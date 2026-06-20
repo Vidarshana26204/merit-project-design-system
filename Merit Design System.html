@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en" data-grain="subtle" data-spin="on">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Merit Project — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700,800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="merit-ds.css" />
+<style>
+  /* page-local: spinning hero stickers (gated by tweak) */
+  @media (prefers-reduced-motion: no-preference){
+    html[data-spin="on"] .pageHero .star.spin{animation:meritSpin 22s linear infinite}
+    html[data-spin="on"] .pageHero .star.spin.rev{animation-direction:reverse;animation-duration:28s}
+  }
+  @keyframes meritSpin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="side">
+    <div class="brand">
+      <div class="mark"><img src="assets/logo.png" alt="Merit Project mark" /></div>
+      <div class="wm">Merit&nbsp;Project<small>Design System</small></div>
+    </div>
+
+    <div class="ver"><span>Version</span><b>v1.0</b></div>
+
+    <nav class="toc">
+      <div class="grp">Foundations</div>
+      <a href="#overview"><span class="ix">00</span> Brand &amp; Voice</a>
+      <a href="#color"><span class="ix">01</span> Color</a>
+      <a href="#type"><span class="ix">02</span> Typography</a>
+      <a href="#look"><span class="ix">03</span> The Signature Look</a>
+      <div class="grp">Components</div>
+      <a href="#buttons"><span class="ix">04</span> Buttons</a>
+      <a href="#cards"><span class="ix">05</span> Cards</a>
+      <a href="#inputs"><span class="ix">06</span> Inputs &amp; Fields</a>
+      <a href="#pills"><span class="ix">07</span> Pills &amp; Tags</a>
+      <a href="#progress"><span class="ix">08</span> Progress &amp; Steppers</a>
+      <a href="#toggles"><span class="ix">09</span> Toggles &amp; Checkboxes</a>
+      <a href="#tabbar"><span class="ix">10</span> Tab Bar</a>
+      <div class="grp">Patterns</div>
+      <a href="#game"><span class="ix">11</span> Gamification</a>
+      <a href="#logo"><span class="ix">12</span> Logo Usage</a>
+      <a href="#dark"><span class="ix">13</span> Dark Mode</a>
+    </nav>
+
+    <a class="backlink" href="Merit Project Brand Board.html">
+      <span class="a">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 19l-7-7 7-7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      Brand Board poster
+    </a>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <!-- HERO -->
+    <header class="pageHero" data-screen-label="Hero">
+      <svg class="star spin" style="left:-40px;top:-30px;width:200px;height:200px" viewBox="0 0 100 100"><path d="M50 6 C58 30 70 42 94 50 C70 58 58 70 50 94 C42 70 30 58 6 50 C30 42 42 30 50 6 Z" fill="#FFCC00"/></svg>
+      <svg class="star spin rev" style="right:-30px;bottom:-50px;width:240px;height:240px" viewBox="0 0 100 100"><polygon points="50,4 56,40 92,28 64,52 96,72 58,64 60,98 50,68 40,98 42,64 4,72 36,52 8,28 44,40" fill="#9ED5B7"/></svg>
+      <div class="inner">
+        <div class="eyebrow">Brand &amp; UI System · Engineering reference</div>
+        <h1>Learn it.<br/>Level up.<br/><em>Earn Merit.</em></h1>
+        <p>The single source of truth for the Merit Project look &amp; feel — a playful, neo-brutalist, gamified study brand. Tokens, type, and copy-paste component recipes for the <strong style="color:#fff">Flutter app</strong> and the <strong style="color:#fff">landing page</strong>.</p>
+        <div class="heroPills">
+          <span class="pill p">Neo-brutalist</span>
+          <span class="pill y">Gamified</span>
+          <span class="pill m">Tri-lingual · EN/SI/TA</span>
+          <span class="pill k">Flutter + Web</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+      <!-- ============ 00 — OVERVIEW / VOICE ============ -->
+      <section class="sec" id="overview" data-screen-label="Brand & Voice">
+        <span class="kicker">00 — Foundations</span>
+        <h2>Bold, playful, game-like — built for serious study.</h2>
+        <p class="lead">Merit is a gamified exam-prep platform for Sri Lankan O/L and A/L students. The look is <strong>neo-brutalist</strong>: flat saturated color blocks, solid black outlines on everything, and hard offset shadows with zero blur. It feels like a sticker sheet, an arcade, and a study planner at once.</p>
+
+        <h3 class="subhead">Three pillars on every screen</h3>
+        <div class="demoGrid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="card feat" style="padding:22px">
+            <div class="ichip k" style="width:40px;height:40px;border-radius:11px">1</div>
+            <h4 style="font-size:18px;margin-top:14px">Outlined &amp; chunky</h4>
+            <p class="note" style="margin-top:8px">Black borders and hard shadows give every element physical, tactile weight.</p>
+          </div>
+          <div class="card feat" style="padding:22px;background:var(--yellow)">
+            <div class="ichip k" style="width:40px;height:40px;border-radius:11px">2</div>
+            <h4 style="font-size:18px;margin-top:14px">Gamified</h4>
+            <p class="note" style="margin-top:8px;color:#312A31">Streaks 🔥, merit points 🪙, tiers, starbursts, leaderboards and progress everywhere.</p>
+          </div>
+          <div class="card feat" style="padding:22px;background:var(--mint)">
+            <div class="ichip k" style="width:40px;height:40px;border-radius:11px">3</div>
+            <h4 style="font-size:18px;margin-top:14px">Tri-lingual &amp; local</h4>
+            <p class="note" style="margin-top:8px;color:#312A31">EN / SI / TA toggles are first-class; content is Sri-Lanka specific.</p>
+          </div>
+        </div>
+
+        <h3 class="subhead">Voice</h3>
+        <p class="note">Confident, encouraging, short. Never corporate, never condescending. Emoji are on-brand but used sparingly as functional accents (🔥 streak · 🪙 points · ★ rating · ⚡ energy).</p>
+        <div class="demoRow" style="margin-top:18px">
+          <span class="pill p" style="padding:10px 16px;font-size:14px">"Keep your streak alive."</span>
+          <span class="pill y" style="padding:10px 16px;font-size:14px">"Earn it."</span>
+          <span class="pill m" style="padding:10px 16px;font-size:14px">"Hit your weak spots first."</span>
+        </div>
+      </section>
+
+      <!-- ============ 01 — COLOR ============ -->
+      <section class="sec" id="color" data-screen-label="Color">
+        <span class="kicker y">01 — Foundations</span>
+        <h2>Six tones and black. No remix.</h2>
+        <p class="lead">These six tones plus the black outline are the whole system — no new hues, no gradients, no unsaturated greys. Click any swatch to copy its hex.</p>
+
+        <div class="swGrid">
+          <div class="sw" data-hex="#8E55D7"><div class="chipc" style="background:#8E55D7"><span class="role">Primary</span></div><div class="meta"><div class="nm">Purple</div><div class="hex">#8E55D7 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#6E36B8"><div class="chipc" style="background:#6E36B8"><span class="role">Pressed</span></div><div class="meta"><div class="nm">Purple Deep</div><div class="hex">#6E36B8 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#FFCC00"><div class="chipc" style="background:#FFCC00"><span class="role dk">Accent</span></div><div class="meta"><div class="nm">Yellow</div><div class="hex">#FFCC00 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#9ED5B7"><div class="chipc" style="background:#9ED5B7"><span class="role dk">Support</span></div><div class="meta"><div class="nm">Mint</div><div class="hex">#9ED5B7 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#FFEFD7"><div class="chipc" style="background:#FFEFD7"><span class="role dk">Surface</span></div><div class="meta"><div class="nm">Cream</div><div class="hex">#FFEFD7 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#312A31"><div class="chipc" style="background:#312A31"><span class="role">Ink</span></div><div class="meta"><div class="nm">Charcoal</div><div class="hex">#312A31 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#1B161B"><div class="chipc" style="background:#1B161B"><span class="role">Dark bg</span></div><div class="meta"><div class="nm">Ink-2</div><div class="hex">#1B161B <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#000000"><div class="chipc" style="background:#000"><span class="role">Outline</span></div><div class="meta"><div class="nm">Line</div><div class="hex">#000000 <span class="copytag">CLICK</span></div></div></div>
+        </div>
+
+        <h3 class="subhead">Extended palette — mobile category accents only</h3>
+        <p class="note">Use these soft tints <strong>only inside the Flutter app</strong> for subject/illustration coding. The canonical six still drive all primary UI.</p>
+        <div class="swGrid">
+          <div class="sw" data-hex="#F2D43B"><div class="chipc" style="background:#F2D43B"><span class="role dk">App accent</span></div><div class="meta"><div class="nm">Yellow soft</div><div class="hex">#F2D43B <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#9CE7C8"><div class="chipc" style="background:#9CE7C8"><span class="role dk">Success</span></div><div class="meta"><div class="nm">Mint soft</div><div class="hex">#9CE7C8 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#FFB3C8"><div class="chipc" style="background:#FFB3C8"><span class="role dk">Category</span></div><div class="meta"><div class="nm">Pink</div><div class="hex">#FFB3C8 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#B3D8FF"><div class="chipc" style="background:#B3D8FF"><span class="role dk">Category</span></div><div class="meta"><div class="nm">Blue</div><div class="hex">#B3D8FF <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#FFF7ED"><div class="chipc" style="background:#FFF7ED"><span class="role dk">Surface-2</span></div><div class="meta"><div class="nm">Cream warm</div><div class="hex">#FFF7ED <span class="copytag">CLICK</span></div></div></div>
+        </div>
+
+        <h3 class="subhead">Contrast rules</h3>
+        <table class="spec">
+          <thead><tr><th>Surface</th><th>Text color</th><th>Border</th></tr></thead>
+          <tbody>
+            <tr><td>Purple / Ink</td><td>White or Cream</td><td><code>#000</code> always</td></tr>
+            <tr><td>Yellow / Mint / Cream / White</td><td>Ink <code>#312A31</code> / <code>#29261B</code></td><td><code>#000</code> always</td></tr>
+            <tr><td>Any dark-mode surface</td><td>Cream <code>#FFF7ED</code></td><td>Cream <code>#FFF7ED</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS tokens</button><button>Flutter</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>:root{
+  --purple:#8E55D7; --purple-deep:#6E36B8;
+  --yellow:#FFCC00; --mint:#9ED5B7; --cream:#FFEFD7;
+  --ink:#312A31; --ink-2:#1B161B; --white:#FFFFFF; --line:#000;
+  /* extended — app category accents */
+  --pink:#FFB3C8; --blue:#B3D8FF; --cream-warm:#FFF7ED;
+  --text-dim:#5a4a5a; --text-mute:#7a6c7a;
+}</code></pre>
+            <pre hidden><code>abstract final class MeritColors {
+  static const purple     = Color(0xFF8E55D7); // primary
+  static const purpleDeep = Color(0xFF6E36B8); // pressed
+  static const yellow     = Color(0xFFFFCC00); // accent
+  static const mint       = Color(0xFF9ED5B7); // success
+  static const cream      = Color(0xFFFFEFD7); // surface
+  static const ink        = Color(0xFF312A31); // text
+  static const ink2       = Color(0xFF1B161B); // dark bg
+  static const line       = Color(0xFF000000); // outline
+  // extended (mobile category accents)
+  static const pink       = Color(0xFFFFB3C8);
+  static const blue       = Color(0xFFB3D8FF);
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 02 — TYPOGRAPHY ============ -->
+      <section class="sec" id="type" data-screen-label="Typography">
+        <span class="kicker m">02 — Foundations</span>
+        <h2>Two families. One loud, one readable.</h2>
+        <p class="lead"><strong>Clash Display</strong> is the personality — headings, numbers, buttons, stat figures, tier names. <strong>Plus Jakarta Sans</strong> carries everything readable and long-form.</p>
+
+        <div class="split">
+          <div class="frame light">
+            <span class="ftag">Clash Display</span>
+            <div style="font-family:var(--font-display);font-weight:700;font-size:96px;letter-spacing:-.04em;line-height:.85;color:#312A31">Aa</div>
+            <div style="font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.04em;margin-top:14px;color:#5a4a5a">500 · 600 · 700 · 800 — tight tracking</div>
+          </div>
+          <div class="frame light" style="background:#fff">
+            <span class="ftag">Plus Jakarta Sans</span>
+            <div style="font-family:var(--font-body);font-weight:700;font-size:96px;line-height:.85;color:#312A31">Aa</div>
+            <div style="font-family:var(--font-body);font-weight:600;font-size:15px;margin-top:14px;color:#5a4a5a">400 · 500 · 600 · 700 — normal tracking</div>
+          </div>
+        </div>
+
+        <h3 class="subhead">Type scale</h3>
+        <div>
+          <div class="typeRow"><div class="meta"><div class="nm">Display</div><div class="sz">Clash · 700 · -4% · 96px<br/>(clamp 72–148 web)</div></div><div class="sample" style="font-size:64px">Earn it.</div></div>
+          <div class="typeRow"><div class="meta"><div class="nm">H1</div><div class="sz">Clash · 700 · 48px</div></div><div class="sample" style="font-size:46px">Top 5 events</div></div>
+          <div class="typeRow"><div class="meta"><div class="nm">H2</div><div class="sz">Clash · 700 · 28–40px</div></div><div class="sample" style="font-size:34px">Keep the streak</div></div>
+          <div class="typeRow"><div class="meta"><div class="nm">H3 / card title</div><div class="sz">Clash · 600 · 22px</div></div><div class="sample" style="font-size:22px">Streaks &amp; merit</div></div>
+          <div class="typeRow"><div class="meta"><div class="nm">Body</div><div class="sz">Jakarta · 500 · 14–17px</div></div><div class="sample body" style="font-size:16px;font-weight:500;color:#5a4a5a">Ship &amp; learn. Adaptive practice across Sinhala, Tamil and English.</div></div>
+          <div class="typeRow"><div class="meta"><div class="nm">Label / eyebrow</div><div class="sz">Jakarta · 700 · 10–12px<br/>.16–.24em · UPPERCASE</div></div><div class="sample body" style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7a6c7a">Top of the week</div></div>
+        </div>
+        <p class="note" style="margin-top:18px"><strong>Signature move:</strong> UPPERCASE micro-labels with wide tracking (<span class="inlineCode">.16em</span>–<span class="inlineCode">.24em</span>) for eyebrows, stat captions and section kickers.</p>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">Web</button><button>Flutter</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>&lt;link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700,800&amp;display=swap" rel="stylesheet"&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"&gt;
+
+h1,h2,h3,h4{font-family:'Clash Display',sans-serif;font-weight:700;
+  letter-spacing:-.02em;line-height:1}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif}</code></pre>
+            <pre hidden><code>// Clash Display is NOT on Google Fonts — bundle the .otf via Fontshare.
+class MeritType {
+  static const display = 'ClashDisplay';
+  static TextStyle clash(double size, {FontWeight w = FontWeight.w700, Color? c}) =>
+      TextStyle(fontFamily: display, fontSize: size, fontWeight: w,
+                letterSpacing: size >= 64 ? -size * 0.04 : -size * 0.02,
+                height: 1.0, color: c);
+  static TextStyle body(double size, {FontWeight w = FontWeight.w500, Color? c}) =>
+      GoogleFonts.plusJakartaSans(fontSize: size, fontWeight: w, height: 1.5, color: c);
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 03 — SIGNATURE LOOK ============ -->
+      <section class="sec" id="look" data-screen-label="Signature Look">
+        <span class="kicker k">03 — Foundations</span>
+        <h2>The signature look.</h2>
+        <p class="lead">Get borders, shadows and radii right and everything else follows. This is what makes something <em>look like Merit</em>.</p>
+
+        <h3 class="subhead">Hard shadows — zero blur, offset down-right</h3>
+        <p class="note">The defining detail. Bigger offset = more important. Never use soft/blurred Material elevation.</p>
+        <div class="shadowRamp">
+          <div class="sd" style="box-shadow:2px 2px 0 #000">2px<br/>chips</div>
+          <div class="sd" style="box-shadow:4px 4px 0 #000">4px<br/>cards</div>
+          <div class="sd" style="box-shadow:6px 6px 0 #000">6px<br/>feature</div>
+          <div class="sd" style="box-shadow:10px 10px 0 #000">10px<br/>hero</div>
+          <div class="sd" style="box-shadow:4px 4px 0 #8E55D7;border-color:#8E55D7">accent<br/>selected</div>
+        </div>
+
+        <h3 class="subhead">Borders &amp; radii</h3>
+        <table class="spec">
+          <thead><tr><th>Property</th><th>Value</th><th>Where</th></tr></thead>
+          <tbody>
+            <tr><td>Border</td><td><code>2px solid #000</code></td><td>everything (3px hero · 1.5px tiny chips)</td></tr>
+            <tr><td>Shadow — small</td><td><code>2–3px 2–3px 0 #000</code></td><td>chips, inputs</td></tr>
+            <tr><td>Shadow — card</td><td><code>4–5px 4–5px 0 #000</code></td><td>content cards</td></tr>
+            <tr><td>Shadow — hero</td><td><code>6px … 14px 0 #000</code></td><td>pricing, phone, CTA</td></tr>
+            <tr><td>Radius — pill</td><td><code>999px</code></td><td>buttons, toggles, tags, progress</td></tr>
+            <tr><td>Radius — card</td><td><code>18–28px</code></td><td>content cards</td></tr>
+            <tr><td>Radius — large frame</td><td><code>32–46px</code></td><td>phone bezel, image frames</td></tr>
+            <tr><td>Radius — icon chip</td><td><code>8–16px</code></td><td>square badges/icons</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="subhead">Selected &amp; hover states</h3>
+        <p class="note">When an element is selected or focused, swap the shadow <em>and</em> border from black to the accent. On web, hover lifts <span class="inlineCode">translate(-2px,-2px)</span> and grows the shadow. Hover a card below:</p>
+        <div class="demoRow" style="margin-top:18px">
+          <div class="card" style="padding:18px 22px;cursor:pointer"><b style="font-family:var(--font-display)">Default</b><div class="note" style="margin-top:4px">black border + 4px shadow</div></div>
+          <div class="card" style="padding:18px 22px;border-color:#8E55D7;box-shadow:4px 4px 0 #8E55D7;cursor:pointer"><b style="font-family:var(--font-display);color:#6E36B8">Selected</b><div class="note" style="margin-top:4px">purple border + purple shadow</div></div>
+        </div>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>.merit-card{
+  background:#fff; border:2px solid var(--line); border-radius:18px;
+  box-shadow:4px 4px 0 var(--line);
+}
+.merit-card.selected{ border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
+.merit-card:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--line); }</code></pre>
+            <pre hidden><code>/// The Merit "sticker box": black border + hard offset shadow, NO blur.
+BoxDecoration meritBox({
+  Color fill = MeritColors.white, double radius = 18, double offset = 4,
+  Color border = MeritColors.line, Color? shadow,
+}) => BoxDecoration(
+  color: fill,
+  borderRadius: BorderRadius.circular(radius),
+  border: Border.all(color: border, width: 2),
+  boxShadow: [
+    BoxShadow(color: shadow ?? MeritColors.line,
+              offset: Offset(offset, offset), blurRadius: 0), // blurRadius:0 is mandatory
+  ],
+);
+// Selected / focused: accent border + accent shadow
+final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple);</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 04 — BUTTONS ============ -->
+      <section class="sec" id="buttons" data-screen-label="Buttons">
+        <span class="kicker">04 — Components</span>
+        <h2>Buttons</h2>
+        <p class="lead">Pill shape, 2px border, hard shadow, Clash Display label. Hover lifts; press pushes in. Try them:</p>
+
+        <div class="demo">
+          <span class="demoLabel">Live · hover &amp; press</span>
+          <div class="demoRow">
+            <button class="btn primary">Start lesson <span class="a"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></button>
+            <button class="btn accent">Earn 40 XP</button>
+            <button class="btn dark">Join cohort <span class="a"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></button>
+            <button class="btn mint">Saved ✓</button>
+            <button class="btn ghost">Skip</button>
+            <button class="btn link">View all</button>
+          </div>
+        </div>
+
+        <div class="anat">
+          <div class="card" style="padding:34px;display:grid;place-items:center;background:var(--surface-2)">
+            <button class="btn primary" style="font-size:17px">Start lesson <span class="a"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></button>
+          </div>
+          <div class="annos">
+            <div class="anno"><b>1</b><div><strong>Pill radius 999px</strong> — always fully rounded.</div></div>
+            <div class="anno"><b>2</b><div><strong>2px black border</strong> + <strong>4px hard shadow</strong>.</div></div>
+            <div class="anno"><b>3</b><div><strong>Clash Display 700</strong>, ~15px label.</div></div>
+            <div class="anno"><b>4</b><div><strong>Yellow arrow chip</strong> on primary/dark variants.</div></div>
+          </div>
+        </div>
+
+        <table class="spec">
+          <thead><tr><th>Variant</th><th>Fill</th><th>Text</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td>Primary</td><td>Purple</td><td>White</td><td>main action</td></tr>
+            <tr><td>Accent</td><td>Yellow</td><td>Ink</td><td>rewards · "Start Learning"</td></tr>
+            <tr><td>Dark</td><td>Ink</td><td>Cream + yellow arrow</td><td>secondary hero CTA</td></tr>
+            <tr><td>Ghost</td><td>Transparent</td><td>Ink</td><td>secondary</td></tr>
+            <tr><td>Link</td><td>—</td><td>Purple underline</td><td>tertiary</td></tr>
+          </tbody>
+        </table>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>.btn{border:2px solid var(--line);border-radius:99px;padding:13px 22px;
+  font-family:'Clash Display';font-weight:700;font-size:15px;
+  box-shadow:4px 4px 0 var(--line);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.btn.primary{background:var(--purple);color:#fff}
+.btn.accent {background:var(--yellow);color:var(--ink)}
+.btn.dark   {background:var(--ink);color:var(--cream)}
+.btn.ghost  {background:transparent;color:var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--line)}
+.btn.dark .arrow{width:22px;height:22px;border-radius:50%;background:var(--yellow);
+  color:var(--ink);display:grid;place-items:center}</code></pre>
+            <pre hidden><code>Widget meritButton(String label, {VoidCallback? onTap,
+    Color fill = MeritColors.purple, Color fg = Colors.white, bool arrow = true}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+      decoration: meritBox(fill: fill, radius: 99, offset: 4),
+      child: Row(mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label, style: MeritType.clash(15, c: fg)),
+          if (arrow) Padding(padding: const EdgeInsets.only(left: 8),
+            child: Text('→', style: MeritType.clash(15, c: fg))),
+        ]),
+    ),
+  );
+}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 05 — CARDS ============ -->
+      <section class="sec" id="cards" data-screen-label="Cards">
+        <span class="kicker">05 — Components</span>
+        <h2>Cards</h2>
+        <p class="lead">The <span class="inlineCode">meritBox</span> with 14–26px padding. Fill colour signals type: white/cream = neutral, purple/ink = featured, yellow = reward/quest, mint = success. Featured cards get a deeper shadow and may carry a clipped decorative shape.</p>
+
+        <div class="demoGrid" style="grid-template-columns:repeat(2,1fr);margin-top:22px">
+          <div class="card" style="padding:22px">
+            <span class="pill k" style="font-size:10px">Neutral</span>
+            <h4 style="font-size:20px;margin-top:14px">Product Design 101</h4>
+            <p class="note" style="margin-top:6px">Beginner · 4 months</p>
+            <div class="progress" style="margin-top:16px"><i data-w="28%"></i></div>
+          </div>
+          <div class="card feat" style="padding:22px;background:var(--purple);color:#fff;position:relative;overflow:hidden">
+            <svg style="position:absolute;right:-30px;bottom:-30px;width:140px;opacity:.18" viewBox="0 0 100 100"><polygon points="50,4 56,40 92,28 64,52 96,72 58,64 60,98 50,68 40,98 42,64 4,72 36,52 8,28 44,40" fill="#FFCC00"/></svg>
+            <span class="pill y" style="font-size:10px">Featured</span>
+            <h4 style="font-size:20px;margin-top:14px;color:#fff">This week's quest</h4>
+            <p class="note" style="margin-top:6px;color:rgba(255,255,255,.85)">Finish 3 quizzes · +120 merit</p>
+          </div>
+          <div class="card" style="padding:22px;background:var(--yellow)">
+            <span class="pill k" style="font-size:10px">Reward</span>
+            <h4 style="font-size:20px;margin-top:14px">Daily bonus unlocked</h4>
+            <p class="note" style="margin-top:6px;color:#312A31">🪙 +50 merit points</p>
+          </div>
+          <div class="card" style="padding:22px;background:var(--mint)">
+            <span class="pill k" style="font-size:10px">Success</span>
+            <h4 style="font-size:20px;margin-top:14px">Stage cleared</h4>
+            <p class="note" style="margin-top:6px;color:#312A31">9 / 10 correct · streak safe 🔥</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 06 — INPUTS ============ -->
+      <section class="sec" id="inputs" data-screen-label="Inputs">
+        <span class="kicker">06 — Components</span>
+        <h2>Inputs &amp; fields</h2>
+        <p class="lead">Radius <strong>14px</strong> (not pill). Uppercase micro-label above. Focus swaps the border + shadow to purple — click into a field to see it.</p>
+
+        <div class="demo">
+          <span class="demoLabel">Live · focus a field</span>
+          <div class="demoGrid" style="grid-template-columns:1fr 1fr;max-width:640px">
+            <div class="field"><label>Full name</label><div class="input"><input type="text" placeholder="Maya Okafor" /></div></div>
+            <div class="field"><label>Phone</label><div class="input"><span class="pre">+94</span><input type="text" placeholder="77 123 4567" /></div></div>
+            <div class="field" style="grid-column:span 2"><label>School / district</label><div class="input"><input type="text" placeholder="Search your school…" /><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#7a6c7a" stroke-width="2"/></svg></div></div>
+          </div>
+        </div>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>.field label{font-size:11px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-dim)}
+.input{display:flex;align-items:center;gap:10px;background:#fff;
+  border:2px solid var(--line);border-radius:14px;padding:12px 14px;
+  font-size:14px;font-weight:600;box-shadow:3px 3px 0 var(--line)}
+.input:focus-within{border-color:var(--purple);box-shadow:3px 3px 0 var(--purple)}
+.input .pre{font-weight:700;padding-right:10px;border-right:1.5px solid var(--line)} /* +94 */</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 07 — PILLS ============ -->
+      <section class="sec" id="pills" data-screen-label="Pills">
+        <span class="kicker">07 — Components</span>
+        <h2>Pills &amp; tags</h2>
+        <p class="lead">Tiny rounded-full labels, 1.5–2px border. Colour-coded for languages, tiers, counts, timers and categories.</p>
+
+        <div class="demo">
+          <span class="demoLabel">Variants</span>
+          <div class="demoRow">
+            <span class="pill p">Curriculum</span>
+            <span class="pill y">⚡ 40 XP</span>
+            <span class="pill m">✓ Done</span>
+            <span class="pill k">♛ PRO</span>
+            <span class="pill">EN · SI · TA</span>
+            <span class="pill">⏱ 4 MIN</span>
+            <span class="pill">3 of 5</span>
+            <span class="pill k">+12</span>
+          </div>
+        </div>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>.pill{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:99px;padding:4px 10px;
+  font-size:11px;font-weight:700;letter-spacing:.06em}
+.pill.p{background:var(--purple);color:#fff}
+.pill.y{background:var(--yellow);color:var(--ink)}
+.pill.m{background:var(--mint);color:var(--ink)}
+.pill.k{background:var(--ink);color:var(--cream)}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 08 — PROGRESS ============ -->
+      <section class="sec" id="progress" data-screen-label="Progress">
+        <span class="kicker">08 — Components</span>
+        <h2>Progress &amp; steppers</h2>
+        <p class="lead">Bordered track + accent fill with a <strong>black right-edge divider</strong> on the fill. Bars animate into view.</p>
+
+        <div class="demo">
+          <span class="demoLabel">Live · animates on scroll</span>
+          <div class="demoCol" style="max-width:520px">
+            <div style="display:grid;grid-template-columns:60px 1fr 36px;gap:12px;align-items:center"><b style="font-family:var(--font-display);font-size:13px">UI</b><div class="progress"><i data-w="78%"></i></div><span style="font-family:var(--font-display);font-weight:700;font-size:13px">78</span></div>
+            <div style="display:grid;grid-template-columns:60px 1fr 36px;gap:12px;align-items:center"><b style="font-family:var(--font-display);font-size:13px">Type</b><div class="progress"><i style="background:var(--yellow)" data-w="54%"></i></div><span style="font-family:var(--font-display);font-weight:700;font-size:13px">54</span></div>
+            <div style="display:grid;grid-template-columns:60px 1fr 36px;gap:12px;align-items:center"><b style="font-family:var(--font-display);font-size:13px">Color</b><div class="progress"><i style="background:var(--mint)" data-w="92%"></i></div><span style="font-family:var(--font-display);font-weight:700;font-size:13px">92</span></div>
+          </div>
+          <div style="margin-top:24px">
+            <div class="note" style="font-weight:700;text-transform:uppercase;letter-spacing:.16em;font-size:10px;margin-bottom:10px">Stepper · stage 3 of 5</div>
+            <div class="stepper" style="max-width:340px">
+              <i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i>
+            </div>
+            <div class="note" style="margin-top:8px;font-size:11px">done = mint · current = purple · todo = white</div>
+          </div>
+        </div>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>.progress{height:14px;background:#fff;border:2px solid var(--line);
+  border-radius:99px;overflow:hidden;box-shadow:2px 2px 0 var(--line)}
+.progress > i{display:block;height:100%;background:var(--purple);
+  border-right:2px solid var(--line)} /* the black divider */
+.stepper i{height:8px;border-radius:99px;border:1.5px solid var(--line);background:#fff;flex:1;max-width:46px}
+.stepper i.on{background:var(--purple)} .stepper i.done{background:var(--mint)}</code></pre>
+            <pre hidden><code>Widget meritProgress(double pct, {Color fill = MeritColors.purple}) => Container(
+  height: 14, decoration: meritBox(radius: 99, offset: 2),
+  clipBehavior: Clip.antiAlias,
+  child: FractionallySizedBox(
+    alignment: Alignment.centerLeft, widthFactor: pct.clamp(0, 1),
+    child: Container(decoration: BoxDecoration(color: fill,
+      border: const Border(right: BorderSide(color: MeritColors.line, width: 2)))),
+  ),
+);</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 09 — TOGGLES ============ -->
+      <section class="sec" id="toggles" data-screen-label="Toggles">
+        <span class="kicker">09 — Components</span>
+        <h2>Toggles &amp; checkboxes</h2>
+        <p class="lead">Toggle: 46×24 pill, ink track → mint when on. Checkbox: 24×24 rounded-7px, mint fill + bold ✓ when on. Both are clickable below.</p>
+
+        <div class="demo">
+          <span class="demoLabel">Live · click them</span>
+          <div class="demoRow" style="gap:28px">
+            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="toggle on"></span> Notifications</div>
+            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="toggle"></span> Daily streak</div>
+            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="toggle on"></span> Cohort feed</div>
+          </div>
+          <div class="demoRow" style="gap:28px;margin-top:20px">
+            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check on">✓</span> Remember me</div>
+            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check"></span> Email past papers</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 10 — TAB BAR ============ -->
+      <section class="sec" id="tabbar" data-screen-label="Tab Bar">
+        <span class="kicker">10 — Components</span>
+        <h2>Bottom tab bar</h2>
+        <p class="lead">Floating bar inset from the edges. Five items; active item is a purple rounded chip with white glyph. Shown in both modes:</p>
+
+        <div class="split">
+          <div class="frame light">
+            <span class="ftag">Light</span>
+            <div class="tabbar">
+              <div class="tb active"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-8 9 8v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="2"/></svg></span>Home</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>Study</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="2"/></svg></span>Quiz</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Points</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2"/></svg></span>You</div>
+            </div>
+          </div>
+          <div class="frame dark">
+            <span class="ftag">Dark</span>
+            <div class="tabbar dark">
+              <div class="tb active"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-8 9 8v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="2"/></svg></span>Home</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>Study</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="2"/></svg></span>Quiz</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Points</div>
+              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2"/></svg></span>You</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 11 — GAMIFICATION ============ -->
+      <section class="sec" id="game" data-screen-label="Gamification">
+        <span class="kicker y">11 — Patterns</span>
+        <h2>Gamification widgets</h2>
+        <p class="lead">The heart of the app. Make it feel earned — streaks, points, tiers, ribbons and leaderboards everywhere.</p>
+
+        <h3 class="subhead">Streak &amp; coin chips</h3>
+        <div class="demo">
+          <div class="demoRow" style="gap:18px">
+            <span class="chip-streak">🔥 14</span>
+            <span class="chip-coins">🪙 2,840</span>
+            <span class="chip-streak">★ 4.9</span>
+          </div>
+        </div>
+
+        <h3 class="subhead">Streak ribbon — 7-day</h3>
+        <div class="demo">
+          <div class="ribbon">
+            <div class="d done"><span class="dot">✓</span>M</div>
+            <div class="d done"><span class="dot">✓</span>T</div>
+            <div class="d done"><span class="dot">✓</span>W</div>
+            <div class="d done"><span class="dot">✓</span>T</div>
+            <div class="d today"><span class="dot">!</span>F</div>
+            <div class="d future"><span class="dot"></span>S</div>
+            <div class="d future"><span class="dot"></span>S</div>
+          </div>
+          <p class="note" style="margin-top:14px;font-size:11px">done = purple ✓ · today = yellow ! · future = dashed empty</p>
+        </div>
+
+        <h3 class="subhead">Tier badge &amp; starburst</h3>
+        <div class="demo">
+          <div class="demoRow" style="gap:30px">
+            <div class="tierBadge">
+              <div class="seal">M</div>
+              <div class="info">
+                <div class="lvl">Level 4 · Achiever</div>
+                <div class="nm">Maya Okafor</div>
+                <div class="pts">2,840 merit · streak 14d</div>
+              </div>
+            </div>
+            <div class="starburst">
+              <svg viewBox="0 0 200 200" width="120" height="120"><g transform="translate(100 100)"><polygon points="0,-92 16,-30 78,-50 36,-2 96,18 32,28 60,86 4,42 -22,98 -28,38 -88,58 -42,12 -98,-12 -38,-22 -78,-72 -18,-44 -16,-92" fill="#8E55D7" stroke="#000" stroke-width="4"/></g></svg>
+              <div class="lbl">Top<br/>10</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subhead">Leaderboard</h3>
+        <div class="demo" style="background:transparent;border:none;box-shadow:none;padding:0">
+          <div class="lead-board" style="max-width:420px">
+            <div class="lr"><span class="rk">1</span><span class="av" style="background:#FFCC00;color:#312A31">A</span><span class="who">Anjana P.</span><span class="pts">3,910 ★</span></div>
+            <div class="lr"><span class="rk">2</span><span class="av" style="background:#9ED5B7;color:#312A31">R</span><span class="who">Rashmi K.</span><span class="pts">3,420 ★</span></div>
+            <div class="lr you"><span class="rk">3</span><span class="av" style="background:#FFEFD7;color:#312A31">M</span><span class="who">You · Maya</span><span class="pts">2,840 ★</span></div>
+            <div class="lr"><span class="rk">4</span><span class="av" style="background:#B3D8FF;color:#312A31">S</span><span class="who">Sahan W.</span><span class="pts">2,610 ★</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 12 — LOGO ============ -->
+      <section class="sec" id="logo" data-screen-label="Logo">
+        <span class="kicker m">12 — Patterns</span>
+        <h2>Logo usage</h2>
+        <p class="lead">A 3-color isometric cube inside a pyramid. It carries its own outline, so it works on cream, white, ink and purple. Pair the mark with the wordmark <strong>"Merit Project"</strong> in Clash Display, uppercase, <span class="inlineCode">letter-spacing:.04em</span>.</p>
+
+        <div class="logoGrid">
+          <div class="logoCell onCream"><img src="assets/logo.png" alt="Merit on cream" /><span class="tag" style="color:#7a6c7a">On cream</span></div>
+          <div class="logoCell onWhite"><img src="assets/logo.png" alt="Merit on white" /><span class="tag" style="color:#7a6c7a">On white</span></div>
+          <div class="logoCell onInk"><img src="assets/logo.png" alt="Merit on ink" /><span class="tag">On ink</span></div>
+          <div class="logoCell onPurple"><img src="assets/logo.png" alt="Merit on purple" /><span class="tag">On purple</span></div>
+        </div>
+
+        <div class="dd">
+          <div class="col do">
+            <h4><span class="badge">✓</span> Do</h4>
+            <ul>
+              <li>Pair with the Clash Display wordmark, uppercase, <span class="inlineCode">.04em</span> tracking.</li>
+              <li>Use on cream, white, ink or purple — it carries its own outline.</li>
+              <li>Keep clear space of at least one cube-width around it.</li>
+            </ul>
+          </div>
+          <div class="col dont">
+            <h4><span class="badge">✕</span> Don't</h4>
+            <ul>
+              <li>Recolor, rotate, or add effects / drop-shadows to the mark.</li>
+              <li>Stretch, skew, or change the cube proportions.</li>
+              <li>Place on a busy photo or a low-contrast tint.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 13 — DARK MODE ============ -->
+      <section class="sec" id="dark" data-screen-label="Dark Mode">
+        <span class="kicker k">13 — Patterns</span>
+        <h2>Dark mode</h2>
+        <p class="lead">Dark mode swaps a small set of variables — it does <strong>not</strong> restyle components. The key rule: <strong>the black outline becomes a cream outline</strong> so the sticker edge survives. Accents stay identical; hard shadows stay.</p>
+
+        <div class="split">
+          <div class="frame light">
+            <span class="ftag">Light</span>
+            <div class="card" style="padding:20px;max-width:300px">
+              <span class="pill p" style="font-size:10px">Quest</span>
+              <h4 style="font-size:19px;margin-top:12px">Color Theory</h4>
+              <p class="note" style="margin-top:6px">10 questions · live</p>
+              <div class="progress" style="margin-top:14px"><i style="width:62%"></i></div>
+              <button class="btn primary sm" style="margin-top:16px">Continue</button>
+            </div>
+          </div>
+          <div class="frame dark">
+            <span class="ftag">Dark</span>
+            <div class="dark">
+              <div class="card" style="padding:20px;max-width:300px">
+                <span class="pill p" style="font-size:10px">Quest</span>
+                <h4 style="font-size:19px;margin-top:12px">Color Theory</h4>
+                <p class="note" style="margin-top:6px;color:#C4B5C4">10 questions · live</p>
+                <div class="progress" style="margin-top:14px"><i style="width:62%"></i></div>
+                <button class="btn primary sm" style="margin-top:16px">Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <table class="spec">
+          <thead><tr><th>Token</th><th>Light</th><th>Dark</th></tr></thead>
+          <tbody>
+            <tr><td>Background</td><td><code>#FFEFD7 / #FFF7ED</code></td><td><code>#1B161B</code></td></tr>
+            <tr><td>Surface / card</td><td><code>#FFFFFF</code></td><td><code>#2A222A</code></td></tr>
+            <tr><td>Text</td><td><code>#29261B</code></td><td><code>#FFF7ED</code></td></tr>
+            <tr><td>Text dim</td><td><code>#5A4A5A</code></td><td><code>#C4B5C4</code></td></tr>
+            <tr><td>Border</td><td><code>#000000</code></td><td><code>#FFF7ED</code> (cream!)</td></tr>
+          </tbody>
+        </table>
+
+        <div class="codeWrap">
+          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
+          <div class="codeBody">
+            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
+            <pre><code>.dark{
+  --bg:#1B161B; --surface:#2A222A;
+  --text:#FFF7ED; --text-dim:#C4B5C4;
+  --border:#FFF7ED;   /* the black outline becomes cream */
+}
+/* components reference var(--border) / var(--surface) — nothing else changes */</code></pre>
+            <pre hidden><code>Color meritBorder(Brightness b) =>
+    b == Brightness.dark ? MeritColors.creamWarm : MeritColors.line;
+Color meritSurface(Brightness b) =>
+    b == Brightness.dark ? const Color(0xFF2A222A) : MeritColors.white;</code></pre>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /wrap -->
+
+    <footer class="foot">
+      <div class="inner">
+        <div>Merit Project · Design System · v1.0 · 2026</div>
+        <div class="hexes">#8E55D7 · #FFCC00 · #9ED5B7 · #FFEFD7 · #312A31</div>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<div id="tweaks-root"></div>
+
+<script src="merit-ds.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "grain": "crunchy",
+  "spin": true
+}/*EDITMODE-END*/;
+
+function MeritDSTweaks() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-grain', t.grain);
+    document.documentElement.setAttribute('data-spin', t.spin ? 'on' : 'off');
+  }, [t.grain, t.spin]);
+
+  return (
+    <TweaksPanel title="Tweaks">
+      <TweakSection label="Texture" />
+      <TweakRadio label="Grain" value={t.grain}
+        options={['off', 'subtle', 'crunchy']}
+        onChange={(v) => setTweak('grain', v)} />
+      <TweakSection label="Motion" />
+      <TweakToggle label="Spin hero stickers" value={t.spin}
+        onChange={(v) => setTweak('spin', v)} />
+    </TweaksPanel>
+  );
+}
+
+document.documentElement.setAttribute('data-grain', TWEAK_DEFAULTS.grain);
+document.documentElement.setAttribute('data-spin', TWEAK_DEFAULTS.spin ? 'on' : 'off');
+ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<MeritDSTweaks />);
+</script>
+
+</body>
+</html>
