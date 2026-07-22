@@ -23,10 +23,12 @@
   --border:#000000;
   --hairline:#E7D8C6;
 
-  --font-display:'Clash Display','Plus Jakarta Sans',system-ui,sans-serif;
+  --font-display:'School Times','Plus Jakarta Sans',system-ui,sans-serif;
   --font-body:'Plus Jakarta Sans',system-ui,sans-serif;
   --font-mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
 }
+
+@font-face{font-family:'School Times';src:url('assets/fonts/SchoolTimes-Regular.ttf') format('truetype');font-weight:400 700;font-style:normal;font-display:swap}
 
 /* dark scope — apply to any frame to flip surfaces. Outline goes cream. */
 .dark{

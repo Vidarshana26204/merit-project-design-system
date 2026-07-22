@@ -45,55 +45,89 @@ feels like a sticker sheet, an arcade, and a study planner at once.
 ## 2. Color tokens (canonical)
 
 These six tones + black are the **whole system. No remix, no new hues.**
+Marketing (landing page) and the mobile app use two different literal
+yellows for the same "Yellow" role — see the note below the table.
 
 | Token | Hex | Role |
 |---|---|---|
 | **Purple** | `#8E55D7` | Primary — main actions, brand, active states |
 | **Purple Deep** | `#6E36B8` | Primary pressed / deep shade |
-| **Yellow** | `#FFCC00` | Accent — highlights, XP, rewards, secondary CTA |
-| **Mint** | `#9ED5B7` | Support — success, "done", positive stats |
-| **Cream** | `#FFEFD7` | Surface — light background, soft cards |
-| **Ink** | `#312A31` | Charcoal — primary text, dark cards |
-| **Ink-2** | `#1B161B` | Darkest — dark-mode background |
+| **Yellow** | `#FFCC00` (marketing) / `#F2D43B` (app) | Accent — highlights, XP, rewards, secondary CTA |
+| **Mint** | `#9CE7C8` (app) / `#9ED5B7` (marketing) | Support — success, "done", positive stats |
+| **Cream** | `#FFF7ED` (app) / `#FFEFD7` (marketing) | Surface — light background, soft cards |
+| **Ink** | `#29261B` (app) / `#312A31` (marketing) | Charcoal — primary text, dark cards |
+| **Ink Deep** | `#1B161B` | Darkest — dark-mode background |
 | **White** | `#FFFFFF` | Base surface |
-| **Line / Border** | `#000000` | The black outline on *everything* |
+| **Line / Border** | `#000000` (light mode) / cream (dark mode) | The outline on *everything* — flips per theme, see §6 |
+
+> **Marketing vs. app yellow:** the landing page (`layout.templ`) uses the
+> brighter `#FFCC00`; the Flutter app uses the softer `#F2D43B` so large
+> fills stay comfortable to look at during long study sessions. Both are
+> "Yellow" — don't introduce a third value.
 
 ### Extended palette (mobile app only)
 
 | Token | Hex | Use |
 |---|---|---|
-| Yellow (soft) | `#F2D43B` | App accent fills where `#FFCC00` is too hot |
-| Mint (soft) | `#9CE7C8` | App success / category |
+| Purple Light | `#EDE4F8` | Selected/container tint (Material `primaryContainer`) |
+| Mint Light / Mint Dark | `#D5F5E9` / `#2D6649` | Success container tint / on-dark-success text |
 | Pink | `#FFB3C8` | Category accent (e.g. Arts, Biology) |
 | Blue | `#B3D8FF` | Category accent (e.g. Technology, ICT) |
-| Cream (warm) | `#FFF7ED` | App surface-2 / page background |
 | Text | `#29261B` | App body text |
 | Text Dim | `#5A4A5A` | Secondary text |
 | Text Mute | `#7A6C7A` | Tertiary / captions / placeholders |
+| Hairline | `#EADCD0` | Light-mode dividers |
+| Streak Orange | `#FF6B2B` | Streak flame / gamification accent (app-specific, not a new hue — a fixed semantic token) |
+| Grade Orange | `#FF9800` | Grade-D badge in quiz results |
+| Error | `#C4393A` | Validation errors, destructive actions |
 
-### Flutter — `MeritColors`
+**Contrast-safe text/icon variants** — the raw fills above (`yellow`,
+`mint`, `blue`, `pink`) fail WCAG contrast for small text/icons on white.
+Use these instead whenever a fill color needs to render as text or an icon
+glyph on a light surface:
+
+| Token | Hex | Contrast on white |
+|---|---|---|
+| Yellow Text | `#7A5F00` | ~6.5:1 |
+| Mint Text | `#1E5C42` | ~7.5:1 |
+| Blue Text | `#1A4A7A` | ~7.2:1 |
+| Pink Text | `#8A2240` | ~6.1:1 |
+
+### Flutter — `MeritColors` (source of truth: `lib/theme/merit_theme.dart`)
 
 ```dart
 import 'package:flutter/material.dart';
 
 abstract final class MeritColors {
-  static const purple     = Color(0xFF8E55D7);
-  static const purpleDeep = Color(0xFF6E36B8);
-  static const yellow     = Color(0xFFFFCC00);
-  static const mint       = Color(0xFF9ED5B7);
-  static const cream      = Color(0xFFFFEFD7);
-  static const ink        = Color(0xFF312A31);
-  static const ink2       = Color(0xFF1B161B);
-  static const white      = Color(0xFFFFFFFF);
-  static const line       = Color(0xFF000000);
-  static const yellowSoft = Color(0xFFF2D43B);
-  static const mintSoft   = Color(0xFF9CE7C8);
-  static const pink       = Color(0xFFFFB3C8);
-  static const blue       = Color(0xFFB3D8FF);
-  static const creamWarm  = Color(0xFFFFF7ED);
-  static const text     = Color(0xFF29261B);
+  static const purple      = Color(0xFF8E55D7);
+  static const purpleDeep  = Color(0xFF6E36B8);
+  static const purpleLight = Color(0xFFEDE4F8);
+  static const yellow      = Color(0xFFF2D43B); // app yellow — see note above
+  static const yellowLight = Color(0xFFFFF5CC);
+  static const mint        = Color(0xFF9CE7C8);
+  static const mintLight   = Color(0xFFD5F5E9);
+  static const mintDark    = Color(0xFF2D6649);
+  static const pink        = Color(0xFFFFB3C8);
+  static const blue        = Color(0xFFB3D8FF);
+  static const cream       = Color(0xFFFFF7ED);
+  static const ink         = Color(0xFF29261B);
+  static const inkDeep     = Color(0xFF1B161B);
+  static const white       = Color(0xFFFFFFFF);
+
   static const textDim  = Color(0xFF5A4A5A);
   static const textMute = Color(0xFF7A6C7A);
+  static const hairline = Color(0xFFEADCD0);
+
+  // Contrast-safe fill→text/icon variants (use on light surfaces)
+  static const yellowText = Color(0xFF7A5F00);
+  static const mintText   = Color(0xFF1E5C42);
+  static const blueText   = Color(0xFF1A4A7A);
+  static const pinkText   = Color(0xFF8A2240);
+
+  // App-specific semantic colors
+  static const streakOrange = Color(0xFFFF6B2B);
+  static const gradeOrange  = Color(0xFFFF9800);
+  static const error        = Color(0xFFC4393A);
 }
 ```
 
@@ -103,15 +137,15 @@ abstract final class MeritColors {
 
 | Family | Where | Weights | Tracking |
 |---|---|---|---|
-| **Clash Display** | All headings, numbers, buttons, stat figures, labels-as-display | 500–800 | tight: `-0.02em` (display down to `-0.04em`) |
+| **School Times** | All headings, numbers, buttons, stat figures, labels-as-display | single weight (400), no true bold | tight: `-0.02em` (display down to `-0.04em`) |
 | **Plus Jakarta Sans** | Body copy, descriptions, form values, fine print | 400–700 | normal |
 
 ### Flutter typography
 
 ```dart
 class MeritType {
-  static const display = 'ClashDisplay';
-  static TextStyle clash(double size, {FontWeight w = FontWeight.w700, Color? c}) =>
+  static const display = 'SchoolTimes';
+  static TextStyle schoolTimes(double size, {FontWeight w = FontWeight.w700, Color? c}) =>
       TextStyle(fontFamily: display, fontSize: size, fontWeight: w,
                 letterSpacing: size >= 64 ? -size * 0.04 : -size * 0.02,
                 height: 1.0, color: c);
@@ -188,7 +222,7 @@ Bordered track, accent fill, **black right-edge divider** on fill. Stepper: done
 `meritBox(radius:20, offset:3)`, 5 items. Active = purple chip with white glyph.
 
 ### Gamification
-- Streak chip: white pill, 🔥 {n}, Clash 800
+- Streak chip: white pill, 🔥 {n}, School Times
 - Coins chip: yellow pill, 🪙 {points}
 - Streak ribbon: done=purple ✓, today=yellow !, future=dashed
 - Leaderboard: dark card, "You" row highlighted purple, points yellow ★
@@ -211,6 +245,26 @@ Bordered track, accent fill, **black right-edge divider** on fill. Stepper: done
 
 ## 7. Do / Don't
 
-**Do:** outline everything · zero-blur hard shadows · Clash Display for loud text · six canonical colors · gamification everywhere · EN/SI/TA first-class.
+**Do:** outline everything · zero-blur hard shadows · School Times for loud text · six canonical colors · gamification everywhere · EN/SI/TA first-class.
 
 **Don't:** soft/blurred Material shadows · gradients or new hues · unstyled Material widgets · freehand illustration (use geometric sticker kit) · overuse emoji.
+
+---
+
+## 8. Accessibility & motion (non-negotiable, both surfaces)
+
+**Touch targets & feedback**
+- Every tappable control ≥44×44pt (`ComponentSizes.minTouchTarget` in Flutter). Icon-only circle buttons below that size get their *hit area* expanded without growing the visible circle — see `MeritCircleOutlineButton` in `merit_circle_button.dart` for the pattern.
+- Every tap gets visible feedback (`InkWell` ripple, not a bare `GestureDetector` with no state change). `MeritTouchable` (press-opacity) is an accepted neo-brutalist alternative to ripple.
+- Icon-only controls (back/close/more, theme toggle, burger menu) need a `Semantics`/`aria-label` — a visual icon is not an accessible name.
+
+**Reduced motion**
+- Any animation that loops or auto-plays without user interaction (confetti, ticker, spinning decorations, pulsing hints) must check the platform's reduced-motion flag and skip or become static. Flutter: `context.isReducedMotionEnabled` (`build_context_extension.dart`). Web: `@media (prefers-reduced-motion: reduce)`.
+- Short (150–300ms) tap/press micro-interactions are exempt — those aren't the pattern reduced-motion targets.
+
+**Dynamic type / text scale**
+- Don't pin `textScaleFactor`/`textScaler` to `1` except where required by a rendering constraint (e.g. LaTeX layout in `latex_text.dart`) — document the exception inline when you do.
+- Fixed-height chrome (tab bars, pill buttons) should tolerate the app's clamped max text scale (see `main.dart` `MediaQuery` override) without clipping.
+
+**Color tokens in dark mode**
+- Never hardcode `#000000` borders on a component that also has a dark-mode variant — use `MeritBorders.resolve(context)` / the `--line` → cream swap (§6). A literal black border you forgot to flip is invisible on an ink background.
