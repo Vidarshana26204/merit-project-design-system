@@ -103,8 +103,20 @@ abstract final class MeritColors {
 
 | Family | Where | Weights | Tracking |
 |---|---|---|---|
-| **Clash Display** | All headings, numbers, buttons, stat figures, labels-as-display | 500–800 | tight: `-0.02em` (display down to `-0.04em`) |
-| **Plus Jakarta Sans** | Body copy, descriptions, form values, fine print | 400–700 | normal |
+| **Clash Display** | App UI headings, numbers, buttons, stat figures, labels-as-display (mobile app + admin/student/contributor web dashboards) | 500–800 | tight: `-0.02em` (display down to `-0.04em`) |
+| **Plus Jakarta Sans** | Body copy, descriptions, form values, fine print — everywhere | 400–700 | normal |
+| **School Times** | Landing page (`meritproject.lk`) headings only — a punchier, more playful marketing-only display face, deliberately distinct from the in-app Clash Display | 400–700 | as authored, no extra tracking |
+
+Font files (self-hosted, not Google Fonts): `assets/fonts/` in this repo —
+`ClashDisplay-{Medium,SemiBold,Bold}.ttf`,
+`PlusJakartaSans-{Regular,Medium,SemiBold,Bold}.ttf`,
+`SchoolTimes-Regular.otf`. Flutter bundles its own copies at
+`merit-project-flutter/assets/google_fonts/`; the backend landing bundles
+its own copy at `merit-project-backend/web/static/fonts/`. Despite the
+`google_fonts` directory name, none of these are loaded from Google
+Fonts — they're local asset files, which is exactly why they should be
+self-hosted on web too rather than substituted with a Google Fonts
+lookalike.
 
 ### Flutter typography
 
@@ -239,11 +251,16 @@ are also exposed as `--merit-*` for direct use outside the shadcn mapping.
 | `--radius` | `1.125rem` (18px) | same | §4 "Radius — card" |
 | `--chart-1..5` | purple/yellow/mint/pink/blue | same | categorical accent set |
 
-**Fonts:** Plus Jakarta Sans (body) and JetBrains Mono load via
-`next/font/google` as `--font-merit-sans` / `--font-merit-mono`. **Clash
-Display is not on Google Fonts** — self-hosting it (Fontshare license
-permitting) is a follow-up; headings currently fall back to Plus Jakarta
-Sans at weight 700 with tightened tracking.
+**Fonts:** self-hosted via `next/font/local`, not `next/font/google` — the
+same `.ttf`/`.otf` files this repo carries in `assets/fonts/` (§3), copied
+into `merit-project-frontend/public/fonts/`. Plus Jakarta Sans is the body
+face everywhere (`--font-merit-sans`); Clash Display is the display face
+for app UI headings (`--font-merit-display`, used in `app/admin`,
+`app/student`, `app/contributor`); School Times is loaded separately and
+scoped only to the landing route group (`app/(landing)/layout.tsx`) as
+`--font-landing-display`, matching the backend templ landing exactly.
+JetBrains Mono still loads from `next/font/google` (`--font-merit-mono`) —
+no local copy of it exists in this design system.
 
 **Known gaps, follow-up work:**
 - Component border-width (2px per §4) isn't retrofitted onto every
