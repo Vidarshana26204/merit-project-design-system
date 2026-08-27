@@ -214,3 +214,44 @@ Bordered track, accent fill, **black right-edge divider** on fill. Stepper: done
 **Do:** outline everything · zero-blur hard shadows · Clash Display for loud text · six canonical colors · gamification everywhere · EN/SI/TA first-class.
 
 **Don't:** soft/blurred Material shadows · gradients or new hues · unstyled Material widgets · freehand illustration (use geometric sticker kit) · overuse emoji.
+
+---
+
+## 8. Web / shadcn mapping (merit-project-frontend)
+
+Added when the unified web frontend (`merit-project-frontend`) needed these
+tokens expressed as shadcn/Tailwind v4 CSS variables. Applied in
+`app/globals.css` — shadcn variable names are kept unprefixed so every
+`components/ui/*` primitive restyles automatically; the raw merit-ds values
+are also exposed as `--merit-*` for direct use outside the shadcn mapping.
+
+| shadcn var | Light | Dark | merit-ds source |
+|---|---|---|---|
+| `--background` | `#FFEFD7` (cream) | `#1B161B` (ink-2) | `--bg` |
+| `--card` / `--popover` | `#FFFFFF` | `#2A222A` | `--surface` |
+| `--foreground` | `#29261B` | `#FFF7ED` | `--text` |
+| `--primary` | `#8E55D7` (purple) | same | `--purple` |
+| `--secondary` | `#9ED5B7` (mint) | `#9CE7C8` (mint-soft) | `--mint` |
+| `--muted` | `#FFF7ED` (cream-warm) | `#241D24` | `--surface-2` |
+| `--accent` | `#FFCC00` (yellow) | same | `--yellow` |
+| `--destructive` | `#C4393A` | same | Flutter `MeritColors.error` (not yet in merit-ds.css root tokens — carried over from the mobile app for consistency) |
+| `--border` / `--input` | `#000000` | `#FFF7ED` | `--line` (dark-mode flip is merit-ds.css's own rule) |
+| `--radius` | `1.125rem` (18px) | same | §4 "Radius — card" |
+| `--chart-1..5` | purple/yellow/mint/pink/blue | same | categorical accent set |
+
+**Fonts:** Plus Jakarta Sans (body) and JetBrains Mono load via
+`next/font/google` as `--font-merit-sans` / `--font-merit-mono`. **Clash
+Display is not on Google Fonts** — self-hosting it (Fontshare license
+permitting) is a follow-up; headings currently fall back to Plus Jakarta
+Sans at weight 700 with tightened tracking.
+
+**Known gaps, follow-up work:**
+- Component border-width (2px per §4) isn't retrofitted onto every
+  `components/ui/*` primitive yet — only the CSS variable color is mapped.
+  Hard-offset shadows (§4) aren't applied to shadcn cards/buttons either.
+- No square favicon/app-icon asset exists yet — `assets/logo.png` is a
+  1536×1024 wordmark, not favicon-shaped.
+- This section covers step 1 (setup + skeletons) of the frontend unification
+  only. Full component-level parity with §5 (buttons/cards/inputs/pills/
+  progress/toggles/tab bar) lands as the real admin/student/contributor UI
+  gets built in later phases.
