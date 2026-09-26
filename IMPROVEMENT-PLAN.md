@@ -385,17 +385,17 @@ floating layers. Neo-brutalism at full volume on a 50-row table is noise.
 6. Add Noto Sinhala/Tamil via `next/font/local` + `unicode-range`, plus `:lang()` overrides.
 7. Add a **Storybook** or `/design` route in the frontend that renders every primitive in light/dark and EN/SI/TA, with Chromatic or Playwright screenshot diffs.
 
-**Status, 2026-09-26: first pass done** on `merit-project-frontend` branch `feat/design-tokens-v2` (base `feat/notes-rendering`, 2 commits). tsc is clean, lint is unchanged (3 pre-existing warnings), and it was checked in the browser as admin (dashboard, questions table, light and dark) and as student (home, subjects).
+**Status, 2026-09-26: first pass done** on `merit-project-frontend` branch `feat/design-tokens-v2` (base `feat/notes-rendering`, 5 commits). tsc is clean, lint is unchanged (3 pre-existing warnings), and it was checked in the browser as admin (dashboard, questions table, light and dark) and as student (home, subjects).
 
 | Step | Status |
 |---|---|
 | 1 Tokens + `@theme` | ✅ `app/merit-tokens.css` pinned by `.design-tokens-ref`. shadcn vars are mapped to semantic tokens. Adds `shadow-brutal-*`, `rounded-card/field/chip/sheet`, `text-link`, `bg-sunken`, `font-display` |
 | 2 Primitives | ✅ button, card, input, textarea, select, badge, checkbox, switch, tabs, progress, table (compact D7), toggles, all floating layers |
 | 3 Leftovers | ✅ Fixed the theme-customizer bug: it re-applied the stock neutral preset over the brand. Fixed the dark destructive colour. Template demo pages stay allow-listed |
-| 4 Icons (Phosphor) | ⏭ Not started. lucide + tabler are used throughout; this is a large mechanical swap |
+| 4 Icons (Phosphor) | ✅ 138 files via generated-then-hand-maintained `lib/icons.tsx` (Bold default, `/ssr` entry so it works in server and client components); lucide + tabler removed; the guard and PR-review rule enforce it. ⏭ `components.json` `iconLibrary` still says lucide (shadcn CLI setting) |
 | 5 Reduced motion | ✅ Decorative animations |
-| 6 Noto SI/TA | ✅ `next/font/local` + `unicode-range`, plus `:lang()` rules. Content renderers still need to set `lang="si|ta"` on SI/TA content |
-| 7 `/design` route / Storybook | ⏭ Not started |
+| 6 Noto SI/TA | ✅ `next/font/local` + `unicode-range`, plus `:lang()` rules. The note reader sets `lang`; other content renderers (questions, flashcards) don't exist on the web yet |
+| 7 `/design` route / Storybook | ✅ `/admin/dev/design` light + dark specimen (no Storybook). ⏭ Screenshot diffs |
 | — Also | 56 purple-as-text sites → `text-link`; soft shadows on pages → hard shadows or removed; guard `scripts/check-design-tokens.mjs` + drift check in CI |
 
 ### Phase 4: DS site v2 (≈1 week, parallel with 2–3)
