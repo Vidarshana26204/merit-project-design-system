@@ -1,0 +1,19 @@
+name: tokens
+
+on:
+  push:
+    paths: ['tokens/**', 'scripts/**', 'build/**', 'SKILL.md', 'package.json', '.github/workflows/tokens.yml']
+  pull_request:
+    paths: ['tokens/**', 'scripts/**', 'build/**', 'SKILL.md', 'package.json', '.github/workflows/tokens.yml']
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Contrast gate (WCAG AA, light + dark) + fails if build/ or SKILL.md
+      # token block is stale relative to tokens/*.tokens.json.
+      - run: npm run check

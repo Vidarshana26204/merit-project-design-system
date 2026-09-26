@@ -28,7 +28,7 @@
       <div class="wm">Merit&nbsp;Project<small>Design System</small></div>
     </div>
 
-    <div class="ver"><span>Version</span><b>v1.1</b></div>
+    <div class="ver"><span>Version</span><b>v2.0</b></div>
 
     <nav class="toc">
       <div class="grp">Foundations</div>
@@ -155,15 +155,22 @@
           <div class="codeTabs"><button class="active">CSS tokens</button><button>Flutter</button></div>
           <div class="codeBody">
             <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>:root{
-  --purple:#8E55D7; --purple-deep:#6E36B8;
-  --yellow:#FFCC00; --mint:#9ED5B7; --cream:#FFEFD7;
-  --ink:#312A31; --ink-2:#1B161B; --white:#FFFFFF; --line:#000;
-  /* extended — app category accents */
-  --pink:#FFB3C8; --blue:#B3D8FF; --cream-warm:#FFF7ED;
-  --text-dim:#5a4a5a; --text-mute:#7a6c7a;
-}</code></pre>
-            <pre hidden><code>// Reference only — the real class is merit-project-flutter/lib/theme/merit_theme.dart.
+            <pre><code>/* Generated from tokens/*.tokens.json by `npm run build` → never hand-edit */
+@import url("build/css/merit-tokens.css");
+
+/* Use SEMANTIC tokens in components — they flip with .dark / [data-theme="dark"] */
+.card{
+  background:var(--merit-surface-default);
+  color:var(--merit-text-primary);
+  border:var(--merit-border-width-base) solid var(--merit-border-default);
+  border-radius:var(--merit-radius-lg);
+  box-shadow:var(--merit-shadow-s3);          /* 4px 4px 0 — blur always 0 */
+}
+a{color:var(--merit-text-link)}               /* purple-700 light · purple-300 dark */
+/* Primitives (--merit-purple-500 …) are for the token layer only. */</code></pre>
+            <pre hidden><code>// v2: build/dart/merit_tokens.g.dart (generated) → context.meritColors.textLink,
+// MeritSpace.space4, MeritRadii.lg, context.meritColors.shadowS3 …  Adopted in Phase 2.
+// Until then — the real class is merit-project-flutter/lib/theme/merit_theme.dart.
 // ⚠ Name mismatch until the v2 token pipeline lands (IMPROVEMENT-PLAN §6 Phase 2):
 //   app MeritColors.yellow = #F2D43B  → DS yellow.400 (large fills / warning)
 //   app MeritColors.mint   = #9CE7C8  → DS mint.400   (dark-mode success, category)
@@ -746,7 +753,7 @@ Color meritSurface(Brightness b) =>
 
     <footer class="foot">
       <div class="inner">
-        <div>Merit Project · Design System · v1.1 · 2026</div>
+        <div>Merit Project · Design System · v2.0 · 2026</div>
         <div class="hexes">#8E55D7 · #FFCC00 · #9ED5B7 · #FFEFD7 · #312A31</div>
       </div>
     </footer>

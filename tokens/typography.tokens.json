@@ -1,0 +1,30 @@
+{
+  "$description": "One type scale for Flutter + web. lineHeight is a ratio. Latin only — SI/TA overrides: tracking 0, line-height ≥1.6 body / ≥1.3 display, no uppercase (IMPROVEMENT-PLAN §4).",
+  "type": {
+    "$type": "typography",
+    "display": {
+      "xl": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "56px", "lineHeight": 1, "fontWeight": "{fontWeight.bold}", "letterSpacing": "-0.04em" } },
+      "lg": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "40px", "lineHeight": 1.1, "fontWeight": "{fontWeight.bold}", "letterSpacing": "-0.03em" } },
+      "md": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "32px", "lineHeight": 1.125, "fontWeight": "{fontWeight.bold}", "letterSpacing": "-0.02em" } }
+    },
+    "title": {
+      "lg": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "24px", "lineHeight": 1.25, "fontWeight": "{fontWeight.semibold}", "letterSpacing": "-0.02em" } },
+      "md": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "20px", "lineHeight": 1.3, "fontWeight": "{fontWeight.semibold}", "letterSpacing": "-0.01em" } },
+      "sm": { "$value": { "fontFamily": "{fontFamily.body}", "fontSize": "16px", "lineHeight": 1.5, "fontWeight": "{fontWeight.bold}", "letterSpacing": "0em" } }
+    },
+    "body": {
+      "lg": { "$value": { "fontFamily": "{fontFamily.body}", "fontSize": "16px", "lineHeight": 1.5, "fontWeight": "{fontWeight.medium}", "letterSpacing": "0em" } },
+      "md": { "$value": { "fontFamily": "{fontFamily.body}", "fontSize": "14px", "lineHeight": 1.5, "fontWeight": "{fontWeight.medium}", "letterSpacing": "0em" } },
+      "sm": { "$value": { "fontFamily": "{fontFamily.body}", "fontSize": "12px", "lineHeight": 1.5, "fontWeight": "{fontWeight.medium}", "letterSpacing": "0em" }, "$description": "Floor for body copy" }
+    },
+    "label": {
+      "md": { "$value": { "fontFamily": "{fontFamily.body}", "fontSize": "12px", "lineHeight": 1.333, "fontWeight": "{fontWeight.bold}", "letterSpacing": "0.08em" }, "$extensions": { "merit.textTransform": "uppercase" } },
+      "sm": { "$value": { "fontFamily": "{fontFamily.body}", "fontSize": "11px", "lineHeight": 1.273, "fontWeight": "{fontWeight.bold}", "letterSpacing": "0.12em" }, "$extensions": { "merit.textTransform": "uppercase" }, "$description": "Absolute floor — nothing smaller than 11px" }
+    },
+    "numeric": {
+      "xl": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "48px", "lineHeight": 1, "fontWeight": "{fontWeight.bold}", "letterSpacing": "-0.02em" }, "$extensions": { "merit.tabularNums": true } },
+      "lg": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "32px", "lineHeight": 1, "fontWeight": "{fontWeight.bold}", "letterSpacing": "-0.02em" }, "$extensions": { "merit.tabularNums": true } },
+      "md": { "$value": { "fontFamily": "{fontFamily.display}", "fontSize": "20px", "lineHeight": 1, "fontWeight": "{fontWeight.bold}", "letterSpacing": "-0.02em" }, "$extensions": { "merit.tabularNums": true } }
+    }
+  }
+}

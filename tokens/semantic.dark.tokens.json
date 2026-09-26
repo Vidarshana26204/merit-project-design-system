@@ -1,0 +1,49 @@
+{
+  "$description": "Semantic roles — dark theme. Outline + hard shadow flip to cream; accents stay.",
+  "color": {
+    "$type": "color",
+    "bg": {
+      "app": { "$value": "{color.ink.900}" },
+      "brand": { "$value": "{color.ink.900}" }
+    },
+    "surface": {
+      "default": { "$value": "{color.ink.800}" },
+      "sunken": { "$value": "{color.ink.850}" },
+      "inverse": { "$value": "{color.cream.100}" },
+      "selected": { "$value": "{color.purple.700}" }
+    },
+    "text": {
+      "primary": { "$value": "{color.cream.100}" },
+      "secondary": { "$value": "{color.mauve.300}" },
+      "tertiary": { "$value": "{color.mauve.400}" },
+      "link": { "$value": "{color.purple.300}" },
+      "onPrimary": { "$value": "{color.white}" },
+      "onAccent": { "$value": "{color.ink.700}" },
+      "onInverse": { "$value": "{color.ink.700}" },
+      "onSuccess": { "$value": "{color.ink.900}" },
+      "onError": { "$value": "{color.ink.900}" }
+    },
+    "border": {
+      "default": { "$value": "{color.cream.100}" },
+      "subtle": { "$value": "{color.ink.600}" }
+    },
+    "shadow": {
+      "color": { "$value": "{color.cream.100}" }
+    },
+    "action": {
+      "primary": { "$value": "{color.purple.500}" },
+      "primaryPressed": { "$value": "{color.purple.700}" },
+      "accent": { "$value": "{color.yellow.500}" }
+    },
+    "feedback": {
+      "success": { "$value": "{color.mint.400}" },
+      "successText": { "$value": "{color.mint.400}" },
+      "warning": { "$value": "{color.yellow.400}" },
+      "error": { "$value": "{color.red.300}" },
+      "errorSubtle": { "$value": "{color.red.900}" }
+    },
+    "focus": {
+      "ring": { "$value": "{color.purple.300}" }
+    }
+  }
+}

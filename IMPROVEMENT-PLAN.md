@@ -336,11 +336,16 @@ floating layers. Neo-brutalism at full volume on a 50-row table is noise.
 - ✅ R10: the demo persona is Nethmi Perera.
 - ⏭ Deferred to Phase 1: token value swaps for a11y (`text-mute` → `#685A68`, dark error, dark link purple). The *rules* are documented in SKILL.md now; the CSS values change with the token pipeline so all three platforms move together.
 
-### Phase 1: token pipeline (3–4 days)
-- Write `tokens/*.tokens.json` (§2), add the Style Dictionary build, and output CSS + Dart + JSON.
-- Rebuild `merit-ds.css` on top of `build/css/merit-tokens.css`.
-- Add `check-drift.mjs` plus a GitHub Action in `merit-project-flutter` and `merit-project-frontend`.
-- Bump the DS to **v2.0.0** and start a `CHANGELOG.md` (semver: token removal = major, token add = minor, value tweak = patch).
+### Phase 1: token pipeline ✅ done 2026-09-26 (v2.0.0)
+- ✅ `tokens/primitives|semantic.light|semantic.dark|component|typography.tokens.json` (DTCG) plus `tokens/contrast.json`.
+- ✅ Build: `npm run build` → `build/css/merit-tokens.css`, `build/dart/merit_tokens.g.dart`, `build/json/merit-tokens.json`, and the SKILL.md §10 block.
+  **Deviation:** a zero-dependency Node script (`scripts/build-tokens.mjs`) instead of Style Dictionary. The DS repo has no npm deps, SD's Flutter formats can't emit a `ThemeExtension`, and custom output keeps files byte-deterministic for the drift check.
+- ✅ Contrast gate: 45 pairs × light/dark on every build. I also ran a negative test: restoring `#7A6C7A` fails the build.
+- ✅ Generated Dart verified in a scratch Flutter 3.38.2 package: `flutter analyze` finds 0 issues, and unit tests pass (values, `lerp`, `context.meritColors`, shadow blur 0).
+- ✅ `merit-ds.css` now imports the tokens, and its legacy short names alias `--merit-*`. In headless Chrome, computed light/dark card colours, borders, and shadows are unchanged.
+- ✅ `scripts/check-drift.mjs` (tested for match, mismatch, and a missing file) and the DS CI `.github/workflows/tokens.yml` (`npm run check`).
+- ✅ `package.json` v2.0.0 and `CHANGELOG.md`.
+- ⏭ **Moved to Phase 2/3 kickoff:** vendoring the generated files and adding the drift-check CI step to `merit-project-flutter` and `merit-project-frontend`. Both checkouts are on unrelated feature branches, so this belongs on each phase's own branch. The CI step: check out the DS repo at a pinned ref, then `node ds/scripts/check-drift.mjs --dart lib/theme/merit_tokens.g.dart` (or `--css …`).
 
 ### Phase 2: Flutter retrofit (≈1.5–2 weeks, can run per feature)
 1. Drop in `merit_tokens.g.dart`. Keep `MeritColors` as a thin generated class.

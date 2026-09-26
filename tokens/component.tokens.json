@@ -1,0 +1,99 @@
+{
+  "$description": "Component tokens — reference semantic (theme-following) or primitive (theme-fixed) tokens only.",
+  "color": {
+    "$type": "color",
+    "quizOption": {
+      "idle": {
+        "bg": { "$value": "{color.surface.default}" },
+        "border": { "$value": "{color.border.default}" },
+        "fg": { "$value": "{color.text.primary}" }
+      },
+      "selected": {
+        "bg": { "$value": "{color.surface.selected}" },
+        "border": { "$value": "{color.action.primary}" },
+        "fg": { "$value": "{color.text.primary}" }
+      },
+      "correct": {
+        "$description": "Always paired with a ✓ icon — never colour alone",
+        "bg": { "$value": "{color.feedback.success}" },
+        "border": { "$value": "{color.border.default}" },
+        "fg": { "$value": "{color.text.onSuccess}" }
+      },
+      "wrong": {
+        "$description": "Always paired with a ✕ icon — never colour alone",
+        "bg": { "$value": "{color.feedback.errorSubtle}" },
+        "border": { "$value": "{color.feedback.error}" },
+        "fg": { "$value": "{color.text.primary}" }
+      },
+      "revealed": {
+        "$description": "The correct answer shown after a wrong pick — dashed border",
+        "bg": { "$value": "{color.surface.default}" },
+        "border": { "$value": "{color.feedback.success}" },
+        "fg": { "$value": "{color.text.primary}" }
+      }
+    },
+    "timer": {
+      "safe": { "$value": "{color.feedback.success}" },
+      "warn": { "$value": "{color.feedback.warning}" },
+      "critical": { "$value": "{color.red.600}" }
+    },
+    "tier": {
+      "wanderer": {
+        "bg": { "$value": "{color.surface.default}" },
+        "seal": { "$value": "{color.ink.700}" }
+      },
+      "achiever": {
+        "$description": "Pro — replaces the premium_screen gradient",
+        "bg": { "$value": "{color.yellow.500}" },
+        "fg": { "$value": "{color.ink.700}" },
+        "seal": { "$value": "{color.ink.700}" }
+      }
+    },
+    "reward": {
+      "points": { "$value": "{color.yellow.500}" },
+      "streakDone": { "$value": "{color.purple.500}" },
+      "streakToday": { "$value": "{color.yellow.500}" }
+    },
+    "grade": {
+      "$description": "Replaces ad-hoc #FF9800. fg = text on the grade fill.",
+      "a": { "bg": { "$value": "{color.mint.500}" }, "fg": { "$value": "{color.ink.700}" } },
+      "b": { "bg": { "$value": "{color.mint.400}" }, "fg": { "$value": "{color.ink.700}" } },
+      "c": { "bg": { "$value": "{color.yellow.400}" }, "fg": { "$value": "{color.ink.700}" } },
+      "d": { "bg": { "$value": "{color.yellow.500}" }, "fg": { "$value": "{color.ink.700}" } },
+      "e": { "bg": { "$value": "{color.pink.300}" }, "fg": { "$value": "{color.ink.700}" } },
+      "f": { "bg": { "$value": "{color.red.600}" }, "fg": { "$value": "{color.white}" } }
+    },
+    "category": {
+      "$description": "Subject colours, assigned deterministically by subject index. Always ink text + black border.",
+      "1": { "$value": "{color.pink.300}" },
+      "2": { "$value": "{color.blue.300}" },
+      "3": { "$value": "{color.mint.400}" },
+      "4": { "$value": "{color.yellow.400}" },
+      "5": { "$value": "{color.purple.100}" },
+      "6": { "$value": "{color.cream.200}" },
+      "fg": { "$value": "{color.ink.700}" }
+    },
+    "chart": {
+      "1": { "$value": "{color.purple.500}" },
+      "2": { "$value": "{color.yellow.500}" },
+      "3": { "$value": "{color.mint.500}" },
+      "4": { "$value": "{color.pink.300}" },
+      "5": { "$value": "{color.blue.300}" }
+    }
+  },
+  "size": {
+    "$type": "dimension",
+    "button": {
+      "sm": { "$value": "36px" },
+      "md": { "$value": "48px" },
+      "lg": { "$value": "56px" }
+    },
+    "quizOption": {
+      "minHeight": { "$value": "56px" }
+    },
+    "iconButton": {
+      "hit": { "$value": "{touch.minTarget}" },
+      "visual": { "$value": "40px" }
+    }
+  }
+}

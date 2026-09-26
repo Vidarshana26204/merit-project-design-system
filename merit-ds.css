@@ -1,3 +1,4 @@
+@import url("build/css/merit-tokens.css");
 /* ============================================================
    MERIT PROJECT — Design System reference site
    Tokens · component library · page chrome
@@ -15,42 +16,33 @@
 @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:'School Times';src:url('assets/fonts/SchoolTimes-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
 
-/* ---------- TOKENS ---------- */
-:root{
-  /* core six + black */
-  --purple:#8E55D7;  --purple-deep:#6E36B8;
-  --yellow:#FFCC00;  --mint:#9ED5B7;  --cream:#FFEFD7;
-  --ink:#312A31;     --ink-2:#1B161B; --white:#FFFFFF;
-  --line:#000000;
-  /* extended (mobile category accents) */
-  --yellow-soft:#F2D43B; --mint-soft:#9CE7C8;
-  --pink:#FFB3C8; --blue:#B3D8FF; --cream-warm:#FFF7ED;
-  --text-dim:#5A4A5A; --text-mute:#7A6C7A;
+/* ---------- TOKENS ----------
+   Values come from build/css/merit-tokens.css (generated — tokens/*.tokens.json).
+   The short names below are this site's legacy aliases. They are declared on
+   :root AND .dark so var() chains re-resolve inside dark frames. */
+:root,.dark{
+  /* brand primitives */
+  --purple:var(--merit-purple-500);  --purple-deep:var(--merit-purple-700);
+  --yellow:var(--merit-yellow-500);  --mint:var(--merit-mint-500);  --cream:var(--merit-cream-200);
+  --ink:var(--merit-ink-700);        --ink-2:var(--merit-ink-900);  --white:var(--merit-white);
+  --line:var(--merit-black);
+  --yellow-soft:var(--merit-yellow-400); --mint-soft:var(--merit-mint-400);
+  --pink:var(--merit-pink-300); --blue:var(--merit-blue-300); --cream-warm:var(--merit-cream-100);
 
-  /* semantic surfaces (light) — overridden inside .dark frames */
-  --bg:#FFEFD7;
-  --surface:#FFFFFF;
-  --surface-2:#FFF7ED;
-  --text:#29261B;
-  --border:#000000;
-  --hairline:#E7D8C6;
+  /* semantic (theme-following) — this reference site is a brand surface, so bg = bg.brand */
+  --bg:var(--merit-bg-brand);
+  --surface:var(--merit-surface-default);
+  --surface-2:var(--merit-surface-sunken);
+  --text:var(--merit-text-primary);
+  --text-dim:var(--merit-text-secondary);
+  --text-mute:var(--merit-text-tertiary);
+  --border:var(--merit-border-default);
+  --hairline:var(--merit-border-subtle);
 
-  --font-display:'Clash Display','Plus Jakarta Sans',system-ui,sans-serif;
-  --font-body:'Plus Jakarta Sans',system-ui,sans-serif;
-  --font-landing:'School Times','Clash Display',system-ui,sans-serif; /* landing headings only */
+  --font-display:var(--merit-font-family-display);
+  --font-body:var(--merit-font-family-body);
+  --font-landing:var(--merit-font-family-landing); /* landing headings only */
   --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
-}
-
-/* dark scope — apply to any frame to flip surfaces. Outline goes cream. */
-.dark{
-  --bg:#1B161B;
-  --surface:#2A222A;
-  --surface-2:#241D24;
-  --text:#FFF7ED;
-  --text-dim:#C4B5C4;
-  --text-mute:#9C8C9C;
-  --border:#FFF7ED;
-  --hairline:#3A2F3A;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}

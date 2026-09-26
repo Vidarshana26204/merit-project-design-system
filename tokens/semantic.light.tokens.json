@@ -1,0 +1,49 @@
+{
+  "$description": "Semantic roles — light theme. Keys must match semantic.dark.tokens.json exactly.",
+  "color": {
+    "$type": "color",
+    "bg": {
+      "app": { "$value": "{color.cream.100}", "$description": "Product UI background (D3)" },
+      "brand": { "$value": "{color.cream.200}", "$description": "Landing / brand bands (D3)" }
+    },
+    "surface": {
+      "default": { "$value": "{color.white}", "$description": "Cards, sheets, inputs" },
+      "sunken": { "$value": "{color.cream.100}", "$description": "Wells, tracks, muted rows" },
+      "inverse": { "$value": "{color.ink.700}", "$description": "Dark button, leaderboard (D4)" },
+      "selected": { "$value": "{color.purple.100}" }
+    },
+    "text": {
+      "primary": { "$value": "{color.ink.text}" },
+      "secondary": { "$value": "{color.mauve.700}" },
+      "tertiary": { "$value": "{color.mauve.600}", "$description": "Captions, placeholders" },
+      "link": { "$value": "{color.purple.700}", "$description": "purple.500 is for fills, not text" },
+      "onPrimary": { "$value": "{color.white}" },
+      "onAccent": { "$value": "{color.ink.700}" },
+      "onInverse": { "$value": "{color.cream.100}" },
+      "onSuccess": { "$value": "{color.ink.700}" },
+      "onError": { "$value": "{color.white}" }
+    },
+    "border": {
+      "default": { "$value": "{color.black}", "$description": "The signature outline" },
+      "subtle": { "$value": "{color.sand.200}", "$description": "Dividers only — never component edges" }
+    },
+    "shadow": {
+      "color": { "$value": "{color.black}", "$description": "Hard shadow follows border" }
+    },
+    "action": {
+      "primary": { "$value": "{color.purple.500}" },
+      "primaryPressed": { "$value": "{color.purple.700}" },
+      "accent": { "$value": "{color.yellow.500}" }
+    },
+    "feedback": {
+      "success": { "$value": "{color.mint.500}" },
+      "successText": { "$value": "{color.mint.800}" },
+      "warning": { "$value": "{color.yellow.400}" },
+      "error": { "$value": "{color.red.600}" },
+      "errorSubtle": { "$value": "{color.red.100}" }
+    },
+    "focus": {
+      "ring": { "$value": "{color.purple.500}", "$description": "3px outline, 2px offset" }
+    }
+  }
+}
