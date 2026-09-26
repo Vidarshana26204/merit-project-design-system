@@ -15,7 +15,7 @@ Token pipeline (IMPROVEMENT-PLAN Phase 1).
   - `build/css/merit-tokens.css`: `--merit-*` custom properties. Light is on `:root`;
     dark is on `.dark` / `[data-theme="dark"]`; there are hard-shadow composites
     `--merit-shadow-s1…s5` and a typography var group per style.
-  - `build/dart/merit_tokens.g.dart`: `MeritPalette`, `MeritSpace`, `MeritRadii`,
+  - `build/dart/merit_tokens.dart`: `MeritPalette`, `MeritSpace`, `MeritRadii`,
     `MeritBorderWidth`, `MeritShadowOffset`, `MeritMotion`, `MeritOpacity`,
     `MeritTouch`, `MeritSize`, `MeritFonts`, `MeritTypeScale`, and the
     `MeritSemanticColors` ThemeExtension (with `shadowS1…S5`, `lerp`, and

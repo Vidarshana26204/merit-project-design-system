@@ -2,7 +2,7 @@
 // Consumer drift check — run from an app repo's CI against a checkout of this
 // design-system repo. Fails if a vendored token file differs from the DS build.
 //
-//   node <ds>/scripts/check-drift.mjs --dart lib/theme/merit_tokens.g.dart
+//   node <ds>/scripts/check-drift.mjs --dart lib/theme/merit_tokens.dart
 //   node <ds>/scripts/check-drift.mjs --css app/merit-tokens.css
 //
 // Paths are relative to the current working directory (the app repo).
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const DS = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCES = {
   '--css': 'build/css/merit-tokens.css',
-  '--dart': 'build/dart/merit_tokens.g.dart',
+  '--dart': 'build/dart/merit_tokens.dart',
   '--json': 'build/json/merit-tokens.json',
 };
 

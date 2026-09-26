@@ -248,7 +248,7 @@ export function formatSkillBlock(themes, contrastResults, version) {
   return [
     SKILL_BEGIN,
     `Tokens **v${version}**. Source of truth: \`tokens/*.tokens.json\`; build with \`npm run build\`.`,
-    'Outputs: `build/css/merit-tokens.css` (web), `build/dart/merit_tokens.g.dart` (Flutter),',
+    'Outputs: `build/css/merit-tokens.css` (web), `build/dart/merit_tokens.dart` (Flutter),',
     '`build/json/merit-tokens.json`. Never hand-edit outputs or hard-code these hex values.',
     '',
     '### Semantic colours',

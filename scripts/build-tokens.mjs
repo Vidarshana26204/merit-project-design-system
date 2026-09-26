@@ -16,7 +16,7 @@ const check = process.argv.includes('--check');
 
 const OUTPUTS = {
   css: 'build/css/merit-tokens.css',
-  dart: 'build/dart/merit_tokens.g.dart',
+  dart: 'build/dart/merit_tokens.dart',
   json: 'build/json/merit-tokens.json',
 };
 
