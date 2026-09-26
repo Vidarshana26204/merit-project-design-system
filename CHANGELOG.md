@@ -4,6 +4,18 @@ Semver for tokens: **removing or renaming** a token is major, **adding** one is 
 and **changing a value** is patch. The version lives in `package.json` and is stamped
 into every generated file.
 
+## 2.1.0 — 2026-09-26
+
+### Added
+- Sinhala/Tamil font fallbacks. Every `fontFamily` stack now includes
+  `Noto Sans Sinhala` and `Noto Sans Tamil` before system fonts. Flutter gets
+  `MeritFonts.fallback`, and every `MeritTypeScale` style sets
+  `fontFamilyFallback`. Consumers must bundle or host the Noto files.
+
+### Changed
+- The Dart output is renamed `build/dart/merit_tokens.dart` (it was `.g.dart`,
+  which consumer repos gitignore).
+
 ## 2.0.0 — 2026-09-26
 
 Token pipeline (IMPROVEMENT-PLAN Phase 1).

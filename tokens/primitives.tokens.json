@@ -137,16 +137,18 @@
   },
   "fontFamily": {
     "$type": "fontFamily",
+    "$description": "Latin faces have no Sinhala/Tamil glyphs — every stack falls back to Noto Sans Sinhala / Tamil before system fonts.",
+    "$extensions": { "merit.flutterFallback": ["NotoSansSinhala", "NotoSansTamil"] },
     "display": {
-      "$value": ["Clash Display", "Plus Jakarta Sans", "system-ui", "sans-serif"],
+      "$value": ["Clash Display", "Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
       "$extensions": { "merit.flutter": "ClashDisplay" }
     },
     "body": {
-      "$value": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+      "$value": ["Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
       "$extensions": { "merit.flutter": "PlusJakartaSans" }
     },
     "landing": {
-      "$value": ["School Times", "Clash Display", "system-ui", "sans-serif"],
+      "$value": ["School Times", "Clash Display", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
       "$description": "Landing page headings only",
       "$extensions": { "merit.flutter": "SchoolTimes" }
     }

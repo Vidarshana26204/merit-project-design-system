@@ -127,6 +127,7 @@ export function formatDart(themes, version) {
     const tracking = Math.round(size * parseFloat(v.letterSpacing) * 100) / 100;
     const props = [
       `fontFamily: '${flutterFont(v.fontFamily)}'`,
+      'fontFamilyFallback: MeritFonts.fallback',
       `fontSize: ${num(size)}`,
       `height: ${num(v.lineHeight)}`,
       `fontWeight: FontWeight.${FONT_WEIGHT[v.fontWeight]}`,
@@ -175,8 +176,10 @@ export function formatDart(themes, version) {
       group('touch').map((t) => `static const double ${dartName(t)} = ${num(px(t.value))};${doc(t)}`)),
     ...cls('Component sizes.', 'MeritSize',
       group('size').map((t) => `static const double ${dartName(t)} = ${num(px(t.value))};`)),
-    ...cls('Bundled font families (pubspec.yaml).', 'MeritFonts',
-      group('fontFamily').map((t) => `static const String ${dartName(t)} = '${t.extensions['merit.flutter']}';${doc(t)}`)),
+    ...cls('Bundled font families (pubspec.yaml). Every style must set fontFamilyFallback: fallback (SI/TA glyphs).', 'MeritFonts', [
+      ...group('fontFamily').map((t) => `static const String ${dartName(t)} = '${t.extensions['merit.flutter']}';${doc(t)}`),
+      `static const List<String> fallback = [${(group('fontFamily')[0]?.extensions['merit.flutterFallback'] ?? []).map((f) => `'${f}'`).join(', ')}];`,
+    ]),
     ...cls('Unified type scale (Latin). SI/TA: letterSpacing 0, height ≥ 1.6 body / 1.3 display.', 'MeritTypeScale', typeStyles),
     '/// Theme-aware semantic + component colours. Register both instances in',
     '/// ThemeData.extensions; read with `context.meritColors`.',
