@@ -37,8 +37,11 @@ feels like a sticker sheet, an arcade, and a study planner at once.
 3. **Tri-lingual & local** — EN / SI / TA toggles are first-class; content is Sri-Lanka-specific (A/L streams, districts, schools).
 
 **Voice:** confident, encouraging, short. "Keep your streak alive." "Earn it."
-"Hit your weak spots first." Never corporate, never condescending. Emoji are
-**on-brand** but used sparingly as accents (🔥 streak, 🪙 coins/points, ★ rating/quiz).
+"Hit your weak spots first." Never corporate, never condescending. Emoji are fine
+in **copy** (push notifications, celebratory text) but are **not UI icons**. Streak,
+coins, rating, and timer glyphs use the icon set (D6: **Phosphor**, Bold weight to
+match 2px outlines, Fill for active states; `phosphor_flutter` in the app,
+`@phosphor-icons/react` on web). Brand glyphs `merit-flame` and `merit-coin` come from the DS icon kit.
 
 ---
 
@@ -58,44 +61,50 @@ These six tones + black are the **whole system. No remix, no new hues.**
 | **White** | `#FFFFFF` | Base surface |
 | **Line / Border** | `#000000` | The black outline on *everything* |
 
-### Extended palette (mobile app only)
+### Extended palette: supporting tints (roles approved in v2 decisions D1–D4)
 
 | Token | Hex | Use |
 |---|---|---|
-| Yellow (soft) | `#F2D43B` | App accent fills where `#FFCC00` is too hot |
-| Mint (soft) | `#9CE7C8` | App success / category |
+| Yellow (soft) | `#F2D43B` | **Large background fills and warning only.** Brand yellow for accents, CTAs, and rewards is `#FFCC00` (D1) |
+| Mint (soft) | `#9CE7C8` | **Dark-mode success** and category tint. Light-mode success is `#9ED5B7` (D2) |
 | Pink | `#FFB3C8` | Category accent (e.g. Arts, Biology) |
 | Blue | `#B3D8FF` | Category accent (e.g. Technology, ICT) |
-| Cream (warm) | `#FFF7ED` | App surface-2 / page background |
-| Text | `#29261B` | App body text |
+| Cream (warm) | `#FFF7ED` | **`bg.app`: page background for all product UI** (app + dashboards). `#FFEFD7` is for brand and landing bands (D3) |
+| Text | `#29261B` | `text.primary`. Ink `#312A31` is `surface.inverse` (dark buttons and cards), not text (D4) |
 | Text Dim | `#5A4A5A` | Secondary text |
-| Text Mute | `#7A6C7A` | Tertiary / captions / placeholders |
+| Text Mute | `#7A6C7A` | Tertiary / captions / placeholders. ⚠ 4.37:1 on cream fails AA; v2 replaces it with `#685A68` (IMPROVEMENT-PLAN §3) |
+| Error | `#C4393A` | Error fill (white text 5.26:1). In dark mode use `#FF9A9A` / Flutter `#FFB3BA`, never `#C4393A` (3.39:1) |
 
-### Flutter — `MeritColors`
+**Text-on-colour rule:** purple `#8E55D7` is a **fill** colour. Purple *text* or links on light
+surfaces use purple-deep `#6E36B8` (6.45:1). Purple `#8E55D7` on cream is only 4.19:1.
+
+### Flutter: `MeritColors` (real names, `lib/theme/merit_theme.dart`)
+
+**Don't redefine the palette.** Import `package:merit_project/theme/merit_theme.dart`.
+The app's constant *names* predate the DS names, so map them carefully:
 
 ```dart
-import 'package:flutter/material.dart';
+// What the app actually defines today (v2 token pipeline will regenerate this):
+MeritColors.purple      // #8E55D7  action.primary fill
+MeritColors.purpleDeep  // #6E36B8  pressed · purple text on light surfaces
+MeritColors.purpleLight // #EDE4F8  selected tint
+MeritColors.yellow      // #F2D43B  ⚠ = DS "yellow soft", NOT brand #FFCC00
+MeritColors.mint        // #9CE7C8  ⚠ = DS "mint soft", NOT #9ED5B7
+MeritColors.cream       // #FFF7ED  ⚠ = DS "cream warm" (bg.app, dark-mode border)
+MeritColors.ink         // #29261B  ⚠ = DS "text" (text.primary)
+MeritColors.inkDeep     // #1B161B  dark background
+MeritColors.inkSurface  // #2A232A  dark surface
+MeritColors.pink / .blue
+MeritColors.textDim / .textMute / .textDimDark / .textMuteDark
+MeritColors.error       // #C4393A
 
-abstract final class MeritColors {
-  static const purple     = Color(0xFF8E55D7);
-  static const purpleDeep = Color(0xFF6E36B8);
-  static const yellow     = Color(0xFFFFCC00);
-  static const mint       = Color(0xFF9ED5B7);
-  static const cream      = Color(0xFFFFEFD7);
-  static const ink        = Color(0xFF312A31);
-  static const ink2       = Color(0xFF1B161B);
-  static const white      = Color(0xFFFFFFFF);
-  static const line       = Color(0xFF000000);
-  static const yellowSoft = Color(0xFFF2D43B);
-  static const mintSoft   = Color(0xFF9CE7C8);
-  static const pink       = Color(0xFFFFB3C8);
-  static const blue       = Color(0xFFB3D8FF);
-  static const creamWarm  = Color(0xFFFFF7ED);
-  static const text     = Color(0xFF29261B);
-  static const textDim  = Color(0xFF5A4A5A);
-  static const textMute = Color(0xFF7A6C7A);
-}
+// Deprecated aliases: do NOT use in new code (codemod pending):
+// sunglow→yellow, emerald→mint, moonstone→purple, brightPink→error,
+// indigoDye→inkDeep, mintGreen→mintLight, blueNCS→blue, neutral10…99
 ```
+
+Never add `Color(0x…)` literals in `lib/features/**`. For borders and hard shadows, use
+`MeritBorders.resolve(context)` / `MeritShadows.brutal*(context)`, which flip to cream in dark mode.
 
 ---
 
@@ -103,7 +112,7 @@ abstract final class MeritColors {
 
 | Family | Where | Weights | Tracking |
 |---|---|---|---|
-| **Clash Display** | App UI headings, numbers, buttons, stat figures, labels-as-display (mobile app + admin/student/contributor web dashboards) | 500–800 | tight: `-0.02em` (display down to `-0.04em`) |
+| **Clash Display** | App UI headings, numbers, buttons, stat figures, labels-as-display (mobile app + admin/student/contributor web dashboards) | 500–700 (**700 is the heaviest cut; never 800**, which renders faux-bold) | tight: `-0.02em` (display down to `-0.04em`) |
 | **Plus Jakarta Sans** | Body copy, descriptions, form values, fine print — everywhere | 400–700 | normal |
 | **School Times** | Landing page (`meritproject.lk`) headings only — a punchier, more playful marketing-only display face, deliberately distinct from the in-app Clash Display | 400–700 | as authored, no extra tracking |
 
@@ -118,21 +127,28 @@ Fonts — they're local asset files, which is exactly why they should be
 self-hosted on web too rather than substituted with a Google Fonts
 lookalike.
 
+**Sinhala / Tamil:** none of these three families contain Sinhala or Tamil glyphs, and
+no SI/TA font ships yet (v2 adds Noto Sans Sinhala and Noto Sans Tamil; see IMPROVEMENT-PLAN §4).
+Until then, for SI/TA strings: letter-spacing 0 (never negative), line-height ≥ 1.6,
+no UPPERCASE wide-tracked labels, and let buttons, pills, and tabs wrap or flex. Tamil
+runs about 30–40% longer than English.
+
 ### Flutter typography
 
+The fonts are declared in `pubspec.yaml` as local families: `ClashDisplay`
+(w500/600/700) and `PlusJakartaSans` (w400–700). **Do not use the `google_fonts`
+package.** In screens, use `Theme.of(context).textTheme.*` or `MeritTypography.*`
+(`lib/theme/merit_theme.dart`) rather than literal `fontSize:`. Label floor: 11.
+
 ```dart
-class MeritType {
-  static const display = 'ClashDisplay';
-  static TextStyle clash(double size, {FontWeight w = FontWeight.w700, Color? c}) =>
-      TextStyle(fontFamily: display, fontSize: size, fontWeight: w,
-                letterSpacing: size >= 64 ? -size * 0.04 : -size * 0.02,
-                height: 1.0, color: c);
-  static TextStyle body(double size, {FontWeight w = FontWeight.w500, Color? c}) =>
-      GoogleFonts.plusJakartaSans(fontSize: size, fontWeight: w, height: 1.5, color: c);
-  static TextStyle label() => GoogleFonts.plusJakartaSans(
-      fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.8,
-      color: MeritColors.textMute);
-}
+// MeritTypography (real) — display/headline/titleLarge = ClashDisplay,
+// titleMedium and below = PlusJakartaSans.
+Text('Keep the streak', style: Theme.of(context).textTheme.headlineMedium);
+Text('12 of 50 today', style: MeritTypography.labelMedium.copyWith(
+    color: Theme.of(context).colorScheme.onSurfaceVariant));
+// Live-updating numbers (timer, points): add tabular figures
+MeritTypography.headlineLarge.copyWith(
+    fontFeatures: const [FontFeature.tabularFigures()]);
 ```
 
 ---
@@ -194,13 +210,15 @@ Radius 14px (not pill). UPPERCASE micro-label above. Focus → purple border + s
 Bordered track, accent fill, **black right-edge divider** on fill. Stepper: done=mint, current=purple, todo=white.
 
 ### Toggles
-46×24 pill, ink→mint. Checkbox: 22×22 rounded-7px, mint+✓ when on.
+46×24 pill, ink→mint. Checkbox: 24×24 rounded-7px. **Form selection = purple fill + white ✓.
+Completion (todo done, stage cleared) = mint fill + ink ✓** (D5: "selected" must never read as "achieved").
 
 ### Tab bar
-`meritBox(radius:20, offset:3)`, 5 items. Active = purple chip with white glyph.
+`meritBox(radius:20, offset:3)`, 5 items max. Active = purple chip with white glyph.
+Label **11px minimum**. Touch target ≥ 48dp.
 
 ### Gamification
-- Streak chip: white pill, 🔥 {n}, Clash 800
+- Streak chip: white pill, flame icon + {n}, Clash 700
 - Coins chip: yellow pill, 🪙 {points}
 - Streak ribbon: done=purple ✓, today=yellow !, future=dashed
 - Leaderboard: dark card, "You" row highlighted purple, points yellow ★
@@ -212,7 +230,8 @@ Bordered track, accent fill, **black right-edge divider** on fill. Stepper: done
 
 | | Light | Dark |
 |---|---|---|
-| Background | `#FFEFD7` | `#1B161B` |
+| Background: product UI (app, dashboards) | `#FFF7ED` | `#1B161B` |
+| Background: brand / landing bands | `#FFEFD7` | `#1B161B` |
 | Surface | `#FFFFFF` | `#2A222A` |
 | Text | `#29261B` | `#FFF7ED` |
 | Border | `#000000` | `#FFF7ED` (cream!) |
@@ -272,3 +291,21 @@ no local copy of it exists in this design system.
   only. Full component-level parity with §5 (buttons/cards/inputs/pills/
   progress/toggles/tab bar) lands as the real admin/student/contributor UI
   gets built in later phases.
+
+---
+
+## 9. v2 decisions (approved 2026-09-26)
+
+Full rationale, measured contrast data and the migration roadmap live in
+`IMPROVEMENT-PLAN.md`. Until the Phase 1 token pipeline lands, these rules
+override any older wording above.
+
+| ID | Decision |
+|---|---|
+| D1 | Brand yellow = `#FFCC00` (accents, CTAs, rewards). `#F2D43B` = large fills + warning only |
+| D2 | `#9ED5B7` = light-mode success. `#9CE7C8` = dark-mode success + category tint |
+| D3 | `bg.app` = `#FFF7ED` for all product UI; `#FFEFD7` = brand / landing bands |
+| D4 | `text.primary` = `#29261B`; `surface.inverse` = `#312A31` |
+| D5 | Checkbox: form selection = purple + white ✓; completion = mint + ink ✓ |
+| D6 | One icon family on both platforms: Phosphor (Bold / Fill) + `merit-flame`, `merit-coin` |
+| D7 | Admin / contributor dashboards use **compact density**: 1.5px borders on table cells, s1–s2 shadows, 8–12 padding; full hard shadows only for primary actions and floating layers |

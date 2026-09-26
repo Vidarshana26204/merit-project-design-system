@@ -3,6 +3,18 @@
    Tokens · component library · page chrome
    ============================================================ */
 
+/* ---------- FONTS (self-hosted — assets/fonts/, never a CDN) ----------
+   Clash Display ships 500/600/700 only (700 is the heaviest cut — no 800).
+   Plus Jakarta Sans ships 400–700. */
+@font-face{font-family:'Clash Display';src:url('assets/fonts/ClashDisplay-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('assets/fonts/ClashDisplay-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('assets/fonts/ClashDisplay-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'School Times';src:url('assets/fonts/SchoolTimes-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+
 /* ---------- TOKENS ---------- */
 :root{
   /* core six + black */
@@ -25,7 +37,8 @@
 
   --font-display:'Clash Display','Plus Jakarta Sans',system-ui,sans-serif;
   --font-body:'Plus Jakarta Sans',system-ui,sans-serif;
-  --font-mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+  --font-landing:'School Times','Clash Display',system-ui,sans-serif; /* landing headings only */
+  --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
 }
 
 /* dark scope — apply to any frame to flip surfaces. Outline goes cream. */
@@ -201,16 +214,18 @@ section.sec:last-of-type{border-bottom:none}
 .toggle.on{background:var(--mint)}
 .toggle.on::after{left:23px;background:var(--ink)}
 .check{width:24px;height:24px;border:2px solid var(--border);border-radius:7px;background:var(--surface);
-  cursor:pointer;display:grid;place-items:center;color:transparent;font-weight:800;flex-shrink:0;transition:.12s}
-.check.on{background:var(--mint);color:var(--ink)}
+  cursor:pointer;display:grid;place-items:center;color:transparent;font-weight:700;flex-shrink:0;transition:.12s}
+/* D5: form selection = purple + white ✓; completion (todo, stage done) = mint + ink ✓ */
+.check.on{background:var(--purple);color:#fff}
+.check.done{background:var(--mint);color:var(--ink)}
 
 /* icon chips / seals / avatars */
 .ichip{display:grid;place-items:center;border:2px solid var(--border);border-radius:12px;
-  font-family:var(--font-display);font-weight:800;width:44px;height:44px;font-size:18px}
+  font-family:var(--font-display);font-weight:700;width:44px;height:44px;font-size:18px}
 .ichip.p{background:var(--purple);color:#fff}.ichip.y{background:var(--yellow);color:#312A31}
 .ichip.m{background:var(--mint);color:#312A31}.ichip.k{background:var(--ink);color:var(--cream)}
 .seal{width:64px;height:64px;border-radius:50%;background:var(--yellow);border:2px solid var(--border);
-  display:grid;place-items:center;color:#312A31;font-family:var(--font-display);font-weight:800;font-size:22px;
+  display:grid;place-items:center;color:#312A31;font-family:var(--font-display);font-weight:700;font-size:22px;
   box-shadow:inset 0 0 0 6px var(--ink),inset 0 0 0 8px var(--yellow)}
 .avstack{display:flex;align-items:center}
 .av{width:38px;height:38px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;
@@ -221,22 +236,22 @@ section.sec:last-of-type{border-bottom:none}
 .tabbar{display:flex;justify-content:space-around;align-items:center;background:var(--surface);
   border:2px solid var(--border);border-radius:20px;padding:8px;box-shadow:3px 3px 0 var(--border);gap:4px}
 .tabbar .tb{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-mute);
-  font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:10px}
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;border-radius:10px}
 .tabbar .tb .g{width:24px;height:24px;display:grid;place-items:center}
 .tabbar .tb.active{background:var(--purple);color:#fff}
 
 /* gamification widgets */
 .chip-streak{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--text);
   border:2px solid var(--border);border-radius:99px;padding:8px 14px;font-family:var(--font-display);
-  font-weight:800;font-size:16px;box-shadow:3px 3px 0 var(--border)}
+  font-weight:700;font-size:16px;box-shadow:3px 3px 0 var(--border)}
 .chip-coins{display:inline-flex;align-items:center;gap:7px;background:var(--yellow);color:#312A31;
   border:2px solid var(--border);border-radius:99px;padding:8px 14px;font-family:var(--font-display);
-  font-weight:800;font-size:16px;box-shadow:3px 3px 0 var(--border)}
+  font-weight:700;font-size:16px;box-shadow:3px 3px 0 var(--border)}
 .ribbon{display:flex;gap:7px}
 .ribbon .d{width:38px;height:46px;border:2px solid var(--border);border-radius:11px;display:flex;
   flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700;
   background:var(--surface);color:var(--text-mute)}
-.ribbon .d .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;font-weight:800;font-size:11px}
+.ribbon .d .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;font-weight:700;font-size:11px}
 .ribbon .d.done{background:var(--purple);color:#fff}
 .ribbon .d.done .dot{background:#fff;color:var(--purple)}
 .ribbon .d.today{background:var(--yellow);color:#312A31}
@@ -247,7 +262,7 @@ section.sec:last-of-type{border-bottom:none}
 .lead-board{background:var(--ink-2);border:2px solid var(--border);border-radius:18px;
   box-shadow:5px 5px 0 var(--border);padding:16px;display:flex;flex-direction:column;gap:8px}
 .lead-board .lr{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:12px;color:var(--cream)}
-.lead-board .lr .rk{font-family:var(--font-display);font-weight:800;font-size:20px;color:#A89AA8;width:28px}
+.lead-board .lr .rk{font-family:var(--font-display);font-weight:700;font-size:20px;color:#A89AA8;width:28px}
 .lead-board .lr .who{font-family:var(--font-display);font-weight:700;font-size:14px;flex:1}
 .lead-board .lr .pts{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--yellow);display:flex;align-items:center;gap:5px}
 .lead-board .lr.you{background:var(--purple);border:2px solid #000}
@@ -260,7 +275,7 @@ section.sec:last-of-type{border-bottom:none}
 .tierBadge .info .pts{font-size:11px;color:#A89AA8;margin-top:2px}
 .starburst{position:relative;width:120px;height:120px;flex-shrink:0}
 .starburst .lbl{position:absolute;inset:0;display:grid;place-items:center;color:#fff;
-  font-family:var(--font-display);font-weight:800;font-size:15px;line-height:.9;text-align:center;text-transform:uppercase}
+  font-family:var(--font-display);font-weight:700;font-size:15px;line-height:.9;text-align:center;text-transform:uppercase}
 
 /* ============================================================
    DEMO SCAFFOLDING
@@ -355,7 +370,7 @@ section.sec:last-of-type{border-bottom:none}
 .dd .col.do{background:#EAF7EF}
 .dd .col.dont{background:#FBEAEA}
 .dd .col h4{font-size:16px;display:flex;align-items:center;gap:8px}
-.dd .col .badge{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:15px}
+.dd .col .badge{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:15px}
 .dd .col.do .badge{background:var(--mint);color:#1c5436}
 .dd .col.dont .badge{background:#F4C7C7;color:#7A2222}
 .dd ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:9px}

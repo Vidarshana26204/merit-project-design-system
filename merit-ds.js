@@ -63,7 +63,7 @@
     document.querySelectorAll('.toggle').forEach(function (t) {
       t.addEventListener('click', function () { t.classList.toggle('on'); });
     });
-    document.querySelectorAll('.check').forEach(function (c) {
+    document.querySelectorAll('.check:not(.done)').forEach(function (c) {
       c.addEventListener('click', function () {
         c.classList.toggle('on');
         c.textContent = c.classList.contains('on') ? '✓' : '';

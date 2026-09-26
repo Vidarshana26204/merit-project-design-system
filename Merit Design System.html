@@ -4,10 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Merit Project — Design System</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700,800&display=swap" rel="stylesheet" />
+<!-- Fonts are self-hosted from assets/fonts/ via @font-face in merit-ds.css — no CDN. -->
+<link rel="preload" href="assets/fonts/ClashDisplay-Bold.ttf" as="font" type="font/ttf" crossorigin />
+<link rel="preload" href="assets/fonts/PlusJakartaSans-Medium.ttf" as="font" type="font/ttf" crossorigin />
 <link rel="stylesheet" href="merit-ds.css" />
 <style>
   /* page-local: spinning hero stickers (gated by tweak) */
@@ -29,7 +28,7 @@
       <div class="wm">Merit&nbsp;Project<small>Design System</small></div>
     </div>
 
-    <div class="ver"><span>Version</span><b>v1.0</b></div>
+    <div class="ver"><span>Version</span><b>v1.1</b></div>
 
     <nav class="toc">
       <div class="grp">Foundations</div>
@@ -51,11 +50,11 @@
       <a href="#dark"><span class="ix">13</span> Dark Mode</a>
     </nav>
 
-    <a class="backlink" href="Merit Project Brand Board.html">
+    <a class="backlink" href="IMPROVEMENT-PLAN.md">
       <span class="a">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 19l-7-7 7-7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span>
-      Brand Board poster
+      v2 improvement plan
     </a>
   </aside>
 
@@ -132,14 +131,14 @@
           <div class="sw" data-hex="#000000"><div class="chipc" style="background:#000"><span class="role">Outline</span></div><div class="meta"><div class="nm">Line</div><div class="hex">#000000 <span class="copytag">CLICK</span></div></div></div>
         </div>
 
-        <h3 class="subhead">Extended palette — mobile category accents only</h3>
-        <p class="note">Use these soft tints <strong>only inside the Flutter app</strong> for subject/illustration coding. The canonical six still drive all primary UI.</p>
+        <h3 class="subhead">Extended palette — supporting tints</h3>
+        <p class="note">Approved roles (v2 decisions D1–D4): <strong>Yellow <span class="inlineCode">#FFCC00</span></strong> is brand yellow for accents, CTAs and rewards; <strong>yellow-soft</strong> only for large background fills and warnings. <strong>Mint <span class="inlineCode">#9ED5B7</span></strong> is light-mode success; <strong>mint-soft</strong> is dark-mode success and a category tint. <strong>Cream-warm</strong> is the product-UI app background; <strong>Cream <span class="inlineCode">#FFEFD7</span></strong> is for brand and landing bands. Text is <span class="inlineCode">#29261B</span>; Ink <span class="inlineCode">#312A31</span> is the inverse surface (dark buttons and cards).</p>
         <div class="swGrid">
-          <div class="sw" data-hex="#F2D43B"><div class="chipc" style="background:#F2D43B"><span class="role dk">App accent</span></div><div class="meta"><div class="nm">Yellow soft</div><div class="hex">#F2D43B <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#9CE7C8"><div class="chipc" style="background:#9CE7C8"><span class="role dk">Success</span></div><div class="meta"><div class="nm">Mint soft</div><div class="hex">#9CE7C8 <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#F2D43B"><div class="chipc" style="background:#F2D43B"><span class="role dk">Big fills</span></div><div class="meta"><div class="nm">Yellow soft</div><div class="hex">#F2D43B <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#9CE7C8"><div class="chipc" style="background:#9CE7C8"><span class="role dk">Dark success</span></div><div class="meta"><div class="nm">Mint soft</div><div class="hex">#9CE7C8 <span class="copytag">CLICK</span></div></div></div>
           <div class="sw" data-hex="#FFB3C8"><div class="chipc" style="background:#FFB3C8"><span class="role dk">Category</span></div><div class="meta"><div class="nm">Pink</div><div class="hex">#FFB3C8 <span class="copytag">CLICK</span></div></div></div>
           <div class="sw" data-hex="#B3D8FF"><div class="chipc" style="background:#B3D8FF"><span class="role dk">Category</span></div><div class="meta"><div class="nm">Blue</div><div class="hex">#B3D8FF <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFF7ED"><div class="chipc" style="background:#FFF7ED"><span class="role dk">Surface-2</span></div><div class="meta"><div class="nm">Cream warm</div><div class="hex">#FFF7ED <span class="copytag">CLICK</span></div></div></div>
+          <div class="sw" data-hex="#FFF7ED"><div class="chipc" style="background:#FFF7ED"><span class="role dk">App bg</span></div><div class="meta"><div class="nm">Cream warm</div><div class="hex">#FFF7ED <span class="copytag">CLICK</span></div></div></div>
         </div>
 
         <h3 class="subhead">Contrast rules</h3>
@@ -164,18 +163,26 @@
   --pink:#FFB3C8; --blue:#B3D8FF; --cream-warm:#FFF7ED;
   --text-dim:#5a4a5a; --text-mute:#7a6c7a;
 }</code></pre>
-            <pre hidden><code>abstract final class MeritColors {
-  static const purple     = Color(0xFF8E55D7); // primary
-  static const purpleDeep = Color(0xFF6E36B8); // pressed
-  static const yellow     = Color(0xFFFFCC00); // accent
-  static const mint       = Color(0xFF9ED5B7); // success
-  static const cream      = Color(0xFFFFEFD7); // surface
-  static const ink        = Color(0xFF312A31); // text
-  static const ink2       = Color(0xFF1B161B); // dark bg
-  static const line       = Color(0xFF000000); // outline
-  // extended (mobile category accents)
-  static const pink       = Color(0xFFFFB3C8);
-  static const blue       = Color(0xFFB3D8FF);
+            <pre hidden><code>// Reference only — the real class is merit-project-flutter/lib/theme/merit_theme.dart.
+// ⚠ Name mismatch until the v2 token pipeline lands (IMPROVEMENT-PLAN §6 Phase 2):
+//   app MeritColors.yellow = #F2D43B  → DS yellow.400 (large fills / warning)
+//   app MeritColors.mint   = #9CE7C8  → DS mint.400   (dark-mode success, category)
+//   app MeritColors.cream  = #FFF7ED  → DS cream.100  (bg.app — D3)
+//   app MeritColors.ink    = #29261B  → DS text.primary (D4)
+// Brand yellow (#FFCC00) and mint (#9ED5B7) have no app constant yet.
+// Never add new Color(0x…) literals in features — reference MeritColors / theme.
+class MeritColors {
+  static const Color purple     = Color(0xFF8E55D7); // action.primary fill
+  static const Color purpleDeep = Color(0xFF6E36B8); // pressed · purple TEXT on light
+  static const Color yellow     = Color(0xFFF2D43B); // yellow.400
+  static const Color mint       = Color(0xFF9CE7C8); // mint.400
+  static const Color cream      = Color(0xFFFFF7ED); // bg.app · dark-mode border
+  static const Color ink        = Color(0xFF29261B); // text.primary
+  static const Color inkDeep    = Color(0xFF1B161B); // dark bg
+  static const Color inkSurface = Color(0xFF2A232A); // dark surface
+  static const Color pink       = Color(0xFFFFB3C8); // category
+  static const Color blue       = Color(0xFFB3D8FF); // category
+  static const Color error      = Color(0xFFC4393A);
 }</code></pre>
           </div>
         </div>
@@ -191,7 +198,7 @@
           <div class="frame light">
             <span class="ftag">Clash Display</span>
             <div style="font-family:var(--font-display);font-weight:700;font-size:96px;letter-spacing:-.04em;line-height:.85;color:#312A31">Aa</div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.04em;margin-top:14px;color:#5a4a5a">500 · 600 · 700 · 800 — tight tracking</div>
+            <div style="font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.04em;margin-top:14px;color:#5a4a5a">500 · 600 · 700 (max) — tight tracking</div>
           </div>
           <div class="frame light" style="background:#fff">
             <span class="ftag">Plus Jakarta Sans</span>
@@ -215,21 +222,32 @@
           <div class="codeTabs"><button class="active">Web</button><button>Flutter</button></div>
           <div class="codeBody">
             <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>&lt;link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700,800&amp;display=swap" rel="stylesheet"&gt;
-&lt;link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"&gt;
+            <pre><code>/* Self-host the files in assets/fonts/ — never a CDN / lookalike.
+   Clash Display: 500·600·700 (700 = heaviest cut). Jakarta: 400–700. */
+@font-face{font-family:'Clash Display';font-weight:700;font-display:swap;
+  src:url('/fonts/ClashDisplay-Bold.ttf') format('truetype')}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:500;font-display:swap;
+  src:url('/fonts/PlusJakartaSans-Medium.ttf') format('truetype')}
+/* …one block per shipped weight (see merit-ds.css) */
 
 h1,h2,h3,h4{font-family:'Clash Display',sans-serif;font-weight:700;
   letter-spacing:-.02em;line-height:1}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif}</code></pre>
-            <pre hidden><code>// Clash Display is NOT on Google Fonts — bundle the .otf via Fontshare.
+            <pre hidden><code>// pubspec.yaml bundles local files (assets/google_fonts/ is just a folder
+// name — nothing loads from Google Fonts). Use the family names directly;
+// do NOT use the google_fonts package.
+//   ClashDisplay     → w500, w600, w700
+//   PlusJakartaSans  → w400, w500, w600, w700
+// In app code prefer Theme.of(context).textTheme / MeritTypography.*
 class MeritType {
   static const display = 'ClashDisplay';
+  static const body = 'PlusJakartaSans';
   static TextStyle clash(double size, {FontWeight w = FontWeight.w700, Color? c}) =>
       TextStyle(fontFamily: display, fontSize: size, fontWeight: w,
                 letterSpacing: size >= 64 ? -size * 0.04 : -size * 0.02,
                 height: 1.0, color: c);
-  static TextStyle body(double size, {FontWeight w = FontWeight.w500, Color? c}) =>
-      GoogleFonts.plusJakartaSans(fontSize: size, fontWeight: w, height: 1.5, color: c);
+  static TextStyle text(double size, {FontWeight w = FontWeight.w500, Color? c}) =>
+      TextStyle(fontFamily: body, fontSize: size, fontWeight: w, height: 1.5, color: c);
 }</code></pre>
           </div>
         </div>
@@ -418,7 +436,7 @@ final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple
         <div class="demo">
           <span class="demoLabel">Live · focus a field</span>
           <div class="demoGrid" style="grid-template-columns:1fr 1fr;max-width:640px">
-            <div class="field"><label>Full name</label><div class="input"><input type="text" placeholder="Maya Okafor" /></div></div>
+            <div class="field"><label>Full name</label><div class="input"><input type="text" placeholder="Nethmi Perera" /></div></div>
             <div class="field"><label>Phone</label><div class="input"><span class="pre">+94</span><input type="text" placeholder="77 123 4567" /></div></div>
             <div class="field" style="grid-column:span 2"><label>School / district</label><div class="input"><input type="text" placeholder="Search your school…" /><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#7a6c7a" stroke-width="2"/></svg></div></div>
           </div>
@@ -523,7 +541,7 @@ final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple
       <section class="sec" id="toggles" data-screen-label="Toggles">
         <span class="kicker">09 — Components</span>
         <h2>Toggles &amp; checkboxes</h2>
-        <p class="lead">Toggle: 46×24 pill, ink track → mint when on. Checkbox: 24×24 rounded-7px, mint fill + bold ✓ when on. Both are clickable below.</p>
+        <p class="lead">Toggle: 46×24 pill, ink track → mint when on. Checkbox: 24×24 rounded-7px. A <strong>form selection</strong> is purple fill + white ✓. A <strong>completion</strong> (todo item, stage cleared) is mint fill + ink ✓, so "selected" never reads as "achieved" (decision D5). The toggles and form checkboxes are clickable below.</p>
 
         <div class="demo">
           <span class="demoLabel">Live · click them</span>
@@ -535,6 +553,9 @@ final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple
           <div class="demoRow" style="gap:28px;margin-top:20px">
             <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check on">✓</span> Remember me</div>
             <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check"></span> Email past papers</div>
+          </div>
+          <div class="demoRow" style="gap:28px;margin-top:20px">
+            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check done" aria-hidden="true">✓</span> Stage 2 cleared <span class="note" style="margin:0;font-weight:500">(completion — static)</span></div>
           </div>
         </div>
       </section>
@@ -602,10 +623,10 @@ final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple
         <div class="demo">
           <div class="demoRow" style="gap:30px">
             <div class="tierBadge">
-              <div class="seal">M</div>
+              <div class="seal">N</div>
               <div class="info">
                 <div class="lvl">Level 4 · Achiever</div>
-                <div class="nm">Maya Okafor</div>
+                <div class="nm">Nethmi Perera</div>
                 <div class="pts">2,840 merit · streak 14d</div>
               </div>
             </div>
@@ -621,7 +642,7 @@ final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple
           <div class="lead-board" style="max-width:420px">
             <div class="lr"><span class="rk">1</span><span class="av" style="background:#FFCC00;color:#312A31">A</span><span class="who">Anjana P.</span><span class="pts">3,910 ★</span></div>
             <div class="lr"><span class="rk">2</span><span class="av" style="background:#9ED5B7;color:#312A31">R</span><span class="who">Rashmi K.</span><span class="pts">3,420 ★</span></div>
-            <div class="lr you"><span class="rk">3</span><span class="av" style="background:#FFEFD7;color:#312A31">M</span><span class="who">You · Maya</span><span class="pts">2,840 ★</span></div>
+            <div class="lr you"><span class="rk">3</span><span class="av" style="background:#FFEFD7;color:#312A31">N</span><span class="who">You · Nethmi</span><span class="pts">2,840 ★</span></div>
             <div class="lr"><span class="rk">4</span><span class="av" style="background:#B3D8FF;color:#312A31">S</span><span class="who">Sahan W.</span><span class="pts">2,610 ★</span></div>
           </div>
         </div>
@@ -694,7 +715,8 @@ final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple
         <table class="spec">
           <thead><tr><th>Token</th><th>Light</th><th>Dark</th></tr></thead>
           <tbody>
-            <tr><td>Background</td><td><code>#FFEFD7 / #FFF7ED</code></td><td><code>#1B161B</code></td></tr>
+            <tr><td>Background — product UI (app, dashboards)</td><td><code>#FFF7ED</code></td><td><code>#1B161B</code></td></tr>
+            <tr><td>Background — brand / landing bands</td><td><code>#FFEFD7</code></td><td><code>#1B161B</code></td></tr>
             <tr><td>Surface / card</td><td><code>#FFFFFF</code></td><td><code>#2A222A</code></td></tr>
             <tr><td>Text</td><td><code>#29261B</code></td><td><code>#FFF7ED</code></td></tr>
             <tr><td>Text dim</td><td><code>#5A4A5A</code></td><td><code>#C4B5C4</code></td></tr>
@@ -724,7 +746,7 @@ Color meritSurface(Brightness b) =>
 
     <footer class="foot">
       <div class="inner">
-        <div>Merit Project · Design System · v1.0 · 2026</div>
+        <div>Merit Project · Design System · v1.1 · 2026</div>
         <div class="hexes">#8E55D7 · #FFCC00 · #9ED5B7 · #FFEFD7 · #312A31</div>
       </div>
     </footer>
@@ -732,43 +754,29 @@ Color meritSurface(Brightness b) =>
   </main>
 </div>
 
-<div id="tweaks-root"></div>
-
 <script src="merit-ds.js"></script>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel">
+<script>
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "grain": "crunchy",
   "spin": true
 }/*EDITMODE-END*/;
 
-function MeritDSTweaks() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  React.useEffect(() => {
+window.MERIT_TWEAKS = {
+  title: 'Tweaks',
+  defaults: TWEAK_DEFAULTS,
+  controls: [
+    { section: 'Texture' },
+    { key: 'grain', label: 'Grain', type: 'radio', options: ['off', 'subtle', 'crunchy'] },
+    { section: 'Motion' },
+    { key: 'spin', label: 'Spin hero stickers', type: 'toggle' }
+  ],
+  apply: function (t) {
     document.documentElement.setAttribute('data-grain', t.grain);
     document.documentElement.setAttribute('data-spin', t.spin ? 'on' : 'off');
-  }, [t.grain, t.spin]);
-
-  return (
-    <TweaksPanel title="Tweaks">
-      <TweakSection label="Texture" />
-      <TweakRadio label="Grain" value={t.grain}
-        options={['off', 'subtle', 'crunchy']}
-        onChange={(v) => setTweak('grain', v)} />
-      <TweakSection label="Motion" />
-      <TweakToggle label="Spin hero stickers" value={t.spin}
-        onChange={(v) => setTweak('spin', v)} />
-    </TweaksPanel>
-  );
-}
-
-document.documentElement.setAttribute('data-grain', TWEAK_DEFAULTS.grain);
-document.documentElement.setAttribute('data-spin', TWEAK_DEFAULTS.spin ? 'on' : 'off');
-ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<MeritDSTweaks />);
+  }
+};
 </script>
+<script src="merit-ds-tweaks.js"></script>
 
 </body>
 </html>
