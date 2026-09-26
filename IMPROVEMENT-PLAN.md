@@ -362,6 +362,20 @@ floating layers. Neo-brutalism at full volume on a 50-row table is noise.
 8. **Lint**: add a `custom_lint` rule, `avoid_raw_colors`, `avoid_blur_shadow`, and `avoid_literal_font_size`, under `lib/features/**`.
 9. **Golden tests** for each `merit_*` widget in light, dark, `si`, `ta`, and 2× text scale.
 
+**Status, 2026-09-26: first pass done** on `merit-project-flutter` branch `feat/design-tokens-v2` (base `feat/fsrs-flashcards`, 7 commits). Analyzer output is identical to the pre-change baseline, and all tests pass (6 → 24).
+
+| Step | Status |
+|---|---|
+| 1 Tokens vendored | ✅ `lib/theme/merit_tokens.dart`, pinned by `.design-tokens-ref`. `MeritColors` aliases `MeritPalette` |
+| 2 ThemeExtension | ✅ Generated `MeritSemanticColors` plus `context.meritColors`. 242 `isDark ? … : …` ternaries are migrated; about 33 bespoke ones remain (hero bands and similar, with no matching token) |
+| 3 ThemeData | ✅ One token-driven builder covering D1/D2/D3/D5, the switch off-state, nav contrast, and dark error |
+| 4 Codemods | ✅ 174 alias uses, neutrals, 34 black literals, and 13 purple-as-text sites. ⏭ radius literals and `fontSize` literals (both visible changes; they need device review) |
+| 5 Blur / gradients | ✅ All *live* screens: tab bar, flashcards, grade/results, loading, hierarchy, premium, avatar. The rest are in 16 unreferenced files (allow-listed) |
+| 6 Accessibility | ✅ Core widgets: quiz option (also fixes selected-looks-correct), buttons, icon buttons, toggle, tabs, progress, flip under reduced motion. ⏭ Remaining ~60 ad-hoc `GestureDetector`/`InkWell`s |
+| 7 Fonts | ✅ Noto Sans Sinhala/Tamil fallbacks, `themeFor(locale)`, Nunito removed (bundle −2.6 MB), license registration fixed |
+| 8 Lint | ✅ As a zero-dependency guard (`tool/check_design_tokens.dart` + CI) instead of `custom_lint` |
+| 9 Goldens | ⏭ Not started. Widget/semantics tests exist for the theme and quiz option |
+
 ### Phase 3: web retrofit (≈1–1.5 weeks)
 1. Import `merit-tokens.css`. Extend `@theme inline` with `--shadow-brutal-1…5`, `--border-width-base`, radius tokens, and motion tokens so Tailwind emits `shadow-brutal-3`, `rounded-card`, and similar.
 2. Restyle via cva variants in `components/ui` (button, card, input, badge, dialog, sheet, tabs, switch, checkbox, progress, table). Replace the 72 `shadow-sm|md|lg` uses with brutal tokens or none (compact density).
