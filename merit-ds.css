@@ -1,43 +1,48 @@
+@import url("build/css/merit-tokens.css");
 /* ============================================================
    MERIT PROJECT — Design System reference site
    Tokens · component library · page chrome
    ============================================================ */
 
-/* ---------- TOKENS ---------- */
-:root{
-  /* core six + black */
-  --purple:#8E55D7;  --purple-deep:#6E36B8;
-  --yellow:#FFCC00;  --mint:#9ED5B7;  --cream:#FFEFD7;
-  --ink:#312A31;     --ink-2:#1B161B; --white:#FFFFFF;
-  --line:#000000;
-  /* extended (mobile category accents) */
-  --yellow-soft:#F2D43B; --mint-soft:#9CE7C8;
-  --pink:#FFB3C8; --blue:#B3D8FF; --cream-warm:#FFF7ED;
-  --text-dim:#5A4A5A; --text-mute:#7A6C7A;
+/* ---------- FONTS (self-hosted — assets/fonts/, never a CDN) ----------
+   Clash Display ships 500/600/700 only (700 is the heaviest cut — no 800).
+   Plus Jakarta Sans ships 400–700. */
+@font-face{font-family:'Clash Display';src:url('assets/fonts/ClashDisplay-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('assets/fonts/ClashDisplay-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Clash Display';src:url('assets/fonts/ClashDisplay-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'School Times';src:url('assets/fonts/SchoolTimes-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
 
-  /* semantic surfaces (light) — overridden inside .dark frames */
-  --bg:#FFEFD7;
-  --surface:#FFFFFF;
-  --surface-2:#FFF7ED;
-  --text:#29261B;
-  --border:#000000;
-  --hairline:#E7D8C6;
+/* ---------- TOKENS ----------
+   Values come from build/css/merit-tokens.css (generated — tokens/*.tokens.json).
+   The short names below are this site's legacy aliases. They are declared on
+   :root AND .dark so var() chains re-resolve inside dark frames. */
+:root,.dark{
+  /* brand primitives */
+  --purple:var(--merit-purple-500);  --purple-deep:var(--merit-purple-700);
+  --yellow:var(--merit-yellow-500);  --mint:var(--merit-mint-500);  --cream:var(--merit-cream-200);
+  --ink:var(--merit-ink-700);        --ink-2:var(--merit-ink-900);  --white:var(--merit-white);
+  --line:var(--merit-black);
+  --yellow-soft:var(--merit-yellow-400); --mint-soft:var(--merit-mint-400);
+  --pink:var(--merit-pink-300); --blue:var(--merit-blue-300); --cream-warm:var(--merit-cream-100);
 
-  --font-display:'Clash Display','Plus Jakarta Sans',system-ui,sans-serif;
-  --font-body:'Plus Jakarta Sans',system-ui,sans-serif;
-  --font-mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
-}
+  /* semantic (theme-following) — this reference site is a brand surface, so bg = bg.brand */
+  --bg:var(--merit-bg-brand);
+  --surface:var(--merit-surface-default);
+  --surface-2:var(--merit-surface-sunken);
+  --text:var(--merit-text-primary);
+  --text-dim:var(--merit-text-secondary);
+  --text-mute:var(--merit-text-tertiary);
+  --border:var(--merit-border-default);
+  --hairline:var(--merit-border-subtle);
 
-/* dark scope — apply to any frame to flip surfaces. Outline goes cream. */
-.dark{
-  --bg:#1B161B;
-  --surface:#2A222A;
-  --surface-2:#241D24;
-  --text:#FFF7ED;
-  --text-dim:#C4B5C4;
-  --text-mute:#9C8C9C;
-  --border:#FFF7ED;
-  --hairline:#3A2F3A;
+  --font-display:var(--merit-font-family-display);
+  --font-body:var(--merit-font-family-body);
+  --font-landing:var(--merit-font-family-landing); /* landing headings only */
+  --font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -201,16 +206,18 @@ section.sec:last-of-type{border-bottom:none}
 .toggle.on{background:var(--mint)}
 .toggle.on::after{left:23px;background:var(--ink)}
 .check{width:24px;height:24px;border:2px solid var(--border);border-radius:7px;background:var(--surface);
-  cursor:pointer;display:grid;place-items:center;color:transparent;font-weight:800;flex-shrink:0;transition:.12s}
-.check.on{background:var(--mint);color:var(--ink)}
+  cursor:pointer;display:grid;place-items:center;color:transparent;font-weight:700;flex-shrink:0;transition:.12s}
+/* D5: form selection = purple + white ✓; completion (todo, stage done) = mint + ink ✓ */
+.check.on{background:var(--purple);color:#fff}
+.check.done{background:var(--mint);color:var(--ink)}
 
 /* icon chips / seals / avatars */
 .ichip{display:grid;place-items:center;border:2px solid var(--border);border-radius:12px;
-  font-family:var(--font-display);font-weight:800;width:44px;height:44px;font-size:18px}
+  font-family:var(--font-display);font-weight:700;width:44px;height:44px;font-size:18px}
 .ichip.p{background:var(--purple);color:#fff}.ichip.y{background:var(--yellow);color:#312A31}
 .ichip.m{background:var(--mint);color:#312A31}.ichip.k{background:var(--ink);color:var(--cream)}
 .seal{width:64px;height:64px;border-radius:50%;background:var(--yellow);border:2px solid var(--border);
-  display:grid;place-items:center;color:#312A31;font-family:var(--font-display);font-weight:800;font-size:22px;
+  display:grid;place-items:center;color:#312A31;font-family:var(--font-display);font-weight:700;font-size:22px;
   box-shadow:inset 0 0 0 6px var(--ink),inset 0 0 0 8px var(--yellow)}
 .avstack{display:flex;align-items:center}
 .av{width:38px;height:38px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;
@@ -221,22 +228,22 @@ section.sec:last-of-type{border-bottom:none}
 .tabbar{display:flex;justify-content:space-around;align-items:center;background:var(--surface);
   border:2px solid var(--border);border-radius:20px;padding:8px;box-shadow:3px 3px 0 var(--border);gap:4px}
 .tabbar .tb{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-mute);
-  font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:10px}
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;border-radius:10px}
 .tabbar .tb .g{width:24px;height:24px;display:grid;place-items:center}
 .tabbar .tb.active{background:var(--purple);color:#fff}
 
 /* gamification widgets */
 .chip-streak{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--text);
   border:2px solid var(--border);border-radius:99px;padding:8px 14px;font-family:var(--font-display);
-  font-weight:800;font-size:16px;box-shadow:3px 3px 0 var(--border)}
+  font-weight:700;font-size:16px;box-shadow:3px 3px 0 var(--border)}
 .chip-coins{display:inline-flex;align-items:center;gap:7px;background:var(--yellow);color:#312A31;
   border:2px solid var(--border);border-radius:99px;padding:8px 14px;font-family:var(--font-display);
-  font-weight:800;font-size:16px;box-shadow:3px 3px 0 var(--border)}
+  font-weight:700;font-size:16px;box-shadow:3px 3px 0 var(--border)}
 .ribbon{display:flex;gap:7px}
 .ribbon .d{width:38px;height:46px;border:2px solid var(--border);border-radius:11px;display:flex;
   flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;font-weight:700;
   background:var(--surface);color:var(--text-mute)}
-.ribbon .d .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;font-weight:800;font-size:11px}
+.ribbon .d .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;font-weight:700;font-size:11px}
 .ribbon .d.done{background:var(--purple);color:#fff}
 .ribbon .d.done .dot{background:#fff;color:var(--purple)}
 .ribbon .d.today{background:var(--yellow);color:#312A31}
@@ -247,7 +254,7 @@ section.sec:last-of-type{border-bottom:none}
 .lead-board{background:var(--ink-2);border:2px solid var(--border);border-radius:18px;
   box-shadow:5px 5px 0 var(--border);padding:16px;display:flex;flex-direction:column;gap:8px}
 .lead-board .lr{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:12px;color:var(--cream)}
-.lead-board .lr .rk{font-family:var(--font-display);font-weight:800;font-size:20px;color:#A89AA8;width:28px}
+.lead-board .lr .rk{font-family:var(--font-display);font-weight:700;font-size:20px;color:#A89AA8;width:28px}
 .lead-board .lr .who{font-family:var(--font-display);font-weight:700;font-size:14px;flex:1}
 .lead-board .lr .pts{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--yellow);display:flex;align-items:center;gap:5px}
 .lead-board .lr.you{background:var(--purple);border:2px solid #000}
@@ -260,7 +267,7 @@ section.sec:last-of-type{border-bottom:none}
 .tierBadge .info .pts{font-size:11px;color:#A89AA8;margin-top:2px}
 .starburst{position:relative;width:120px;height:120px;flex-shrink:0}
 .starburst .lbl{position:absolute;inset:0;display:grid;place-items:center;color:#fff;
-  font-family:var(--font-display);font-weight:800;font-size:15px;line-height:.9;text-align:center;text-transform:uppercase}
+  font-family:var(--font-display);font-weight:700;font-size:15px;line-height:.9;text-align:center;text-transform:uppercase}
 
 /* ============================================================
    DEMO SCAFFOLDING
@@ -355,7 +362,7 @@ section.sec:last-of-type{border-bottom:none}
 .dd .col.do{background:#EAF7EF}
 .dd .col.dont{background:#FBEAEA}
 .dd .col h4{font-size:16px;display:flex;align-items:center;gap:8px}
-.dd .col .badge{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:15px}
+.dd .col .badge{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:15px}
 .dd .col.do .badge{background:var(--mint);color:#1c5436}
 .dd .col.dont .badge{background:#F4C7C7;color:#7A2222}
 .dd ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:9px}
@@ -380,6 +387,90 @@ section.sec:last-of-type{border-bottom:none}
 .foot .inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;
   align-items:center;flex-wrap:wrap;gap:16px;font-size:12px;letter-spacing:.06em}
 .foot .hexes{font-family:var(--font-mono)}
+
+/* ============================================================
+   v2 — SPACING / MOTION / STATES / QUIZ / EMPTY / SKELETON /
+   DENSITY / CHANGELOG
+   ============================================================ */
+
+/* ---- spacing ramp ---- */
+.spaceRamp{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px;margin-top:22px}
+.spaceRamp .sp{display:flex;flex-direction:column;align-items:center;gap:8px}
+.spaceRamp .sp i{display:block;background:var(--purple);border:2px solid var(--line);border-radius:4px}
+.spaceRamp .sp span{font-family:var(--font-mono);font-size:11px;color:var(--text-dim)}
+
+/* ---- motion ---- */
+.motionRow{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.motionChip{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:2px solid var(--line);
+  border-radius:14px;padding:12px 16px;min-width:120px}
+.motionChip b{font-family:var(--font-display);font-size:14px}
+.motionChip span{font-family:var(--font-mono);font-size:11px;color:var(--text-dim)}
+.motionBox{width:56px;height:56px;background:var(--purple);border:2px solid var(--line);border-radius:14px;
+  cursor:pointer}
+.motionBox.fast{transition:transform .12s cubic-bezier(.2,.7,.2,1)}
+.motionBox.base{transition:transform .18s cubic-bezier(.2,.7,.2,1)}
+.motionBox.slow{transition:transform .28s cubic-bezier(.2,.7,.2,1)}
+.motionBox.play{transform:translateX(140px) rotate(8deg)}
+@media (prefers-reduced-motion:reduce){.motionBox{transition:none!important}}
+
+/* ---- focus ring demo ---- */
+.focusDemo{display:flex;flex-wrap:wrap;gap:16px;margin-top:18px}
+.focusDemo button,.focusDemo a{font:inherit}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+
+/* ---- quiz option ---- */
+.qopt{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--line);
+  border-radius:14px;padding:12px 14px;box-shadow:3px 3px 0 var(--line);cursor:pointer;transition:.15s}
+.qopt .num{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:700;font-size:12px;flex-shrink:0;background:var(--surface)}
+.qopt .glyph{margin-left:auto;width:22px;height:22px;border-radius:7px;border:2px solid var(--line);
+  display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0}
+.qopt.selected{border-color:var(--purple);box-shadow:3px 3px 0 var(--purple)}
+.qopt.selected .num{background:var(--purple);color:#fff}
+.qopt.correct{background:var(--mint);border-color:var(--line)}
+.qopt.correct .glyph{background:var(--mint);color:#1c5436}
+.qopt.wrong{background:#F4C7C7;border-color:#C4393A}
+.qopt.wrong .glyph{background:#C4393A;color:#fff}
+.qopt.revealed{border-style:dashed;border-color:var(--mint)}
+.qopt.revealed .glyph{background:var(--mint);color:#1c5436}
+.qtimer{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:800;
+  font-size:22px;padding:8px 16px;border:2px solid var(--line);border-radius:99px;box-shadow:3px 3px 0 var(--line)}
+.qtimer.safe{background:var(--mint)}.qtimer.warn{background:var(--yellow)}.qtimer.critical{background:#C4393A;color:#fff}
+
+/* ---- feedback / empty states ---- */
+.emptyState{text-align:center;padding:48px 24px;border:2px dashed var(--hairline);border-radius:18px}
+.emptyState .glyph{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;border:2px solid var(--line);
+  display:grid;place-items:center;background:var(--surface-2);font-size:26px}
+.emptyState h4{font-size:17px;margin-bottom:6px}
+.toastDemo{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--cream);
+  border:2px solid var(--line);border-radius:14px;padding:12px 16px;box-shadow:3px 3px 0 var(--line);max-width:360px}
+.toastDemo.success{background:var(--mint);color:#1c5436}
+.toastDemo.error{background:#C4393A;color:#fff}
+
+/* ---- skeleton / shimmer ---- */
+.skeleton{background:var(--surface-2);border:2px solid var(--line);border-radius:10px;position:relative;overflow:hidden}
+.skeleton::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:meritShimmer 1.6s infinite}
+@media (prefers-reduced-motion:reduce){.skeleton::after{animation:none}}
+@keyframes meritShimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+/* ---- density ---- */
+.densityDemo table{width:100%;border-collapse:collapse;border:2px solid var(--line);border-radius:12px;overflow:hidden}
+.densityDemo.expressive td,.densityDemo.expressive th{padding:16px;box-shadow:none}
+.densityDemo.compact td,.densityDemo.compact th{padding:8px 10px;font-size:12.5px}
+.densityDemo td,.densityDemo th{border-bottom:1.5px solid var(--hairline);text-align:left}
+.densityDemo th{background:var(--ink);color:var(--cream);font-family:var(--font-display);font-size:11px;
+  text-transform:uppercase;letter-spacing:.1em}
+
+/* ---- changelog ---- */
+.changeList{display:flex;flex-direction:column;gap:18px;margin-top:18px}
+.changeEntry{border-left:3px solid var(--line);padding-left:16px}
+.changeEntry .ver{font-family:var(--font-display);font-weight:700;font-size:16px}
+.changeEntry .ver .bump{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border-radius:99px;border:1.5px solid var(--line);margin-left:8px;vertical-align:middle}
+.changeEntry .bump.major{background:#F4C7C7}.changeEntry .bump.minor{background:var(--mint)}
+.changeEntry .bump.patch{background:var(--yellow)}
 
 /* responsive */
 @media (max-width:1080px){

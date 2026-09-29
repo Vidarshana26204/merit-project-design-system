@@ -1,0 +1,163 @@
+{
+  "$description": "Merit primitives — raw values. Screens must NOT reference these directly; use semantic or component tokens.",
+  "color": {
+    "$type": "color",
+    "white": { "$value": "#FFFFFF" },
+    "black": { "$value": "#000000", "$description": "The signature outline (light mode)" },
+    "purple": {
+      "100": { "$value": "#EDE4F8", "$description": "Selected tint" },
+      "300": { "$value": "#B48CE8", "$description": "Dark-mode purple text/links/focus" },
+      "500": { "$value": "#8E55D7", "$description": "Brand purple — fills only, not text on light" },
+      "700": { "$value": "#6E36B8", "$description": "Pressed · purple text on light surfaces" }
+    },
+    "yellow": {
+      "100": { "$value": "#FFF5CC" },
+      "400": { "$value": "#F2D43B", "$description": "Large fills + warning only (D1)" },
+      "500": { "$value": "#FFCC00", "$description": "Brand yellow — accents, CTAs, rewards (D1)" },
+      "900": { "$value": "#4A3900" }
+    },
+    "mint": {
+      "100": { "$value": "#D5F5E9" },
+      "400": { "$value": "#9CE7C8", "$description": "Dark-mode success + category (D2)" },
+      "500": { "$value": "#9ED5B7", "$description": "Light-mode success (D2)" },
+      "800": { "$value": "#2D6649", "$description": "Success text on light surfaces" }
+    },
+    "cream": {
+      "100": { "$value": "#FFF7ED", "$description": "bg.app (D3) · dark-mode outline" },
+      "200": { "$value": "#FFEFD7", "$description": "Brand cream — landing / brand bands (D3)" }
+    },
+    "sand": {
+      "200": { "$value": "#E7D8C6", "$description": "Light hairline" }
+    },
+    "ink": {
+      "text": { "$value": "#29261B", "$description": "text.primary (D4)" },
+      "600": { "$value": "#3A2F3A", "$description": "Dark hairline" },
+      "700": { "$value": "#312A31", "$description": "surface.inverse (D4)" },
+      "800": { "$value": "#2A222A", "$description": "Dark surface" },
+      "850": { "$value": "#241D24", "$description": "Dark sunken surface" },
+      "900": { "$value": "#1B161B", "$description": "Dark background" }
+    },
+    "mauve": {
+      "300": { "$value": "#C4B5C4", "$description": "Dark secondary text" },
+      "350": { "$value": "#A89AA8", "$description": "Muted text on ink surfaces" },
+      "400": { "$value": "#9C8C9C", "$description": "Dark tertiary text" },
+      "600": { "$value": "#685A68", "$description": "Light tertiary text (replaces #7A6C7A — 4.37:1 on cream failed AA)" },
+      "700": { "$value": "#5A4A5A", "$description": "Light secondary text" }
+    },
+    "pink": { "300": { "$value": "#FFB3C8" } },
+    "blue": { "300": { "$value": "#B3D8FF" } },
+    "red": {
+      "50": { "$value": "#FFDADE" },
+      "100": { "$value": "#F4C7C7", "$description": "Wrong-answer fill (light)" },
+      "300": { "$value": "#FF9A9A", "$description": "Dark-mode error" },
+      "600": { "$value": "#C4393A", "$description": "Error (light)" },
+      "800": { "$value": "#8B1538" },
+      "900": { "$value": "#93001A", "$description": "Wrong-answer fill (dark)" }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "0": { "$value": "0px" },
+    "1": { "$value": "4px" },
+    "2": { "$value": "8px" },
+    "3": { "$value": "12px" },
+    "4": { "$value": "16px" },
+    "5": { "$value": "20px" },
+    "6": { "$value": "24px" },
+    "8": { "$value": "32px" },
+    "10": { "$value": "40px" },
+    "12": { "$value": "48px" },
+    "16": { "$value": "64px" }
+  },
+  "radius": {
+    "$type": "dimension",
+    "xs": { "$value": "6px", "$description": "Tiny chips" },
+    "sm": { "$value": "10px", "$description": "Icon chips" },
+    "md": { "$value": "14px", "$description": "Inputs, option rows" },
+    "lg": { "$value": "18px", "$description": "Cards" },
+    "xl": { "$value": "24px", "$description": "Sheets, feature cards" },
+    "2xl": { "$value": "32px", "$description": "Frames" },
+    "pill": { "$value": "999px" }
+  },
+  "borderWidth": {
+    "$type": "dimension",
+    "hairline": { "$value": "1.5px" },
+    "base": { "$value": "2px" },
+    "heavy": { "$value": "3px" }
+  },
+  "shadowOffset": {
+    "$type": "dimension",
+    "$description": "Hard shadow offsets (x = y). Blur is ALWAYS 0.",
+    "s1": { "$value": "2px" },
+    "s2": { "$value": "3px" },
+    "s3": { "$value": "4px", "$description": "Default card" },
+    "s4": { "$value": "6px", "$description": "Featured" },
+    "s5": { "$value": "10px", "$description": "Hero" }
+  },
+  "duration": {
+    "$type": "duration",
+    "instant": { "$value": "80ms" },
+    "fast": { "$value": "120ms", "$description": "Press" },
+    "base": { "$value": "180ms", "$description": "Toggle, tab" },
+    "slow": { "$value": "280ms", "$description": "Sheet, card-flip half" },
+    "celebrate": { "$value": "600ms", "$description": "Grade, level-up" }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "standard": { "$value": [0.2, 0.7, 0.2, 1] },
+    "exit": { "$value": [0.4, 0, 1, 1] }
+  },
+  "opacity": {
+    "$type": "number",
+    "disabled": { "$value": 0.4 },
+    "scrimLight": { "$value": 0.5 },
+    "scrimDark": { "$value": 0.7 }
+  },
+  "zIndex": {
+    "$type": "number",
+    "$extensions": { "merit.platforms": ["css"] },
+    "base": { "$value": 0 },
+    "sticky": { "$value": 10 },
+    "dropdown": { "$value": 20 },
+    "overlay": { "$value": 30 },
+    "modal": { "$value": 40 },
+    "toast": { "$value": 50 }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "$extensions": { "merit.platforms": ["css"] },
+    "sm": { "$value": "640px" },
+    "md": { "$value": "768px" },
+    "lg": { "$value": "1024px" },
+    "xl": { "$value": "1280px" }
+  },
+  "touch": {
+    "$type": "dimension",
+    "minTarget": { "$value": "48px", "$description": "48dp Android / ≥44pt iOS" }
+  },
+  "fontFamily": {
+    "$type": "fontFamily",
+    "$description": "Latin faces have no Sinhala/Tamil glyphs — every stack falls back to Noto Sans Sinhala / Tamil before system fonts.",
+    "$extensions": { "merit.flutterFallback": ["NotoSansSinhala", "NotoSansTamil"] },
+    "display": {
+      "$value": ["Clash Display", "Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
+      "$extensions": { "merit.flutter": "ClashDisplay" }
+    },
+    "body": {
+      "$value": ["Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
+      "$extensions": { "merit.flutter": "PlusJakartaSans" }
+    },
+    "landing": {
+      "$value": ["School Times", "Clash Display", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
+      "$description": "Landing page headings only",
+      "$extensions": { "merit.flutter": "SchoolTimes" }
+    }
+  },
+  "fontWeight": {
+    "$type": "fontWeight",
+    "regular": { "$value": 400 },
+    "medium": { "$value": 500 },
+    "semibold": { "$value": 600 },
+    "bold": { "$value": 700, "$description": "Heaviest shipped cut — never 800" }
+  }
+}
