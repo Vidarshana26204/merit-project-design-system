@@ -398,10 +398,22 @@ floating layers. Neo-brutalism at full volume on a 50-row table is noise.
 | 7 `/design` route / Storybook | ✅ `/admin/dev/design` light + dark specimen (no Storybook). ⏭ Screenshot diffs |
 | — Also | 56 purple-as-text sites → `text-link`; soft shadows on pages → hard shadows or removed; guard `scripts/check-design-tokens.mjs` + drift check in CI |
 
-### Phase 4: DS site v2 (≈1 week, parallel with 2–3)
-Add the new sections: Spacing & Layout · Motion · States & Focus · Accessibility · Iconography
-· Tri-lingual Type · Quiz components · Feedback & Empty states · Data viz · Density modes
-· Landing (School Times) specimen · Tokens reference (auto-generated table) · Changelog.
+### Phase 4: DS site v2 ✅ done 2026-09-29 (site v2.2, no token version change)
+
+All twelve planned sections added (§24 04–05, 13, 15–20, 23–25; nav 00–25 across
+four groups). Tokens Reference (§24) reads live values off
+`build/css/merit-tokens.css` at page load rather than a hand-copied table — the
+hex shown can never drift from what's shipped. Verified: 26/26 sections present
+via DOM dump, the live token table's 19 rows match the generated CSS exactly in
+both themes, contrast gate still passes, no console errors, nav/scroll-spy work
+against the longer page.
+
+**Accessibility** (originally slated for this phase) is covered incrementally
+elsewhere rather than as one section: the States & Focus section (§13) documents
+the focus-ring and never-colour-alone rules, and the real audit work — semantics,
+reduced motion, contrast fixes — already landed in Phase 2/3 on the actual apps,
+which is where it has to be checked (a static reference page can describe a rule
+but can't verify a screen reader announces it).
 
 ---
 

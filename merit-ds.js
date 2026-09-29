@@ -118,9 +118,55 @@
     });
   }
 
+  /* ---------- token reference table (§24) ----------
+     Reads live computed values off build/css/merit-tokens.css — never a
+     hand-copied hex. The NAME list below must be kept in sync with
+     tokens/semantic.*.tokens.json keys (rare: only on add/remove); the
+     VALUES always reflect whatever is actually shipped. */
+  var SEMANTIC_TOKENS = [
+    'bg-app', 'bg-brand', 'surface-default', 'surface-sunken', 'surface-inverse',
+    'surface-selected', 'text-primary', 'text-secondary', 'text-tertiary',
+    'text-link', 'border-default', 'border-subtle', 'action-primary',
+    'action-primary-pressed', 'action-accent', 'feedback-success',
+    'feedback-warning', 'feedback-error', 'focus-ring'
+  ];
+
+  function buildTokenTable() {
+    var host = document.getElementById('tokenRefTable');
+    if (!host) return;
+    var root = getComputedStyle(document.documentElement);
+    var darkEl = document.createElement('div');
+    darkEl.className = 'dark';
+    darkEl.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none';
+    document.body.appendChild(darkEl);
+    var dark = getComputedStyle(darkEl);
+
+    var rows = SEMANTIC_TOKENS.map(function (name) {
+      var varName = '--merit-' + name;
+      var light = (root.getPropertyValue(varName) || '').trim();
+      var d = (dark.getPropertyValue(varName) || '').trim();
+      if (!light) return '';
+      return '<tr>' +
+        '<td><code>' + name + '</code></td>' +
+        '<td><span style="display:inline-flex;align-items:center;gap:6px">' +
+          '<span style="width:14px;height:14px;border-radius:4px;border:1.5px solid var(--line);background:' + light + ';display:inline-block"></span>' +
+          '<code>' + light + '</code></span></td>' +
+        '<td><span style="display:inline-flex;align-items:center;gap:6px">' +
+          '<span style="width:14px;height:14px;border-radius:4px;border:1.5px solid var(--line);background:' + d + ';display:inline-block"></span>' +
+          '<code>' + d + '</code></span></td>' +
+        '<td class="mono">var(' + varName + ')</td>' +
+        '</tr>';
+    }).join('');
+
+    document.body.removeChild(darkEl);
+    host.innerHTML = '<table class="spec">' +
+      '<thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>CSS</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table>';
+  }
+
   function init() {
     wireCopy(); wireTabs(); wireSwatches(); wireToggles();
-    wireProgress(); wireScrollSpy();
+    wireProgress(); wireScrollSpy(); buildTokenTable();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

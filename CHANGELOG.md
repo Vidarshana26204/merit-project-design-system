@@ -2,7 +2,27 @@
 
 Semver for tokens: **removing or renaming** a token is major, **adding** one is minor,
 and **changing a value** is patch. The version lives in `package.json` and is stamped
-into every generated file.
+into every generated file. The reference site (`Merit Design System.html`) carries its
+own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
+
+## Site v2.2 — 2026-09-29
+
+Phase 4: reference-site rebuild. No token value or name changes — `package.json`
+stays 2.1.0.
+
+### Added
+- Twelve new sections: Spacing & Layout, Motion, States & Focus, Quiz Components,
+  Feedback & Empty States, Iconography, Tri-lingual Type, Data Viz, Density Modes,
+  Landing Specimen, Tokens Reference, Changelog.
+- **Tokens Reference (§24)** reads live computed values off
+  `build/css/merit-tokens.css` at page load via `buildTokenTable()` in
+  `merit-ds.js` — the hex values shown can never drift from what's shipped
+  (only the token *name* list needs manual sync when a token is added/removed).
+- Quiz option states (`.qopt`), timer (`.qtimer`), empty states, toasts, skeleton
+  shimmer, density comparison, motion demo, and a live focus-ring tab-through, all
+  new CSS in `merit-ds.css`.
+- Nav renumbered 00–25 across four groups (Foundations, Components, Patterns,
+  Reference); all existing section anchors unchanged.
 
 ## 2.1.0 — 2026-09-26
 
