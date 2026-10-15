@@ -1,58 +1,79 @@
 {
-  "$description": "Merit primitives — raw values. Screens must NOT reference these directly; use semantic or component tokens.",
+  "$description": "Merit v3 primitives — raw values. Screens must NOT reference these directly; use semantic or component tokens.",
   "color": {
     "$type": "color",
     "white": { "$value": "#FFFFFF" },
-    "black": { "$value": "#000000", "$description": "The signature outline (light mode)" },
-    "purple": {
-      "100": { "$value": "#EDE4F8", "$description": "Selected tint" },
-      "300": { "$value": "#B48CE8", "$description": "Dark-mode purple text/links/focus" },
-      "500": { "$value": "#8E55D7", "$description": "Brand purple — fills only, not text on light" },
-      "700": { "$value": "#6E36B8", "$description": "Pressed · purple text on light surfaces" }
-    },
-    "yellow": {
-      "100": { "$value": "#FFF5CC" },
-      "400": { "$value": "#F2D43B", "$description": "Large fills + warning only (D1)" },
-      "500": { "$value": "#FFCC00", "$description": "Brand yellow — accents, CTAs, rewards (D1)" },
-      "900": { "$value": "#4A3900" }
-    },
-    "mint": {
-      "100": { "$value": "#D5F5E9" },
-      "400": { "$value": "#9CE7C8", "$description": "Dark-mode success + category (D2)" },
-      "500": { "$value": "#9ED5B7", "$description": "Light-mode success (D2)" },
-      "800": { "$value": "#2D6649", "$description": "Success text on light surfaces" }
-    },
-    "cream": {
-      "100": { "$value": "#FFF7ED", "$description": "bg.app (D3) · dark-mode outline" },
-      "200": { "$value": "#FFEFD7", "$description": "Brand cream — landing / brand bands (D3)" }
-    },
-    "sand": {
-      "200": { "$value": "#E7D8C6", "$description": "Light hairline" }
+    "canvas": {
+      "50": { "$value": "#FBFAF4", "$description": "bg.app — warm off-white (D10)" },
+      "100": { "$value": "#F4F1E6", "$description": "Sunken wells, tracks" },
+      "200": { "$value": "#E9E4D4", "$description": "Light hairline / divider" }
     },
     "ink": {
-      "text": { "$value": "#29261B", "$description": "text.primary (D4)" },
-      "600": { "$value": "#3A2F3A", "$description": "Dark hairline" },
-      "700": { "$value": "#312A31", "$description": "surface.inverse (D4)" },
-      "800": { "$value": "#2A222A", "$description": "Dark surface" },
-      "850": { "$value": "#241D24", "$description": "Dark sunken surface" },
-      "900": { "$value": "#1B161B", "$description": "Dark background" }
+      "500": { "$value": "#68667F", "$description": "Tertiary text, input borders" },
+      "700": { "$value": "#4A4760", "$description": "Secondary text" },
+      "900": { "$value": "#1E1B2E", "$description": "Primary text, outlines, labels on orange (D9)" }
     },
-    "mauve": {
-      "300": { "$value": "#C4B5C4", "$description": "Dark secondary text" },
-      "350": { "$value": "#A89AA8", "$description": "Muted text on ink surfaces" },
-      "400": { "$value": "#9C8C9C", "$description": "Dark tertiary text" },
-      "600": { "$value": "#685A68", "$description": "Light tertiary text (replaces #7A6C7A — 4.37:1 on cream failed AA)" },
-      "700": { "$value": "#5A4A5A", "$description": "Light secondary text" }
+    "orange": {
+      "100": { "$value": "#FFE7D8" },
+      "300": { "$value": "#FF9A63" },
+      "400": { "$value": "#FF8A4C", "$description": "Dark-mode action / eyebrow" },
+      "500": { "$value": "#F65E16", "$description": "Brand orange — fills with INK labels only (D9)" },
+      "600": { "$value": "#EA540E", "$description": "Pressed — darkest orange that still carries an ink label (4.61:1)" },
+      "700": { "$value": "#B23F06", "$description": "Strong fill with white label · eyebrow text on light" }
     },
-    "pink": { "300": { "$value": "#FFB3C8" } },
-    "blue": { "300": { "$value": "#B3D8FF" } },
+    "coral": {
+      "100": { "$value": "#FEE3D8" },
+      "300": { "$value": "#FC906C", "$description": "Patch / energy tint" }
+    },
+    "sand": {
+      "100": { "$value": "#FCEBD3", "$description": "Brand / landing bands" },
+      "300": { "$value": "#F0DEC0", "$description": "Patch tint" }
+    },
+    "violet": {
+      "50": { "$value": "#F4EFF9" },
+      "100": { "$value": "#E7DCF2", "$description": "Selected tint" },
+      "300": { "$value": "#C9B3EA", "$description": "Dark-mode link / focus / accent" },
+      "400": { "$value": "#905AA8", "$description": "Lilac patch" },
+      "500": { "$value": "#663696", "$description": "Link, focus ring, calm-mode selection" },
+      "600": { "$value": "#7E24DE", "$description": "Electric — sparkles only" },
+      "700": { "$value": "#54306C", "$description": "Brand violet — feature bands, accent fill, Achiever" },
+      "800": { "$value": "#3C244E", "$description": "Pressed · dark-mode feature band" },
+      "900": { "$value": "#24162F" }
+    },
+    "sage": {
+      "100": { "$value": "#E2F2E6", "$description": "Correct-answer fill (light)" },
+      "300": { "$value": "#A2D2AE", "$description": "Success fill" },
+      "500": { "$value": "#6FAF82" },
+      "700": { "$value": "#2F6B43", "$description": "Success text on light" },
+      "900": { "$value": "#1D3B28", "$description": "Correct-answer fill (dark)" }
+    },
+    "butter": {
+      "100": { "$value": "#FFF3CC" },
+      "300": { "$value": "#FFD66B", "$description": "Reward fill, warning, Achiever seal" },
+      "500": { "$value": "#F5B700", "$description": "Coin glyph" }
+    },
+    "blush": { "300": { "$value": "#F6B5C3", "$description": "Category only" } },
+    "sky": {
+      "300": { "$value": "#BCD6F2", "$description": "Category only" },
+      "500": { "$value": "#5B8FCB", "$description": "Chart only" }
+    },
     "red": {
-      "50": { "$value": "#FFDADE" },
-      "100": { "$value": "#F4C7C7", "$description": "Wrong-answer fill (light)" },
-      "300": { "$value": "#FF9A9A", "$description": "Dark-mode error" },
-      "600": { "$value": "#C4393A", "$description": "Error (light)" },
-      "800": { "$value": "#8B1538" },
-      "900": { "$value": "#93001A", "$description": "Wrong-answer fill (dark)" }
+      "100": { "$value": "#FBDAD6", "$description": "Wrong-answer fill (light)" },
+      "300": { "$value": "#FF9A8F", "$description": "Dark-mode error" },
+      "600": { "$value": "#C7362F", "$description": "Error (light)" },
+      "900": { "$value": "#5A1A1A", "$description": "Wrong-answer fill (dark)" }
+    },
+    "night": {
+      "600": { "$value": "#3A3048", "$description": "Dark hairline" },
+      "700": { "$value": "#2E2539" },
+      "800": { "$value": "#221B2C", "$description": "Dark surface" },
+      "850": { "$value": "#1C1625", "$description": "Dark sunken" },
+      "900": { "$value": "#17121F", "$description": "Dark background — violet-black (D15)" }
+    },
+    "mist": {
+      "50": { "$value": "#F7F3EA", "$description": "Dark-mode primary text" },
+      "300": { "$value": "#B9B2C6", "$description": "Dark secondary text" },
+      "400": { "$value": "#9C94AC", "$description": "Dark tertiary text, input borders" }
     }
   },
   "space": {
@@ -72,27 +93,19 @@
   "radius": {
     "$type": "dimension",
     "xs": { "$value": "6px", "$description": "Tiny chips" },
-    "sm": { "$value": "10px", "$description": "Icon chips" },
-    "md": { "$value": "14px", "$description": "Inputs, option rows" },
-    "lg": { "$value": "18px", "$description": "Cards" },
-    "xl": { "$value": "24px", "$description": "Sheets, feature cards" },
-    "2xl": { "$value": "32px", "$description": "Frames" },
+    "sm": { "$value": "10px", "$description": "Icon chips, letter chips" },
+    "md": { "$value": "16px", "$description": "Inputs, quiz options" },
+    "lg": { "$value": "20px", "$description": "Small cards, patchwork tiles" },
+    "xl": { "$value": "24px", "$description": "Cards (D11)" },
+    "2xl": { "$value": "32px", "$description": "Sheets, feature bands" },
     "pill": { "$value": "999px" }
   },
   "borderWidth": {
     "$type": "dimension",
-    "hairline": { "$value": "1.5px" },
-    "base": { "$value": "2px" },
-    "heavy": { "$value": "3px" }
-  },
-  "shadowOffset": {
-    "$type": "dimension",
-    "$description": "Hard shadow offsets (x = y). Blur is ALWAYS 0.",
-    "s1": { "$value": "2px" },
-    "s2": { "$value": "3px" },
-    "s3": { "$value": "4px", "$description": "Default card" },
-    "s4": { "$value": "6px", "$description": "Featured" },
-    "s5": { "$value": "10px", "$description": "Hero" }
+    "$description": "v3: cards have no border (D11). Outlines are for inputs, chips and illustration.",
+    "hairline": { "$value": "1px", "$description": "Dividers, compact table cells" },
+    "base": { "$value": "1.5px", "$description": "Inputs, filter chips, patchwork outlines" },
+    "strong": { "$value": "2px", "$description": "Selected / focused component edge" }
   },
   "duration": {
     "$type": "duration",
@@ -140,17 +153,13 @@
     "$description": "Latin faces have no Sinhala/Tamil glyphs — every stack falls back to Noto Sans Sinhala / Tamil before system fonts.",
     "$extensions": { "merit.flutterFallback": ["NotoSansSinhala", "NotoSansTamil"] },
     "display": {
-      "$value": ["Clash Display", "Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
-      "$extensions": { "merit.flutter": "ClashDisplay" }
+      "$value": ["General Sans", "Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
+      "$description": "Headings, numbers, wordmark (D8). Product + landing — School Times retired (D13)",
+      "$extensions": { "merit.flutter": "GeneralSans" }
     },
     "body": {
       "$value": ["Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
       "$extensions": { "merit.flutter": "PlusJakartaSans" }
-    },
-    "landing": {
-      "$value": ["School Times", "Clash Display", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
-      "$description": "Landing page headings only",
-      "$extensions": { "merit.flutter": "SchoolTimes" }
     }
   },
   "fontWeight": {

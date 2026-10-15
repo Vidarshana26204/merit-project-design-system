@@ -3,47 +3,76 @@
   "color": {
     "$type": "color",
     "bg": {
-      "app": { "$value": "{color.cream.100}", "$description": "Product UI background (D3)" },
-      "brand": { "$value": "{color.cream.200}", "$description": "Landing / brand bands (D3)" }
+      "app": { "$value": "{color.canvas.50}", "$description": "Product UI background — warm canvas (D10)" },
+      "brand": { "$value": "{color.sand.100}", "$description": "Landing / brand bands" }
     },
     "surface": {
-      "default": { "$value": "{color.white}", "$description": "Cards, sheets, inputs" },
-      "sunken": { "$value": "{color.cream.100}", "$description": "Wells, tracks, muted rows" },
-      "inverse": { "$value": "{color.ink.700}", "$description": "Dark button, leaderboard (D4)" },
-      "selected": { "$value": "{color.purple.100}" }
+      "default": { "$value": "{color.white}", "$description": "Cards, sheets, inputs — no border (D11)" },
+      "sunken": { "$value": "{color.canvas.100}", "$description": "Wells, tracks, skeletons, figure plates" },
+      "inverse": { "$value": "{color.ink.900}", "$description": "Dark button, tooltip" },
+      "selected": { "$value": "{color.violet.100}", "$description": "Form selection (D5)" },
+      "feature": { "$value": "{color.violet.700}", "$description": "Feature / Achiever band" }
     },
     "text": {
-      "primary": { "$value": "{color.ink.text}" },
-      "secondary": { "$value": "{color.mauve.700}" },
-      "tertiary": { "$value": "{color.mauve.600}", "$description": "Captions, placeholders" },
-      "link": { "$value": "{color.purple.700}", "$description": "purple.500 is for fills, not text" },
-      "onPrimary": { "$value": "{color.white}" },
-      "onAccent": { "$value": "{color.ink.700}" },
-      "onInverse": { "$value": "{color.cream.100}" },
-      "onSuccess": { "$value": "{color.ink.700}" },
+      "primary": { "$value": "{color.ink.900}" },
+      "secondary": { "$value": "{color.ink.700}" },
+      "tertiary": { "$value": "{color.ink.500}", "$description": "Captions, placeholders" },
+      "link": { "$value": "{color.violet.500}" },
+      "eyebrow": { "$value": "{color.orange.700}", "$description": "Uppercase eyebrow labels (Latin only)" },
+      "onPrimary": { "$value": "{color.ink.900}", "$description": "Ink on orange — never white (D9)" },
+      "onPrimaryStrong": { "$value": "{color.white}" },
+      "onAccent": { "$value": "{color.white}" },
+      "onFeature": { "$value": "{color.white}" },
+      "onInverse": { "$value": "{color.canvas.50}" },
+      "onSuccess": { "$value": "{color.ink.900}" },
+      "onWarning": { "$value": "{color.ink.900}" },
       "onError": { "$value": "{color.white}" }
     },
     "border": {
-      "default": { "$value": "{color.black}", "$description": "The signature outline" },
-      "subtle": { "$value": "{color.sand.200}", "$description": "Dividers only — never component edges" }
-    },
-    "shadow": {
-      "color": { "$value": "{color.black}", "$description": "Hard shadow follows border" }
+      "default": { "$value": "{color.ink.500}", "$description": "Input / control edge (≥3:1)" },
+      "strong": { "$value": "{color.ink.900}", "$description": "Ink outline — chips, patchwork, illustration" },
+      "subtle": { "$value": "{color.canvas.200}", "$description": "Dividers, idle option edge" }
     },
     "action": {
-      "primary": { "$value": "{color.purple.500}" },
-      "primaryPressed": { "$value": "{color.purple.700}" },
-      "accent": { "$value": "{color.yellow.500}" }
+      "primary": { "$value": "{color.orange.500}" },
+      "primaryPressed": { "$value": "{color.orange.600}" },
+      "primaryStrong": { "$value": "{color.orange.700}", "$description": "White-label variant for dense contexts (D9)" },
+      "accent": { "$value": "{color.violet.700}" },
+      "accentPressed": { "$value": "{color.violet.800}" }
     },
     "feedback": {
-      "success": { "$value": "{color.mint.500}" },
-      "successText": { "$value": "{color.mint.800}" },
-      "warning": { "$value": "{color.yellow.400}" },
+      "success": { "$value": "{color.sage.300}" },
+      "successSubtle": { "$value": "{color.sage.100}" },
+      "successText": { "$value": "{color.sage.700}" },
+      "warning": { "$value": "{color.butter.300}" },
       "error": { "$value": "{color.red.600}" },
       "errorSubtle": { "$value": "{color.red.100}" }
     },
     "focus": {
-      "ring": { "$value": "{color.purple.500}", "$description": "3px outline, 2px offset" }
+      "ring": { "$value": "{color.violet.500}", "$description": "3px outline, 2px offset — orange is too light (C3)" }
+    },
+    "decor": {
+      "sparkle": { "$value": "{color.violet.600}" },
+      "sparkleWarm": { "$value": "{color.orange.500}" },
+      "underline": { "$value": "{color.orange.500}", "$description": "Brush underline under the emphasis word" },
+      "connector": { "$value": "{color.ink.500}", "$description": "Dotted learning-path connector" }
     }
+  },
+  "elevation": {
+    "$type": "shadow",
+    "$description": "Soft, warm-violet-tinted depth (D11). Max 2 layers. Never combine with a border on cards.",
+    "e0": { "$value": [] },
+    "e1": { "$value": [
+      { "color": "#1E1B2E0F", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" },
+      { "color": "#54306C14", "offsetX": "0px", "offsetY": "4px", "blur": "12px", "spread": "0px" }
+    ], "$description": "Cards, chips, search pill" },
+    "e2": { "$value": [
+      { "color": "#1E1B2E0F", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px" },
+      { "color": "#54306C1F", "offsetX": "0px", "offsetY": "10px", "blur": "24px", "spread": "0px" }
+    ], "$description": "Raised: tab bar, toasts, popovers, hovered cards" },
+    "e3": { "$value": [
+      { "color": "#1E1B2E14", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px" },
+      { "color": "#54306C2E", "offsetX": "0px", "offsetY": "18px", "blur": "40px", "spread": "0px" }
+    ], "$description": "Dialogs, bottom sheets" }
   }
 }

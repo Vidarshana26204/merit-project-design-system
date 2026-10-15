@@ -5,19 +5,19 @@
     "quizOption": {
       "idle": {
         "bg": { "$value": "{color.surface.default}" },
-        "border": { "$value": "{color.border.default}" },
+        "border": { "$value": "{color.border.subtle}" },
         "fg": { "$value": "{color.text.primary}" }
       },
       "selected": {
         "bg": { "$value": "{color.surface.selected}" },
-        "border": { "$value": "{color.action.primary}" },
+        "border": { "$value": "{color.focus.ring}" },
         "fg": { "$value": "{color.text.primary}" }
       },
       "correct": {
         "$description": "Always paired with a ✓ icon — never colour alone",
-        "bg": { "$value": "{color.feedback.success}" },
-        "border": { "$value": "{color.border.default}" },
-        "fg": { "$value": "{color.text.onSuccess}" }
+        "bg": { "$value": "{color.feedback.successSubtle}" },
+        "border": { "$value": "{color.feedback.successText}" },
+        "fg": { "$value": "{color.text.primary}" }
       },
       "wrong": {
         "$description": "Always paired with a ✕ icon — never colour alone",
@@ -28,57 +28,64 @@
       "revealed": {
         "$description": "The correct answer shown after a wrong pick — dashed border",
         "bg": { "$value": "{color.surface.default}" },
-        "border": { "$value": "{color.feedback.success}" },
+        "border": { "$value": "{color.feedback.successText}" },
         "fg": { "$value": "{color.text.primary}" }
       }
     },
     "timer": {
-      "safe": { "$value": "{color.feedback.success}" },
-      "warn": { "$value": "{color.feedback.warning}" },
-      "critical": { "$value": "{color.red.600}" }
+      "$description": "Calm until it matters (C2): neutral → butter → red",
+      "safe": { "$value": "{color.surface.sunken}" },
+      "warn": { "$value": "{color.butter.300}" },
+      "critical": { "$value": "{color.red.600}" },
+      "fg": { "$value": "{color.ink.900}" },
+      "criticalFg": { "$value": "{color.white}" }
     },
     "tier": {
       "wanderer": {
         "bg": { "$value": "{color.surface.default}" },
-        "seal": { "$value": "{color.ink.700}" }
+        "seal": { "$value": "{color.ink.900}" }
       },
       "achiever": {
-        "$description": "Pro — replaces the premium_screen gradient",
-        "bg": { "$value": "{color.yellow.500}" },
-        "fg": { "$value": "{color.ink.700}" },
-        "seal": { "$value": "{color.ink.700}" }
+        "$description": "Pro — violet band + butter seal + orange cap (C6)",
+        "bg": { "$value": "{color.violet.700}" },
+        "fg": { "$value": "{color.white}" },
+        "seal": { "$value": "{color.butter.300}" },
+        "cap": { "$value": "{color.orange.500}" }
       }
     },
     "reward": {
-      "points": { "$value": "{color.yellow.500}" },
-      "streakDone": { "$value": "{color.purple.500}" },
-      "streakToday": { "$value": "{color.yellow.500}" }
+      "points": { "$value": "{color.butter.500}", "$description": "Coin glyph" },
+      "pointsFill": { "$value": "{color.butter.300}" },
+      "streak": { "$value": "{color.orange.500}", "$description": "Flame glyph" },
+      "streakDone": { "$value": "{color.orange.500}" },
+      "streakToday": { "$value": "{color.butter.300}" }
     },
     "grade": {
-      "$description": "Replaces ad-hoc #FF9800. fg = text on the grade fill.",
-      "a": { "bg": { "$value": "{color.mint.500}" }, "fg": { "$value": "{color.ink.700}" } },
-      "b": { "bg": { "$value": "{color.mint.400}" }, "fg": { "$value": "{color.ink.700}" } },
-      "c": { "bg": { "$value": "{color.yellow.400}" }, "fg": { "$value": "{color.ink.700}" } },
-      "d": { "bg": { "$value": "{color.yellow.500}" }, "fg": { "$value": "{color.ink.700}" } },
-      "e": { "bg": { "$value": "{color.pink.300}" }, "fg": { "$value": "{color.ink.700}" } },
+      "$description": "fg = text on the grade fill. Letter always shown.",
+      "a": { "bg": { "$value": "{color.sage.300}" }, "fg": { "$value": "{color.ink.900}" } },
+      "b": { "bg": { "$value": "{color.sage.100}" }, "fg": { "$value": "{color.ink.900}" } },
+      "c": { "bg": { "$value": "{color.butter.300}" }, "fg": { "$value": "{color.ink.900}" } },
+      "d": { "bg": { "$value": "{color.orange.300}" }, "fg": { "$value": "{color.ink.900}" } },
+      "e": { "bg": { "$value": "{color.coral.300}" }, "fg": { "$value": "{color.ink.900}" } },
       "f": { "bg": { "$value": "{color.red.600}" }, "fg": { "$value": "{color.white}" } }
     },
     "category": {
-      "$description": "Subject colours, assigned deterministically by subject index. Always ink text + black border.",
-      "1": { "$value": "{color.pink.300}" },
-      "2": { "$value": "{color.blue.300}" },
-      "3": { "$value": "{color.mint.400}" },
-      "4": { "$value": "{color.yellow.400}" },
-      "5": { "$value": "{color.purple.100}" },
-      "6": { "$value": "{color.cream.200}" },
-      "fg": { "$value": "{color.ink.700}" }
+      "$description": "Subject patchwork tints, assigned deterministically by subject index. Ink text + ink outline. Patterns per D14: 1 dots, 2 checks, 3 stripes, 4 hatch, 5 dots, 6 stripes.",
+      "1": { "$value": "{color.sage.300}" },
+      "2": { "$value": "{color.sky.300}" },
+      "3": { "$value": "{color.coral.300}" },
+      "4": { "$value": "{color.butter.300}" },
+      "5": { "$value": "{color.violet.100}" },
+      "6": { "$value": "{color.blush.300}" },
+      "fg": { "$value": "{color.ink.900}" },
+      "outline": { "$value": "{color.ink.900}" }
     },
     "chart": {
-      "1": { "$value": "{color.purple.500}" },
-      "2": { "$value": "{color.yellow.500}" },
-      "3": { "$value": "{color.mint.500}" },
-      "4": { "$value": "{color.pink.300}" },
-      "5": { "$value": "{color.blue.300}" }
+      "1": { "$value": "{color.violet.500}" },
+      "2": { "$value": "{color.orange.500}" },
+      "3": { "$value": "{color.sage.500}" },
+      "4": { "$value": "{color.butter.500}" },
+      "5": { "$value": "{color.sky.500}" }
     }
   },
   "size": {

@@ -25,6 +25,78 @@ Brand refresh. No token value or name changes; `package.json` stays 2.1.0.
 ### Removed
 - `assets/logo.png`, the old 1536×1024 AI raster with text baked into the cube.
 
+## 3.0.0 — 2026-10-16
+
+A full reinvention, inspired by the MindInventory "Online Learning" reference. Decisions D8–D15
+are in `DECISIONS-v3.md` and the research is in `research/v3/`. The reference site
+(`Merit Design System.html`) has **not** been rebuilt for v3 yet (that is Phase D). Until then it
+renders against renamed tokens and will look broken.
+
+### Changed: values (semantic names kept)
+- **Palette (D10):**
+  - `bg.app` is the warm canvas `#FBFAF4`. `bg.brand` is sand `#FCEBD3`.
+  - Text is ink-slate (`#1E1B2E` / `#4A4760` / `#68667F`).
+  - `action.primary` is **orange `#F65E16` with an ink label** (D9).
+  - `action.accent` is violet `#54306C`, with a white label.
+  - Links and the focus ring are violet `#663696`.
+  - Success is sage, warning is butter, and error is `#C7362F`.
+- **Dark mode (D15):** a violet-black base (`#17121F` / `#221B2C`), orange lifted to `#FF8A4C` and
+  violet links at `#C9B3EA`.
+- `text.onPrimary` is now **ink**, not white. White text on brand orange fails WCAG.
+- `text.onAccent` is white in light mode and ink in dark mode.
+- `border.default` is now the input/control edge (`#68667F` light, `#9C94AC` dark). It was the black
+  signature outline.
+- Border widths: `hairline` 1px (was 1.5), `base` 1.5px (was 2).
+- Radii: `md` 16 (was 14), `lg` 20 (was 18). Cards use `xl` 24.
+- `fontFamily.display` is **General Sans** (D8). The Flutter family name is `GeneralSans`.
+- The display, title and emphasis styles use weight 600.
+- Component tokens were recoloured: quiz options, timer, tier, reward, grade A–F, category 1–6 and
+  chart 1–5.
+
+### Added
+- **Semantic:**
+  - `surface.feature`
+  - `text.eyebrow`, `text.onPrimaryStrong`, `text.onFeature`, `text.onWarning`
+  - `border.strong` (the ink outline for chips and illustration)
+  - `action.primaryStrong` (burnt orange with a white label), `action.accentPressed`
+  - `feedback.successSubtle`
+  - `decor.sparkle`, `decor.sparkleWarm`, `decor.underline`, `decor.connector`
+- **Elevation (D11):** soft, themed shadows `elevation.e0–e3` (`$type: shadow`). They generate as
+  CSS `--merit-elevation-e*` and as Dart `context.meritColors.elevationE0…E3` (`List<BoxShadow>`).
+- **Type:** `type.emphasis.lg/md` (italic) and `type.eyebrow`. The generators emit
+  `--merit-type-*-style` and `fontStyle: FontStyle.italic`.
+- **Component:**
+  - `timer.fg`, `timer.criticalFg`
+  - `tier.achiever.cap`
+  - `reward.streak`, `reward.pointsFill`
+  - `category.outline`
+- **Primitives:** `canvas`, `ink.500/700/900`, `orange`, `coral`, `sand.100/300`, `violet`, `sage`,
+  `butter`, `blush`, `sky`, `night`, `mist`.
+- **Contrast gate:** 63 pairs × light/dark = 126 checks. New checks cover orange as a non-text fill
+  (≥3:1 on canvas), the eyebrow, the feature band, and quiz-option borders.
+- The pipeline supports 8-digit `#RRGGBBAA` colours (Dart output is `0xAARRGGBB`).
+
+### Removed (rename map v2 → v3)
+| v2 | v3 |
+|---|---|
+| `shadowOffset.s1–s5`, `--merit-shadow-s1…s5`, `--merit-shadow-offset-*`, Dart `MeritShadowOffset`, `context.meritColors.shadowS1…S5` | `elevation.e1` (s1–s3), `e2` (s4), `e3` (s5, dialogs) |
+| `shadow.color` / `--merit-shadow-color` / `shadowColor` | none (each elevation layer carries its own colour) |
+| `borderWidth.heavy` (3px) | `borderWidth.strong` (2px) |
+| `fontFamily.landing` (School Times) | `fontFamily.display` (D13) |
+| `purple.100/300/500/700` | `violet.100/300/500/700` (new values; brand fill is now `violet.700`) |
+| `yellow.100/400/500/900` | `butter.100/300/500` |
+| `mint.100/400/500/800` | `sage.100/300/700` |
+| `cream.100/200` | `canvas.50` / `sand.100` |
+| `sand.200` | `canvas.200` |
+| `ink.text`, `ink.600/700/800/850/900` | `ink.900`; dark surfaces move to `night.600–900` |
+| `mauve.*` | `ink.500/700` (light), `mist.300/400` (dark) |
+| `pink.300`, `blue.300` | `blush.300`, `sky.300` |
+| `red.50`, `red.800` | none (`red.100/300/600/900` remain, with new values) |
+| `black` | `ink.900` (`border.strong`) |
+
+Consumers stay on their v2 pin (`.design-tokens-ref`, the vendored `merit_tokens.dart`) until they
+migrate. See `MIGRATION-v3.md` (Phase D).
+
 ## Site v2.2 — 2026-09-29
 
 Phase 4: reference-site rebuild. No token value or name changes — `package.json`
