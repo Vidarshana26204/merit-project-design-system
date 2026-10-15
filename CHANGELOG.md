@@ -5,6 +5,26 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## Site v2.3 — 2026-10-15
+
+Brand refresh. No token value or name changes; `package.json` stays 2.1.0.
+
+### Added
+- `assets/brand/`: the cube-in-pyramid mark redrawn as clean SVG (no baked-in text) in the
+  DS style. Includes dark, small, cube-only, one-colour and Achiever versions, the app icon,
+  Android adaptive and monochrome icons, and MERIT / PROJECT lockups (horizontal, dark,
+  stacked), with PNGs in `assets/brand/png/`.
+- `merit-coin` (Merit Points): gold pyramid coin, small cut, dark version, and Fill/Bold glyphs.
+- `scripts/brand/build_brand.py` generates all of the above.
+- SKILL.md §11 covers logo and coin usage.
+
+### Changed
+- Reference site §21 Logo Usage was rebuilt around the new files. The sidebar mark uses
+  `merit-mark-dark.svg`.
+
+### Removed
+- `assets/logo.png`, the old 1536×1024 AI raster with text baked into the cube.
+
 ## Site v2.2 — 2026-09-29
 
 Phase 4: reference-site rebuild. No token value or name changes — `package.json`
