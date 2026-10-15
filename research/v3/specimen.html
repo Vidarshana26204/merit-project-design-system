@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merit v3 Specimen</title>
+<!-- Research specimen only (Phase A). Fonts load from CDNs here for comparison;
+     the shipped system self-hosts its chosen faces. -->
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,700,500i,600i,700i&f[]=satoshi@500,700,900,700i,900i&f[]=cabinet-grotesk@500,700,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Noto+Sans+Sinhala:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+@font-face { font-family: "Clash Display"; src: url("../../assets/fonts/ClashDisplay-SemiBold.ttf") format("truetype"); font-weight: 600; }
+@font-face { font-family: "Clash Display"; src: url("../../assets/fonts/ClashDisplay-Bold.ttf") format("truetype"); font-weight: 700; }
+
+/* ── v3 primitives (proposed) ───────────────────────────── */
+:root {
+  --canvas-50:#FBFAF4; --canvas-100:#F4F1E6; --canvas-200:#E9E4D4;
+  --white:#FFFFFF;
+  --ink-900:#1E1B2E; --ink-700:#4A4760; --ink-500:#68667F;
+  --orange-100:#FFE7D8; --orange-300:#FF9A63; --orange-500:#F65E16; --orange-600:#E0510C; --orange-700:#B23F06;
+  --coral-300:#FC906C;
+  --sand-100:#FCEBD3; --sand-300:#F0DEC0;
+  --violet-50:#F4EFF9; --violet-100:#E7DCF2; --violet-300:#C9B3EA; --violet-400:#905AA8; --violet-500:#663696; --violet-600:#7E24DE; --violet-700:#54306C; --violet-800:#3C244E; --violet-900:#24162F;
+  --sage-100:#E2F2E6; --sage-300:#A2D2AE; --sage-700:#2F6B43;
+  --butter-300:#FFD66B; --butter-500:#F5B700;
+  --blush-300:#F6B5C3; --sky-300:#BCD6F2;
+  --red-100:#FBDAD6; --red-600:#C7362F; --red-300:#FF9A8F;
+  --vblack-900:#17121F; --vblack-850:#1C1625; --vblack-800:#221B2C; --vblack-700:#2E2539; --vblack-600:#3A3048;
+}
+/* ── v3 semantic (proposed) ─────────────────────────────── */
+:root, [data-theme="light"] {
+  --bg-app: var(--canvas-50); --surface: var(--white); --surface-sunken: var(--canvas-100);
+  --surface-feature: var(--violet-700); --surface-selected: var(--violet-100);
+  --text-1: var(--ink-900); --text-2: var(--ink-700); --text-3: var(--ink-500);
+  --text-link: var(--violet-500); --text-eyebrow: var(--orange-700);
+  --action-primary: var(--orange-500); --on-primary: var(--ink-900);
+  --action-primary-strong: var(--orange-700); --on-primary-strong: var(--white);
+  --action-accent: var(--violet-700); --on-accent: var(--white);
+  --border-subtle: var(--canvas-200); --outline: var(--ink-900);
+  --success: var(--sage-300); --success-text: var(--sage-700);
+  --error: var(--red-600); --error-subtle: var(--red-100); --warning: var(--butter-300);
+  --focus: var(--violet-500);
+  --e1: 0 1px 2px rgba(30,27,46,.06), 0 4px 12px rgba(84,48,108,.08);
+  --e2: 0 2px 4px rgba(30,27,46,.06), 0 10px 24px rgba(84,48,108,.12);
+  --e3: 0 4px 8px rgba(30,27,46,.08), 0 18px 40px rgba(84,48,108,.18);
+}
+[data-theme="dark"] {
+  --bg-app: var(--vblack-900); --surface: var(--vblack-800); --surface-sunken: var(--vblack-850);
+  --surface-feature: var(--violet-800); --surface-selected: var(--violet-800);
+  --text-1: #F7F3EA; --text-2: #B9B2C6; --text-3: #9C94AC;
+  --text-link: var(--violet-300); --text-eyebrow: #FF8A4C;
+  --action-primary: #FF8A4C; --on-primary: var(--ink-900);
+  --action-primary-strong: #FF8A4C; --on-primary-strong: var(--ink-900);
+  --action-accent: var(--violet-300); --on-accent: var(--ink-900);
+  --border-subtle: var(--vblack-600); --outline: #F7F3EA;
+  --success: var(--sage-300); --success-text: var(--sage-300);
+  --error: var(--red-300); --error-subtle: #5A1A1A; --warning: var(--butter-300);
+  --focus: var(--violet-300);
+  --e1: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+  --e2: 0 2px 4px rgba(0,0,0,.4), 0 10px 24px rgba(0,0,0,.4);
+  --e3: 0 4px 8px rgba(0,0,0,.5), 0 18px 40px rgba(0,0,0,.5);
+}
+
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg-app); color:var(--text-1); font:500 15px/1.55 "Plus Jakarta Sans","Noto Sans Sinhala","Noto Sans Tamil",system-ui,sans-serif; --display:"General Sans"; }
+.wrap { max-width:1180px; margin:0 auto; padding:24px 16px 96px; }
+h1,h2,h3,.disp { font-family:var(--display),"Plus Jakarta Sans","Noto Sans Sinhala","Noto Sans Tamil",sans-serif; font-weight:600; letter-spacing:-.02em; margin:0; }
+h2 { font-size:28px; margin-bottom:6px; }
+section { margin-top:56px; }
+.lede { color:var(--text-2); max-width:70ch; margin:4px 0 20px; }
+.eyebrow { font:700 11px/1.3 "Plus Jakarta Sans",sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--text-eyebrow); margin-bottom:8px; }
+.grid { display:grid; gap:16px; }
+.g2 { grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }
+.g3 { grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+.g6 { grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
+.card { background:var(--surface); border-radius:24px; padding:20px; box-shadow:var(--e1); }
+.sunk { background:var(--surface-sunken); border-radius:16px; padding:14px; }
+.muted { color:var(--text-3); font-size:13px; }
+code { font:500 12px/1.4 ui-monospace,Menlo,monospace; color:var(--text-2); }
+
+/* Top bar */
+.top { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
+.brand { font:italic 900 26px/1 "Satoshi",sans-serif; letter-spacing:-.02em; text-transform:uppercase; }
+.brand b { color:var(--action-primary); }
+.pillbtn { font:600 14px/1 "Plus Jakarta Sans",sans-serif; border:0; border-radius:999px; padding:12px 20px; min-height:44px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
+.pillbtn:focus-visible, .chip:focus-visible, .opt:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
+.b-primary { background:var(--action-primary); color:var(--on-primary); box-shadow:var(--e1); }
+.b-strong { background:var(--action-primary-strong); color:var(--on-primary-strong); box-shadow:var(--e1); }
+.b-accent { background:var(--action-accent); color:var(--on-accent); }
+.b-ghost { background:transparent; color:var(--text-1); box-shadow:inset 0 0 0 1.5px var(--border-subtle); }
+.b-link { background:none; color:var(--text-link); text-decoration:underline; text-underline-offset:4px; padding-inline:4px; }
+.b-primary:hover { background:var(--orange-600); }
+.b-primary:active, .b-strong:active { transform:translateY(1px); box-shadow:none; }
+
+/* Headline + brush underline */
+.u { position:relative; white-space:nowrap; z-index:0; }
+.u::after { content:""; position:absolute; left:-2%; right:-2%; bottom:-.12em; height:.32em; z-index:-1;
+  background:var(--action-primary); opacity:.9;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M2 9C34 3 92 1 198 4c-6 2-50 3-92 5C70 11 30 12 6 13 1 13 0 10 2 9z'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M2 9C34 3 92 1 198 4c-6 2-50 3-92 5C70 11 30 12 6 13 1 13 0 10 2 9z'/%3E%3C/svg%3E") center/100% 100% no-repeat; }
+
+/* Swatches */
+.sw { border-radius:16px; overflow:hidden; box-shadow:var(--e1); background:var(--surface); }
+.sw .chipc { height:64px; display:flex; align-items:flex-end; padding:8px; font:600 11px/1 ui-monospace,Menlo,monospace; }
+.sw .meta { padding:8px 10px; font-size:12px; }
+.sw .meta b { display:block; font-size:13px; }
+
+/* Font compare */
+.fc { display:flex; flex-direction:column; gap:10px; }
+.fc .hd { font-size:34px; line-height:1.08; font-weight:600; letter-spacing:-.025em; }
+.fc .num { font-size:30px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+.fc .tri { font-size:20px; font-weight:600; line-height:1.35; letter-spacing:0; }
+.fc .q { font-size:18px; font-weight:600; line-height:1.3; }
+.fc .em { font-style:italic; }
+.tag { display:inline-block; font:700 11px/1 "Plus Jakarta Sans",sans-serif; padding:5px 9px; border-radius:999px; background:var(--surface-sunken); color:var(--text-2); }
+.tag.rec { background:var(--orange-100); color:var(--orange-700); }
+
+/* Chips + search */
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { font:600 13px/1 "Plus Jakarta Sans",sans-serif; padding:10px 14px; min-height:40px; border-radius:999px; border:1px solid var(--outline); background:var(--surface); color:var(--text-1); cursor:pointer; }
+.chip[aria-pressed="true"] { background:var(--action-accent); border-color:var(--action-accent); color:var(--on-accent); }
+.search { display:flex; align-items:center; background:var(--surface); border-radius:999px; box-shadow:var(--e2); padding:6px 6px 6px 20px; max-width:440px; }
+.search input { flex:1; border:0; background:none; font:500 14px "Plus Jakarta Sans",sans-serif; color:var(--text-1); min-width:0; outline:none; }
+.search button { width:44px; height:44px; border-radius:50%; border:0; background:var(--action-primary); color:var(--on-primary); font-size:20px; display:grid; place-items:center; cursor:pointer; }
+
+/* Patchwork */
+.tile { display:flex; flex-direction:column; gap:10px; }
+.tile svg { width:100%; height:auto; display:block; }
+.tile b { font-family:var(--display),sans-serif; font-weight:600; font-size:16px; }
+
+/* Quiz */
+.opt { display:flex; align-items:center; gap:12px; min-height:56px; padding:10px 14px; border-radius:16px; background:var(--surface); box-shadow:inset 0 0 0 1.5px var(--border-subtle); font-weight:600; cursor:pointer; }
+.opt .l { width:32px; height:32px; flex:none; border-radius:10px; display:grid; place-items:center; background:var(--surface-sunken); font-family:var(--display),sans-serif; font-weight:700; }
+.opt .ic { margin-left:auto; font-size:22px; }
+.opt.sel { background:var(--surface-selected); box-shadow:inset 0 0 0 2px var(--focus); }
+.opt.sel .l { background:var(--action-accent); color:var(--on-accent); }
+.opt.ok { background:var(--sage-100); color:var(--ink-900); box-shadow:inset 0 0 0 2px var(--sage-700); }
+.opt.ok .l { background:var(--sage-700); color:#fff; }
+.opt.bad { background:var(--error-subtle); box-shadow:inset 0 0 0 2px var(--error); }
+.opt.bad .l { background:var(--error); color:#fff; }
+[data-theme="dark"] .opt.bad .l { color:var(--ink-900); }
+.opt.rev { box-shadow:none; outline:2px dashed var(--success-text); outline-offset:-2px; }
+.stlabel { font:700 10px/1 "Plus Jakarta Sans",sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin:10px 0 4px; }
+
+/* Gamification */
+.hud { display:flex; gap:8px; flex-wrap:wrap; }
+.hchip { display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px; background:var(--surface); box-shadow:var(--e1); font-family:var(--display),sans-serif; font-weight:700; font-variant-numeric:tabular-nums; }
+.hchip .ph-fill.flame { color:var(--orange-500); } .hchip .ph-fill.coin { color:var(--butter-500); }
+.timer { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px; font-family:var(--display),sans-serif; font-weight:700; font-size:20px; font-variant-numeric:tabular-nums; }
+.t-safe { background:var(--surface-sunken); color:var(--text-1); } .t-warn { background:var(--butter-300); color:var(--ink-900); } .t-crit { background:var(--red-600); color:#fff; }
+
+/* Achiever band */
+.band { position:relative; overflow:hidden; background:var(--violet-700); color:#fff; border-radius:28px; padding:28px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between; }
+.band::after { content:""; position:absolute; right:-60px; top:-40px; bottom:-40px; width:220px; background:var(--orange-500); border-radius:999px 0 0 999px; z-index:0; }
+.band > * { position:relative; z-index:1; }
+.band h3 { font-size:24px; color:#fff; }
+.band p { margin:4px 0 0; color:#E7DCF2; max-width:42ch; }
+.seal { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:var(--butter-300); color:var(--ink-900); font:700 11px/1 "Plus Jakarta Sans",sans-serif; letter-spacing:.06em; text-transform:uppercase; }
+
+/* Path */
+.path svg { width:100%; height:auto; }
+
+/* Contrast table */
+table { border-collapse:collapse; width:100%; font-size:13px; }
+td,th { text-align:left; padding:7px 8px; border-bottom:1px solid var(--border-subtle); }
+.pass { color:var(--success-text); font-weight:700; } .fail { color:var(--error); font-weight:700; }
+
+/* Font picker */
+select { font:600 14px "Plus Jakarta Sans",sans-serif; padding:10px 14px; border-radius:999px; border:1px solid var(--border-subtle); background:var(--surface); color:var(--text-1); min-height:44px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .spark { animation: tw 2.4s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+  @keyframes tw { 50% { transform:scale(.7) rotate(20deg); opacity:.7; } }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand">Merit<b>.</b></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <label class="muted" for="dface" style="align-self:center">Display face</label>
+    <select id="dface">
+      <option value="General Sans" selected>General Sans (rec.)</option>
+      <option>Satoshi</option><option>Clash Display</option><option>Cabinet Grotesk</option><option>Outfit</option><option>Bricolage Grotesque</option>
+    </select>
+    <button class="pillbtn b-ghost" id="theme"><i class="ph ph-moon"></i> Dark</button>
+  </div>
+</header>
+
+<section style="margin-top:32px">
+  <div class="eyebrow">Merit design system · v3 research</div>
+  <h1 style="font-size:clamp(36px,6vw,60px);line-height:1.04;max-width:16ch;margin-bottom:18px">Learn it. Level up. Earn <span class="u">Merit.</span></h1>
+  <p class="lede">Phase A specimen. It shows the proposed palette, display-face candidates, motifs and the core components, built on the warm-canvas, orange and violet grammar of the reference. Every value here is a proposal for the checkpoint and is not shipped.</p>
+  <div class="search"><input aria-label="Search" placeholder="Search subject, topic, past paper…"><button aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button></div>
+</section>
+
+<!-- PALETTE -->
+<section>
+  <div class="eyebrow">01 · Palette</div>
+  <h2>Warm energy, violet depth.</h2>
+  <p class="lede">These hue families were sampled from the reference: orange to coral to sand for energy, violet for focus and authority, and sage as the one cool accent. Butter (rewards) and sky/blush (subject categories) were added to cover Merit's own needs.</p>
+  <div class="grid g6" id="swatches"></div>
+</section>
+
+<!-- D9 -->
+<section>
+  <div class="eyebrow">02 · Decision D9</div>
+  <h2>The orange problem.</h2>
+  <p class="lede">White on brand orange fails AA for button text: the reference <code>#FC661E</code> is 2.98:1, and the tuned v3 <code>#F65E16</code> is 3.22:1, which passes only for large text. There are two ways to keep orange as the primary action.</p>
+  <div class="grid g2">
+    <div class="card"><span class="tag rec">A · recommended</span>
+      <p>Vivid orange <code>#F65E16</code> fill with an <b>ink</b> label (5.22:1); the fill clears 3:1 on canvas. This keeps the reference's energy.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="pillbtn b-primary">Start practice <i class="ph-bold ph-arrow-right"></i></button><button class="pillbtn b-accent">Go Achiever</button><button class="pillbtn b-ghost">Later</button><button class="pillbtn b-link">Review mistakes</button></div></div>
+    <div class="card"><span class="tag">B</span>
+      <p>Burnt-orange fill <code>#B23F06</code> with a <b>white</b> label (5.82:1). It is safer for long labels but reads brown and duller.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="pillbtn b-strong">Start practice <i class="ph-bold ph-arrow-right"></i></button><button class="pillbtn b-accent">Go Achiever</button></div></div>
+  </div>
+</section>
+
+<!-- TYPE -->
+<section>
+  <div class="eyebrow">03 · Decision D8</div>
+  <h2>Display face candidates.</h2>
+  <p class="lede">Each card renders Merit content in its candidate face. Body text stays Plus Jakarta Sans, and SI/TA fall back to Noto. Use the picker at the top to apply a face to the whole page.</p>
+  <div class="grid g3" id="fonts"></div>
+</section>
+
+<!-- MOTIFS -->
+<section>
+  <div class="eyebrow">04 · Illustration kit</div>
+  <h2>Patchwork <span class="u">subjects</span>.</h2>
+  <p class="lede">Each tile is a rounded square cut into geometric patches, each filled with a tint or pattern (dots, stripes, checks), all outlined in ink. A Phosphor Duotone glyph sits on the white focal patch. Sparkles and dotted connectors are the motifs.</p>
+  <div class="grid g6" id="tiles"></div>
+</section>
+
+<!-- COMPONENTS -->
+<section>
+  <div class="eyebrow">05 · Components</div>
+  <h2>Core pieces, both modes.</h2>
+  <p class="lede">Calm mode, used for quiz-taking and notes: canvas, slate text and violet selection. Energy mode, used for home, rewards and landing: orange, butter and sparkles.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3 style="font-size:18px;margin-bottom:12px">Gamer header &amp; filters</h3>
+      <div class="hud"><span class="hchip"><i class="ph-fill ph-flame flame"></i>12</span><span class="hchip"><i class="ph-fill ph-coins coin"></i>1,240</span><span class="hchip"><i class="ph-fill ph-crown" style="color:var(--violet-500)"></i>Achiever</span></div>
+      <div class="stlabel">Stream / medium</div>
+      <div class="chips" role="group" aria-label="Filters">
+        <button class="chip" aria-pressed="true">Bio stream</button><button class="chip" aria-pressed="false">Maths stream</button><button class="chip" aria-pressed="false">Commerce</button><button class="chip" aria-pressed="false">සිංහල</button><button class="chip" aria-pressed="false">தமிழ்</button>
+      </div>
+      <div class="stlabel">Timer · paper mode</div>
+      <div class="hud"><span class="timer t-safe"><i class="ph-bold ph-timer"></i>42:10</span><span class="timer t-warn"><i class="ph-bold ph-timer"></i>04:59</span><span class="timer t-crit"><i class="ph-bold ph-timer"></i>00:58</span></div>
+      <div class="stlabel">Progress</div>
+      <div style="height:12px;border-radius:99px;background:var(--surface-sunken);overflow:hidden"><div style="width:64%;height:100%;background:var(--action-primary);border-radius:99px"></div></div>
+      <p class="muted" style="margin:6px 0 0">32 of 50 questions today · Wanderer</p>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:18px;margin-bottom:4px">Quiz option states</h3>
+      <p class="muted" style="margin:0 0 6px">Colour is never the only signal: every state also has an icon, and "revealed" is dashed.</p>
+      <div class="stlabel">Idle</div><div class="opt" tabindex="0"><span class="l">A</span>Mitochondria</div>
+      <div class="stlabel">Selected</div><div class="opt sel" tabindex="0"><span class="l">B</span>Ribosome<i class="ph-fill ph-circle ic" style="color:var(--focus)"></i></div>
+      <div class="stlabel">Correct</div><div class="opt ok"><span class="l">C</span>Golgi apparatus<i class="ph-bold ph-check-circle ic"></i></div>
+      <div class="stlabel">Wrong</div><div class="opt bad"><span class="l">D</span>Lysosome<i class="ph-bold ph-x-circle ic" style="color:var(--error)"></i></div>
+      <div class="stlabel">Revealed</div><div class="opt rev"><span class="l">C</span>Golgi apparatus<i class="ph-bold ph-check ic" style="color:var(--success-text)"></i></div>
+    </div>
+  </div>
+
+  <div class="band" style="margin-top:16px">
+    <div><span class="seal"><i class="ph-fill ph-seal-check"></i> Achiever</span>
+      <h3 style="margin-top:10px">Unlimited practice. 1.5× points.</h3>
+      <p>Adaptive mode finds your weak spots first. Cancel anytime.</p></div>
+    <button class="pillbtn" style="background:#fff;color:var(--ink-900)">See plans <i class="ph-bold ph-arrow-right"></i></button>
+  </div>
+
+  <div class="card path" style="margin-top:16px">
+    <h3 style="font-size:18px">Learning path map</h3>
+    <p class="muted" style="margin:2px 0 8px">The hierarchy as connected tiles: done is sage, current is orange with a sparkle, locked is sunken.</p>
+    <svg viewBox="0 0 640 140" role="img" aria-label="Learning path: 2 done, 1 current, 2 locked">
+      <path d="M60 70 H580" stroke="var(--text-3)" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" fill="none"/>
+      <g font-family="Plus Jakarta Sans" font-size="12" font-weight="700" text-anchor="middle" fill="var(--text-2)">
+        <rect x="28" y="38" width="64" height="64" rx="18" fill="var(--sage-300)" stroke="var(--outline)" stroke-width="1.5"/><text x="60" y="120">Cells</text><text x="60" y="76" font-size="20" fill="var(--ink-900)">✓</text>
+        <rect x="158" y="38" width="64" height="64" rx="18" fill="var(--sage-300)" stroke="var(--outline)" stroke-width="1.5"/><text x="190" y="120">Tissues</text><text x="190" y="76" font-size="20" fill="var(--ink-900)">✓</text>
+        <rect x="288" y="30" width="80" height="80" rx="22" fill="var(--orange-500)" stroke="var(--outline)" stroke-width="1.5"/><text x="328" y="128" fill="var(--text-1)">Enzymes</text><text x="328" y="76" font-size="18" fill="var(--ink-900)">64%</text>
+        <path class="spark" d="M378 22c1 8 4 11 12 12-8 1-11 4-12 12-1-8-4-11-12-12 8-1 11-4 12-12z" fill="var(--violet-600)"/>
+        <rect x="428" y="38" width="64" height="64" rx="18" fill="var(--surface-sunken)" stroke="var(--border-subtle)" stroke-width="1.5"/><text x="460" y="120">Genetics</text>
+        <rect x="548" y="38" width="64" height="64" rx="18" fill="var(--surface-sunken)" stroke="var(--border-subtle)" stroke-width="1.5"/><text x="580" y="120">Evolution</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- CONTRAST -->
+<section>
+  <div class="eyebrow">06 · Contrast (live)</div>
+  <h2>Gate preview.</h2>
+  <p class="lede">These ratios are computed from the computed styles of the current theme. Switch theme to re-check. In Phase B the real gate moves to <code>tokens/contrast.json</code>.</p>
+  <div class="card" style="overflow-x:auto"><table id="cr"><thead><tr><th>Pair</th><th>Fg</th><th>Bg</th><th>Ratio</th><th>Min</th><th></th></tr></thead><tbody></tbody></table></div>
+</section>
+
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1.6" fill="#1E1B2E" opacity=".55"/></pattern>
+    <pattern id="stripes" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="8" fill="#1E1B2E" opacity=".45"/></pattern>
+    <pattern id="checks" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#1E1B2E" opacity=".25"/><rect x="5" y="5" width="5" height="5" fill="#1E1B2E" opacity=".25"/></pattern>
+    <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0L7 7M7 0L0 7" stroke="#1E1B2E" stroke-width=".8" opacity=".45"/></pattern>
+  </defs>
+</svg>
+
+<script>
+const $ = s => document.querySelector(s);
+const root = document.documentElement;
+
+/* Theme toggle */
+$('#theme').addEventListener('click', () => {
+  const dark = root.dataset.theme !== 'dark';
+  root.dataset.theme = dark ? 'dark' : 'light';
+  $('#theme').innerHTML = dark ? '<i class="ph ph-sun"></i> Light' : '<i class="ph ph-moon"></i> Dark';
+  buildContrast();
+});
+$('#dface').addEventListener('change', e => document.body.style.setProperty('--display', `"${e.target.value}"`));
+
+/* Swatches */
+const SW = [
+  ['canvas-50','bg.app'],['canvas-100','surface.sunken'],['white','surface.default'],['ink-900','text.primary'],['ink-700','text.secondary'],['ink-500','text.tertiary'],
+  ['orange-500','action.primary'],['orange-700','text.eyebrow / strong'],['coral-300','patch / energy'],['sand-300','patch'],['butter-300','reward / warning'],['butter-500','coin glyph'],
+  ['violet-700','surface.feature / accent'],['violet-500','link / focus'],['violet-600','sparkle'],['violet-100','surface.selected'],['sage-300','success fill'],['sage-700','success text'],
+  ['blush-300','category'],['sky-300','category'],['red-600','error'],['vblack-900','dark bg.app'],['vblack-800','dark surface'],['violet-300','dark link / focus']
+];
+const L = h => { const c=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(v=>v<=.03928?v/12.92:((v+.055)/1.055)**2.4); return .2126*c[0]+.7152*c[1]+.0722*c[2]; };
+const ratio = (a,b) => { const x=L(a), y=L(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
+const hexOf = v => { const t=document.createElement('i'); t.style.color=v; document.body.appendChild(t); const m=getComputedStyle(t).color.match(/\d+/g).map(Number); t.remove(); return '#'+m.slice(0,3).map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase(); };
+$('#swatches').innerHTML = SW.map(([k,role]) => {
+  const hex = hexOf(`var(--${k})`); const fg = ratio(hex,'#1E1B2E') > ratio(hex,'#FFFFFF') ? '#1E1B2E' : '#FFFFFF';
+  return `<div class="sw"><div class="chipc" style="background:${hex};color:${fg}">${hex}</div><div class="meta"><b>${k}</b>${role}</div></div>`;
+}).join('');
+
+/* Fonts */
+const FONTS = [
+  ['General Sans','Fontshare · ITF FFL · italic ✓','rec'],['Satoshi','Fontshare · ITF FFL · italic ✓',''],['Clash Display','v2 face · no italic',''],
+  ['Cabinet Grotesk','Fontshare · no italic',''],['Outfit','Google · OFL · no italic',''],['Bricolage Grotesque','Google · OFL · no italic','']
+];
+$('#fonts').innerHTML = FONTS.map(([f,meta,rec]) => `
+  <div class="card fc" style="font-family:'${f}','Noto Sans Sinhala','Noto Sans Tamil',sans-serif">
+    <div style="display:flex;justify-content:space-between;gap:8px;font-family:'Plus Jakarta Sans'"><b>${f}</b><span class="tag ${rec}">${rec?'recommended':meta.split(' · ')[0]}</span></div>
+    <div class="muted" style="font-family:'Plus Jakarta Sans'">${meta}</div>
+    <div class="hd">Hit your <span class="u">weak spots</span> first.</div>
+    <div class="hd em" style="font-size:24px">Keep your streak alive.</div>
+    <div class="num">04:59 · 1,240 · 98%</div>
+    <div class="q">Q7. Which organelle packages proteins for secretion?</div>
+    <div class="tri">ලකුණු 1,240 · புள்ளிகள் 1,240 · Points</div>
+  </div>`).join('');
+
+/* Tiles */
+const CATS = [
+  ['Biology','dna','#A2D2AE','#FC906C','dots'],['Chemistry','flask','#FCEBD3','#663696','stripes'],['Physics','atom','#BCD6F2','#F65E16','checks'],
+  ['Combined Maths','function','#FFD66B','#54306C','hatch'],['ICT','cpu','#E7DCF2','#FC906C','dots'],['Languages','translate','#F6B5C3','#A2D2AE','stripes']
+];
+$('#tiles').innerHTML = CATS.map(([n,ic,a,b,p]) => `
+  <div class="card tile">
+    <svg viewBox="0 0 120 120" role="img" aria-label="${n} tile">
+      <rect x="4" y="4" width="112" height="112" rx="24" fill="${a}"/>
+      <path d="M4 70 L60 116 H28 Q4 116 4 92Z" fill="${b}"/>
+      <path d="M70 4 H92 Q116 4 116 28 V60 Z" fill="url(#${p})"/>
+      <path d="M4 70 L60 116 H28 Q4 116 4 92Z" fill="url(#${p})"/>
+      <rect x="32" y="32" width="56" height="56" rx="14" fill="#fff" stroke="#1E1B2E" stroke-width="1.5"/>
+      <rect x="4" y="4" width="112" height="112" rx="24" fill="none" stroke="#1E1B2E" stroke-width="1.5"/>
+      <path d="M4 70 L60 116 M70 4 L116 60" stroke="#1E1B2E" stroke-width="1.5"/>
+      <path class="spark" d="M104 8c.8 6 3 8.2 9 9-6 .8-8.2 3-9 9-.8-6-3-8.2-9-9 6-.8 8.2-3 9-9z" fill="#F65E16"/>
+    </svg>
+    <div style="display:flex;align-items:center;gap:8px"><i class="ph-duotone ph-${ic}" style="font-size:22px;color:var(--violet-500)"></i><b>${n}</b></div>
+  </div>`).join('');
+// Phosphor glyph inside tile focal patch
+document.querySelectorAll('.tile').forEach((t,i) => {
+  const ic = document.createElement('i'); ic.className = `ph-duotone ph-${CATS[i][1]}`;
+  ic.style.cssText = 'position:absolute;font-size:34px;color:#1E1B2E;left:50%;top:50%;transform:translate(-50%,-50%)';
+  const w = document.createElement('div'); w.style.position='relative';
+  const svg = t.querySelector('svg'); svg.replaceWith(w); w.append(svg, ic);
+});
+
+/* Contrast */
+function buildContrast() {
+  const v = n => hexOf(`var(--${n})`);
+  const P = [
+    ['Body text','text-1','bg-app',4.5],['Secondary','text-2','bg-app',4.5],['Tertiary on surface','text-3','surface',4.5],['Tertiary on sunken','text-3','surface-sunken',4.5],
+    ['Link','text-link','bg-app',4.5],['Eyebrow','text-eyebrow','bg-app',4.5],['Primary label (A)','on-primary','action-primary',4.5],['Strong label (B)','on-primary-strong','action-primary-strong',4.5],
+    ['Accent label','on-accent','action-accent',4.5],['Success text','success-text','bg-app',4.5],['Error text','error','surface',4.5],['Focus ring','focus','bg-app',3],
+    ['Chip outline','outline','surface',3],['Primary fill vs canvas','action-primary','bg-app',3]
+  ];
+  $('#cr tbody').innerHTML = P.map(([l,f,b,min]) => { const F=v(f), B=v(b), r=ratio(F,B);
+    return `<tr><td>${l}</td><td><code>${f}</code> ${F}</td><td><code>${b}</code> ${B}</td><td><b>${r.toFixed(2)}</b></td><td>${min}</td><td class="${r>=min?'pass':'fail'}">${r>=min?'PASS':'FAIL'}</td></tr>`; }).join('');
+}
+buildContrast();
+</script>
+</body>
+</html>
