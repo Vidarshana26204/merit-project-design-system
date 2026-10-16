@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "source": "tokens/*.tokens.json",
   "themes": {
     "light": {
@@ -174,6 +174,10 @@
       "color.category.6": "#F6B5C3",
       "color.category.fg": "#1E1B2E",
       "color.category.outline": "#1E1B2E",
+      "color.patchwork.seam": "#1E1B2E",
+      "color.patchwork.plate": "#FFFFFF",
+      "color.patchwork.iconLine": "#1E1B2E",
+      "color.patchwork.iconShade": "#E9E4D4",
       "color.chart.1": "#663696",
       "color.chart.2": "#F65E16",
       "color.chart.3": "#6FAF82",
@@ -677,6 +681,10 @@
       "color.category.6": "#F6B5C3",
       "color.category.fg": "#1E1B2E",
       "color.category.outline": "#1E1B2E",
+      "color.patchwork.seam": "#1E1B2E",
+      "color.patchwork.plate": "#FFFFFF",
+      "color.patchwork.iconLine": "#1E1B2E",
+      "color.patchwork.iconShade": "#E9E4D4",
       "color.chart.1": "#663696",
       "color.chart.2": "#F65E16",
       "color.chart.3": "#6FAF82",

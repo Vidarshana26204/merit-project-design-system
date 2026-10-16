@@ -399,6 +399,7 @@ table.spec td { padding: 10px; border-bottom: var(--merit-border-width-hairline)
 .land .prog { padding: 8px 28px 36px; display: grid; grid-template-columns: 1fr 3fr; gap: 24px; align-items: start; }
 .land .prog .items { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px; }
 .land .prog .it img { width: 44px; }
+.modeic { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; font-size: 26px; color: var(--merit-ink-900); }
 .land .cta { margin: 0 28px 28px; }
 @media (max-width: 760px) { .land .hero2, .land .prog { grid-template-columns: 1fr; } .land nav a { display: none; } }
 
@@ -442,3 +443,11 @@ table.spec td { padding: 10px; border-bottom: var(--merit-border-width-hairline)
 .iconGrid i { font-size: 26px; color: var(--merit-text-primary); }
 hr.sep { border: 0; border-top: var(--merit-border-width-hairline) solid var(--merit-border-subtle); margin: 22px 0; }
 .foot { margin-top: 96px; padding-top: 24px; border-top: var(--merit-border-width-hairline) solid var(--merit-border-subtle); color: var(--merit-text-tertiary); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+/* 21 · hierarchy patchworks */
+.pwcard { position: relative; overflow: hidden; padding-right: 72px; }
+.pwcorner { position: absolute; top: 0; right: 0; width: 64px; height: 64px; background-size: cover; border-bottom-left-radius: 64px; border-left: 1.5px solid var(--merit-patchwork-seam); border-bottom: 1.5px solid var(--merit-patchwork-seam); }
+.pwpatterns { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 12px; margin-top: 8px; }
+.pwpatterns figure { margin: 0; text-align: center; font-size: 12px; color: var(--merit-text-secondary); }
+.pwpatterns img { width: 100%; max-width: 72px; display: block; margin: 0 auto 4px; }
+.pwmono { display: inline-block; width: 28px; height: 28px; background: currentColor; color: var(--merit-text-primary); -webkit-mask: var(--pw) center / contain no-repeat; mask: var(--pw) center / contain no-repeat; }

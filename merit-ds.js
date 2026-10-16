@@ -211,15 +211,20 @@
       return '<div class="row"><code style="width:72px">space.' + k + '</code><span style="display:inline-block;height:14px;width:' + v + ';border-radius:4px;background:var(--merit-action-primary)"></span><span class="muted">' + v + '</span></div>';
     }).join('');
   }
+  var PATTERNS = ['dots', 'halftone', 'stripes', 'checks', 'hatch', 'waves', 'zigzag', 'chevron', 'triangles', 'grid', 'plus', 'arcs', 'diamonds', 'scales', 'bricks', 'dashes'];
   var SUBJECTS = [['biology', 'Biology', 1], ['physics', 'Physics', 2], ['chemistry', 'Chemistry', 3], ['maths', 'Combined Maths', 4], ['ict', 'ICT', 5], ['languages', 'Languages', 6]];
   function renderSubjects() {
     var b = $('#subjBadges');
     if (b) b.innerHTML = SUBJECTS.map(function (s) {
-      return '<span class="subj" style="background:var(--merit-category-' + s[2] + ')"><img src="assets/v3/tiles/' + s[0] + '.svg" alt="" />' + s[1] + '</span>';
+      return '<span class="subj" style="background:var(--merit-category-' + s[2] + ')"><img src="assets/v3/patchwork-demo/' + s[0] + '-mono.svg" alt="" />' + s[1] + '</span>';
     }).join('');
     var t = $('#tiles');
     if (t) t.innerHTML = SUBJECTS.map(function (s) {
-      return '<div class="card" style="padding:14px;text-align:center"><img src="assets/v3/tiles/' + s[0] + '.svg" alt="" style="width:100%;max-width:120px" /><h4 style="margin-top:8px">' + s[1] + '</h4><span class="muted">category.' + s[2] + '</span></div>';
+      return '<div class="card" style="padding:14px;text-align:center"><img src="assets/v3/patchwork-demo/' + s[0] + '-tile.svg" alt="" style="width:100%;max-width:120px" /><h4 style="margin-top:8px">' + s[1] + '</h4></div>';
+    }).join('');
+    var pw = $('#pwPatterns');
+    if (pw) pw.innerHTML = PATTERNS.map(function (n) {
+      return '<figure><img src="assets/v3/patchwork-demo/pattern-' + n + '.svg" alt="" /><figcaption>' + n + '</figcaption></figure>';
     }).join('');
   }
   function renderGrades() {

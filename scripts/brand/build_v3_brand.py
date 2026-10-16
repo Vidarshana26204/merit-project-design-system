@@ -7,7 +7,7 @@
 Reads  assets/brand/*.svg (v2 masters) and assets/fonts/GeneralSans-*.ttf (local only,
         see assets/fonts/README.md).
 Writes assets/v3/brand/*.svg, assets/v3/patterns/*.svg, assets/v3/motifs/*.svg,
-        assets/v3/tiles/*.svg and assets/v3/spots/*.svg.
+        and assets/v3/spots/*.svg. Hierarchy patchworks: scripts/patchwork/.
 
 All colours come from build/json/merit-tokens.json (light theme), so a token change
 followed by a re-run keeps the art in sync. Output is deterministic.
@@ -173,67 +173,36 @@ def build_motifs() -> None:
           f'<circle cx="152" cy="12" r="4" fill="{WHITE}" stroke="{INK}" stroke-width="1.5"/></svg>\n')
 
 
-# ── 5. Subject patchwork tiles (category 1–6) + spot illustrations ───────────────────
-# category index → (tint token, second-patch token, pattern). Glyphs are drawn in ink
-# line on the white focal patch so the tile reads without an icon font.
-CATEGORIES = [
-    ("biology", "category.1", "coral.300", "dots"),
-    ("physics", "category.2", "orange.500", "checks"),
-    ("chemistry", "category.3", "violet.500", "stripes"),
-    ("maths", "category.4", "violet.700", "hatch"),
-    ("ict", "category.5", "coral.300", "dots"),
-    ("languages", "category.6", "sage.300", "stripes"),
-]
-GLYPHS = {
-    # simple 24×24 line drawings (ink, 1.5 stroke), centred on the focal patch
-    "biology": '<path d="M8 3c0 6 8 6 8 12s-8 6-8 6M16 3c0 6-8 6-8 12s8 6 8 6M9 7h6M9 17h6"/>',
-    "physics": '<ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-60 12 12)"/><circle cx="12" cy="12" r="1.6" fill="{ink}"/>',
-    "chemistry": '<path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3M7 15h10"/>',
-    "maths": '<path d="M4 6h7M7.5 2.5v7M4 18h7M13 4l7 7M20 4l-7 7M13 17h7M16.5 14v0M16.5 20v0"/><circle cx="16.5" cy="14" r=".6" fill="{ink}"/><circle cx="16.5" cy="20" r=".6" fill="{ink}"/>',
-    "ict": '<rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
-    "languages": '<path d="M3 5h10M8 3v2M5 5c1 4 4 7 7 8M11 5c-1 4-4 7-7 8M13 21l4-9 4 9M14.5 18h5"/>',
-}
-
-
-def tile(name: str, tint: str, patch: str, pattern: str) -> str:
-    glyph = GLYPHS[name].format(ink=INK)
-    return (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="t">'
-        f'<title id="t">{name.capitalize()} patchwork tile</title>'
-        f'<defs>{pattern_def(pattern, "p")}<clipPath id="r"><rect x="4" y="4" width="112" height="112" rx="24"/></clipPath></defs>'
-        f'<g clip-path="url(#r)"><rect x="4" y="4" width="112" height="112" fill="{c(tint)}"/>'
-        f'<path d="M4 70L60 116H4Z" fill="{c(patch)}"/><path d="M4 70L60 116H4Z" fill="url(#p)"/>'
-        f'<path d="M70 4H116V60Z" fill="url(#p)"/></g>'
-        f'<g fill="none" stroke="{INK}" stroke-width="1.5" stroke-linejoin="round">'
-        f'<rect x="4" y="4" width="112" height="112" rx="24"/><path d="M4 70L60 116M70 4L116 60"/></g>'
-        f'<rect x="32" y="32" width="56" height="56" rx="14" fill="{WHITE}" stroke="{INK}" stroke-width="1.5"/>'
-        f'<g transform="translate(42 42) scale(1.5)" fill="none" stroke="{INK}" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">{glyph}</g>'
-        f'<path transform="translate(96 6) scale(.75)" d="{SPARKLE}" fill="{c("decor.sparkleWarm")}"/>'
-        "</svg>\n"
-    )
-
-
+# ── 5. State spots: line-art mono (never patchwork) ─────────────────────────────────────
+# Patterns + icons are reserved for hierarchy identity (SKILL.md §12), so empty / error /
+# offline / not-found / success use a different grammar: one flat organic blob in a soft
+# tint and a single-weight ink line drawing. No frame, no patches, no patterns, no sparkles.
+BLOB = ("M100 22c30 0 58 12 70 36s6 52-14 70-52 22-78 14S30 116 26 90s2-46 22-58 28-10 52-10z")
 SPOTS = {
-    "empty": ("Nothing here yet", '<path d="M14 18h20M14 24h14M14 30h18"/><rect x="8" y="8" width="32" height="32" rx="6"/>', "sand.300", "dots"),
-    "error": ("Something went wrong", '<path d="M24 10l16 28H8z"/><path d="M24 20v8M24 33v.5"/>', "coral.300", "stripes"),
-    "offline": ("You're offline", '<path d="M6 18c10-9 26-9 36 0M12 25c7-6 17-6 24 0M18 32c4-3 8-3 12 0M8 8l32 32"/>', "sky.300", "checks"),
-    "not-found": ("Page not found", '<circle cx="21" cy="21" r="11"/><path d="M29 29l10 10M17 19h.5M25 19h.5M17 25c2 2 6 2 8 0"/>', "violet.100", "hatch"),
-    "success": ("All done", '<circle cx="24" cy="24" r="16"/><path d="M16 24l6 6 11-12"/>', "sage.300", "dots"),
+    "empty": ("Nothing here yet", "sage.100",
+              '<path d="M58 84l14-30h56l14 30"/><path d="M58 84v34a6 6 0 0 0 6 6h72a6 6 0 0 0 6-6V84h-30'
+              'a12 12 0 0 1-24 0z"/><path d="M84 40l-6-10M100 36V24M116 40l6-10"/>'),
+    "error": ("Something went wrong", "blush.300",
+              '<path d="M28 96c10 0 16-4 22-12"/><rect x="50" y="64" width="34" height="34" rx="6"/>'
+              '<path d="M84 74h12M84 88h12"/><rect x="112" y="64" width="34" height="34" rx="6"/>'
+              '<path d="M146 81c10 0 18 6 26 14"/><path d="M122 76v0M122 86v0" stroke-width="5"/>'
+              '<path d="M100 52l4 8M104 106l-4 8M92 48v8"/>'),
+    "offline": ("You're offline", "sky.300",
+                '<path d="M66 108h64a22 22 0 0 0 2-44 30 30 0 0 0-58-4 24 24 0 0 0-8 48z"/><path d="M60 40l80 84"/>'),
+    "not-found": ("Page not found", "butter.100",
+                  '<circle cx="92" cy="74" r="28"/><path d="M112 94l26 26"/>'
+                  '<path d="M84 66a8 8 0 1 1 10 8c-2 1-2 3-2 6M92 88h0"/>'),
+    "success": ("All done", "sage.300",
+                '<circle cx="100" cy="76" r="36"/><path d="M84 76l11 11 22-24"/><path d="M78 108l-8 22 14-6 8 12 6-20M122 108l8 22-14-6-8 12-6-20"/>'),
 }
 
 
-def spot(name: str, title: str, glyph: str, tint: str, pattern: str) -> str:
+def spot(name: str, title: str, tint: str, drawing: str) -> str:
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160" role="img" aria-labelledby="t">'
-        f'<title id="t">{title}</title><defs>{pattern_def(pattern, "p")}</defs>'
-        f'<rect x="36" y="24" width="128" height="112" rx="28" fill="{c(tint)}" stroke="{INK}" stroke-width="1.5"/>'
-        f'<path d="M36 96L84 136H64Q36 136 36 108Z" fill="url(#p)"/>'
-        f'<path d="M124 24H136Q164 24 164 52V64Z" fill="{c("orange.500")}" stroke="{INK}" stroke-width="1.5"/>'
-        f'<rect x="68" y="44" width="64" height="72" rx="16" fill="{WHITE}" stroke="{INK}" stroke-width="1.5"/>'
-        f'<g transform="translate(76 56)" fill="none" stroke="{INK}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">{glyph}</g>'
-        f'<path transform="translate(16 28) scale(.8)" d="{SPARKLE}" fill="{c("decor.sparkle")}"/>'
-        f'<path transform="translate(170 112) scale(.6)" d="{SPARKLE}" fill="{c("decor.sparkleWarm")}"/>'
-        f'<path d="M24 76H36M164 76H180" stroke="{c("decor.connector")}" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 6"/>'
+        f'<title id="t">{title}</title>'
+        f'<path d="{BLOB}" fill="{c(tint)}"/>'
+        f'<g fill="none" stroke="{INK}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{drawing}</g>'
         "</svg>\n"
     )
 
@@ -251,12 +220,10 @@ def main() -> None:
     write("brand/merit-lockup-horizontal-dark.svg", lockup("horizontal", dark=True))
     build_patterns()
     build_motifs()
-    for name, tint, patch, pattern in CATEGORIES:
-        write(f"tiles/{name}.svg", tile(name, tint, patch, pattern))
-    for name, (title, glyph, tint, pattern) in SPOTS.items():
-        write(f"spots/{name}.svg", spot(name, title, glyph, tint, pattern))
+    for name, (title, tint, drawing) in SPOTS.items():
+        write(f"spots/{name}.svg", spot(name, title, tint, drawing))
     print(f"✓ {len(masters)} brand masters, 3 lockups, {len(PATTERNS)} patterns, 5 motifs, "
-          f"{len(CATEGORIES)} tiles, {len(SPOTS)} spots → {OUT.relative_to(ROOT)}")
+          f"{len(SPOTS)} spots → {OUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

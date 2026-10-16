@@ -73,15 +73,63 @@ Restyle these first, in this order:
 7. `merit_segmented_tabs` and the bottom bar in `main_screen`
 8. `merit_quiz_option`
 9. `merit_gamer_header`, `merit_leaderboard_row`, `merit_achievement_badge`
-10. `merit_dialog`, `merit_snack_bar`, `merit_empty_data` / `merit_error` / `offline_container` (switch to the `assets/v3/spots/*` SVGs), `merit_shimmer`
+10. `merit_dialog`, `merit_snack_bar`, `merit_empty_data` / `merit_error` / `offline_container` (switch to the line-art `assets/v3/spots/*` SVGs; never a patchwork), `merit_shimmer`
 
 The specs are in SKILL.md §5 and the reference site.
 
 ### 1.4 New widgets
-- `MeritPatchworkTile`: loads `assets/v3/tiles/<subject>.svg` with `flutter_svg`, chosen by category index.
+- `MeritPatchwork`: per-node hierarchy patchworks (§1.4a below). Replaces the v3.0 category tiles.
 - `MeritLearningPath`: replaces the plain hierarchy tree in `hierarchy_navigator`.
 - `MeritSectionHeader`: eyebrow plus a title with an optional brush underline (a `CustomPainter` or the SVG). SI/TA versions get no uppercase.
 - `MeritAchieverBand`: replaces the `Color(0x…)` gradient in `premium/ui/premium_screen.dart`.
+
+### 1.4a `MeritPatchwork` (DS 3.1, SKILL.md §12)
+**Data:** the backend adds `patchwork` to subject, topic and subtopic payloads (§3a). Add a
+Freezed model:
+```dart
+@freezed
+class Patchwork with _$Patchwork {
+  const factory Patchwork({
+    required String signature,
+    required String version,
+    required PatchworkUrls urls, // tile, row, corner, mono
+  }) = _Patchwork;
+}
+```
+**Widget:**
+```dart
+MeritPatchwork(
+  patchwork: node.patchwork,          // nullable
+  variant: PatchworkVariant.tile,     // tile | row | corner | mono
+  fallbackCategory: subject.categoryIndex,
+  semanticLabel: node.title,
+)
+```
+- **Rendering:** `SvgPicture.network(url)`, cached on disk by `signature` (it is immutable per
+  signature). Use the `flutter_cache_manager` already in deps, or add it.
+- **Loading or missing:** draw the same frame with the `category.N` tint and a Phosphor
+  **duotone** icon. Never show another node's patchwork.
+- **Mono:** `colorFilter: ColorFilter.mode(color, BlendMode.srcIn)`.
+- **Corner:** `ClipRRect` the card, then `Positioned(top: 0, right: 0)` with a 56×56 SVG
+  clipped to a bottom-left quarter circle (`ClipPath`), and a 1.5 `patchwork.seam` edge.
+- **Accessibility:** `tile` and `row` take the node title as their semantics label. `corner`
+  is `excludeFromSemantics`.
+
+**Where each variant goes:**
+
+| Widget | Variant |
+|---|---|
+| `subjects_screen` grid, `enrollment_card` | `tile` |
+| `subject_details_screen` header | `row` (expanded) → `tile` (collapsed app bar) |
+| `enhanced_topic_card`, `topics_list`, `hierarchy_sliver_list` topic rows | `row` (or `tile` in grid layout) |
+| `enhanced_subtopic_card`, `subtopics_list` | `row` |
+| `flippable_study_card`, `study_card_stack`, `flashcard_dashboard_screen` deck tiles | subtopic `corner` |
+| Notes list and note tiles (study screen) | subtopic `corner` |
+| `hierarchy_breadcrumb_bar` | `corner` at 20dp (circle-clipped) |
+| Quiz option cards, quiz-taking body, notes reader body | **none** (calm mode) |
+| Empty / error / offline | **none**: line-art spots only |
+
+**Verification:** golden tests for the four variants plus the fallback, in light and dark.
 
 ### 1.5 Icons
 - `PhosphorIconsBold.*` becomes `PhosphorIconsRegular.*`, except active states (Fill) and category chips (Duotone).
@@ -135,6 +183,14 @@ onboarding.
 In `lib/icons.tsx`, change the default weight from `bold` to `regular`. Audit the 4 explicit `fill`
 uses, which stay as they are.
 
+### 2.5a Patchworks
+Add `components/merit/patchwork.tsx` (`<Patchwork patchwork={…} variant="tile|row|corner|mono" />`):
+- `tile`, `row` and `corner` render as `<img>`. Set `alt` to the node title, except `corner`, which gets `alt=""`.
+- `mono` renders as a CSS mask over `currentColor`.
+
+The fallback and the placement rules match Flutter §1.4a: subject, topic and subtopic cards and
+lists, note and flashcard tiles (corner), and breadcrumbs. Admin tables use `mono` only.
+
 ### 2.6 Landing (`app/(landing)`, `features/landing`)
 Rebuild the hero, programme grid and CTA band from the landing specimen (reference site §29).
 
@@ -159,6 +215,18 @@ Rebuild the hero, programme grid and CTA band from the landing specimen (referen
   **Decide this before investing in it.**
 
 ---
+
+## 3a. Backend: `hierarchy_patchworks` (`merit-project-backend`, branch `feat/patchworks`)
+- **Migration:** the `hierarchy_patchworks` table:
+  - `node_type` is one of `subject`, `topic`, `subtopic` or `quest`;
+  - plus `node_id`, `signature` (unique), `icon_id`, `engine_version`, `variants` JSONB and timestamps;
+  - `UNIQUE(node_type, node_id)`.
+- **Import:** `make patchworks-import MANIFEST=../merit-content/patchworks/manifest.json` upserts
+  every node. Subjects resolve by `code`; topics and subtopics resolve by UUID.
+- **API:** hierarchy, subject and topic responses add
+  `patchwork: {signature, version, urls{tile,row,corner,mono}}`. The URLs are built from
+  `CONTENT_CDN_BASE` + the variant path.
+- **Upload:** sync `merit-content/patchworks/out/` to the CDN bucket under `patchworks/`.
 
 ## 4. Out of scope
 - `merit-project-admin` (legacy, folded into the frontend).

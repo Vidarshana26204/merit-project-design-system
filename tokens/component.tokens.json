@@ -70,7 +70,7 @@
       "f": { "bg": { "$value": "{color.red.600}" }, "fg": { "$value": "{color.white}" } }
     },
     "category": {
-      "$description": "Subject patchwork tints, assigned deterministically by subject index. Ink text + ink outline. Patterns per D14: 1 dots, 2 checks, 3 stripes, 4 hatch, 5 dots, 6 stripes.",
+      "$description": "Category tints for chips and the in-app patchwork FALLBACK (tint + Phosphor duotone) when a node has no generated patchwork. Real patchworks are generated per node (SKILL.md §12). Ink text + ink outline.",
       "1": { "$value": "{color.sage.300}" },
       "2": { "$value": "{color.sky.300}" },
       "3": { "$value": "{color.coral.300}" },
@@ -79,6 +79,13 @@
       "6": { "$value": "{color.blush.300}" },
       "fg": { "$value": "{color.ink.900}" },
       "outline": { "$value": "{color.ink.900}" }
+    },
+    "patchwork": {
+      "$description": "Hierarchy patchworks (D16, SKILL.md §12). Theme-fixed: tiles keep light plates in dark mode. Patch tints come from the subject families in scripts/patchwork/engine.py; pattern ink is the patch tint mixed 42% toward ink.",
+      "seam": { "$value": "{color.ink.900}", "$description": "Frame and patch seams" },
+      "plate": { "$value": "{color.white}", "$description": "Icon plate behind the node icon" },
+      "iconLine": { "$value": "{color.ink.900}", "$description": "Icon outline" },
+      "iconShade": { "$value": "{color.canvas.200}", "$description": "Icon shade layers" }
     },
     "chart": {
       "1": { "$value": "{color.violet.500}" },

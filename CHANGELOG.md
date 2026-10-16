@@ -5,6 +5,38 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## 3.1.0 — 2026-10-16
+
+Hierarchy patchworks (D16). Adds tokens, no renames or removals.
+
+### Added
+- `color.patchwork.{seam,plate,iconLine,iconShade}`: theme-fixed patchwork tokens
+  (`--merit-patchwork-*`, `MeritColors.patchwork*`).
+- `scripts/patchwork/`: a deterministic generator for per-node patchworks.
+  - It has 16 geometry-expanded patterns, polygon and arc layouts, reference-style icon
+    recolouring, and a signature + salt registry for global uniqueness and size budgets.
+  - Its CLI is `index` / `suggest` / `generate` / `audit` / `demo`, and pytest covers it.
+  - The licensed icon pack and production output live in the private `merit-content` repo.
+- `assets/v3/patchwork-demo/`: a licence-safe demo set (MIT Phosphor glyphs) with all four
+  variants, plus the 16 pattern swatches.
+- SKILL.md §12 (Hierarchy patchworks) and DECISIONS D16.
+
+### Changed
+- `assets/v3/spots/*`: redrawn as **line art** (a blob plus an ink line drawing), so empty and
+  error states can't be mistaken for hierarchy nodes.
+- `color.category.*` is now the chip tint and the patchwork **fallback** tint (description only).
+- Reference site:
+  - §21 is now "Hierarchy patchworks".
+  - The hero, cards and screen specimens use the demo patchworks.
+  - The landing "practise" modes use Phosphor duotone instead of tiles.
+  - Sparkles are removed from patchwork clusters.
+- SKILL.md:
+  - §6: calm screens allow only the subtopic `corner` on note and flashcard tiles.
+  - §9: rewritten.
+
+### Removed
+- `assets/v3/tiles/*` (six shared category tiles), replaced by per-node patchworks.
+
 ## Site v2.3 — 2026-10-15
 
 Brand refresh. No token value or name changes; `package.json` stays 2.1.0.

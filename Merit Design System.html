@@ -23,7 +23,7 @@
       <img class="lt-only" src="assets/v3/brand/merit-mark.svg" alt="" /><img class="dk-only" src="assets/v3/brand/merit-mark-dark.svg" alt="" />
       <div class="wm">MERIT<b>.</b><small>Design System</small></div>
     </div>
-    <div class="ver"><span>Tokens</span><b>v3.0.0</b></div>
+    <div class="ver"><span>Tokens</span><b>v3.1.0</b></div>
 
     <nav class="toc" aria-label="Sections">
       <div class="grp">Foundations</div>
@@ -50,7 +50,7 @@
       <a href="#flash"><span class="ix">18</span> Flashcards</a>
       <a href="#path"><span class="ix">19</span> Learning path</a>
       <a href="#feedback"><span class="ix">20</span> Empty &amp; error</a>
-      <a href="#illus"><span class="ix">21</span> Illustration kit</a>
+      <a href="#illus"><span class="ix">21</span> Hierarchy patchworks</a>
       <a href="#icons"><span class="ix">22</span> Iconography</a>
       <a href="#trilingual"><span class="ix">23</span> EN · SI · TA</a>
       <a href="#chart"><span class="ix">24</span> Data viz</a>
@@ -85,12 +85,10 @@
       </div>
       <div class="heroArt" aria-hidden="true">
         <svg class="path" viewBox="0 0 100 100" fill="none"><path d="M30 26 H70 V62 H30 V86" stroke="var(--merit-decor-connector)" stroke-width=".6" stroke-dasharray=".6 2.2" stroke-linecap="round"/></svg>
-        <img src="assets/v3/tiles/biology.svg" style="left:8%;top:6%" alt="" />
-        <img src="assets/v3/tiles/physics.svg" style="right:6%;top:12%;width:30%" alt="" />
-        <img src="assets/v3/tiles/chemistry.svg" style="left:30%;top:42%;width:40%" alt="" />
-        <img src="assets/v3/tiles/maths.svg" style="left:4%;bottom:2%;width:30%" alt="" />
-        <img class="spark twinkle" src="assets/v3/motifs/sparkle.svg" style="right:20%;bottom:16%;width:34px;filter:none" alt="" />
-        <img class="spark twinkle" src="assets/v3/motifs/sparkle-warm.svg" style="left:48%;top:4%;width:26px;filter:none" alt="" />
+        <img src="assets/v3/patchwork-demo/biology-tile.svg" style="left:8%;top:6%" alt="" />
+        <img src="assets/v3/patchwork-demo/physics-tile.svg" style="right:6%;top:12%;width:30%" alt="" />
+        <img src="assets/v3/patchwork-demo/chemistry-tile.svg" style="left:30%;top:42%;width:40%" alt="" />
+        <img src="assets/v3/patchwork-demo/maths-tile.svg" style="left:4%;bottom:2%;width:30%" alt="" />
       </div>
     </header>
 
@@ -105,7 +103,7 @@
   <div class="grid g3">
     <div class="panel"><h3>Calm canvas</h3><p class="muted">A warm off-white page, slate text, and soft depth with no hard outlines on UI chrome. It is easy on the eyes for long reading sessions.</p></div>
     <div class="panel"><h3>Earned energy</h3><p class="muted">Orange, sparkles and brush underlines are saved for actions, rewards and celebration. They feel earned because they are rare.</p></div>
-    <div class="panel"><h3>Patchwork learning</h3><p class="muted">Each subject is a patchwork tile, and topics link up as a dotted learning path. The illustration system doubles as navigation.</p></div>
+    <div class="panel"><h3>Patchwork learning</h3><p class="muted">Every subject, topic and subtopic has its own patchwork: an icon on geometric patches no other node shares. The illustration system doubles as navigation.</p></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
     <div class="do"><b><i class="ph-fill ph-check-circle"></i> Voice: do</b><ul><li>Be short and confident: "Keep your streak alive."</li><li>Encourage: "Hit your weak spots first."</li><li>Say exactly what happens: "12 of 50 questions today."</li></ul></div>
@@ -280,7 +278,7 @@ FilledButton(
   <div class="secHead"><span class="eyebrow">08 · Cards</span><h2>Borderless and lifted.</h2>
     <p class="lede">Neutral is white with e1. Feature is the violet band. Reward is butter. Success is sage-subtle. Selected adds a 2&nbsp;px violet inset. Interactive cards rise to e2 on hover.</p></div>
   <div class="grid g4">
-    <div class="card hover"><div class="row"><span class="thumb"><img src="assets/v3/tiles/biology.svg" alt="" /></span><div><h4>Cell biology</h4><span class="muted">12 of 18 subtopics</span></div></div><div class="progress" style="margin-top:14px"><i data-w="66%"></i></div></div>
+    <div class="card hover"><div class="row"><span class="thumb"><img src="assets/v3/patchwork-demo/cells-tile.svg" alt="" /></span><div><h4>Cell biology</h4><span class="muted">12 of 18 subtopics</span></div></div><div class="progress" style="margin-top:14px"><i data-w="66%"></i></div></div>
     <div class="card feature"><span class="seal"><i class="ph-fill ph-seal-check"></i> Achiever</span><h4 style="margin-top:12px">Adaptive mode</h4><p class="muted" style="margin:4px 0 0">Your weak spots, first.</p></div>
     <div class="card reward"><div class="row"><i class="ph-fill ph-coins" style="font-size:28px"></i><span class="num" style="font-size:28px">+120</span></div><h4 style="margin-top:6px">Points earned today</h4></div>
     <div class="card selected"><h4>Paper mode</h4><p class="muted" style="margin:4px 0 0">A timed past paper. 2 attempts left today.</p></div>
@@ -472,7 +470,7 @@ FilledButton(
 <!-- ======================= 20 FEEDBACK ======================= -->
 <section class="sec" id="feedback">
   <div class="secHead"><span class="eyebrow">20 · Empty &amp; error</span><h2>One picture, one line, <span class="u">one</span> action.</h2>
-    <p class="lede">Spot illustrations come from the patchwork kit. Skeletons are sunken blocks with no border, and the shimmer stops under reduced motion.</p></div>
+    <p class="lede">State spots are <b>line art</b>: one flat blob and a single ink line drawing. They never use patches, patterns or pack icons, so an empty or error state can't be mistaken for a subject or topic. Skeletons are sunken blocks with no border, and the shimmer stops under reduced motion.</p></div>
   <div class="grid g3">
     <div class="panel empty"><img src="assets/v3/spots/empty.svg" alt="" /><h4>No flashcards yet</h4><p class="muted">Save a question to start a deck.</p><button class="btn primary sm">Browse topics</button></div>
     <div class="panel empty"><img src="assets/v3/spots/offline.svg" alt="" /><h4>You're offline</h4><p class="muted">We'll sync your answers when you reconnect.</p><button class="btn ghost sm">Try again</button></div>
@@ -482,18 +480,34 @@ FilledButton(
 
 <!-- ======================= 21 ILLUSTRATION ======================= -->
 <section class="sec" id="illus">
-  <div class="secHead"><span class="eyebrow">21 · Illustration kit</span><h2>Patchwork <span class="u">subjects</span>.</h2>
-    <p class="lede">A tile is a rounded square cut into geometric patches. Each patch is filled with a tint or a pattern (dots, stripes, checks or hatch) and outlined with a 1.5 ink line around a white focal patch. The motifs are a 4-point sparkle, a brush underline and a dotted connector. Everything is generated from tokens by <code>scripts/brand/build_v3_brand.py</code>, and the full set is in <a href="assets/v3/index.html">assets/v3</a>.</p></div>
+  <div class="secHead"><span class="eyebrow">21 · Hierarchy patchworks</span><h2>Every node, its own <span class="u">patchwork</span>.</h2>
+    <p class="lede">Each Subject, Topic and Subtopic gets a generated patchwork: a framed tile cut into 3–6 patches, each a tint or one of 16 geometric patterns, with the node's icon on a white plate. Subject icons are unique across the app, topic and subtopic icons are unique within their subject, and <b>no two nodes share a composition</b>. Patchworks are for hierarchy widgets only. Generator: <code>scripts/patchwork/</code> (SKILL.md §12). The demo below uses MIT Phosphor glyphs; production icons live in the private content repo.</p></div>
+  <span class="label">Subjects · tile</span>
   <div class="grid g6" id="tiles"></div>
-  <div class="grid g4" style="margin-top:16px">
-    <div class="panel"><span class="label">Patterns</span><div class="row"><img src="assets/v3/patterns/dots.svg" width="44" alt="dots" /><img src="assets/v3/patterns/stripes.svg" width="44" alt="stripes" /><img src="assets/v3/patterns/checks.svg" width="44" alt="checks" /><img src="assets/v3/patterns/hatch.svg" width="44" alt="hatch" /></div></div>
-    <div class="panel"><span class="label">Sparkles</span><div class="row"><img src="assets/v3/motifs/sparkle.svg" width="32" alt="" /><img src="assets/v3/motifs/sparkle-warm.svg" width="24" alt="" /><img src="assets/v3/motifs/sparkle.svg" width="16" alt="" /></div></div>
+  <span class="label" style="display:block;margin-top:20px">Topics · row (lists, banners, subject header)</span>
+  <div class="grid" style="margin-top:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
+    <img src="assets/v3/patchwork-demo/waves-row.svg" style="width:100%" alt="Oscillations and waves" />
+    <img src="assets/v3/patchwork-demo/plants-row.svg" style="width:100%" alt="Plant form and function" />
+    <img src="assets/v3/patchwork-demo/kinetics-row.svg" style="width:100%" alt="Chemical kinetics" />
+    <img src="assets/v3/patchwork-demo/magnetism-row.svg" style="width:100%" alt="Magnetic field" />
+  </div>
+  <div class="grid g3" style="margin-top:16px">
+    <div class="panel"><span class="label">Subtopic · corner</span><p class="muted" style="margin:4px 0 12px">Flashcard and note tiles carry their subtopic's patches in the top-right corner. No icon. Questions don't.</p>
+      <div class="card pwcard"><span class="pwcorner" style="background-image:url(assets/v3/patchwork-demo/leaf-corner.svg)"></span><span class="eyebrow">Flashcard · Leaf structure</span><h4 style="margin-top:6px">What do guard cells control?</h4><p class="muted" style="margin:4px 0 0">Tap to flip</p></div></div>
+    <div class="panel"><span class="label">Variants</span><div class="row" style="gap:12px;align-items:flex-end;flex-wrap:wrap"><img src="assets/v3/patchwork-demo/thermal-tile.svg" width="72" alt="tile" /><img src="assets/v3/patchwork-demo/thermal-corner.svg" width="48" alt="corner" /><span class="pwmono" role="img" aria-label="mono" style="--pw:url(assets/v3/patchwork-demo/thermal-mono.svg)"></span></div>
+      <p class="muted" style="margin:10px 0 0"><b>tile</b> 1:1 grids · <b>row</b> 4:1 lists · <b>corner</b> card corners, breadcrumbs · <b>mono</b> <code>currentColor</code> for dense tables and chips.</p></div>
+    <div class="panel"><span class="label">Signature</span><p class="muted" style="margin:4px 0 0"><code>sha256(node_id ‖ icon_sha256 ‖ engine)</code> seeds the layout, tints, patterns and plate. A registry checks the composition key across every node in every subject and re-rolls a salt on collision, so outputs are stable and unique. The <code>quest:&lt;subtopic&gt;:&lt;n&gt;</code> namespace is reserved for Quests.</p></div>
+  </div>
+  <span class="label" style="display:block;margin-top:20px">16 patterns</span>
+  <div class="pwpatterns" id="pwPatterns"></div>
+  <div class="grid g3" style="margin-top:16px">
     <div class="panel"><span class="label">Brush underline</span><img src="assets/v3/motifs/brush-underline.svg" style="width:100%;height:14px" alt="" /></div>
     <div class="panel"><span class="label">Connector</span><img src="assets/v3/motifs/connector.svg" style="width:100%" alt="" /></div>
+    <div class="panel"><span class="label">Sparkles (rewards only)</span><div class="row"><img src="assets/v3/motifs/sparkle.svg" width="28" alt="" /><img src="assets/v3/motifs/sparkle-warm.svg" width="22" alt="" /></div></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
-    <div class="do"><b><i class="ph-fill ph-check-circle"></i> Do</b><ul><li>Use one tile per subject, assigned by category index</li><li>Use 2–3 sparkles per composition at most</li><li>Keep patterns as SVG and never raster</li></ul></div>
-    <div class="dont"><b><i class="ph-fill ph-x-circle"></i> Don't</b><ul><li>Put patchwork or sparkles on calm screens</li><li>Draw freehand people or stock illustration</li><li>Use gradients on tiles</li></ul></div>
+    <div class="do"><b><i class="ph-fill ph-check-circle"></i> Do</b><ul><li>Use a node's own patchwork wherever that node appears: grids, lists, headers, its flashcards and notes</li><li>Fall back to the category tint plus a Phosphor duotone icon if no patchwork is published yet</li><li>Regenerate from the script and never edit SVGs by hand</li></ul></div>
+    <div class="dont"><b><i class="ph-fill ph-x-circle"></i> Don't</b><ul><li>Use patterns + icons for anything that is not a hierarchy node (modes, rewards, empty states)</li><li>Add sparkles, shadows or gradients to a patchwork</li><li>Reuse another node's patchwork, even for a related topic</li></ul></div>
   </div>
 </section>
 
@@ -576,9 +590,9 @@ FilledButton(
       <div class="grow">
         <div class="row" style="justify-content:space-between"><div><span class="eyebrow">Good morning</span><h3>Hi, Dilini</h3></div><div class="hud"><span class="hchip"><i class="ph-fill ph-flame fl"></i>12</span><span class="hchip"><i class="ph-fill ph-coins co"></i>1,240</span></div></div>
         <div class="search" style="box-shadow:var(--merit-elevation-e1)"><input aria-label="Search" placeholder="Search topics…" /><button aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button></div>
-        <div class="mini"><span class="eyebrow">Continue</span><div class="row" style="margin-top:8px"><span class="thumb"><img src="assets/v3/tiles/biology.svg" alt="" /></span><div style="flex:1"><b>Enzymes</b><div class="muted">Biology · 64%</div><div class="progress" style="margin-top:6px"><i data-w="64%"></i></div></div></div></div>
+        <div class="mini"><span class="eyebrow">Continue</span><div class="row" style="margin-top:8px"><span class="thumb"><img src="assets/v3/patchwork-demo/leaf-tile.svg" alt="" /></span><div style="flex:1"><b>Leaf structure</b><div class="muted">Biology · 64%</div><div class="progress" style="margin-top:6px"><i data-w="64%"></i></div></div></div></div>
         <div class="card reward" style="padding:14px"><div class="row" style="justify-content:space-between"><b>Daily quest</b><span class="badge" style="background:var(--merit-white);color:var(--merit-ink-900)">+50</span></div><p style="margin:4px 0 0;font-size:13px">Answer 10 Chemistry questions</p></div>
-        <div class="row" style="gap:10px"><img src="assets/v3/tiles/chemistry.svg" width="64" alt="Chemistry" /><img src="assets/v3/tiles/physics.svg" width="64" alt="Physics" /><img src="assets/v3/tiles/maths.svg" width="64" alt="Maths" /><img src="assets/v3/tiles/ict.svg" width="64" alt="ICT" /></div>
+        <div class="row" style="gap:10px"><img src="assets/v3/patchwork-demo/chemistry-tile.svg" width="64" alt="Chemistry" /><img src="assets/v3/patchwork-demo/physics-tile.svg" width="64" alt="Physics" /><img src="assets/v3/patchwork-demo/maths-tile.svg" width="64" alt="Maths" /><img src="assets/v3/patchwork-demo/ict-tile.svg" width="64" alt="ICT" /></div>
         <nav class="tabbar" aria-label="Demo"><a class="on" href="#screens"><i class="ph-fill ph-house"></i>Home</a><a href="#screens"><i class="ph ph-books"></i>Study</a><a href="#screens"><i class="ph ph-exam"></i>Quiz</a><a href="#screens"><i class="ph ph-trophy"></i>Ranks</a><a href="#screens"><i class="ph ph-user"></i>Me</a></nav>
       </div>
       <div class="cap">Home · energy</div>
@@ -667,19 +681,17 @@ FilledButton(
       </div>
       <div class="art" aria-hidden="true">
         <svg viewBox="0 0 100 86" style="position:absolute;inset:0;width:100%;height:100%" fill="none"><path d="M24 22H72V58H34V80" stroke="var(--merit-decor-connector)" stroke-width=".6" stroke-dasharray=".6 2.2" stroke-linecap="round"/></svg>
-        <img class="t" src="assets/v3/tiles/physics.svg" style="left:6%;top:4%" alt="" />
-        <img class="t" src="assets/v3/tiles/chemistry.svg" style="right:6%;top:10%;width:30%" alt="" />
-        <img class="t" src="assets/v3/tiles/biology.svg" style="left:34%;top:44%;width:36%" alt="" />
-        <img class="twinkle" src="assets/v3/motifs/sparkle-warm.svg" style="position:absolute;left:52%;top:6%;width:24px" alt="" />
-        <img class="twinkle" src="assets/v3/motifs/sparkle.svg" style="position:absolute;right:10%;bottom:6%;width:30px" alt="" />
+        <img class="t" src="assets/v3/patchwork-demo/physics-tile.svg" style="left:6%;top:4%" alt="" />
+        <img class="t" src="assets/v3/patchwork-demo/chemistry-tile.svg" style="right:6%;top:10%;width:30%" alt="" />
+        <img class="t" src="assets/v3/patchwork-demo/biology-tile.svg" style="left:34%;top:44%;width:36%" alt="" />
       </div>
     </div>
     <div class="prog">
       <h3 style="font-size:26px">Three ways <br />to <span class="u">practise</span></h3>
       <div class="items">
-        <div class="it"><img src="assets/v3/tiles/maths.svg" alt="" /><h4 style="margin-top:8px">Paper mode</h4><p class="muted">Timed past papers, marked instantly.</p></div>
-        <div class="it"><img src="assets/v3/tiles/biology.svg" alt="" /><h4 style="margin-top:8px">Mastery mode</h4><p class="muted">Topic by topic, at your pace.</p></div>
-        <div class="it"><img src="assets/v3/tiles/ict.svg" alt="" /><h4 style="margin-top:8px">Adaptive mode</h4><p class="muted">Your weak spots, first.</p></div>
+        <div class="it"><span class="modeic" style="background:var(--merit-category-4)"><i class="ph-duotone ph-timer"></i></span><h4 style="margin-top:8px">Paper mode</h4><p class="muted">Timed past papers, marked instantly.</p></div>
+        <div class="it"><span class="modeic" style="background:var(--merit-category-1)"><i class="ph-duotone ph-target"></i></span><h4 style="margin-top:8px">Mastery mode</h4><p class="muted">Topic by topic, at your pace.</p></div>
+        <div class="it"><span class="modeic" style="background:var(--merit-category-5)"><i class="ph-duotone ph-brain"></i></span><h4 style="margin-top:8px">Adaptive mode</h4><p class="muted">Your weak spots, first.</p></div>
       </div>
     </div>
     <div class="band cta"><div><h3 style="margin:0">Start free today.</h3><p>Questions and past papers every day on Wanderer. No card needed.</p></div><a class="btn" href="#landing">Create account <i class="ph-bold ph-arrow-right"></i></a></div>
@@ -695,17 +707,18 @@ FilledButton(
 
 <!-- ======================= 31 CHANGELOG ======================= -->
 <section class="sec" id="changelog">
-  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.0.0</h2></div>
+  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.1.0</h2></div>
   <div class="panel">
     <ul>
-      <li><b>Full reinvention</b> inspired by MindInventory's "Online Learning" shot. The palette, depth model, display face and illustration kit are all new (D8–D15).</li>
+      <li><b>v3.1.0 · Hierarchy patchworks (D16).</b> Every subject, topic and subtopic gets its own generated patchwork with 16 patterns, a signature and a uniqueness registry (§21). State spots are now line art. The new tokens are <code>patchwork.*</code>, and the six shared category tiles are removed.</li>
+      <li><b>v3.0.0 · Full reinvention</b> inspired by MindInventory's "Online Learning" shot. The palette, depth model, display face and illustration kit are all new (D8–D15).</li>
       <li>Semantic token names are kept wherever their meaning holds. The hard-shadow tokens, <code>shadow.color</code>, <code>borderWidth.heavy</code>, <code>fontFamily.landing</code> and the v2 primitive names are removed.</li>
       <li>Soft themed <code>elevation.e0–e3</code> is new. <code>text.onPrimary</code> is now ink.</li>
       <li>The contrast gate runs 126 checks, and all pass AA in light and dark.</li>
     </ul>
     <p class="muted">The rename map is in <a href="CHANGELOG.md">CHANGELOG.md</a>, and consumer steps are in <a href="MIGRATION-v3.md">MIGRATION-v3.md</a>.</p>
   </div>
-  <footer class="foot"><span>Merit Project · Design System v3.0.0</span><span>Reference: MindInventory UI/UX, Dribbble 18955306 (inspiration only)</span></footer>
+  <footer class="foot"><span>Merit Project · Design System v3.1.0</span><span>Reference: MindInventory UI/UX, Dribbble 18955306 (inspiration only)</span></footer>
 </section>
 
     </div>
