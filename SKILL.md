@@ -494,8 +494,21 @@ empty/error states must never use them.
 
 **Grammar**
 - **Frame:** a 256 rounded square (rx 32) with a 3.6 ink frame (`patchwork.seam`).
-- **Body:** 3–6 polygon patches from 2–3 straight cuts, plus up to one curved overlay
-  (a quarter disc in a corner or a half disc on an edge). Seams are 2.6 ink.
+- **Body (radial):** straight rays run from the centre to the frame, so **every patch is a wedge
+  that touches the centred icon**. Ray ends sit on perimeter positions (96 slots, roughly even
+  with jitter), which lets the tile and the row share one composition. Seams are 2.6 ink.
+- **Patch count by level, inherited:**
+
+  | Level | Patches | Made of |
+  |---|---|---|
+  | Subject | 4 | 4 fresh styles (at most one wedge) |
+  | Topic | 5 | its subject's 4 styles, in order, plus 1 new patch |
+  | Subtopic | 6 | its topic's 5 styles, in order, plus 1 new patch |
+  | Quest (reserved) | 7 | its subtopic's 6 styles plus 1 new patch |
+
+  The new patch uses a pattern the parent doesn't, a tint that differs from both neighbours,
+  and is **unique among siblings**. The rays are re-drawn per node, so a child reads as
+  "parent + 1" without repeating the parent's geometry.
 - **Patch fill:** a tint, or a tint plus one of **16 patterns**: dots, halftone, stripes, checks,
   hatch, waves, zigzag, chevron, triangles, grid, plus, arcs, diamonds, scales, bricks, dashes.
   Pattern ink is the patch tint mixed 42% toward ink. At most one **wedge** (violet 500/700,
@@ -505,11 +518,11 @@ empty/error states must never use them.
   - the dominant hue becomes the node accent (with a deeper twin);
   - near-black and the outline become ink;
   - shade layers become `patchwork.iconShade`.
-- **Plate:** the icon sits on a white circle, squircle or hexagon (or bare, larger).
+- **Icon:** always **centred** on a white circle, squircle or hexagon plate (it covers where the
+  seams meet), in the tile and in the row.
 - **No sparkles, shadows or gradients.** Tiles are theme-fixed: plates stay light in dark mode.
 
-**Subject families** keep siblings related. Each node takes 2 tints from its subject's family and
-1–2 from the global set:
+**Subject families** set the subject's tints and the tint pool for every patch added below it:
 
 | Family | Subjects | Tints |
 |---|---|---|
@@ -523,14 +536,14 @@ empty/error states must never use them.
 | Variant | Size | Use |
 |---|---|---|
 | `tile` | 1:1, 256 | Subject grid, topic cards, subject header (collapsed) |
-| `row` | 4:1, 1024×256 | Topic and subtopic list rows, banners, expanded subject header. Patches extend; the plate sits at the left third |
+| `row` | 4:1, 1024×256 | Topic and subtopic list rows, banners, expanded subject header. Same rays and styles as the tile; the wedges stretch sideways and the icon stays **centred** |
 | `corner` | 1:1, full patch body, **no icon** | Top-right corner of **flashcard and note tiles** (the subtopic's corner, clipped to a 56dp quarter circle by the card radius), breadcrumbs. Questions don't get one |
 | `mono` | `currentColor` icon | Dense tables, admin, chips, tab icons |
 
 **Uniqueness**
 - **Subject icons** are unique across all subjects.
 - **Topic and subtopic icons** are unique within their subject.
-- The **composition** (layout slots + per-patch tint, pattern, angle, density + plate) is unique across **every node of every subject**.
+- The **composition** (ray slots + per-patch tint, pattern, angle, density + plate) is unique across **every node of every subject**, and the patch a child adds is unique among its siblings.
 - **Signature:** `sha256(node_id ‖ icon_sha256 ‖ engine_version)`, where `icon_sha256` is the checksum of the canonical icon. It seeds the PRNG.
 - **Registry:** `registry.json` in merit-content is append-only. On a key collision or a file over budget, it bumps a stored `salt`, so regeneration is byte-stable.
 - **Quests:** the node id `quest:<subtopic_id>:<n>` is reserved for future Quests. They use the same engine and registry, so a quest's patchwork never collides with a node's.

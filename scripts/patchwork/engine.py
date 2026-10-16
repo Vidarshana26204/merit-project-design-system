@@ -1,11 +1,15 @@
-"""Patchwork engine: node + icon → deterministic, unique composition → SVG variants.
+"""Patchwork engine: node + icon (+ parent) → deterministic, unique composition → SVG.
 
     signature = sha256(node_id | icon_sha256 | ENGINE_VERSION)
     seed      = sha256(signature | salt)            salt starts at 0, bumps on collision
 
-The composition key (layout slots + per-patch tint/pattern/angle/density + plate) must be
-unique across every node of every subject; the Registry enforces that and records the salt
-so regeneration is reproducible.
+Layout (D16 rev 2): radial wedges that all meet at the centred icon. Patch count follows
+the hierarchy: subject 4, topic 5, subtopic 6 (quest 7). A child keeps its parent's patch
+styles in order and inserts exactly one new patch, so a topic reads as "its subject + 1".
+
+The composition key (rays + per-patch style + plate) is unique across every node of every
+subject, and the added patch is unique among siblings; the Registry enforces both and
+records the salt so regeneration is reproducible.
 """
 from __future__ import annotations
 
@@ -18,7 +22,7 @@ from pathlib import Path
 from . import geometry, patterns
 from .icon import Icon, markup
 
-ENGINE_VERSION = "1"
+ENGINE_VERSION = "2"
 ROOT = Path(__file__).resolve().parents[2]
 
 TILE = 256.0
@@ -60,7 +64,8 @@ FAMILIES: dict[str, dict[str, list[str]]] = {
 }
 SUBJECT_FAMILY = {"PHYSICS": "warm", "CHEMISTRY": "cool", "BIOLOGY": "fresh"}
 GLOBAL_TINTS = sorted({t for fam in FAMILIES.values() for t in fam["tints"]})
-PLATES = ("circle", "squircle", "hexagon", "none")
+PLATES = ("circle", "squircle", "hexagon")   # the plate hides where the seams meet
+LEVEL_PATCHES = {"subject": 4, "topic": 5, "subtopic": 6, "quest": 7}
 PATTERN_NAMES = list(patterns.PATTERNS)
 
 
@@ -71,6 +76,7 @@ class Node:
     subject: str       # subject code, e.g. PHYSICS
     code: str = ""
     title: str = ""
+    parent: str | None = None   # parent node id (topic → subject, subtopic → topic)
 
 
 @dataclass
@@ -89,76 +95,93 @@ class Composition:
     signature: str
     salt: int
     family: str
-    layout: geometry.Layout
-    styles: list[PatchStyle]
-    row_layout: geometry.Layout
-    row_styles: list[PatchStyle]
+    rays: list[int]                 # perimeter slots, sorted; len == patch count
+    styles: list[PatchStyle]        # one per wedge, clockwise from rays[0]
+    added: int | None               # index of the patch this node added to its parent's
     plate: str
     accent: str
 
+    def layout(self, w: float, h: float) -> geometry.Layout:
+        return geometry.radial_layout(self.rays, w, h)
+
     def key(self) -> str:
         """Canonical, hashable description of what the tile looks like (minus the icon)."""
-        body = {
-            "cuts": self.layout.cuts, "overlays": self.layout.overlays, "plate": self.plate,
-            "patches": [(s.tint, s.pattern, s.angle, s.density, s.wedge) for s in self.styles],
-        }
+        body = {"rays": self.rays, "plate": self.plate,
+                "patches": [(s.tint, s.pattern, s.angle, s.density, s.wedge) for s in self.styles]}
         return hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
+
+    def added_key(self) -> str | None:
+        if self.added is None:
+            return None
+        s = self.styles[self.added]
+        return f"{s.tint}|{s.pattern}|{s.angle}|{s.density}"
 
 
 def signature(node: Node, icon_sha: str) -> str:
     return hashlib.sha256(f"{node.id}|{icon_sha}|{ENGINE_VERSION}".encode()).hexdigest()
 
 
-def _style_patches(rng: random.Random, layout: geometry.Layout, fam: dict[str, list[str]],
-                   wedge_ok: bool) -> list[PatchStyle]:
-    # Node palette: 2 family tints + 1–2 global tints, so siblings rhyme but differ.
-    own = rng.sample(fam["tints"], 2)
-    extra = rng.sample([t for t in GLOBAL_TINTS if t not in own], rng.choice((1, 2)))
-    palette = own + extra
-    styles: list[PatchStyle] = []
-    n = len(layout.patches)
-    wedge_i = -1
-    if wedge_ok and rng.random() < 0.55:
-        # the smallest cut patch becomes the accent wedge
-        cut = [i for i, p in enumerate(layout.patches) if not p.overlay]
-        wedge_i = min(cut, key=lambda i: layout.patches[i].area)
-    used_patterns: list[str] = []
-    for i in range(n):
-        if i == wedge_i:
-            styles.append(PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots", "halftone")),
-                                     0, 1, wedge=True))
-            continue
-        neighbours = {styles[j].tint for j in range(i) if geometry.adjacent(layout.patches[i], layout.patches[j])}
-        choices = [t for t in palette if t not in neighbours] or [t for t in GLOBAL_TINTS if t not in neighbours]
-        least = min(sum(1 for s in styles if s.tint == t) for t in choices)
-        tint = rng.choice([t for t in choices if sum(1 for s in styles if s.tint == t) == least])
-        if rng.random() < 0.55:
-            pool = [p for p in PATTERN_NAMES if p not in used_patterns] or PATTERN_NAMES
-            pat: str | None = rng.choice(pool)
-            used_patterns.append(pat)
-            angle = rng.choice(patterns.ANGLES if pat in patterns.ROTATABLE else (0, 45))
-            density = rng.randrange(3)
-        else:
-            pat, angle, density = None, 0, 0
-        styles.append(PatchStyle(tint, pat, angle, density))
-    return styles
+def _rays(rng: random.Random, n: int) -> list[int]:
+    """n rays spread round the perimeter with jitter, so wedges stay similar in size."""
+    slots = geometry.RAY_SLOTS
+    step = slots / n
+    jitter = max(1, int(step * 0.22))
+    offset = rng.randrange(slots)
+    rays = {(offset + round(k * step) + rng.randint(-jitter, jitter)) % slots for k in range(n)}
+    while len(rays) < n:                       # jitter collision: nudge until distinct
+        rays.add(rng.randrange(slots))
+    return sorted(rays)
 
 
-def compose(node: Node, icon: Icon | None, salt: int = 0) -> Composition:
+def _new_style(rng: random.Random, fam: dict[str, list[str]], avoid_tints: set[str],
+               avoid_patterns: set[str], allow_wedge: bool) -> PatchStyle:
+    if allow_wedge and rng.random() < 0.5:
+        return PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots", "halftone")), 0, 1, wedge=True)
+    pool = fam["tints"] + rng.sample(GLOBAL_TINTS, 3)
+    tints = [t for t in pool if t not in avoid_tints] or [t for t in GLOBAL_TINTS if t not in avoid_tints]
+    tint = rng.choice(tints)
+    if rng.random() < 0.8:
+        pats = [p for p in PATTERN_NAMES if p not in avoid_patterns] or PATTERN_NAMES
+        pat: str | None = rng.choice(pats)
+        angle = rng.choice(patterns.ANGLES if pat in patterns.ROTATABLE else (0, 45))
+        return PatchStyle(tint, pat, angle, rng.choice((1, 1, 2)))
+    return PatchStyle(tint, None, 0, 0)
+
+
+def compose(node: Node, icon: Icon | None, salt: int = 0, parent: "Composition | None" = None) -> Composition:
     sig = signature(node, icon.sha256 if icon else "noicon")
     rng = random.Random(int(hashlib.sha256(f"{sig}|{salt}".encode()).hexdigest(), 16))
     fam_name = SUBJECT_FAMILY.get(node.subject) or list(FAMILIES)[
         int(hashlib.sha256(node.subject.encode()).hexdigest(), 16) % len(FAMILIES)]
     fam = FAMILIES[fam_name]
-    layout = geometry.make_layout(rng, TILE, TILE, n_cuts=rng.choice((2, 2, 3)),
-                                  n_overlays=rng.choice((0, 1, 1)), min_frac=0.06)
-    styles = _style_patches(rng, layout, fam, wedge_ok=True)
+    n = LEVEL_PATCHES.get(node.level, 4) if parent is None else len(parent.styles) + 1
+
+    added: int | None
+    if parent is None:
+        # A root (subject): n fresh styles, cyclic neighbours never share a tint, at most one wedge.
+        styles: list[PatchStyle] = []
+        wedge_at = rng.randrange(n) if rng.random() < 0.6 else -1
+        for i in range(n):
+            avoid = {styles[-1].tint} if styles else set()
+            if i == n - 1 and styles:
+                avoid.add(styles[0].tint)
+            st = _new_style(rng, fam, avoid, {s.pattern for s in styles if s.pattern}, allow_wedge=False)
+            if i == wedge_at:
+                st = PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots")), 0, 1, wedge=True)
+            styles.append(st)
+        added = None
+    else:
+        # A child: the parent's styles in order + one new patch inserted between two of them.
+        base = list(parent.styles)
+        added = rng.randrange(len(base) + 1)
+        left, right = base[(added - 1) % len(base)], base[added % len(base)]
+        new = _new_style(rng, fam, {left.tint, right.tint} | {s.tint for s in base if s.wedge},
+                         {s.pattern for s in base if s.pattern}, allow_wedge=False)
+        styles = base[:added] + [new] + base[added:]
+    rays = _rays(rng, n)
     plate = rng.choice(PLATES)
     accent = rng.choice(fam["accent"])
-    row_layout = geometry.make_layout(rng, ROW_W, ROW_H, n_cuts=rng.choice((3, 4, 5)),
-                                      n_overlays=rng.choice((1, 2)), min_frac=0.03, row=True)
-    row_styles = _style_patches(rng, row_layout, fam, wedge_ok=True)
-    return Composition(node, icon, sig, salt, fam_name, layout, styles, row_layout, row_styles, plate, accent)
+    return Composition(node, icon, sig, salt, fam_name, rays, styles, added, plate, accent)
 
 
 # ── rendering ───────────────────────────────────────────────────────────────────────────
@@ -230,28 +253,26 @@ def _title(comp: Composition) -> str:
     return f"<title>{t}</title>"
 
 
+def _frame(w: float, h: float) -> str:
+    return (f'<rect x="{FRAME / 2}" y="{FRAME / 2}" width="{w - FRAME}" height="{h - FRAME}" '
+            f'rx="{FRAME_RX - FRAME / 2}" fill="none" stroke="{INK}" stroke-width="{FRAME}"/>')
+
+
 def render_tile(comp: Composition) -> str:
-    uid = "t"
-    defs, body = _body(comp.layout, comp.styles, uid, FRAME_RX)
+    defs, body = _body(comp.layout(TILE, TILE), comp.styles, "t", FRAME_RX)
     c = TILE / 2
-    plate = _plate(comp.plate, c, c, 78)
-    icon = _icon_g(comp, c, c, 124 if comp.plate != "none" else 168)
-    frame = (f'<rect x="{FRAME / 2}" y="{FRAME / 2}" width="{TILE - FRAME}" height="{TILE - FRAME}" '
-             f'rx="{FRAME_RX - FRAME / 2}" fill="none" stroke="{INK}" stroke-width="{FRAME}"/>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img">'
-            f'{_title(comp)}<defs>{defs}</defs>{body}{plate}{icon}{frame}</svg>\n')
+            f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, c, c, 78)}'
+            f'{_icon_g(comp, c, c, 124)}{_frame(TILE, TILE)}</svg>\n')
 
 
 def render_row(comp: Composition) -> str:
-    uid = "r"
-    defs, body = _body(comp.row_layout, comp.row_styles, uid, FRAME_RX, pattern_scale=1.4)
-    cx, cy = ROW_W / 3, ROW_H / 2
-    plate = _plate(comp.plate if comp.plate != "none" else "circle", cx, cy, 86)
-    icon = _icon_g(comp, cx, cy, 136)
-    frame = (f'<rect x="{FRAME / 2}" y="{FRAME / 2}" width="{ROW_W - FRAME}" height="{ROW_H - FRAME}" '
-             f'rx="{FRAME_RX - FRAME / 2}" fill="none" stroke="{INK}" stroke-width="{FRAME}"/>')
+    """Same rays and styles as the tile; the wedges stretch sideways around the centred icon."""
+    defs, body = _body(comp.layout(ROW_W, ROW_H), comp.styles, "r", FRAME_RX, pattern_scale=1.4)
+    cx, cy = ROW_W / 2, ROW_H / 2
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 256" width="1024" height="256" role="img">'
-            f'{_title(comp)}<defs>{defs}</defs>{body}{plate}{icon}{frame}</svg>\n')
+            f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, cx, cy, 86)}'
+            f'{_icon_g(comp, cx, cy, 136)}{_frame(ROW_W, ROW_H)}</svg>\n')
 
 
 def render_corner(comp: Composition) -> str:
@@ -260,7 +281,7 @@ def render_corner(comp: Composition) -> str:
     Widgets clip it (e.g. a quarter-circle or the card's top-right radius), so the whole
     composition is kept: any crop still shows the node's own tints and patterns.
     """
-    defs, body = _body(comp.layout, comp.styles, "c", None)
+    defs, body = _body(comp.layout(TILE, TILE), comp.styles, "c", None)
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="96" height="96" aria-hidden="true">'
             f'<defs>{defs}<clipPath id="cq"><rect width="256" height="256"/></clipPath></defs>'
             f'<g clip-path="url(#cq)">{body}</g></svg>\n')
@@ -283,8 +304,19 @@ def within_budget(comp: Composition) -> bool:
 
 
 # ── registry ───────────────────────────────────────────────────────────────────────────
+MAX_SALT = 400
+
+
+def _size(comp: Composition) -> int:
+    return sum(len(RENDERERS[v](comp).encode()) for v in BUDGET)
+
+
 class Registry:
-    """Append-only record of signatures, salts and composition keys (global uniqueness)."""
+    """Append-only record of signatures, salts and composition keys.
+
+    Guarantees: composition keys unique across all nodes; the patch a child adds is unique
+    among its siblings; files within BUDGET (or, if no salt fits, the smallest candidate).
+    """
 
     def __init__(self, path: Path | None = None):
         self.path = path
@@ -294,28 +326,56 @@ class Registry:
             if loaded.get("engine_version") == ENGINE_VERSION:
                 self.data = loaded
         self.keys = {v["key"]: k for k, v in self.data["nodes"].items()}
+        self.added: dict[str, dict[str, str]] = {}          # parent id → added key → node id
+        for k, v in self.data["nodes"].items():
+            if v.get("parent") and v.get("added"):
+                self.added.setdefault(v["parent"], {})[v["added"]] = k
+        self.over_budget: list[str] = []
 
-    def place(self, node: Node, icon: Icon | None) -> Composition:
+    def _free(self, node: Node, comp: Composition) -> bool:
+        if self.keys.get(comp.key(), node.id) != node.id:
+            return False
+        ak = comp.added_key()
+        if ak and self.added.get(node.parent or "", {}).get(ak, node.id) != node.id:
+            return False
+        return True
+
+    def place(self, node: Node, icon: Icon | None, parent: Composition | None = None) -> Composition:
         rec = self.data["nodes"].get(node.id)
         icon_sha = icon.sha256 if icon else "noicon"
         if rec and rec["icon_sha256"] == icon_sha:
-            comp = compose(node, icon, rec["salt"])
+            comp = compose(node, icon, rec["salt"], parent)
             if comp.key() == rec["key"]:
                 return comp
-        if rec:  # icon changed → free the old key, re-place
+        if rec:  # icon or parent changed → free the old entries, re-place
             self.keys.pop(rec["key"], None)
-        salt = 0
-        while True:
-            comp = compose(node, icon, salt)
-            k = comp.key()
-            if k not in self.keys and within_budget(comp):
+            if rec.get("added"):
+                self.added.get(rec.get("parent") or "", {}).pop(rec["added"], None)
+        best: tuple[int, Composition] | None = None
+        for salt in range(MAX_SALT):
+            comp = compose(node, icon, salt, parent)
+            if not self._free(node, comp):
+                continue
+            if within_budget(comp):
+                best = (0, comp)
                 break
-            salt += 1
+            size = _size(comp)
+            if best is None or size < best[0]:
+                best = (size, comp)
+        if best is None:
+            raise RuntimeError(f"no unique composition for {node.id} within {MAX_SALT} salts")
+        comp = best[1]
+        if best[0]:
+            self.over_budget.append(node.id)
+        k = comp.key()
         self.keys[k] = node.id
+        ak = comp.added_key()
+        if ak:
+            self.added.setdefault(node.parent or "", {})[ak] = node.id
         self.data["nodes"][node.id] = {
-            "level": node.level, "subject": node.subject, "code": node.code,
+            "level": node.level, "subject": node.subject, "code": node.code, "parent": node.parent,
             "icon": icon.id if icon else None, "icon_sha256": icon_sha,
-            "signature": comp.signature, "salt": salt, "key": k,
+            "signature": comp.signature, "salt": comp.salt, "key": k, "added": ak,
         }
         return comp
 

@@ -12,7 +12,11 @@ Hierarchy patchworks (D16). Adds tokens, no renames or removals.
 ### Added
 - `color.patchwork.{seam,plate,iconLine,iconShade}`: theme-fixed patchwork tokens
   (`--merit-patchwork-*`, `MeritColors.patchwork*`).
-- `scripts/patchwork/`: a deterministic generator for per-node patchworks.
+- `scripts/patchwork/`: a deterministic generator for per-node patchworks (engine v2).
+  - **Radial layout:** every patch is a wedge touching the centred icon. Subjects have 4
+    patches, topics 5 and subtopics 6; each child keeps its parent's patches in order and adds
+    one new patch that is unique among its siblings. The row variant shares the tile's rays,
+    with the icon centred.
   - It has 16 geometry-expanded patterns, polygon and arc layouts, reference-style icon
     recolouring, and a signature + salt registry for global uniqueness and size budgets.
   - Its CLI is `index` / `suggest` / `generate` / `audit` / `demo`, and pytest covers it.

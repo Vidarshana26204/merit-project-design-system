@@ -1,7 +1,11 @@
-"""Patch layouts: a framed rectangle split by straight cuts, plus optional curved overlays.
+"""Patch layouts.
 
-Every choice is drawn from discrete slots so a layout can be expressed as a small,
-hashable key (see engine.Composition.key). Pure Python, deterministic.
+Hierarchy patchworks use a **radial** layout (D16 rev 2): N rays from the centre to the
+frame, so every patch is a wedge that touches the centre where the icon sits. Rays are
+positions on the frame perimeter (fractions in [0, 1), clockwise from the top-left
+corner), so the same composition renders in any aspect ratio: the square tile and the
+4:1 row share their rays, and in the row the wedges stretch sideways around the centred
+icon. Pure Python, deterministic.
 """
 from __future__ import annotations
 
@@ -162,3 +166,43 @@ def adjacent(p: Patch, q: Patch, eps: float = 0.5) -> bool:
         return not (a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1])
     shared = sum(1 for u in p.poly if any(abs(u[0] - v[0]) < eps and abs(u[1] - v[1]) < eps for v in q.poly))
     return shared >= 2
+
+
+RAY_SLOTS = 96   # perimeter positions a ray may take
+
+
+def perimeter_point(t: float, w: float, h: float) -> tuple[Point, float]:
+    """Point at perimeter fraction t (clockwise from top-left) and its arc position."""
+    total = 2 * (w + h)
+    d = (t % 1.0) * total
+    if d <= w:
+        return (d, 0.0), d
+    if d <= w + h:
+        return (w, d - w), d
+    if d <= 2 * w + h:
+        return (w - (d - w - h), h), d
+    return (0.0, h - (d - 2 * w - h)), d
+
+
+def radial_layout(rays: list[int], w: float, h: float) -> Layout:
+    """Wedges between consecutive rays (slot indices, sorted), all meeting at the centre."""
+    c = (w / 2, h / 2)
+    total = 2 * (w + h)
+    corners = [(w, 0.0, w), (w, h, w + h), (0.0, h, 2 * w + h), (0.0, 0.0, total)]  # (x, y, arc)
+    patches: list[Patch] = []
+    n = len(rays)
+    for i in range(n):
+        t0, t1 = rays[i] / RAY_SLOTS, rays[(i + 1) % n] / RAY_SLOTS
+        if t1 <= t0:
+            t1 += 1.0
+        (p0, a0) = perimeter_point(t0, w, h)
+        (p1, a1) = perimeter_point(t1, w, h)
+        a1 = a0 + (t1 - t0) * total
+        poly: list[Point] = [c, p0]
+        for lap in (0.0, total):
+            for x, y, arc in corners:
+                if a0 < arc + lap < a1:
+                    poly.append((x, y))
+        poly.append(p1)
+        patches.append(Patch(poly_d(poly), area(poly), bbox(poly), poly))
+    return Layout(w, h, [(r, 0) for r in rays], [], patches)

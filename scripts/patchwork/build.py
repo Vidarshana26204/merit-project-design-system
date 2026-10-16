@@ -41,7 +41,8 @@ else:
 LEVEL_ORDER = {"subject": 0, "topic": 1, "subtopic": 2}
 STOP = {"and", "the", "of", "in", "a", "an", "to", "for", "with", "on", "its", "their", "by", "as", "at", "from"}
 # Sets ranked for pool fallback (science-adjacent first).
-SET_RANK = ["Science", "Healthy", "Ecology", "Space", "AirPollution", "Food", "PetShop",
+SET_RANK = ["Science", "Medical", "Healthy", "Ecology", "Sea", "Space", "GlobalWarming", "AirPollution",
+            "Photography", "MusicAndMultimedia", "PlasticPollution", "Food", "PetShop", "Family", "Cleaning",
             "ComputerTechnology", "InternetOfThings", "Artificial_Intelligence", "Education",
             "Communications", "Logistics", "Office", "Startup", "Fintech", "BusinessAndFinance", "Insurance"]
 
@@ -52,30 +53,43 @@ def pw(content: Path) -> Path:
 
 # ── index ─────────────────────────────────────────────────────────────────────────────────
 def cmd_index(a: argparse.Namespace) -> None:
+    """Dedup the pack by byte checksum. Canonical ids already in icon-index.json are kept,
+    so adding sets never renames an icon that a map references."""
     src, out = Path(a.icons), pw(Path(a.content))
-    seen: dict[str, str] = {}
-    entries, dupes = [], 0
+    prev_path = out / "icon-index.json"
+    prev = {e["sha256"]: e["id"] for e in json.loads(prev_path.read_text())} if prev_path.exists() else {}
+    found: dict[str, list[tuple[str, str, Path]]] = {}      # sha → [(set, name, file)]
     for d in sorted(p for p in src.iterdir() if p.is_dir()):
         set_name = re.sub(r"-FilledOutline(-\d+)?$", "", d.name)
-        for f in sorted((d / "svg").iterdir()):
+        svg_dir = d / "svg"
+        if not svg_dir.is_dir():
+            continue
+        for f in sorted(svg_dir.iterdir()):
             raw = f.read_bytes()
             if not raw.lstrip().startswith((b"<svg", b"<?xml")):
                 continue                     # .DS_Store and friends
-            sha = iconlib.sha256_bytes(raw)
-            if sha in seen:
-                dupes += 1
-                continue
             name = f.name[:-4] if f.name.endswith(".svg") else f.name
-            icon_id = f"{set_name}/{name}"
-            seen[sha] = icon_id
-            dst = out / "icons" / set_name / f"{name}.svg"
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(f, dst)
-            ic = iconlib.load(dst, icon_id)
-            tags = sorted({t.lower() for t in re.split(r"[-_\s]+", name) if t and t.lower() not in STOP})
-            entries.append({"id": icon_id, "set": set_name, "name": name, "sha256": sha, "view": ic.view, "tags": tags})
-    (out / "icon-index.json").write_text(json.dumps(entries, indent=1) + "\n")
+            found.setdefault(iconlib.sha256_bytes(raw), []).append((set_name, name, f))
+    entries, dupes = [], 0
+    if (out / "icons").exists():
+        shutil.rmtree(out / "icons")
+    for sha, copies in found.items():
+        dupes += len(copies) - 1
+        keep = next((c for c in copies if f"{c[0]}/{c[1]}" == prev.get(sha)), copies[0])
+        set_name, name, f = keep
+        icon_id = f"{set_name}/{name}"
+        dst = out / "icons" / set_name / f"{name}.svg"
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(f, dst)
+        ic = iconlib.load(dst, icon_id)
+        tags = sorted({t.lower() for t in re.split(r"[-_\s]+", name) if t and t.lower() not in STOP})
+        entries.append({"id": icon_id, "set": set_name, "name": name, "sha256": sha, "view": ic.view, "tags": tags})
+    entries.sort(key=lambda e: e["id"])
+    lost = sorted(set(prev.values()) - {e["id"] for e in entries})
+    prev_path.write_text(json.dumps(entries, indent=1) + "\n")
     print(f"✓ {len(entries)} unique icons ({dupes} byte-identical duplicates dropped) → {out / 'icons'}")
+    if lost:
+        print(f"  ! {len(lost)} previously indexed icons are gone: {', '.join(lost[:5])}…", file=sys.stderr)
 
 
 def load_index(content: Path) -> dict[str, dict]:
@@ -87,14 +101,16 @@ def hierarchy(content: Path, subject: str) -> list[engine.Node]:
     sdir = content / "subjects" / subject
     meta = json.loads((sdir / "subject.json").read_text())
     h = json.loads((sdir / "hierarchy.json").read_text())
-    nodes = [engine.Node(f"subject:{meta['code']}", "subject", subject, meta["code"], meta.get("name", subject))]
+    sid = f"subject:{meta['code']}"
+    nodes = [engine.Node(sid, "subject", subject, meta["code"], meta.get("name", subject))]
     for t in sorted(h["topics"], key=lambda t: t.get("display_order", 0)):
         if not t.get("is_active", True):
             continue
-        nodes.append(engine.Node(t["id"], "topic", subject, t["code"], t["translations"]["en"]["title"]))
+        nodes.append(engine.Node(t["id"], "topic", subject, t["code"], t["translations"]["en"]["title"], parent=sid))
         for st in sorted(t.get("subtopics", []), key=lambda s: s.get("display_order", 0)):
             if st.get("is_active", True):
-                nodes.append(engine.Node(st["id"], "subtopic", subject, st["code"], st["translations"]["en"]["title"]))
+                nodes.append(engine.Node(st["id"], "subtopic", subject, st["code"],
+                                         st["translations"]["en"]["title"], parent=t["id"]))
     return nodes
 
 
@@ -183,13 +199,15 @@ def cmd_generate(a: argparse.Namespace) -> None:
             global_subject_icons.add(m["icon"])
     count = 0
     for subject in subs:
-        nodes = hierarchy(content, subject)
+        nodes = hierarchy(content, subject)     # parents always precede their children
         icons = assign_icons(content, subject, nodes, idx, global_subject_icons)
+        placed: dict[str, engine.Composition] = {}
         for n in nodes:
             icon_id, how, why = icons[n.id]
             e = idx[icon_id]
             ic = iconlib.load(base / "icons" / e["set"] / f"{e['name']}.svg", icon_id)
-            comp = reg.place(n, ic)
+            comp = reg.place(n, ic, placed.get(n.parent or ""))
+            placed[n.id] = comp
             key = node_key(n)
             variants = {}
             for v, fn in engine.RENDERERS.items():
@@ -198,12 +216,15 @@ def cmd_generate(a: argparse.Namespace) -> None:
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_text(svg)
                 variants[v] = {"path": f"out/{key}/{v}.svg", "sha256": iconlib.sha256_bytes(svg.encode()), "bytes": len(svg.encode())}
-            manifest[key] = {"node_id": n.id, "level": n.level, "subject": subject, "code": n.code, "title": n.title,
+            manifest[key] = {"node_id": n.id, "parent": n.parent, "level": n.level, "subject": subject,
+                             "code": n.code, "title": n.title, "patches": len(comp.styles),
                              "signature": comp.signature, "icon": icon_id, "icon_sha256": ic.sha256,
                              "how": how, "why": why, "family": comp.family, "engine_version": engine.ENGINE_VERSION,
                              "variants": variants}
             count += 1
     reg.save()
+    if reg.over_budget:
+        print(f"  ! {len(reg.over_budget)} nodes kept their smallest over-budget candidate", file=sys.stderr)
     manifest_path.write_text(json.dumps(dict(sorted(manifest.items())), indent=1, ensure_ascii=False) + "\n")
     contact_sheet(content, manifest)
     print(f"✓ {count} nodes × {len(engine.RENDERERS)} variants → {base / 'out'}")
@@ -258,22 +279,22 @@ def _card(k: str, m: dict, row: bool = False) -> str:
 
 
 # ── demo (public, licence-safe) ───────────────────────────────────────────────────────
-DEMO_NODES = [  # (id, level, subject family key, title, Phosphor glyph)
-    ("demo:physics", "subject", "PHYSICS", "Physics", "atom"),
-    ("demo:chemistry", "subject", "CHEMISTRY", "Chemistry", "flask"),
-    ("demo:biology", "subject", "BIOLOGY", "Biology", "dna"),
-    ("demo:maths", "subject", "MATHS", "Combined Maths", "function"),
-    ("demo:ict", "subject", "ICT", "ICT", "cpu"),
-    ("demo:languages", "subject", "LANGUAGES", "Languages", "translate"),
-    ("demo:waves", "topic", "PHYSICS", "Oscillations and waves", "wave-sine"),
-    ("demo:magnetism", "topic", "PHYSICS", "Magnetic field", "magnet"),
-    ("demo:current", "subtopic", "PHYSICS", "Current electricity", "lightning"),
-    ("demo:thermal", "subtopic", "PHYSICS", "Thermal physics", "thermometer"),
-    ("demo:kinetics", "topic", "CHEMISTRY", "Chemical kinetics", "test-tube"),
-    ("demo:plants", "topic", "BIOLOGY", "Plant form and function", "plant"),
-    ("demo:leaf", "subtopic", "BIOLOGY", "Leaf structure", "leaf"),
-    ("demo:cells", "subtopic", "BIOLOGY", "Cell studies", "microscope"),
-    ("demo:circulation", "subtopic", "BIOLOGY", "Circulatory systems", "heartbeat"),
+DEMO_NODES = [  # (id, level, subject family key, title, Phosphor glyph, parent id) — parents first
+    ("demo:physics", "subject", "PHYSICS", "Physics", "atom", None),
+    ("demo:chemistry", "subject", "CHEMISTRY", "Chemistry", "flask", None),
+    ("demo:biology", "subject", "BIOLOGY", "Biology", "dna", None),
+    ("demo:maths", "subject", "MATHS", "Combined Maths", "function", None),
+    ("demo:ict", "subject", "ICT", "ICT", "cpu", None),
+    ("demo:languages", "subject", "LANGUAGES", "Languages", "translate", None),
+    ("demo:waves", "topic", "PHYSICS", "Oscillations and waves", "wave-sine", "demo:physics"),
+    ("demo:magnetism", "topic", "PHYSICS", "Magnetic field", "magnet", "demo:physics"),
+    ("demo:current", "subtopic", "PHYSICS", "Electromagnetic induction", "lightning", "demo:magnetism"),
+    ("demo:thermal", "subtopic", "PHYSICS", "Thermal waves", "thermometer", "demo:waves"),
+    ("demo:kinetics", "topic", "CHEMISTRY", "Chemical kinetics", "test-tube", "demo:chemistry"),
+    ("demo:plants", "topic", "BIOLOGY", "Plant form and function", "plant", "demo:biology"),
+    ("demo:leaf", "subtopic", "BIOLOGY", "Leaf structure", "leaf", "demo:plants"),
+    ("demo:cells", "subtopic", "BIOLOGY", "Plant cells", "microscope", "demo:plants"),
+    ("demo:circulation", "subtopic", "BIOLOGY", "Water transport", "heartbeat", "demo:plants"),
 ]
 
 
@@ -286,9 +307,11 @@ def cmd_demo(a: argparse.Namespace) -> None:
         shutil.rmtree(out)
     glyphs = Path(__file__).resolve().parent / "demo-icons"
     reg = engine.Registry()
-    for nid, level, subject, title, glyph in DEMO_NODES:
+    placed: dict[str, engine.Composition] = {}
+    for nid, level, subject, title, glyph, parent in DEMO_NODES:
         ic = iconlib.load(glyphs / f"{glyph}.svg", f"phosphor/{glyph}")
-        comp = reg.place(engine.Node(nid, level, subject, nid, title), ic)
+        comp = reg.place(engine.Node(nid, level, subject, nid, title, parent), ic, placed.get(parent or ""))
+        placed[nid] = comp
         for v, fn in engine.RENDERERS.items():
             p = out / f"{nid.split(':')[1]}-{v}.svg"
             p.parent.mkdir(parents=True, exist_ok=True)
