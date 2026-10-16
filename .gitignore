@@ -1,1 +1,4 @@
 .DS_Store
+# General Sans (ITF Free Font License) must not be redistributed from a public
+# repository. Fetch it locally: see assets/fonts/README.md.
+assets/fonts/GeneralSans-*
