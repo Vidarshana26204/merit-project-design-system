@@ -1,1255 +1,717 @@
 <!DOCTYPE html>
-<html lang="en" data-grain="subtle" data-spin="on">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Merit Project — Design System</title>
-<!-- Fonts are self-hosted from assets/fonts/ via @font-face in merit-ds.css — no CDN. -->
-<link rel="preload" href="assets/fonts/ClashDisplay-Bold.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="preload" href="assets/fonts/PlusJakartaSans-Medium.ttf" as="font" type="font/ttf" crossorigin />
+<title>Merit Design System</title>
+<meta name="description" content="Merit Project design system v3: tokens, type, components and patterns for the Flutter app, the web frontend and the landing page." />
+<link rel="icon" href="assets/v3/brand/merit-mark-small.svg" />
+<link rel="preload" href="assets/fonts/GeneralSans-Semibold.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="merit-ds.css" />
-<style>
-  /* page-local: spinning hero stickers (gated by tweak) */
-  @media (prefers-reduced-motion: no-preference){
-    html[data-spin="on"] .pageHero .star.spin{animation:meritSpin 22s linear infinite}
-    html[data-spin="on"] .pageHero .star.spin.rev{animation-direction:reverse;animation-duration:28s}
-  }
-  @keyframes meritSpin{to{transform:rotate(360deg)}}
-</style>
+<!-- Phosphor (D0c, D12): Regular default, Fill = active, Duotone = category chips. -->
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 </head>
 <body>
+
+<button class="btn icon menuBtn" id="menuBtn" aria-label="Open navigation" aria-controls="side" aria-expanded="false"><i class="ph ph-list"></i></button>
 
 <div class="shell">
 
   <!-- ============ SIDEBAR ============ -->
-  <aside class="side">
+  <aside class="side" id="side">
     <div class="brand">
-      <div class="mark"><img src="assets/brand/merit-mark-dark.svg" alt="Merit Project mark" /></div>
-      <div class="wm">Merit&nbsp;Project<small>Design System</small></div>
+      <img class="lt-only" src="assets/v3/brand/merit-mark.svg" alt="" /><img class="dk-only" src="assets/v3/brand/merit-mark-dark.svg" alt="" />
+      <div class="wm">MERIT<b>.</b><small>Design System</small></div>
     </div>
+    <div class="ver"><span>Tokens</span><b>v3.0.0</b></div>
 
-    <div class="ver"><span>Version</span><b>v2.3</b></div>
-
-    <nav class="toc">
+    <nav class="toc" aria-label="Sections">
       <div class="grp">Foundations</div>
-      <a href="#overview"><span class="ix">00</span> Brand &amp; Voice</a>
-      <a href="#color"><span class="ix">01</span> Color</a>
+      <a href="#overview"><span class="ix">00</span> Brand &amp; voice</a>
+      <a href="#color"><span class="ix">01</span> Colour</a>
       <a href="#type"><span class="ix">02</span> Typography</a>
-      <a href="#look"><span class="ix">03</span> The Signature Look</a>
-      <a href="#space"><span class="ix">04</span> Spacing &amp; Layout</a>
+      <a href="#shape"><span class="ix">03</span> Shape &amp; depth</a>
+      <a href="#space"><span class="ix">04</span> Spacing &amp; layout</a>
       <a href="#motion"><span class="ix">05</span> Motion</a>
+      <a href="#modes"><span class="ix">06</span> Calm &amp; energy</a>
       <div class="grp">Components</div>
-      <a href="#buttons"><span class="ix">06</span> Buttons</a>
-      <a href="#cards"><span class="ix">07</span> Cards</a>
-      <a href="#inputs"><span class="ix">08</span> Inputs &amp; Fields</a>
-      <a href="#pills"><span class="ix">09</span> Pills &amp; Tags</a>
-      <a href="#progress"><span class="ix">10</span> Progress &amp; Steppers</a>
-      <a href="#toggles"><span class="ix">11</span> Toggles &amp; Checkboxes</a>
-      <a href="#tabbar"><span class="ix">12</span> Tab Bar</a>
-      <a href="#states"><span class="ix">13</span> States &amp; Focus</a>
+      <a href="#buttons"><span class="ix">07</span> Buttons</a>
+      <a href="#cards"><span class="ix">08</span> Cards</a>
+      <a href="#inputs"><span class="ix">09</span> Inputs &amp; search</a>
+      <a href="#chips"><span class="ix">10</span> Chips &amp; badges</a>
+      <a href="#progress"><span class="ix">11</span> Progress</a>
+      <a href="#toggles"><span class="ix">12</span> Toggles &amp; checks</a>
+      <a href="#nav"><span class="ix">13</span> Tab bar &amp; segments</a>
+      <a href="#overlays"><span class="ix">14</span> Dialogs &amp; toasts</a>
+      <a href="#states"><span class="ix">15</span> States &amp; focus</a>
       <div class="grp">Patterns</div>
-      <a href="#game"><span class="ix">14</span> Gamification</a>
-      <a href="#quiz"><span class="ix">15</span> Quiz Components</a>
-      <a href="#feedback"><span class="ix">16</span> Feedback &amp; Empty States</a>
-      <a href="#icons"><span class="ix">17</span> Iconography</a>
-      <a href="#trilingual"><span class="ix">18</span> Tri-lingual Type</a>
-      <a href="#chart"><span class="ix">19</span> Data Viz</a>
-      <a href="#density"><span class="ix">20</span> Density Modes</a>
-      <a href="#logo"><span class="ix">21</span> Logo Usage</a>
-      <a href="#dark"><span class="ix">22</span> Dark Mode</a>
+      <a href="#game"><span class="ix">16</span> Gamification</a>
+      <a href="#quiz"><span class="ix">17</span> Quiz</a>
+      <a href="#flash"><span class="ix">18</span> Flashcards</a>
+      <a href="#path"><span class="ix">19</span> Learning path</a>
+      <a href="#feedback"><span class="ix">20</span> Empty &amp; error</a>
+      <a href="#illus"><span class="ix">21</span> Illustration kit</a>
+      <a href="#icons"><span class="ix">22</span> Iconography</a>
+      <a href="#trilingual"><span class="ix">23</span> EN · SI · TA</a>
+      <a href="#chart"><span class="ix">24</span> Data viz</a>
+      <a href="#density"><span class="ix">25</span> Density</a>
+      <a href="#logo"><span class="ix">26</span> Logo</a>
+      <a href="#dark"><span class="ix">27</span> Dark mode</a>
       <div class="grp">Reference</div>
-      <a href="#landing"><span class="ix">23</span> Landing Specimen</a>
-      <a href="#tokens"><span class="ix">24</span> Tokens Reference</a>
-      <a href="#changelog"><span class="ix">25</span> Changelog</a>
+      <a href="#screens"><span class="ix">28</span> Screen specimens</a>
+      <a href="#landing"><span class="ix">29</span> Landing specimen</a>
+      <a href="#tokens"><span class="ix">30</span> Tokens</a>
+      <a href="#changelog"><span class="ix">31</span> Changelog</a>
     </nav>
 
-    <a class="backlink" href="IMPROVEMENT-PLAN.md">
-      <span class="a">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
-      v2 improvement plan
-    </a>
+    <div class="sideFoot">
+      <button class="btn ghost sm" id="themeBtn" aria-pressed="false"><i class="ph ph-moon"></i> <span>Dark</span></button>
+      <a class="btn ghost sm" href="DECISIONS-v3.md"><i class="ph ph-scroll"></i> Decisions</a>
+    </div>
   </aside>
 
   <!-- ============ MAIN ============ -->
-  <main class="main">
+  <main class="main" id="main">
 
-    <!-- HERO -->
-    <header class="pageHero" data-screen-label="Hero">
-      <svg class="star spin" style="left:-40px;top:-30px;width:200px;height:200px" viewBox="0 0 100 100"><path d="M50 6 C58 30 70 42 94 50 C70 58 58 70 50 94 C42 70 30 58 6 50 C30 42 42 30 50 6 Z" fill="#FFCC00"/></svg>
-      <svg class="star spin rev" style="right:-30px;bottom:-50px;width:240px;height:240px" viewBox="0 0 100 100"><polygon points="50,4 56,40 92,28 64,52 96,72 58,64 60,98 50,68 40,98 42,64 4,72 36,52 8,28 44,40" fill="#9ED5B7"/></svg>
-      <div class="inner">
-        <div class="eyebrow">Brand &amp; UI System · Engineering reference</div>
-        <h1>Learn it.<br/>Level up.<br/><em>Earn Merit.</em></h1>
-        <p>The single source of truth for the Merit Project look &amp; feel — a playful, neo-brutalist, gamified study brand. Tokens, type, and copy-paste component recipes for the <strong style="color:#fff">Flutter app</strong> and the <strong style="color:#fff">landing page</strong>.</p>
-        <div class="heroPills">
-          <span class="pill p">Neo-brutalist</span>
-          <span class="pill y">Gamified</span>
-          <span class="pill m">Tri-lingual · EN/SI/TA</span>
-          <span class="pill k">Flutter + Web</span>
+    <header class="hero">
+      <div>
+        <span class="eyebrow">Merit design system · v3</span>
+        <h1>Learn it. Level up. <br />Earn <span class="u">Merit.</span></h1>
+        <p class="lede">The single source of truth for how Merit looks and feels on the Flutter app, the student/admin web app and the landing page. It is warm, calm enough to study on, and bright enough to celebrate every streak.</p>
+        <div class="heroCtas">
+          <a class="btn primary lg" href="#color">Explore the system <i class="ph-bold ph-arrow-right"></i></a>
+          <a class="btn ghost lg" href="#tokens">Tokens</a>
         </div>
+      </div>
+      <div class="heroArt" aria-hidden="true">
+        <svg class="path" viewBox="0 0 100 100" fill="none"><path d="M30 26 H70 V62 H30 V86" stroke="var(--merit-decor-connector)" stroke-width=".6" stroke-dasharray=".6 2.2" stroke-linecap="round"/></svg>
+        <img src="assets/v3/tiles/biology.svg" style="left:8%;top:6%" alt="" />
+        <img src="assets/v3/tiles/physics.svg" style="right:6%;top:12%;width:30%" alt="" />
+        <img src="assets/v3/tiles/chemistry.svg" style="left:30%;top:42%;width:40%" alt="" />
+        <img src="assets/v3/tiles/maths.svg" style="left:4%;bottom:2%;width:30%" alt="" />
+        <img class="spark twinkle" src="assets/v3/motifs/sparkle.svg" style="right:20%;bottom:16%;width:34px;filter:none" alt="" />
+        <img class="spark twinkle" src="assets/v3/motifs/sparkle-warm.svg" style="left:48%;top:4%;width:26px;filter:none" alt="" />
       </div>
     </header>
 
     <div class="wrap">
 
-      <!-- ============ 00 — OVERVIEW / VOICE ============ -->
-      <section class="sec" id="overview" data-screen-label="Brand & Voice">
-        <span class="kicker">00 — Foundations</span>
-        <h2>Bold, playful, game-like — built for serious study.</h2>
-        <p class="lead">Merit is a gamified exam-prep platform for Sri Lankan O/L and A/L students. The look is <strong>neo-brutalist</strong>: flat saturated color blocks, solid black outlines on everything, and hard offset shadows with zero blur. It feels like a sticker sheet, an arcade, and a study planner at once.</p>
+<!-- ======================= 00 BRAND ======================= -->
+<section class="sec" id="overview">
+  <div class="secHead"><span class="eyebrow">00 · Brand &amp; voice</span>
+    <h2>Warm, clear, <span class="u">quietly</span> playful.</h2>
+    <p class="lede">Merit is a gamified exam-prep platform for Sri Lankan O/L and A/L students: quizzes, flashcards, past papers, streaks and adaptive practice in Sinhala, Tamil and English. v3 keeps the game but sets it on a calm, warm canvas that suits hours of study.</p>
+  </div>
+  <div class="grid g3">
+    <div class="panel"><h3>Calm canvas</h3><p class="muted">A warm off-white page, slate text, and soft depth with no hard outlines on UI chrome. It is easy on the eyes for long reading sessions.</p></div>
+    <div class="panel"><h3>Earned energy</h3><p class="muted">Orange, sparkles and brush underlines are saved for actions, rewards and celebration. They feel earned because they are rare.</p></div>
+    <div class="panel"><h3>Patchwork learning</h3><p class="muted">Each subject is a patchwork tile, and topics link up as a dotted learning path. The illustration system doubles as navigation.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="do"><b><i class="ph-fill ph-check-circle"></i> Voice: do</b><ul><li>Be short and confident: "Keep your streak alive."</li><li>Encourage: "Hit your weak spots first."</li><li>Say exactly what happens: "12 of 50 questions today."</li></ul></div>
+    <div class="dont"><b><i class="ph-fill ph-x-circle"></i> Voice: don't</b><ul><li>Shame or pressure: "You're falling behind!"</li><li>Use corporate filler: "Leverage our solutions".</li><li>Use emoji as UI icons. Emoji are fine in celebratory copy.</li></ul></div>
+  </div>
+</section>
 
-        <h3 class="subhead">Three pillars on every screen</h3>
-        <div class="demoGrid" style="grid-template-columns:repeat(3,1fr)">
-          <div class="card feat" style="padding:22px">
-            <div class="ichip k" style="width:40px;height:40px;border-radius:11px">1</div>
-            <h4 style="font-size:18px;margin-top:14px">Outlined &amp; chunky</h4>
-            <p class="note" style="margin-top:8px">Black borders and hard shadows give every element physical, tactile weight.</p>
-          </div>
-          <div class="card feat" style="padding:22px;background:var(--yellow)">
-            <div class="ichip k" style="width:40px;height:40px;border-radius:11px">2</div>
-            <h4 style="font-size:18px;margin-top:14px">Gamified</h4>
-            <p class="note" style="margin-top:8px;color:#312A31">Streaks 🔥, merit points 🪙, tiers, starbursts, leaderboards and progress everywhere.</p>
-          </div>
-          <div class="card feat" style="padding:22px;background:var(--mint)">
-            <div class="ichip k" style="width:40px;height:40px;border-radius:11px">3</div>
-            <h4 style="font-size:18px;margin-top:14px">Tri-lingual &amp; local</h4>
-            <p class="note" style="margin-top:8px;color:#312A31">EN / SI / TA toggles are first-class; content is Sri-Lanka specific.</p>
-          </div>
-        </div>
+<!-- ======================= 01 COLOUR ======================= -->
+<section class="sec" id="color">
+  <div class="secHead"><span class="eyebrow">01 · Colour</span>
+    <h2>Warm energy, <span class="u">violet</span> depth.</h2>
+    <p class="lede">There are two hue families: <b>orange → coral → sand</b> for energy and <b>violet</b> for focus, links and premium. They sit on a warm <b>canvas</b> with <b>ink-slate</b> text. Sage means success, butter means rewards, and blush and sky are only for subject categories. Click a swatch to copy its hex value.</p>
+  </div>
+  <span class="label">Core</span>
+  <div class="grid g6" data-swatches="canvas-50:bg.app canvas-100:surface.sunken white:surface.default ink-900:text.primary ink-700:text.secondary ink-500:text.tertiary"></div>
+  <span class="label">Energy</span>
+  <div class="grid g6" data-swatches="orange-500:action.primary orange-600:pressed orange-700:primaryStrong · eyebrow coral-300:patch sand-100:bg.brand sand-300:patch"></div>
+  <span class="label">Depth</span>
+  <div class="grid g6" data-swatches="violet-700:accent · feature violet-500:link · focus violet-600:sparkle violet-400:lilac patch violet-100:surface.selected violet-800:pressed"></div>
+  <span class="label">Feedback &amp; reward</span>
+  <div class="grid g6" data-swatches="sage-300:success sage-100:success subtle sage-700:success text butter-300:reward · warning butter-500:coin glyph red-600:error"></div>
+  <span class="label">Category only</span>
+  <div class="grid g6" data-swatches="blush-300:category 6 sky-300:category 2 sky-500:chart 5"></div>
 
-        <h3 class="subhead">Voice</h3>
-        <p class="note">Confident, encouraging, short. Never corporate, never condescending. Emoji are on-brand but used sparingly as functional accents (🔥 streak · 🪙 points · ★ rating · ⚡ energy).</p>
-        <div class="demoRow" style="margin-top:18px">
-          <span class="pill p" style="padding:10px 16px;font-size:14px">"Keep your streak alive."</span>
-          <span class="pill y" style="padding:10px 16px;font-size:14px">"Earn it."</span>
-          <span class="pill m" style="padding:10px 16px;font-size:14px">"Hit your weak spots first."</span>
-        </div>
-      </section>
+  <div class="grid g2" style="margin-top:22px">
+    <div class="panel">
+      <h3>The orange rule (D9)</h3>
+      <p class="muted">Brand orange <code>#F65E16</code> always carries an <b>ink</b> label (5.22:1). White on orange fails WCAG, so dense or long labels use <code>primaryStrong</code> (burnt orange with a white label, 5.82:1).</p>
+      <div class="row" style="margin-top:12px"><button class="btn primary">Start practice</button><button class="btn strong">Download paper</button></div>
+    </div>
+    <div class="panel">
+      <h3>Violet for focus</h3>
+      <p class="muted">Orange is too light for a focus ring on the canvas (2.85:1), so links, the focus ring and form selection all use violet. Selection never uses sage, because sage means "achieved" (D5).</p>
+      <div class="row" style="margin-top:12px"><a href="#color">A violet link</a><button class="chip" aria-pressed="true">Selected</button><span class="check done" aria-label="Completed">✓</span></div>
+    </div>
+  </div>
+</section>
 
-      <!-- ============ 01 — COLOR ============ -->
-      <section class="sec" id="color" data-screen-label="Color">
-        <span class="kicker y">01 — Foundations</span>
-        <h2>Six tones and black. No remix.</h2>
-        <p class="lead">These six tones plus the black outline are the whole system — no new hues, no gradients, no unsaturated greys. Click any swatch to copy its hex.</p>
+<!-- ======================= 02 TYPE ======================= -->
+<section class="sec" id="type">
+  <div class="secHead"><span class="eyebrow">02 · Typography</span>
+    <h2>One display face, <span class="emph">one</span> reading face.</h2>
+    <p class="lede"><b>General Sans</b> (D8) handles headings, numbers, the wordmark and the italic emphasis voice. <b>Plus Jakarta Sans</b> handles everything you read. Sinhala and Tamil fall back to Noto Sans Sinhala and Noto Sans Tamil. Nothing is smaller than 11&nbsp;px, and no weight goes above 700.</p>
+  </div>
+  <div class="panel tblWrap">
+    <table class="spec">
+      <thead><tr><th>Style</th><th>Specimen</th><th>Spec</th></tr></thead>
+      <tbody id="typeTable"></tbody>
+    </table>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel"><span class="label">Emphasis voice</span><h3 style="font-size:28px">Start learning with <span class="u">free</span> past papers.</h3><p class="muted" style="margin-top:12px">Use at most one underlined word per heading. The brush stroke is a decoration under the text box, so it works under Sinhala and Tamil too.</p></div>
+    <div class="panel"><span class="label">Numbers</span><div class="row" style="gap:18px"><span class="num" style="font-size:48px">04:59</span><span class="num" style="font-size:32px">1,240</span><span class="num" style="font-size:20px">98%</span></div><p class="muted" style="margin-top:12px">Timers, points and ranks always use <code>tabular-nums</code> (<code>type.numeric.*</code>), so the digits don't jitter as they change.</p></div>
+  </div>
+</section>
 
-        <div class="swGrid">
-          <div class="sw" data-hex="#8E55D7"><div class="chipc" style="background:#8E55D7"><span class="role">Primary</span></div><div class="meta"><div class="nm">Purple</div><div class="hex">#8E55D7 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#6E36B8"><div class="chipc" style="background:#6E36B8"><span class="role">Pressed</span></div><div class="meta"><div class="nm">Purple Deep</div><div class="hex">#6E36B8 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFCC00"><div class="chipc" style="background:#FFCC00"><span class="role dk">Accent</span></div><div class="meta"><div class="nm">Yellow</div><div class="hex">#FFCC00 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#9ED5B7"><div class="chipc" style="background:#9ED5B7"><span class="role dk">Support</span></div><div class="meta"><div class="nm">Mint</div><div class="hex">#9ED5B7 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFEFD7"><div class="chipc" style="background:#FFEFD7"><span class="role dk">Surface</span></div><div class="meta"><div class="nm">Cream</div><div class="hex">#FFEFD7 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#312A31"><div class="chipc" style="background:#312A31"><span class="role">Ink</span></div><div class="meta"><div class="nm">Charcoal</div><div class="hex">#312A31 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#1B161B"><div class="chipc" style="background:#1B161B"><span class="role">Dark bg</span></div><div class="meta"><div class="nm">Ink-2</div><div class="hex">#1B161B <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#000000"><div class="chipc" style="background:#000"><span class="role">Outline</span></div><div class="meta"><div class="nm">Line</div><div class="hex">#000000 <span class="copytag">CLICK</span></div></div></div>
-        </div>
-
-        <h3 class="subhead">Extended palette — supporting tints</h3>
-        <p class="note">Approved roles (v2 decisions D1–D4): <strong>Yellow <span class="inlineCode">#FFCC00</span></strong> is brand yellow for accents, CTAs and rewards; <strong>yellow-soft</strong> only for large background fills and warnings. <strong>Mint <span class="inlineCode">#9ED5B7</span></strong> is light-mode success; <strong>mint-soft</strong> is dark-mode success and a category tint. <strong>Cream-warm</strong> is the product-UI app background; <strong>Cream <span class="inlineCode">#FFEFD7</span></strong> is for brand and landing bands. Text is <span class="inlineCode">#29261B</span>; Ink <span class="inlineCode">#312A31</span> is the inverse surface (dark buttons and cards).</p>
-        <div class="swGrid">
-          <div class="sw" data-hex="#F2D43B"><div class="chipc" style="background:#F2D43B"><span class="role dk">Big fills</span></div><div class="meta"><div class="nm">Yellow soft</div><div class="hex">#F2D43B <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#9CE7C8"><div class="chipc" style="background:#9CE7C8"><span class="role dk">Dark success</span></div><div class="meta"><div class="nm">Mint soft</div><div class="hex">#9CE7C8 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFB3C8"><div class="chipc" style="background:#FFB3C8"><span class="role dk">Category</span></div><div class="meta"><div class="nm">Pink</div><div class="hex">#FFB3C8 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#B3D8FF"><div class="chipc" style="background:#B3D8FF"><span class="role dk">Category</span></div><div class="meta"><div class="nm">Blue</div><div class="hex">#B3D8FF <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFF7ED"><div class="chipc" style="background:#FFF7ED"><span class="role dk">App bg</span></div><div class="meta"><div class="nm">Cream warm</div><div class="hex">#FFF7ED <span class="copytag">CLICK</span></div></div></div>
-        </div>
-
-        <h3 class="subhead">Contrast rules</h3>
-        <table class="spec">
-          <thead><tr><th>Surface</th><th>Text color</th><th>Border</th></tr></thead>
-          <tbody>
-            <tr><td>Purple / Ink</td><td>White or Cream</td><td><code>#000</code> always</td></tr>
-            <tr><td>Yellow / Mint / Cream / White</td><td>Ink <code>#312A31</code> / <code>#29261B</code></td><td><code>#000</code> always</td></tr>
-            <tr><td>Any dark-mode surface</td><td>Cream <code>#FFF7ED</code></td><td>Cream <code>#FFF7ED</code></td></tr>
-          </tbody>
-        </table>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS tokens</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>/* Generated from tokens/*.tokens.json by `npm run build` → never hand-edit */
-@import url("build/css/merit-tokens.css");
-
-/* Use SEMANTIC tokens in components — they flip with .dark / [data-theme="dark"] */
-.card{
-  background:var(--merit-surface-default);
-  color:var(--merit-text-primary);
-  border:var(--merit-border-width-base) solid var(--merit-border-default);
-  border-radius:var(--merit-radius-lg);
-  box-shadow:var(--merit-shadow-s3);          /* 4px 4px 0 — blur always 0 */
-}
-a{color:var(--merit-text-link)}               /* purple-700 light · purple-300 dark */
-/* Primitives (--merit-purple-500 …) are for the token layer only. */</code></pre>
-            <pre hidden><code>// v2: build/dart/merit_tokens.dart (generated) → context.meritColors.textLink,
-// MeritSpace.space4, MeritRadii.lg, context.meritColors.shadowS3 …  Adopted in Phase 2.
-// Until then — the real class is merit-project-flutter/lib/theme/merit_theme.dart.
-// ⚠ Name mismatch until the v2 token pipeline lands (IMPROVEMENT-PLAN §6 Phase 2):
-//   app MeritColors.yellow = #F2D43B  → DS yellow.400 (large fills / warning)
-//   app MeritColors.mint   = #9CE7C8  → DS mint.400   (dark-mode success, category)
-//   app MeritColors.cream  = #FFF7ED  → DS cream.100  (bg.app — D3)
-//   app MeritColors.ink    = #29261B  → DS text.primary (D4)
-// Brand yellow (#FFCC00) and mint (#9ED5B7) have no app constant yet.
-// Never add new Color(0x…) literals in features — reference MeritColors / theme.
-class MeritColors {
-  static const Color purple     = Color(0xFF8E55D7); // action.primary fill
-  static const Color purpleDeep = Color(0xFF6E36B8); // pressed · purple TEXT on light
-  static const Color yellow     = Color(0xFFF2D43B); // yellow.400
-  static const Color mint       = Color(0xFF9CE7C8); // mint.400
-  static const Color cream      = Color(0xFFFFF7ED); // bg.app · dark-mode border
-  static const Color ink        = Color(0xFF29261B); // text.primary
-  static const Color inkDeep    = Color(0xFF1B161B); // dark bg
-  static const Color inkSurface = Color(0xFF2A232A); // dark surface
-  static const Color pink       = Color(0xFFFFB3C8); // category
-  static const Color blue       = Color(0xFFB3D8FF); // category
-  static const Color error      = Color(0xFFC4393A);
+<!-- ======================= 03 SHAPE ======================= -->
+<section class="sec" id="shape">
+  <div class="secHead"><span class="eyebrow">03 · Shape &amp; depth</span>
+    <h2>Soft depth, <span class="u">no</span> hard edges.</h2>
+    <p class="lede">v3 retires the neo-brutalist black outline and hard shadow (D11). Cards float on soft, violet-tinted elevation with no border. Ink outlines are reserved for illustration, filter chips and patchwork, where they read as drawing rather than chrome.</p>
+  </div>
+  <div class="grid g4">
+    <div><div class="elev" style="box-shadow:var(--merit-elevation-e0);background:var(--merit-surface-sunken)">e0</div><p class="muted">Flat. Wells, compact rows.</p></div>
+    <div><div class="elev" style="box-shadow:var(--merit-elevation-e1)">e1</div><p class="muted">Cards, chips, search.</p></div>
+    <div><div class="elev" style="box-shadow:var(--merit-elevation-e2)">e2</div><p class="muted">Tab bar, toasts, hover.</p></div>
+    <div><div class="elev" style="box-shadow:var(--merit-elevation-e3)">e3</div><p class="muted">Dialogs, sheets.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="panel tblWrap"><table class="spec"><thead><tr><th>Radius</th><th>Value</th><th>Use</th></tr></thead><tbody id="radiusTable"></tbody></table></div>
+    <div class="panel tblWrap"><table class="spec"><thead><tr><th>Border</th><th>Value</th><th>Use</th></tr></thead><tbody>
+      <tr><td><code>hairline</code></td><td>1px</td><td>Dividers, compact table cells</td></tr>
+      <tr><td><code>base</code></td><td>1.5px</td><td>Inputs, filter chips, patchwork outlines</td></tr>
+      <tr><td><code>strong</code></td><td>2px</td><td>Selected / focused component edge</td></tr>
+    </tbody></table>
+    <p class="muted" style="margin-top:10px">Cards never combine a border with elevation.</p></div>
+  </div>
+  <div class="codeWrap"><div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div><div class="codeBody"><button class="copyBtn"><span class="lbl">Copy</span></button>
+<pre><code>.card {
+  background: var(--merit-surface-default);
+  border-radius: var(--merit-radius-xl);      /* 24 */
+  box-shadow: var(--merit-elevation-e1);      /* no border */
 }</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 02 — TYPOGRAPHY ============ -->
-      <section class="sec" id="type" data-screen-label="Typography">
-        <span class="kicker m">02 — Foundations</span>
-        <h2>Two families. One loud, one readable.</h2>
-        <p class="lead"><strong>Clash Display</strong> is the personality — headings, numbers, buttons, stat figures, tier names. <strong>Plus Jakarta Sans</strong> carries everything readable and long-form.</p>
-
-        <div class="split">
-          <div class="frame light">
-            <span class="ftag">Clash Display</span>
-            <div style="font-family:var(--font-display);font-weight:700;font-size:96px;letter-spacing:-.04em;line-height:.85;color:#312A31">Aa</div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.04em;margin-top:14px;color:#5a4a5a">500 · 600 · 700 (max) — tight tracking</div>
-          </div>
-          <div class="frame light" style="background:#fff">
-            <span class="ftag">Plus Jakarta Sans</span>
-            <div style="font-family:var(--font-body);font-weight:700;font-size:96px;line-height:.85;color:#312A31">Aa</div>
-            <div style="font-family:var(--font-body);font-weight:600;font-size:15px;margin-top:14px;color:#5a4a5a">400 · 500 · 600 · 700 — normal tracking</div>
-          </div>
-        </div>
-
-        <h3 class="subhead">Type scale</h3>
-        <div>
-          <div class="typeRow"><div class="meta"><div class="nm">Display</div><div class="sz">Clash · 700 · -4% · 96px<br/>(clamp 72–148 web)</div></div><div class="sample" style="font-size:64px">Earn it.</div></div>
-          <div class="typeRow"><div class="meta"><div class="nm">H1</div><div class="sz">Clash · 700 · 48px</div></div><div class="sample" style="font-size:46px">Top 5 events</div></div>
-          <div class="typeRow"><div class="meta"><div class="nm">H2</div><div class="sz">Clash · 700 · 28–40px</div></div><div class="sample" style="font-size:34px">Keep the streak</div></div>
-          <div class="typeRow"><div class="meta"><div class="nm">H3 / card title</div><div class="sz">Clash · 600 · 22px</div></div><div class="sample" style="font-size:22px">Streaks &amp; merit</div></div>
-          <div class="typeRow"><div class="meta"><div class="nm">Body</div><div class="sz">Jakarta · 500 · 14–17px</div></div><div class="sample body" style="font-size:16px;font-weight:500;color:#5a4a5a">Ship &amp; learn. Adaptive practice across Sinhala, Tamil and English.</div></div>
-          <div class="typeRow"><div class="meta"><div class="nm">Label / eyebrow</div><div class="sz">Jakarta · 700 · 10–12px<br/>.16–.24em · UPPERCASE</div></div><div class="sample body" style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7a6c7a">Top of the week</div></div>
-        </div>
-        <p class="note" style="margin-top:18px"><strong>Signature move:</strong> UPPERCASE micro-labels with wide tracking (<span class="inlineCode">.16em</span>–<span class="inlineCode">.24em</span>) for eyebrows, stat captions and section kickers.</p>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">Web</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>/* Self-host the files in assets/fonts/ — never a CDN / lookalike.
-   Clash Display: 500·600·700 (700 = heaviest cut). Jakarta: 400–700. */
-@font-face{font-family:'Clash Display';font-weight:700;font-display:swap;
-  src:url('/fonts/ClashDisplay-Bold.ttf') format('truetype')}
-@font-face{font-family:'Plus Jakarta Sans';font-weight:500;font-display:swap;
-  src:url('/fonts/PlusJakartaSans-Medium.ttf') format('truetype')}
-/* …one block per shipped weight (see merit-ds.css) */
-
-h1,h2,h3,h4{font-family:'Clash Display',sans-serif;font-weight:700;
-  letter-spacing:-.02em;line-height:1}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif}</code></pre>
-            <pre hidden><code>// pubspec.yaml bundles local files (assets/google_fonts/ is just a folder
-// name — nothing loads from Google Fonts). Use the family names directly;
-// do NOT use the google_fonts package.
-//   ClashDisplay     → w500, w600, w700
-//   PlusJakartaSans  → w400, w500, w600, w700
-// In app code prefer Theme.of(context).textTheme / MeritTypography.*
-class MeritType {
-  static const display = 'ClashDisplay';
-  static const body = 'PlusJakartaSans';
-  static TextStyle clash(double size, {FontWeight w = FontWeight.w700, Color? c}) =>
-      TextStyle(fontFamily: display, fontSize: size, fontWeight: w,
-                letterSpacing: size >= 64 ? -size * 0.04 : -size * 0.02,
-                height: 1.0, color: c);
-  static TextStyle text(double size, {FontWeight w = FontWeight.w500, Color? c}) =>
-      TextStyle(fontFamily: body, fontSize: size, fontWeight: w, height: 1.5, color: c);
-}</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 03 — SIGNATURE LOOK ============ -->
-      <section class="sec" id="look" data-screen-label="Signature Look">
-        <span class="kicker k">03 — Foundations</span>
-        <h2>The signature look.</h2>
-        <p class="lead">Get borders, shadows and radii right and everything else follows. This is what makes something <em>look like Merit</em>.</p>
-
-        <h3 class="subhead">Hard shadows — zero blur, offset down-right</h3>
-        <p class="note">The defining detail. Bigger offset = more important. Never use soft/blurred Material elevation.</p>
-        <div class="shadowRamp">
-          <div class="sd" style="box-shadow:2px 2px 0 #000">2px<br/>chips</div>
-          <div class="sd" style="box-shadow:4px 4px 0 #000">4px<br/>cards</div>
-          <div class="sd" style="box-shadow:6px 6px 0 #000">6px<br/>feature</div>
-          <div class="sd" style="box-shadow:10px 10px 0 #000">10px<br/>hero</div>
-          <div class="sd" style="box-shadow:4px 4px 0 #8E55D7;border-color:#8E55D7">accent<br/>selected</div>
-        </div>
-
-        <h3 class="subhead">Borders &amp; radii</h3>
-        <table class="spec">
-          <thead><tr><th>Property</th><th>Value</th><th>Where</th></tr></thead>
-          <tbody>
-            <tr><td>Border</td><td><code>2px solid #000</code></td><td>everything (3px hero · 1.5px tiny chips)</td></tr>
-            <tr><td>Shadow — small</td><td><code>2–3px 2–3px 0 #000</code></td><td>chips, inputs</td></tr>
-            <tr><td>Shadow — card</td><td><code>4–5px 4–5px 0 #000</code></td><td>content cards</td></tr>
-            <tr><td>Shadow — hero</td><td><code>6px … 14px 0 #000</code></td><td>pricing, phone, CTA</td></tr>
-            <tr><td>Radius — pill</td><td><code>999px</code></td><td>buttons, toggles, tags, progress</td></tr>
-            <tr><td>Radius — card</td><td><code>18–28px</code></td><td>content cards</td></tr>
-            <tr><td>Radius — large frame</td><td><code>32–46px</code></td><td>phone bezel, image frames</td></tr>
-            <tr><td>Radius — icon chip</td><td><code>8–16px</code></td><td>square badges/icons</td></tr>
-          </tbody>
-        </table>
-
-        <h3 class="subhead">Selected &amp; hover states</h3>
-        <p class="note">When an element is selected or focused, swap the shadow <em>and</em> border from black to the accent. On web, hover lifts <span class="inlineCode">translate(-2px,-2px)</span> and grows the shadow. Hover a card below:</p>
-        <div class="demoRow" style="margin-top:18px">
-          <div class="card" style="padding:18px 22px;cursor:pointer"><b style="font-family:var(--font-display)">Default</b><div class="note" style="margin-top:4px">black border + 4px shadow</div></div>
-          <div class="card" style="padding:18px 22px;border-color:#8E55D7;box-shadow:4px 4px 0 #8E55D7;cursor:pointer"><b style="font-family:var(--font-display);color:#6E36B8">Selected</b><div class="note" style="margin-top:4px">purple border + purple shadow</div></div>
-        </div>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.merit-card{
-  background:#fff; border:2px solid var(--line); border-radius:18px;
-  box-shadow:4px 4px 0 var(--line);
-}
-.merit-card.selected{ border-color:var(--purple); box-shadow:4px 4px 0 var(--purple); }
-.merit-card:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--line); }</code></pre>
-            <pre hidden><code>/// The Merit "sticker box": black border + hard offset shadow, NO blur.
-BoxDecoration meritBox({
-  Color fill = MeritColors.white, double radius = 18, double offset = 4,
-  Color border = MeritColors.line, Color? shadow,
-}) => BoxDecoration(
-  color: fill,
-  borderRadius: BorderRadius.circular(radius),
-  border: Border.all(color: border, width: 2),
-  boxShadow: [
-    BoxShadow(color: shadow ?? MeritColors.line,
-              offset: Offset(offset, offset), blurRadius: 0), // blurRadius:0 is mandatory
-  ],
-);
-// Selected / focused: accent border + accent shadow
-final selected = meritBox(border: MeritColors.purple, shadow: MeritColors.purple);</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 04 — SPACING & LAYOUT ============ -->
-      <section class="sec" id="space" data-screen-label="Spacing & Layout">
-        <span class="kicker">04 — Foundations</span>
-        <h2>Spacing &amp; layout.</h2>
-        <p class="lead">A 4-pt scale (<span class="inlineCode">MeritSpace</span> / <span class="inlineCode">--merit-space-*</span>). Card padding uses 16–24; section gaps use 24–48. Radii collapse to seven named steps — never a one-off pixel value.</p>
-
-        <h3 class="subhead">Spacing scale</h3>
-        <div class="spaceRamp">
-          <div class="sp"><i style="width:4px;height:24px"></i><span>1 · 4</span></div>
-          <div class="sp"><i style="width:8px;height:24px"></i><span>2 · 8</span></div>
-          <div class="sp"><i style="width:12px;height:24px"></i><span>3 · 12</span></div>
-          <div class="sp"><i style="width:16px;height:24px"></i><span>4 · 16</span></div>
-          <div class="sp"><i style="width:20px;height:24px"></i><span>5 · 20</span></div>
-          <div class="sp"><i style="width:24px;height:24px"></i><span>6 · 24</span></div>
-          <div class="sp"><i style="width:32px;height:24px"></i><span>8 · 32</span></div>
-          <div class="sp"><i style="width:40px;height:24px"></i><span>10 · 40</span></div>
-          <div class="sp"><i style="width:48px;height:24px"></i><span>12 · 48</span></div>
-          <div class="sp"><i style="width:64px;height:24px"></i><span>16 · 64</span></div>
-        </div>
-
-        <h3 class="subhead">Radius scale</h3>
-        <table class="spec">
-          <thead><tr><th>Token</th><th>Value</th><th>Where</th></tr></thead>
-          <tbody>
-            <tr><td>xs</td><td><code>6px</code></td><td>tiny chips</td></tr>
-            <tr><td>sm</td><td><code>10px</code></td><td>icon chips</td></tr>
-            <tr><td>md</td><td><code>14px</code></td><td>inputs, quiz option rows</td></tr>
-            <tr><td>lg</td><td><code>18px</code></td><td>cards</td></tr>
-            <tr><td>xl</td><td><code>24px</code></td><td>sheets, feature cards</td></tr>
-            <tr><td>2xl</td><td><code>32px</code></td><td>frames, phone bezel</td></tr>
-            <tr><td>pill</td><td><code>999px</code></td><td>buttons, toggles, tags</td></tr>
-          </tbody>
-        </table>
-
-        <h3 class="subhead">Touch target</h3>
-        <p class="note">Every tappable control keeps a minimum <strong>48dp / 44pt</strong> hit area, even when the visual chip is smaller — expand padding, don't shrink the target.</p>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>padding: var(--merit-space-4);      /* 16px card padding */
-gap: var(--merit-space-6);          /* 24px section gap */
-border-radius: var(--merit-radius-lg);
-min-height: var(--merit-touch-min-target);   /* 48px */</code></pre>
-            <pre hidden><code>Padding.all(MeritSpace.space4)               // 16
-SizedBox(height: MeritSpace.space6)          // 24 section gap
-BorderRadius.circular(MeritRadii.lg)         // 18
-ConstrainedBox(constraints: BoxConstraints(
-  minHeight: MeritTouch.minTarget))          // 48</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 05 — MOTION ============ -->
-      <section class="sec" id="motion" data-screen-label="Motion">
-        <span class="kicker y">05 — Foundations</span>
-        <h2>Motion has a purpose, or it's off.</h2>
-        <p class="lead">Four durations, one curve for entering, a faster one for leaving. Click a box below to see the timing; every one collapses to an instant opacity change when <span class="inlineCode">prefers-reduced-motion</span> is on — try your OS setting.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Live · click to play</span>
-          <div class="motionRow">
-            <div class="motionChip"><b>fast</b><span>120ms · press</span><div class="motionBox fast" onclick="this.classList.toggle('play')"></div></div>
-            <div class="motionChip"><b>base</b><span>180ms · toggle, tab</span><div class="motionBox base" onclick="this.classList.toggle('play')"></div></div>
-            <div class="motionChip"><b>slow</b><span>280ms · sheet, flip half</span><div class="motionBox slow" onclick="this.classList.toggle('play')"></div></div>
-          </div>
-        </div>
-
-        <table class="spec">
-          <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
-          <tbody>
-            <tr><td>instant</td><td><code>80ms</code></td><td>micro state flips</td></tr>
-            <tr><td>fast</td><td><code>120ms</code></td><td>press feedback</td></tr>
-            <tr><td>base</td><td><code>180ms</code></td><td>toggle, tab switch</td></tr>
-            <tr><td>slow</td><td><code>280ms</code></td><td>sheet open, card-flip half</td></tr>
-            <tr><td>celebrate</td><td><code>600ms</code></td><td>grade reveal, level-up</td></tr>
-            <tr><td>standard easing</td><td><code>cubic-bezier(.2,.7,.2,1)</code></td><td>entering</td></tr>
-            <tr><td>exit easing</td><td>70% of the enter duration</td><td>leaving — exits read faster than entrances</td></tr>
-          </tbody>
-        </table>
-
-        <div class="dd">
-          <div class="col do">
-            <h4><span class="badge">✓</span> Do</h4>
-            <ul>
-              <li>Gate every non-essential animation on reduced motion — collapse to an opacity fade ≤120ms.</li>
-              <li>Animate 1–2 elements per view, transform/opacity only.</li>
-              <li>Let exits finish faster than entrances.</li>
-            </ul>
-          </div>
-          <div class="col dont">
-            <h4><span class="badge">✕</span> Don't</h4>
-            <ul>
-              <li>Spin, parallax, or 3D-flip when reduced motion is on.</li>
-              <li>Animate width/height/layout — transform only.</li>
-              <li>Use one duration for every transition regardless of size.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 06 — BUTTONS ============ -->
-      <section class="sec" id="buttons" data-screen-label="Buttons">
-        <span class="kicker">06 — Components</span>
-        <h2>Buttons</h2>
-        <p class="lead">Pill shape, 2px border, hard shadow, Clash Display label. Hover lifts; press pushes in. Try them:</p>
-
-        <div class="demo">
-          <span class="demoLabel">Live · hover &amp; press</span>
-          <div class="demoRow">
-            <button class="btn primary">Start lesson <span class="a"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></button>
-            <button class="btn accent">Earn 40 XP</button>
-            <button class="btn dark">Join cohort <span class="a"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></button>
-            <button class="btn mint">Saved ✓</button>
-            <button class="btn ghost">Skip</button>
-            <button class="btn link">View all</button>
-          </div>
-        </div>
-
-        <div class="anat">
-          <div class="card" style="padding:34px;display:grid;place-items:center;background:var(--surface-2)">
-            <button class="btn primary" style="font-size:17px">Start lesson <span class="a"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></button>
-          </div>
-          <div class="annos">
-            <div class="anno"><b>1</b><div><strong>Pill radius 999px</strong> — always fully rounded.</div></div>
-            <div class="anno"><b>2</b><div><strong>2px black border</strong> + <strong>4px hard shadow</strong>.</div></div>
-            <div class="anno"><b>3</b><div><strong>Clash Display 700</strong>, ~15px label.</div></div>
-            <div class="anno"><b>4</b><div><strong>Yellow arrow chip</strong> on primary/dark variants.</div></div>
-          </div>
-        </div>
-
-        <table class="spec">
-          <thead><tr><th>Variant</th><th>Fill</th><th>Text</th><th>Use</th></tr></thead>
-          <tbody>
-            <tr><td>Primary</td><td>Purple</td><td>White</td><td>main action</td></tr>
-            <tr><td>Accent</td><td>Yellow</td><td>Ink</td><td>rewards · "Start Learning"</td></tr>
-            <tr><td>Dark</td><td>Ink</td><td>Cream + yellow arrow</td><td>secondary hero CTA</td></tr>
-            <tr><td>Ghost</td><td>Transparent</td><td>Ink</td><td>secondary</td></tr>
-            <tr><td>Link</td><td>—</td><td>Purple underline</td><td>tertiary</td></tr>
-          </tbody>
-        </table>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.btn{border:2px solid var(--line);border-radius:99px;padding:13px 22px;
-  font-family:'Clash Display';font-weight:700;font-size:15px;
-  box-shadow:4px 4px 0 var(--line);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
-.btn.primary{background:var(--purple);color:#fff}
-.btn.accent {background:var(--yellow);color:var(--ink)}
-.btn.dark   {background:var(--ink);color:var(--cream)}
-.btn.ghost  {background:transparent;color:var(--ink)}
-.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--line)}
-.btn.dark .arrow{width:22px;height:22px;border-radius:50%;background:var(--yellow);
-  color:var(--ink);display:grid;place-items:center}</code></pre>
-            <pre hidden><code>Widget meritButton(String label, {VoidCallback? onTap,
-    Color fill = MeritColors.purple, Color fg = Colors.white, bool arrow = true}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-      decoration: meritBox(fill: fill, radius: 99, offset: 4),
-      child: Row(mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(label, style: MeritType.clash(15, c: fg)),
-          if (arrow) Padding(padding: const EdgeInsets.only(left: 8),
-            child: Text('→', style: MeritType.clash(15, c: fg))),
-        ]),
-    ),
-  );
-}</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 07 — CARDS ============ -->
-      <section class="sec" id="cards" data-screen-label="Cards">
-        <span class="kicker">07 — Components</span>
-        <h2>Cards</h2>
-        <p class="lead">The <span class="inlineCode">meritBox</span> with 14–26px padding. Fill colour signals type: white/cream = neutral, purple/ink = featured, yellow = reward/quest, mint = success. Featured cards get a deeper shadow and may carry a clipped decorative shape.</p>
-
-        <div class="demoGrid" style="grid-template-columns:repeat(2,1fr);margin-top:22px">
-          <div class="card" style="padding:22px">
-            <span class="pill k" style="font-size:10px">Neutral</span>
-            <h4 style="font-size:20px;margin-top:14px">Product Design 101</h4>
-            <p class="note" style="margin-top:6px">Beginner · 4 months</p>
-            <div class="progress" style="margin-top:16px"><i data-w="28%"></i></div>
-          </div>
-          <div class="card feat" style="padding:22px;background:var(--purple);color:#fff;position:relative;overflow:hidden">
-            <svg style="position:absolute;right:-30px;bottom:-30px;width:140px;opacity:.18" viewBox="0 0 100 100"><polygon points="50,4 56,40 92,28 64,52 96,72 58,64 60,98 50,68 40,98 42,64 4,72 36,52 8,28 44,40" fill="#FFCC00"/></svg>
-            <span class="pill y" style="font-size:10px">Featured</span>
-            <h4 style="font-size:20px;margin-top:14px;color:#fff">This week's quest</h4>
-            <p class="note" style="margin-top:6px;color:rgba(255,255,255,.85)">Finish 3 quizzes · +120 merit</p>
-          </div>
-          <div class="card" style="padding:22px;background:var(--yellow)">
-            <span class="pill k" style="font-size:10px">Reward</span>
-            <h4 style="font-size:20px;margin-top:14px">Daily bonus unlocked</h4>
-            <p class="note" style="margin-top:6px;color:#312A31">🪙 +50 merit points</p>
-          </div>
-          <div class="card" style="padding:22px;background:var(--mint)">
-            <span class="pill k" style="font-size:10px">Success</span>
-            <h4 style="font-size:20px;margin-top:14px">Stage cleared</h4>
-            <p class="note" style="margin-top:6px;color:#312A31">9 / 10 correct · streak safe 🔥</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 08 — INPUTS ============ -->
-      <section class="sec" id="inputs" data-screen-label="Inputs">
-        <span class="kicker">08 — Components</span>
-        <h2>Inputs &amp; fields</h2>
-        <p class="lead">Radius <strong>14px</strong> (not pill). Uppercase micro-label above. Focus swaps the border + shadow to purple — click into a field to see it.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Live · focus a field</span>
-          <div class="demoGrid" style="grid-template-columns:1fr 1fr;max-width:640px">
-            <div class="field"><label>Full name</label><div class="input"><input type="text" placeholder="Nethmi Perera" /></div></div>
-            <div class="field"><label>Phone</label><div class="input"><span class="pre">+94</span><input type="text" placeholder="77 123 4567" /></div></div>
-            <div class="field" style="grid-column:span 2"><label>School / district</label><div class="input"><input type="text" placeholder="Search your school…" /><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#7a6c7a" stroke-width="2"/></svg></div></div>
-          </div>
-        </div>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.field label{font-size:11px;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--text-dim)}
-.input{display:flex;align-items:center;gap:10px;background:#fff;
-  border:2px solid var(--line);border-radius:14px;padding:12px 14px;
-  font-size:14px;font-weight:600;box-shadow:3px 3px 0 var(--line)}
-.input:focus-within{border-color:var(--purple);box-shadow:3px 3px 0 var(--purple)}
-.input .pre{font-weight:700;padding-right:10px;border-right:1.5px solid var(--line)} /* +94 */</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 09 — PILLS ============ -->
-      <section class="sec" id="pills" data-screen-label="Pills">
-        <span class="kicker">09 — Components</span>
-        <h2>Pills &amp; tags</h2>
-        <p class="lead">Tiny rounded-full labels, 1.5–2px border. Colour-coded for languages, tiers, counts, timers and categories.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Variants</span>
-          <div class="demoRow">
-            <span class="pill p">Curriculum</span>
-            <span class="pill y">⚡ 40 XP</span>
-            <span class="pill m">✓ Done</span>
-            <span class="pill k">♛ PRO</span>
-            <span class="pill">EN · SI · TA</span>
-            <span class="pill">⏱ 4 MIN</span>
-            <span class="pill">3 of 5</span>
-            <span class="pill k">+12</span>
-          </div>
-        </div>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.pill{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--ink);
-  border:1.5px solid var(--line);border-radius:99px;padding:4px 10px;
-  font-size:11px;font-weight:700;letter-spacing:.06em}
-.pill.p{background:var(--purple);color:#fff}
-.pill.y{background:var(--yellow);color:var(--ink)}
-.pill.m{background:var(--mint);color:var(--ink)}
-.pill.k{background:var(--ink);color:var(--cream)}</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 10 — PROGRESS ============ -->
-      <section class="sec" id="progress" data-screen-label="Progress">
-        <span class="kicker">10 — Components</span>
-        <h2>Progress &amp; steppers</h2>
-        <p class="lead">Bordered track + accent fill with a <strong>black right-edge divider</strong> on the fill. Bars animate into view.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Live · animates on scroll</span>
-          <div class="demoCol" style="max-width:520px">
-            <div style="display:grid;grid-template-columns:60px 1fr 36px;gap:12px;align-items:center"><b style="font-family:var(--font-display);font-size:13px">UI</b><div class="progress"><i data-w="78%"></i></div><span style="font-family:var(--font-display);font-weight:700;font-size:13px">78</span></div>
-            <div style="display:grid;grid-template-columns:60px 1fr 36px;gap:12px;align-items:center"><b style="font-family:var(--font-display);font-size:13px">Type</b><div class="progress"><i style="background:var(--yellow)" data-w="54%"></i></div><span style="font-family:var(--font-display);font-weight:700;font-size:13px">54</span></div>
-            <div style="display:grid;grid-template-columns:60px 1fr 36px;gap:12px;align-items:center"><b style="font-family:var(--font-display);font-size:13px">Color</b><div class="progress"><i style="background:var(--mint)" data-w="92%"></i></div><span style="font-family:var(--font-display);font-weight:700;font-size:13px">92</span></div>
-          </div>
-          <div style="margin-top:24px">
-            <div class="note" style="font-weight:700;text-transform:uppercase;letter-spacing:.16em;font-size:10px;margin-bottom:10px">Stepper · stage 3 of 5</div>
-            <div class="stepper" style="max-width:340px">
-              <i class="done"></i><i class="done"></i><i class="on"></i><i></i><i></i>
-            </div>
-            <div class="note" style="margin-top:8px;font-size:11px">done = mint · current = purple · todo = white</div>
-          </div>
-        </div>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.progress{height:14px;background:#fff;border:2px solid var(--line);
-  border-radius:99px;overflow:hidden;box-shadow:2px 2px 0 var(--line)}
-.progress > i{display:block;height:100%;background:var(--purple);
-  border-right:2px solid var(--line)} /* the black divider */
-.stepper i{height:8px;border-radius:99px;border:1.5px solid var(--line);background:#fff;flex:1;max-width:46px}
-.stepper i.on{background:var(--purple)} .stepper i.done{background:var(--mint)}</code></pre>
-            <pre hidden><code>Widget meritProgress(double pct, {Color fill = MeritColors.purple}) => Container(
-  height: 14, decoration: meritBox(radius: 99, offset: 2),
-  clipBehavior: Clip.antiAlias,
-  child: FractionallySizedBox(
-    alignment: Alignment.centerLeft, widthFactor: pct.clamp(0, 1),
-    child: Container(decoration: BoxDecoration(color: fill,
-      border: const Border(right: BorderSide(color: MeritColors.line, width: 2)))),
+<pre hidden><code>final c = context.meritColors;
+DecoratedBox(
+  decoration: BoxDecoration(
+    color: c.surfaceDefault,
+    borderRadius: BorderRadius.circular(MeritRadii.xl),
+    boxShadow: c.elevationE1, // List&lt;BoxShadow&gt;, themed
   ),
-);</code></pre>
-          </div>
-        </div>
-      </section>
+  child: child,
+);</code></pre></div></div>
+</section>
 
-      <!-- ============ 11 — TOGGLES ============ -->
-      <section class="sec" id="toggles" data-screen-label="Toggles">
-        <span class="kicker">11 — Components</span>
-        <h2>Toggles &amp; checkboxes</h2>
-        <p class="lead">Toggle: 46×24 pill, ink track → mint when on. Checkbox: 24×24 rounded-7px. A <strong>form selection</strong> is purple fill + white ✓. A <strong>completion</strong> (todo item, stage cleared) is mint fill + ink ✓, so "selected" never reads as "achieved" (decision D5). The toggles and form checkboxes are clickable below.</p>
+<!-- ======================= 04 SPACE ======================= -->
+<section class="sec" id="space">
+  <div class="secHead"><span class="eyebrow">04 · Spacing &amp; layout</span>
+    <h2>A 4-point rhythm.</h2>
+    <p class="lede">Spacing steps by 4. Expressive screens (student app, landing) pad cards by 16–24. Compact screens (admin) pad by 8–12. Touch targets are at least 48&nbsp;dp on every platform.</p>
+  </div>
+  <div class="panel"><div id="spaceScale" class="stack"></div></div>
+</section>
 
-        <div class="demo">
-          <span class="demoLabel">Live · click them</span>
-          <div class="demoRow" style="gap:28px">
-            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="toggle on"></span> Notifications</div>
-            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="toggle"></span> Daily streak</div>
-            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="toggle on"></span> Cohort feed</div>
-          </div>
-          <div class="demoRow" style="gap:28px;margin-top:20px">
-            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check on">✓</span> Remember me</div>
-            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check"></span> Email past papers</div>
-          </div>
-          <div class="demoRow" style="gap:28px;margin-top:20px">
-            <div style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px"><span class="check done" aria-hidden="true">✓</span> Stage 2 cleared <span class="note" style="margin:0;font-weight:500">(completion — static)</span></div>
-          </div>
-        </div>
-      </section>
+<!-- ======================= 05 MOTION ======================= -->
+<section class="sec" id="motion">
+  <div class="secHead"><span class="eyebrow">05 · Motion</span>
+    <h2>Motion has a job, or it's off.</h2>
+    <p class="lede">Presses run 120&nbsp;ms, toggles and tabs 180&nbsp;ms, sheets and card flips 280&nbsp;ms, and celebrations 600&nbsp;ms. All motion uses the <code>standard</code> curve. Under reduced motion there is no shimmer, no twinkle and no flip (a crossfade replaces it).</p>
+  </div>
+  <div class="grid g3">
+    <div class="panel"><span class="label">Press</span><button class="btn primary">Press me</button><p class="muted">Moves down 1&nbsp;px and drops to e0.</p></div>
+    <div class="panel"><span class="label">Toggle · 180ms</span><button class="toggle on" aria-pressed="true" aria-label="Demo toggle"></button></div>
+    <div class="panel"><span class="label">Celebrate · 600ms</span><div class="row"><span class="grade" style="background:var(--merit-grade-a-bg);color:var(--merit-grade-a-fg)">A</span><img class="sparkle twinkle" src="assets/v3/motifs/sparkle.svg" alt="" /></div></div>
+  </div>
+</section>
 
-      <!-- ============ 12 — TAB BAR ============ -->
-      <section class="sec" id="tabbar" data-screen-label="Tab Bar">
-        <span class="kicker">12 — Components</span>
-        <h2>Bottom tab bar</h2>
-        <p class="lead">Floating bar inset from the edges. Five items; active item is a purple rounded chip with white glyph. Shown in both modes:</p>
+<!-- ======================= 06 MODES ======================= -->
+<section class="sec" id="modes">
+  <div class="secHead"><span class="eyebrow">06 · Educational theming</span>
+    <h2><span class="u">Calm</span> to study, energy to celebrate.</h2>
+    <p class="lede">Merit is both an exam room and a game, and each screen picks one mode (D15). The full criteria are in <code>research/v3/edu-theming-criteria.md</code>.</p>
+  </div>
+  <div class="grid g2">
+    <div class="panel">
+      <span class="modeTag calm"><i class="ph-fill ph-moon-stars"></i> Calm</span>
+      <h3 style="margin-top:10px">Quiz-taking, paper mode, notes</h3>
+      <ul class="muted"><li>Canvas or white surfaces, slate text, violet selection</li><li>No sparkles, patchwork or brush underlines</li><li>One orange action at most ("Submit")</li><li>The timer stays neutral until 5&nbsp;min, then turns butter, then red</li></ul>
+    </div>
+    <div class="panel">
+      <span class="modeTag energy"><i class="ph-fill ph-lightning"></i> Energy</span>
+      <h3 style="margin-top:10px">Home, rewards, results, leaderboard, landing</h3>
+      <ul class="muted"><li>Orange CTAs, butter coins, an orange flame</li><li>Patchwork tiles, sparkles, the brush underline</li><li>Celebration motion up to 600&nbsp;ms</li><li>At most one Achiever band per screen</li></ul>
+    </div>
+  </div>
+</section>
 
-        <div class="split">
-          <div class="frame light">
-            <span class="ftag">Light</span>
-            <div class="tabbar">
-              <div class="tb active"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-8 9 8v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="2"/></svg></span>Home</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>Study</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="2"/></svg></span>Quiz</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Points</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2"/></svg></span>You</div>
-            </div>
-          </div>
-          <div class="frame dark">
-            <span class="ftag">Dark</span>
-            <div class="tabbar dark">
-              <div class="tb active"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-8 9 8v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="2"/></svg></span>Home</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>Study</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="2"/></svg></span>Quiz</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Points</div>
-              <div class="tb"><span class="g"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2"/></svg></span>You</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 13 — STATES & FOCUS ============ -->
-      <section class="sec" id="states" data-screen-label="States & Focus">
-        <span class="kicker">13 — Components</span>
-        <h2>States &amp; focus.</h2>
-        <p class="lead">State is never colour alone — pair it with an icon, text, or the border/shadow swap. Keyboard focus is a <strong>3px purple ring, 2px offset</strong>, always visible, never suppressed. Tab through the row below.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Live · tab through</span>
-          <div class="focusDemo">
-            <button class="btn primary">Primary</button>
-            <button class="btn ghost">Ghost</button>
-            <a href="#states" class="pill p">Link pill</a>
-            <span class="check" tabindex="0"></span>
-            <span class="toggle" tabindex="0"></span>
-          </div>
-        </div>
-
-        <table class="spec">
-          <thead><tr><th>State</th><th>Signal</th><th>Never</th></tr></thead>
-          <tbody>
-            <tr><td>Selected</td><td>Purple border + shadow, filled chip</td><td>Colour tint alone</td></tr>
-            <tr><td>Correct / success</td><td>Mint fill <strong>+ ✓ icon</strong></td><td>Green with no icon</td></tr>
-            <tr><td>Wrong / error</td><td>Red border/fill <strong>+ ✕ icon</strong> + error text</td><td>Red with no icon or copy</td></tr>
-            <tr><td>Disabled</td><td>40% opacity, no shadow, no tap action</td><td>Full colour that still looks tappable</td></tr>
-            <tr><td>Focus (keyboard)</td><td>3px purple ring, 2px offset, ≥3:1 contrast</td><td>Suppressing the default outline</td></tr>
-          </tbody>
-        </table>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>:focus-visible{
-  outline: 3px solid var(--merit-focus-ring);
-  outline-offset: 2px;
+<!-- ======================= 07 BUTTONS ======================= -->
+<section class="sec" id="buttons">
+  <div class="secHead"><span class="eyebrow">07 · Buttons</span><h2>Pills, always.</h2>
+    <p class="lede">Sizes are S&nbsp;36, M&nbsp;48 and L&nbsp;56. Loading swaps the label for a spinner and keeps the width. Disabled sets opacity to .4 and removes elevation. Icons are Phosphor at 1.15em.</p></div>
+  <div class="panel">
+    <span class="label">Variants</span>
+    <div class="row"><button class="btn primary">Primary</button><button class="btn strong">Strong</button><button class="btn accent">Accent</button><button class="btn inverse">Inverse</button><button class="btn ghost">Ghost</button><button class="btn link">Link</button></div>
+    <span class="label">Sizes &amp; states</span>
+    <div class="row"><button class="btn primary sm">Small</button><button class="btn primary">Medium</button><button class="btn primary lg">Large <i class="ph-bold ph-arrow-right"></i></button><button class="btn primary loading">Saving</button><button class="btn primary" disabled>Disabled</button><button class="btn icon" aria-label="Bookmark"><i class="ph ph-bookmark-simple"></i></button></div>
+  </div>
+  <div class="codeWrap"><div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div><div class="codeBody"><button class="copyBtn"><span class="lbl">Copy</span></button>
+<pre><code>.btn-primary {
+  min-height: var(--merit-size-button-md);
+  border-radius: var(--merit-radius-pill);
+  background: var(--merit-action-primary);
+  color: var(--merit-text-on-primary);        /* ink, never white (D9) */
+  box-shadow: var(--merit-elevation-e1);
 }
-.disabled{ opacity: var(--merit-opacity-disabled); box-shadow: none; pointer-events: none; }</code></pre>
-            <pre hidden><code>Semantics(button: true, enabled: !disabled, selected: isSelected,
-  child: FocusableActionDetector(
-    child: AnimatedOpacity(
-      opacity: disabled ? MeritOpacity.disabled : 1,
-      duration: MeritMotion.fast, child: content),
-  ));</code></pre>
-          </div>
-        </div>
-      </section>
+.btn-primary:hover { background: var(--merit-action-primary-pressed); }</code></pre>
+<pre hidden><code>final c = context.meritColors;
+FilledButton(
+  style: FilledButton.styleFrom(
+    backgroundColor: c.actionPrimary,
+    foregroundColor: c.textOnPrimary,
+    minimumSize: const Size.fromHeight(MeritSize.buttonMd),
+    shape: const StadiumBorder(),
+    textStyle: MeritTypeScale.titleSm,
+  ),
+  onPressed: onStart,
+  child: const Text('Start practice'),
+);</code></pre></div></div>
+</section>
 
-      <!-- ============ 14 — GAMIFICATION ============ -->
-      <section class="sec" id="game" data-screen-label="Gamification">
-        <span class="kicker y">14 — Patterns</span>
-        <h2>Gamification widgets</h2>
-        <p class="lead">The heart of the app. Make it feel earned — streaks, points, tiers, ribbons and leaderboards everywhere.</p>
+<!-- ======================= 08 CARDS ======================= -->
+<section class="sec" id="cards">
+  <div class="secHead"><span class="eyebrow">08 · Cards</span><h2>Borderless and lifted.</h2>
+    <p class="lede">Neutral is white with e1. Feature is the violet band. Reward is butter. Success is sage-subtle. Selected adds a 2&nbsp;px violet inset. Interactive cards rise to e2 on hover.</p></div>
+  <div class="grid g4">
+    <div class="card hover"><div class="row"><span class="thumb"><img src="assets/v3/tiles/biology.svg" alt="" /></span><div><h4>Cell biology</h4><span class="muted">12 of 18 subtopics</span></div></div><div class="progress" style="margin-top:14px"><i data-w="66%"></i></div></div>
+    <div class="card feature"><span class="seal"><i class="ph-fill ph-seal-check"></i> Achiever</span><h4 style="margin-top:12px">Adaptive mode</h4><p class="muted" style="margin:4px 0 0">Your weak spots, first.</p></div>
+    <div class="card reward"><div class="row"><i class="ph-fill ph-coins" style="font-size:28px"></i><span class="num" style="font-size:28px">+120</span></div><h4 style="margin-top:6px">Points earned today</h4></div>
+    <div class="card selected"><h4>Paper mode</h4><p class="muted" style="margin:4px 0 0">A timed past paper. 2 attempts left today.</p></div>
+  </div>
+</section>
 
-        <h3 class="subhead">Streak &amp; coin chips</h3>
-        <div class="demo">
-          <div class="demoRow" style="gap:18px">
-            <span class="chip-streak">🔥 14</span>
-            <span class="chip-coins">🪙 2,840</span>
-            <span class="chip-streak">★ 4.9</span>
-          </div>
-        </div>
+<!-- ======================= 09 INPUTS ======================= -->
+<section class="sec" id="inputs">
+  <div class="secHead"><span class="eyebrow">09 · Inputs &amp; search</span><h2>Labels always visible.</h2>
+    <p class="lede">Inputs have a 1.5&nbsp;px edge at ≥3:1 and a 16 radius. Focus adds a violet border and a soft ring. Help and error text sit below the field, and errors carry an icon.</p></div>
+  <div class="grid g2">
+    <div class="panel stack">
+      <div class="field"><label for="f1">Full name</label><input id="f1" class="input" placeholder="As on your NIC" /><span class="help">Shown on the leaderboard.</span></div>
+      <div class="field err"><label for="f2">Phone</label><div class="phone"><span class="cc">+94</span><input id="f2" class="input" value="77 12" aria-invalid="true" /></div><span class="help"><i class="ph-fill ph-warning-circle"></i> Enter 9 digits after +94.</span></div>
+      <div class="field"><label>Verification code</label><div class="otp"><input class="input" value="4" aria-label="Digit 1" /><input class="input" value="2" aria-label="Digit 2" /><input class="input" aria-label="Digit 3" /><input class="input" aria-label="Digit 4" /><input class="input" aria-label="Digit 5" /><input class="input" aria-label="Digit 6" /></div></div>
+    </div>
+    <div class="panel stack">
+      <span class="label">Search pill</span>
+      <div class="search"><i class="ph ph-magnifying-glass lead"></i><input aria-label="Search" placeholder="Search subject, topic, past paper…" /><button aria-label="Search"><i class="ph-bold ph-arrow-right"></i></button></div>
+      <p class="muted">A white pill with e2 and a round orange action. Use it for subject, topic and notes search.</p>
+    </div>
+  </div>
+</section>
 
-        <h3 class="subhead">Streak ribbon — 7-day</h3>
-        <div class="demo">
-          <div class="ribbon">
-            <div class="d done"><span class="dot">✓</span>M</div>
-            <div class="d done"><span class="dot">✓</span>T</div>
-            <div class="d done"><span class="dot">✓</span>W</div>
-            <div class="d done"><span class="dot">✓</span>T</div>
-            <div class="d today"><span class="dot">!</span>F</div>
-            <div class="d future"><span class="dot"></span>S</div>
-            <div class="d future"><span class="dot"></span>S</div>
-          </div>
-          <p class="note" style="margin-top:14px;font-size:11px">done = purple ✓ · today = yellow ! · future = dashed empty</p>
-        </div>
+<!-- ======================= 10 CHIPS ======================= -->
+<section class="sec" id="chips">
+  <div class="secHead"><span class="eyebrow">10 · Chips &amp; badges</span><h2>Filter, tag, celebrate.</h2>
+    <p class="lede">Filter chips have an ink outline, and the selected one fills violet. Badges are flat, at least 24 high, with an 11.5&nbsp;px label. Subject badges carry their patchwork tile.</p></div>
+  <div class="panel">
+    <span class="label">Filter chips · grade</span>
+    <div class="chips" role="group" aria-label="Grade filter"><button class="chip" aria-pressed="false">Grade 10</button><button class="chip" aria-pressed="true">Grade 11 · O/L</button><button class="chip" aria-pressed="false">Grade 12</button><button class="chip" aria-pressed="false">Grade 13 · A/L</button></div>
+    <span class="label">Badges</span>
+    <div class="row"><span class="badge orange"><i class="ph-fill ph-flame"></i> Hot streak</span><span class="badge violet">Pro</span><span class="badge sage"><i class="ph-bold ph-check"></i> Done</span><span class="badge butter">+20 bonus</span><span class="badge red">Expired</span><span class="badge outline">2023 paper</span><span class="badge">Draft</span></div>
+    <span class="label">Subject badges</span>
+    <div class="row" id="subjBadges"></div>
+  </div>
+</section>
 
-        <h3 class="subhead">Tier badge &amp; starburst</h3>
-        <div class="demo">
-          <div class="demoRow" style="gap:30px">
-            <div class="tierBadge">
-              <div class="seal">N</div>
-              <div class="info">
-                <div class="lvl">Level 4 · Achiever</div>
-                <div class="nm">Nethmi Perera</div>
-                <div class="pts">2,840 merit · streak 14d</div>
-              </div>
-            </div>
-            <div class="starburst">
-              <svg viewBox="0 0 200 200" width="120" height="120"><g transform="translate(100 100)"><polygon points="0,-92 16,-30 78,-50 36,-2 96,18 32,28 60,86 4,42 -22,98 -28,38 -88,58 -42,12 -98,-12 -38,-22 -78,-72 -18,-44 -16,-92" fill="#8E55D7" stroke="#000" stroke-width="4"/></g></svg>
-              <div class="lbl">Top<br/>10</div>
-            </div>
-          </div>
-        </div>
+<!-- ======================= 11 PROGRESS ======================= -->
+<section class="sec" id="progress">
+  <div class="secHead"><span class="eyebrow">11 · Progress</span><h2>Always show the <span class="u">next</span> step.</h2>
+    <p class="lede">Fills are orange in energy screens and violet in calm screens (quiz progress). Rings carry a tabular number. In the stepper, done is sage with a ✓, current is orange, and to-do is sunken, with a dotted connector between steps.</p></div>
+  <div class="grid g3">
+    <div class="panel stack"><span class="label">Bars</span><div class="progress"><i data-w="72%"></i></div><div class="progress calm"><i data-w="40%"></i></div><div class="progress ok"><i data-w="100%"></i></div><span class="muted">32 of 50 questions today</span></div>
+    <div class="panel"><span class="label">Rings</span><div class="row"><div class="ring" style="--p:64" role="img" aria-label="64 percent"><span>64%</span></div><div class="ring" style="--p:92;--c:var(--merit-feedback-success)" role="img" aria-label="92 percent"><span>92%</span></div></div></div>
+    <div class="panel"><span class="label">Stepper</span><div class="stepper"><span class="st done">✓</span><span class="ln"></span><span class="st done">✓</span><span class="ln"></span><span class="st cur">3</span><span class="ln"></span><span class="st todo">4</span></div></div>
+  </div>
+</section>
 
-        <h3 class="subhead">Leaderboard</h3>
-        <div class="demo" style="background:transparent;border:none;box-shadow:none;padding:0">
-          <div class="lead-board" style="max-width:420px">
-            <div class="lr"><span class="rk">1</span><span class="av" style="background:#FFCC00;color:#312A31">A</span><span class="who">Anjana P.</span><span class="pts">3,910 ★</span></div>
-            <div class="lr"><span class="rk">2</span><span class="av" style="background:#9ED5B7;color:#312A31">R</span><span class="who">Rashmi K.</span><span class="pts">3,420 ★</span></div>
-            <div class="lr you"><span class="rk">3</span><span class="av" style="background:#FFEFD7;color:#312A31">N</span><span class="who">You · Nethmi</span><span class="pts">2,840 ★</span></div>
-            <div class="lr"><span class="rk">4</span><span class="av" style="background:#B3D8FF;color:#312A31">S</span><span class="who">Sahan W.</span><span class="pts">2,610 ★</span></div>
-          </div>
-        </div>
-      </section>
+<!-- ======================= 12 TOGGLES ======================= -->
+<section class="sec" id="toggles">
+  <div class="secHead"><span class="eyebrow">12 · Toggles &amp; checks</span><h2>Selected ≠ achieved.</h2>
+    <p class="lede">D5 still applies. <b>Form selection</b> is violet with a white ✓. <b>Completion</b> (a todo done, a stage cleared) is sage with an ink ✓. The two must never look alike.</p></div>
+  <div class="panel row" style="gap:28px">
+    <div class="row"><button class="toggle" aria-pressed="false" aria-label="Toggle off"></button><button class="toggle on" aria-pressed="true" aria-label="Toggle on"></button></div>
+    <div class="row"><button class="check" aria-label="Select"></button><button class="check on" aria-label="Selected">✓</button><span class="check done" aria-label="Completed">✓</span></div>
+    <div class="row"><span class="radio" role="img" aria-label="Radio off"></span><span class="radio on" role="img" aria-label="Radio on"></span></div>
+  </div>
+</section>
 
-      <!-- ============ 15 — QUIZ COMPONENTS ============ -->
-      <section class="sec" id="quiz" data-screen-label="Quiz Components">
-        <span class="kicker y">15 — Patterns</span>
-        <h2>Quiz components.</h2>
-        <p class="lead">The core loop. Five option states — <strong>idle → selected</strong> before grading, then <strong>correct / wrong / revealed</strong> after. Selected is purple, not mint — mint means "achieved", not "picked" (see toggles). Results always carry an icon, never colour alone.</p>
+<!-- ======================= 13 NAV ======================= -->
+<section class="sec" id="nav">
+  <div class="secHead"><span class="eyebrow">13 · Tab bar &amp; segments</span><h2>Five tabs, one active.</h2>
+    <p class="lede">The bottom bar floats on e2 with a 32 radius. The active tab is a violet-tinted pill with a Fill icon. Labels are at least 11&nbsp;px, targets at least 48&nbsp;dp, and the bar respects the safe area. Segmented controls sit on a sunken track. Language names appear in their own script.</p></div>
+  <div class="grid g2">
+    <div class="panel"><nav class="tabbar" aria-label="Demo tab bar"><a class="on" href="#nav"><i class="ph-fill ph-house"></i>Home</a><a href="#nav"><i class="ph ph-books"></i>Study</a><a href="#nav"><i class="ph ph-exam"></i>Quiz</a><a href="#nav"><i class="ph ph-trophy"></i>Ranks</a><a href="#nav"><i class="ph ph-user"></i>Me</a></nav></div>
+    <div class="panel stack"><div class="seg" role="group" aria-label="Language"><button aria-pressed="true">English</button><button aria-pressed="false" lang="si">සිංහල</button><button aria-pressed="false" lang="ta">தமிழ்</button></div><div class="seg" role="group" aria-label="Range"><button aria-pressed="false">Week</button><button aria-pressed="true">Month</button><button aria-pressed="false">All time</button></div></div>
+  </div>
+</section>
 
-        <div class="demo">
-          <span class="demoLabel">Live · answer states</span>
-          <div class="demoCol" style="max-width:480px">
-            <div class="qopt selected"><span class="num">A</span> Mitochondria <span class="glyph"></span></div>
-            <div class="qopt correct"><span class="num">B</span> Ribosome <span class="glyph">✓</span></div>
-            <div class="qopt wrong"><span class="num">C</span> Golgi apparatus <span class="glyph">✕</span></div>
-            <div class="qopt revealed"><span class="num">D</span> Lysosome <span class="glyph">✓</span></div>
-          </div>
-        </div>
-        <p class="note"><strong>revealed</strong> = the correct option shown after the student picked wrong — dashed mint border, distinct from the selected-and-correct state above it.</p>
+<!-- ======================= 14 OVERLAYS ======================= -->
+<section class="sec" id="overlays">
+  <div class="secHead"><span class="eyebrow">14 · Dialogs &amp; toasts</span><h2>Lifted, never boxed.</h2>
+    <p class="lede">Dialogs and sheets use e3 and a 32 radius over a 50% ink scrim. Toasts are inverse, use e2, last 4&nbsp;s, and carry an icon and at most one action.</p></div>
+  <div class="grid g2">
+    <div class="scrim"><div class="dialog"><h3>Leave this paper?</h3><p class="muted">Your answers are saved, but the timer keeps running.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn ghost sm">Cancel</button><button class="btn primary sm">Leave</button></div></div></div>
+    <div class="stack"><div class="toast"><i class="ph-fill ph-check-circle lead ok"></i>Saved to your flashcards<button class="act">Undo</button></div><div class="toast"><i class="ph-fill ph-wifi-slash lead bad"></i>You're offline. Answers will sync later.</div>
+      <div class="sheet"><div class="grab"></div><h4>Report a question</h4><div class="stack" style="margin-top:10px"><button class="opt"><span class="l"><i class="ph ph-text-aa"></i></span>Typo or wording</button><button class="opt"><span class="l"><i class="ph ph-seal-question"></i></span>Wrong answer key</button></div></div></div>
+  </div>
+</section>
 
-        <h3 class="subhead">Timer</h3>
-        <div class="demo">
-          <div class="demoRow" style="gap:16px">
-            <span class="qtimer safe">04:32</span>
-            <span class="qtimer warn">00:58</span>
-            <span class="qtimer critical">00:09</span>
-          </div>
-        </div>
+<!-- ======================= 15 STATES ======================= -->
+<section class="sec" id="states">
+  <div class="secHead"><span class="eyebrow">15 · States &amp; focus</span><h2>Visible focus, everywhere.</h2>
+    <p class="lede">Focus is a 3&nbsp;px violet outline with a 2&nbsp;px offset (≥3:1 on every surface). Tab through the row below. Hover darkens fills or lifts cards. Disabled is .4 opacity with no elevation.</p></div>
+  <div class="panel row"><button class="btn primary">Tab to me</button><button class="chip" aria-pressed="false">Chip</button><a href="#states">Link</a><input class="input" style="max-width:200px" placeholder="Input" aria-label="Demo input" /><button class="btn ghost" disabled>Disabled</button></div>
+</section>
 
-        <h3 class="subhead">Grade colours</h3>
-        <div class="swGrid">
-          <div class="sw" data-hex="#9ED5B7"><div class="chipc" style="background:#9ED5B7"><span class="role dk">A+ / A</span></div><div class="meta"><div class="nm">grade.a</div><div class="hex">mint.500 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#9CE7C8"><div class="chipc" style="background:#9CE7C8"><span class="role dk">B</span></div><div class="meta"><div class="nm">grade.b</div><div class="hex">mint.400 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#F2D43B"><div class="chipc" style="background:#F2D43B"><span class="role dk">C</span></div><div class="meta"><div class="nm">grade.c</div><div class="hex">yellow.400 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFCC00"><div class="chipc" style="background:#FFCC00"><span class="role dk">D</span></div><div class="meta"><div class="nm">grade.d</div><div class="hex">yellow.500 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#FFB3C8"><div class="chipc" style="background:#FFB3C8"><span class="role dk">E</span></div><div class="meta"><div class="nm">grade.e</div><div class="hex">pink.300 <span class="copytag">CLICK</span></div></div></div>
-          <div class="sw" data-hex="#C4393A"><div class="chipc" style="background:#C4393A"><span class="role">F</span></div><div class="meta"><div class="nm">grade.f</div><div class="hex">red.600 <span class="copytag">CLICK</span></div></div></div>
-        </div>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.qopt.selected{ border-color:var(--merit-action-primary); box-shadow:3px 3px 0 var(--merit-action-primary); }
-.qopt.correct { background:var(--merit-quiz-option-correct-bg); }
-.qopt.wrong   { background:var(--merit-quiz-option-wrong-bg); border-color:var(--merit-quiz-option-wrong-border); }
-/* every correct/wrong row also renders a ✓ / ✕ glyph — never colour alone */</code></pre>
-            <pre hidden><code>MeritQuizOption(
-  index: 0, state: MeritQuizOptionState.correct,
-  content: Text('Ribosome'),
-)
-// states: idle · selected · correct · wrong · revealed (merit_quiz_option.dart)</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 16 — FEEDBACK & EMPTY STATES ============ -->
-      <section class="sec" id="feedback" data-screen-label="Feedback & Empty States">
-        <span class="kicker" style="background:var(--mint);color:#1c5436">16 — Patterns</span>
-        <h2>Feedback &amp; empty states.</h2>
-        <p class="lead">Toasts float, keep the outline + hard shadow, and use colour + icon together. Empty states get a dashed frame, one line, and one action — never a bare "No data".</p>
-
-        <div class="demo">
-          <span class="demoLabel">Live · toasts</span>
-          <div class="demoCol">
-            <div class="toastDemo">🔔 Saved your progress</div>
-            <div class="toastDemo success">✓ Quiz submitted — 9/10 correct</div>
-            <div class="toastDemo error">✕ Couldn't sync. Retrying…</div>
-          </div>
-        </div>
-
-        <h3 class="subhead">Empty state</h3>
-        <div class="demo">
-          <div class="emptyState" style="max-width:420px;margin:0 auto">
-            <div class="glyph">📄</div>
-            <h4>No flashcards yet</h4>
-            <p class="note">Add your first card to start building a deck.</p>
-            <button class="btn primary sm" style="margin-top:14px">Create flashcard</button>
-          </div>
-        </div>
-
-        <h3 class="subhead">Loading skeleton</h3>
-        <div class="demo">
-          <div class="demoCol" style="max-width:420px">
-            <div class="skeleton" style="height:18px;width:70%"></div>
-            <div class="skeleton" style="height:14px;width:100%"></div>
-            <div class="skeleton" style="height:14px;width:90%"></div>
-          </div>
-          <p class="note" style="margin-top:12px">Sunken-surface blocks with a sweeping highlight — never a spinner for list content. Off entirely under reduced motion.</p>
-        </div>
-      </section>
-
-      <!-- ============ 17 — ICONOGRAPHY ============ -->
-      <section class="sec" id="icons" data-screen-label="Iconography">
-        <span class="kicker k">17 — Patterns</span>
-        <h2>Iconography.</h2>
-        <p class="lead">One family across platforms — <strong>Phosphor</strong>, Bold weight to match the 2px outlines (D6). Fill weight marks the active/selected state of a tab or toggle. Emoji stay in copy, never as structural UI icons.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Bold (default) vs Fill (active)</span>
-          <div class="demoRow" style="gap:22px">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-8 9 8v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z" stroke="currentColor" stroke-width="2.4"/></svg>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z"/></svg>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.4"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" stroke="currentColor" stroke-width="2.4"/></svg>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
-          </div>
-        </div>
-
-        <div class="dd">
-          <div class="col do">
-            <h4><span class="badge">✓</span> Do</h4>
-            <ul>
-              <li>One family everywhere — <span class="inlineCode">@/lib/icons</span> (web), <span class="inlineCode">phosphor_flutter</span> (app).</li>
-              <li>Bold stroke weight by default; Fill only for the active/selected state.</li>
-              <li>Pair an icon-only control with a label for screen readers.</li>
-            </ul>
-          </div>
-          <div class="col dont">
-            <h4><span class="badge">✕</span> Don't</h4>
-            <ul>
-              <li>Use emoji as a nav, tab, or button icon — inconsistent across platforms, untheme-able.</li>
-              <li>Mix icon families on one screen.</li>
-              <li>Use Phosphor <span class="inlineCode">Coins</span> for Merit Points — use the <span class="inlineCode">merit-coin</span> glyph (§21).</li>
-              <li>Ship an icon-only button with no accessible name.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 18 — TRI-LINGUAL TYPE ============ -->
-      <section class="sec" id="trilingual" data-screen-label="Tri-lingual Type">
-        <span class="kicker m">18 — Patterns</span>
-        <h2>EN · SI · TA type.</h2>
-        <p class="lead">Clash Display and Plus Jakarta Sans carry no Sinhala or Tamil glyphs — every stack falls back to <strong>Noto Sans Sinhala</strong> / <strong>Noto Sans Tamil</strong>. Those scripts get different rules, not just a different font.</p>
-
-        <div class="demo">
-          <span class="demoLabel">Specimen</span>
-          <div class="demoCol">
-            <div style="font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:-.02em">Keep your streak alive</div>
-            <div lang="si" style="font-family:'Noto Sans Sinhala',var(--font-body);font-weight:700;font-size:24px;letter-spacing:0;line-height:1.3">ඔබේ දිනපතා ප්‍රගතිය තබාගන්න</div>
-            <div lang="ta" style="font-family:'Noto Sans Tamil',var(--font-body);font-weight:700;font-size:22px;letter-spacing:0;line-height:1.3">உங்கள் தொடர் வெற்றியை தக்கவைக்கவும்</div>
-          </div>
-        </div>
-
-        <table class="spec">
-          <thead><tr><th>Rule</th><th>Latin</th><th>Sinhala / Tamil</th></tr></thead>
-          <tbody>
-            <tr><td>Letter-spacing</td><td>Tight on display (<code>-2%</code> to <code>-4%</code>)</td><td><strong>Always 0</strong> — negative tracking collides conjuncts</td></tr>
-            <tr><td>Line-height</td><td>1.0–1.25 display, 1.5 body</td><td>≥1.3 display, ≥1.6 body — stacked vowel signs</td></tr>
-            <tr><td>Labels</td><td>UPPERCASE, wide tracking</td><td>No case exists — sentence case, normal tracking</td></tr>
-            <tr><td>String length</td><td>baseline</td><td>Tamil runs ~30–40% longer — buttons/tabs must wrap or flex</td></tr>
-          </tbody>
-        </table>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>:lang(si), :lang(ta){
-  letter-spacing: 0 !important;
-  line-height: 1.6;
-  text-transform: none !important;
-}
-:is(:lang(si), :lang(ta)) :is(h1,h2,h3,h4){ line-height: 1.3; }</code></pre>
-            <pre hidden><code>// Every MeritTypography style sets a Sinhala/Tamil fallback:
-TextStyle(fontFamily: 'ClashDisplay',
-  fontFamilyFallback: MeritFonts.fallback, /* Noto Sans Sinhala, Tamil */
-  letterSpacing: -1.12);
-// MeritDesignSystem.themeFor(brightness, locale) zeroes tracking
-// and raises line-height for the 'si'/'ta' textTheme.</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 19 — DATA VIZ ============ -->
-      <section class="sec" id="chart" data-screen-label="Data Viz">
-        <span class="kicker" style="background:var(--blue);color:#312A31">19 — Patterns</span>
-        <h2>Data viz.</h2>
-        <p class="lead">Five categorical colours, always with a legend and a value — colour never carries meaning alone.</p>
-
-        <div class="demo">
-          <span class="demoLabel">chart-1…5</span>
-          <div class="demoRow" style="align-items:flex-end;gap:10px;height:120px">
-            <div style="width:36px;height:96px;background:var(--purple);border:2px solid var(--line);border-radius:6px 6px 0 0"></div>
-            <div style="width:36px;height:70px;background:var(--yellow);border:2px solid var(--line);border-radius:6px 6px 0 0"></div>
-            <div style="width:36px;height:110px;background:var(--mint);border:2px solid var(--line);border-radius:6px 6px 0 0"></div>
-            <div style="width:36px;height:52px;background:#FFB3C8;border:2px solid var(--line);border-radius:6px 6px 0 0"></div>
-            <div style="width:36px;height:80px;background:#B3D8FF;border:2px solid var(--line);border-radius:6px 6px 0 0"></div>
-          </div>
-          <div class="demoRow" style="gap:14px;margin-top:14px;font-size:12px">
-            <span class="pill p" style="font-size:10px">Physics</span>
-            <span class="pill y" style="font-size:10px">Chemistry</span>
-            <span class="pill m" style="font-size:10px">Biology</span>
-            <span class="pill" style="font-size:10px">Combined Maths</span>
-            <span class="pill" style="font-size:10px">ICT</span>
-          </div>
-        </div>
-        <p class="note">Sequential data (single metric, e.g. accuracy over time) ramps through purple tints only; never mixes categorical hues into a sequence.</p>
-      </section>
-
-      <!-- ============ 20 — DENSITY MODES ============ -->
-      <section class="sec" id="density" data-screen-label="Density Modes">
-        <span class="kicker k">20 — Patterns</span>
-        <h2>Density modes.</h2>
-        <p class="lead">The student app and landing run <strong>expressive</strong> density — s3 shadows, 16–24px padding. Admin and contributor dashboards run <strong>compact</strong> (D7): 1.5px hairline borders on table cells, s1–s2 shadows, 8–12px padding. Full neo-brutalism on a 50-row table is noise, not brand.</p>
-
-        <div class="split">
-          <div class="frame light">
-            <span class="ftag">Expressive</span>
-            <div class="densityDemo expressive">
-              <table>
-                <thead><tr><th>Question</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr><td>Question #08cc</td><td>Active</td></tr>
-                  <tr><td>Question #259a</td><td>Inactive</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="frame light" style="background:#fff">
-            <span class="ftag">Compact</span>
-            <div class="densityDemo compact">
-              <table>
-                <thead><tr><th>Question</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr><td>Question #08cc</td><td>Active</td></tr>
-                  <tr><td>Question #259a</td><td>Inactive</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 21 — LOGO ============ -->
-      <section class="sec" id="logo" data-screen-label="Logo">
-        <span class="kicker m">21 — Patterns</span>
-        <h2>Logo usage</h2>
-        <p class="lead">A 3-colour isometric cube inside a pyramid, drawn in the system's own language: black outline on every facet and one hard offset shadow. Every edge runs at 30°, 60° or 90°. Pair it with the <strong>MERIT</strong> wordmark (Clash Display Bold, uppercase) over <strong>PROJECT</strong> (Plus Jakarta Sans Bold, tracked to the same width). Files: <span class="inlineCode">assets/brand/</span>, generated by <span class="inlineCode">scripts/brand/build_brand.py</span>.</p>
-
-        <div class="logoGrid">
-          <div class="logoCell onCream"><img src="assets/brand/merit-mark.svg" alt="Merit on cream" /><span class="tag" style="color:#685A68">On cream</span></div>
-          <div class="logoCell onWhite"><img src="assets/brand/merit-mark.svg" alt="Merit on white" /><span class="tag" style="color:#685A68">On white</span></div>
-          <div class="logoCell onInk"><img src="assets/brand/merit-mark-dark.svg" alt="Merit on ink" /><span class="tag">On ink · -dark</span></div>
-          <div class="logoCell onPurple"><img src="assets/brand/merit-mark-white.svg" alt="Merit on purple" /><span class="tag">On purple · one-colour</span></div>
-        </div>
-
-        <h3 class="subhead">Versions</h3>
-        <div class="logoGrid">
-          <div class="logoCell onWhite"><img src="assets/brand/merit-mark-small.svg" alt="" /><span class="tag" style="color:#685A68">Small cut · 24–32px</span></div>
-          <div class="logoCell onWhite"><img src="assets/brand/merit-cube.svg" alt="" /><span class="tag" style="color:#685A68">Cube · favicon / 16px</span></div>
-          <div class="logoCell onWhite"><img src="assets/brand/merit-app-icon.svg" alt="" style="border-radius:22%" /><span class="tag" style="color:#685A68">App icon</span></div>
-          <div class="logoCell onWhite"><img src="assets/brand/merit-mark-black.svg" alt="" /><span class="tag" style="color:#685A68">One colour · print</span></div>
-          <div class="logoCell onWhite"><img src="assets/brand/merit-mark-achiever.svg" alt="" /><span class="tag" style="color:#685A68">Achiever (Pro)</span></div>
-        </div>
-        <div class="logoGrid" style="grid-template-columns:2fr 1fr">
-          <div class="logoCell onWhite" style="aspect-ratio:2.6/1"><img src="assets/brand/merit-lockup-horizontal.svg" alt="Merit Project horizontal lockup" style="width:80%" /><span class="tag" style="color:#685A68">Horizontal lockup</span></div>
-          <div class="logoCell onWhite" style="aspect-ratio:1/1"><img src="assets/brand/merit-lockup-stacked.svg" alt="Merit Project stacked lockup" /><span class="tag" style="color:#685A68">Stacked lockup</span></div>
-        </div>
-
-        <h3 class="subhead">Merit Points coin · <span class="inlineCode">merit-coin</span></h3>
-        <p class="note">The in-game currency is the pyramid alone, cut in gold facets: a piece of Merit you collect. Use the full coin from 32px up, the small cut (one ridge) at 16–24px, and the single-colour glyph inside chips and buttons (tint it with <span class="inlineCode">currentColor</span> / a ColorFilter).</p>
-        <div class="logoGrid">
-          <div class="logoCell onCream"><img src="assets/brand/merit-coin.svg" alt="Merit Points coin" /><span class="tag" style="color:#685A68">Coin</span></div>
-          <div class="logoCell onCream"><img src="assets/brand/merit-coin-small.svg" alt="" style="width:30%;height:30%" /><span class="tag" style="color:#685A68">Small cut · ≤24px</span></div>
-          <div class="logoCell onInk"><img src="assets/brand/merit-coin-dark.svg" alt="" /><span class="tag">On ink · -dark</span></div>
-          <div class="logoCell onWhite" style="color:#29261B"><svg viewBox="0 0 256 256" width="62%" height="62%" aria-hidden="true"><g transform="translate(2.56 12.36) scale(0.98)"><polygon points="121.00,46.11 121.00,196.00 34.47,196.00" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round"/><polygon points="135.00,46.11 221.53,196.00 135.00,196.00" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round"/></g></svg><span class="tag" style="color:#685A68">Glyph · Fill</span></div>
-        </div>
-
-        <div class="dd">
-          <div class="col do">
-            <h4><span class="badge">✓</span> Do</h4>
-            <ul>
-              <li>Use the <strong>-dark</strong> files on ink / dark mode — the outline flips to cream (§22).</li>
-              <li>Switch to the small cut at 32px and below, and the cube alone at 16px.</li>
-              <li>Keep clear space of at least one cube-width around the mark.</li>
-            </ul>
-          </div>
-          <div class="col dont">
-            <h4><span class="badge">✕</span> Don't</h4>
-            <ul>
-              <li>Recolour facets, rotate, or add soft shadows / gradients — the hard shadow is part of the mark.</li>
-              <li>Stretch, skew, or change the cube proportions.</li>
-              <li>Set the wordmark in mixed case, or place the mark on a busy photo or low-contrast tint.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 22 — DARK MODE ============ -->
-      <section class="sec" id="dark" data-screen-label="Dark Mode">
-        <span class="kicker k">22 — Patterns</span>
-        <h2>Dark mode</h2>
-        <p class="lead">Dark mode swaps a small set of variables — it does <strong>not</strong> restyle components. The key rule: <strong>the black outline becomes a cream outline</strong> so the sticker edge survives. Accents stay identical; hard shadows stay.</p>
-
-        <div class="split">
-          <div class="frame light">
-            <span class="ftag">Light</span>
-            <div class="card" style="padding:20px;max-width:300px">
-              <span class="pill p" style="font-size:10px">Quest</span>
-              <h4 style="font-size:19px;margin-top:12px">Color Theory</h4>
-              <p class="note" style="margin-top:6px">10 questions · live</p>
-              <div class="progress" style="margin-top:14px"><i style="width:62%"></i></div>
-              <button class="btn primary sm" style="margin-top:16px">Continue</button>
-            </div>
-          </div>
-          <div class="frame dark">
-            <span class="ftag">Dark</span>
-            <div class="dark">
-              <div class="card" style="padding:20px;max-width:300px">
-                <span class="pill p" style="font-size:10px">Quest</span>
-                <h4 style="font-size:19px;margin-top:12px">Color Theory</h4>
-                <p class="note" style="margin-top:6px;color:#C4B5C4">10 questions · live</p>
-                <div class="progress" style="margin-top:14px"><i style="width:62%"></i></div>
-                <button class="btn primary sm" style="margin-top:16px">Continue</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <table class="spec">
-          <thead><tr><th>Token</th><th>Light</th><th>Dark</th></tr></thead>
-          <tbody>
-            <tr><td>Background — product UI (app, dashboards)</td><td><code>#FFF7ED</code></td><td><code>#1B161B</code></td></tr>
-            <tr><td>Background — brand / landing bands</td><td><code>#FFEFD7</code></td><td><code>#1B161B</code></td></tr>
-            <tr><td>Surface / card</td><td><code>#FFFFFF</code></td><td><code>#2A222A</code></td></tr>
-            <tr><td>Text</td><td><code>#29261B</code></td><td><code>#FFF7ED</code></td></tr>
-            <tr><td>Text dim</td><td><code>#5A4A5A</code></td><td><code>#C4B5C4</code></td></tr>
-            <tr><td>Border</td><td><code>#000000</code></td><td><code>#FFF7ED</code> (cream!)</td></tr>
-          </tbody>
-        </table>
-
-        <div class="codeWrap">
-          <div class="codeTabs"><button class="active">CSS</button><button>Flutter</button></div>
-          <div class="codeBody">
-            <button class="copyBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 012-2h10" stroke="currentColor" stroke-width="2"/></svg><span class="lbl">Copy</span></button>
-            <pre><code>.dark{
-  --bg:#1B161B; --surface:#2A222A;
-  --text:#FFF7ED; --text-dim:#C4B5C4;
-  --border:#FFF7ED;   /* the black outline becomes cream */
-}
-/* components reference var(--border) / var(--surface) — nothing else changes */</code></pre>
-            <pre hidden><code>Color meritBorder(Brightness b) =>
-    b == Brightness.dark ? MeritColors.creamWarm : MeritColors.line;
-Color meritSurface(Brightness b) =>
-    b == Brightness.dark ? const Color(0xFF2A222A) : MeritColors.white;</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 23 — LANDING SPECIMEN ============ -->
-      <section class="sec" id="landing" data-screen-label="Landing Specimen">
-        <span class="kicker y">23 — Reference</span>
-        <h2>Landing specimen.</h2>
-        <p class="lead">The marketing site (<span class="inlineCode">meritproject.lk</span>) is the one place School Times replaces Clash Display for headings — a punchier, more playful marketing-only face, deliberately distinct from in-app UI. Body copy stays Plus Jakarta Sans everywhere.</p>
-
-        <div class="demo" style="background:var(--ink-2);color:var(--cream)">
-          <span class="demoLabel" style="color:#A89AA8">Dark hero band</span>
-          <div style="font-family:var(--font-landing);font-weight:700;font-size:clamp(32px,5vw,56px);line-height:.95;letter-spacing:-.01em">
-            Learn it.<br/>Level up.<br/><span style="color:var(--yellow)">Earn Merit.</span>
-          </div>
-          <p style="margin-top:16px;max-width:44ch;color:#D8CBD8;font-size:15px;line-height:1.6">A gamified exam-prep platform for Sri Lankan O/L and A/L students — quizzes, flashcards, past papers, streaks.</p>
-          <button class="btn accent" style="margin-top:18px">Start learning</button>
-        </div>
-        <p class="note">School Times headings never appear at app-UI sizes (labels, buttons, stat figures) — those stay Clash Display, even on the landing route, per §3.</p>
-      </section>
-
-      <!-- ============ 24 — TOKENS REFERENCE ============ -->
-      <section class="sec" id="tokens" data-screen-label="Tokens Reference">
-        <span class="kicker">24 — Reference</span>
-        <h2>Tokens reference.</h2>
-        <p class="lead">Read live from <span class="inlineCode">build/css/merit-tokens.css</span> at page load — the hex values below can never drift from what's shipped. Source of truth: <span class="inlineCode">tokens/*.tokens.json</span>; rebuild with <span class="inlineCode">npm run build</span>.</p>
-        <div id="tokenRefTable"><p class="note">Loading…</p></div>
-      </section>
-
-      <!-- ============ 25 — CHANGELOG ============ -->
-      <section class="sec" id="changelog" data-screen-label="Changelog">
-        <span class="kicker k">25 — Reference</span>
-        <h2>Changelog.</h2>
-        <p class="lead">Semver for tokens: <strong>removing/renaming</strong> a token is major, <strong>adding</strong> one is minor, a <strong>value change</strong> is patch. Full history: <span class="inlineCode">CHANGELOG.md</span>.</p>
-        <div class="changeList">
-          <div class="changeEntry">
-            <div class="ver">v2.1.0 <span class="bump minor">minor</span></div>
-            <p class="note">Sinhala/Tamil font fallbacks on every stack — <span class="inlineCode">MeritFonts.fallback</span>, <span class="inlineCode">fontFamilyFallback</span> on every type style.</p>
-          </div>
-          <div class="changeEntry">
-            <div class="ver">v2.0.0 <span class="bump major">major</span></div>
-            <p class="note">Token pipeline: DTCG source files, generated CSS/Dart/JSON, a WCAG contrast gate on every build, and a drift check for consumer repos. Fixed the caption-grey, dark-error and dark-link contrast failures.</p>
-          </div>
-          <div class="changeEntry">
-            <div class="ver">v1.1.0 <span class="bump minor">minor</span></div>
-            <p class="note">Self-hosted fonts, decisions D1–D7 recorded, Clash Display capped at 700, 11px label floor, vanilla-JS tweaks panel.</p>
-          </div>
-          <div class="changeEntry">
-            <div class="ver">v1.0.0 <span class="bump major">major</span></div>
-            <p class="note">Initial system: brand, colour, type, signature look, components, patterns.</p>
-          </div>
-        </div>
-      </section>
-
-    </div><!-- /wrap -->
-
-    <footer class="foot">
-      <div class="inner">
-        <div>Merit Project · Design System · v2.3 · 2026</div>
-        <div class="hexes">#8E55D7 · #FFCC00 · #9ED5B7 · #FFEFD7 · #312A31</div>
+<!-- ======================= 16 GAME ======================= -->
+<section class="sec" id="game">
+  <div class="secHead"><span class="eyebrow">16 · Gamification</span><h2>Make progress <span class="u">feel</span> good.</h2>
+    <p class="lede">The orange flame is the streak. The butter coin is points. Wanderer and Achiever are clearly distinct tiers. Every number is tabular.</p></div>
+  <div class="grid g2">
+    <div class="panel stack">
+      <span class="label">Gamer header</span>
+      <div class="hud"><span class="hchip"><i class="ph-fill ph-flame fl"></i>12</span><span class="hchip"><i class="ph-fill ph-coins co"></i>1,240</span><span class="hchip"><i class="ph-fill ph-crown cr"></i>Achiever</span></div>
+      <span class="label">Streak ribbon</span>
+      <div class="ribbon"><span class="d">M<br/>✓</span><span class="d">T<br/>✓</span><span class="d">W<br/>✓</span><span class="t">T<br/>!</span><span class="f">F</span><span class="f">S</span><span class="f">S</span></div>
+      <span class="label">Points breakdown</span>
+      <div class="tblWrap"><table class="spec"><tbody>
+        <tr><td>18 correct × 10</td><td class="num" style="text-align:right">180</td></tr>
+        <tr><td>Accuracy ≥ 80% bonus</td><td class="num" style="text-align:right">+20</td></tr>
+        <tr><td>Achiever × 1.5</td><td class="num" style="text-align:right">×1.5</td></tr>
+        <tr><td><b>Total</b></td><td class="num" style="text-align:right;font-size:20px">300</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="panel stack">
+      <span class="label">Leaderboard</span>
+      <div class="podium">
+        <div class="p"><span class="muted">Nimali</span><div class="blk" style="height:70px;background:var(--merit-category-2)">2</div></div>
+        <div class="p"><i class="ph-fill ph-crown" style="color:var(--merit-reward-points);font-size:22px"></i><span class="muted">Kavin</span><div class="blk" style="height:96px;background:var(--merit-reward-points-fill)">1</div></div>
+        <div class="p"><span class="muted">Aysha</span><div class="blk" style="height:54px;background:var(--merit-category-3)">3</div></div>
       </div>
-    </footer>
+      <div class="lb">
+        <div class="r"><span class="pos">4</span><span class="av" style="background:var(--merit-category-1)">TR</span><span class="nm">Tharindu R.</span><span class="pts"><i class="ph-fill ph-coins" style="color:var(--merit-reward-points)"></i>2,310</span></div>
+        <div class="r me"><span class="pos">5</span><span class="av" style="background:var(--merit-category-5)">YOU</span><span class="nm">You</span><span class="pts"><i class="ph-fill ph-coins" style="color:var(--merit-reward-points)"></i>2,240</span></div>
+        <div class="r"><span class="pos">6</span><span class="av" style="background:var(--merit-category-6)">SM</span><span class="nm">Sahan M.</span><span class="pts"><i class="ph-fill ph-coins" style="color:var(--merit-reward-points)"></i>2,105</span></div>
+      </div>
+      <span class="label">Grades</span>
+      <div class="row" id="grades"></div>
+    </div>
+  </div>
+  <div class="band" style="margin-top:16px">
+    <div><span class="seal"><i class="ph-fill ph-seal-check"></i> Achiever</span><h3>Unlimited practice. 1.5× points.</h3><p>Adaptive mode finds your weak spots first. Cancel anytime.</p></div>
+    <button class="btn">See plans <i class="ph-bold ph-arrow-right"></i></button>
+  </div>
+  <div class="panel" style="margin-top:16px"><span class="label">Quota meter · Wanderer</span><div class="row" style="justify-content:space-between"><span><b class="num">32</b> of 50 questions today</span><span class="muted">Resets at midnight</span></div><div class="progress" style="margin-top:8px"><i data-w="64%"></i></div></div>
+</section>
 
+<!-- ======================= 17 QUIZ ======================= -->
+<section class="sec" id="quiz">
+  <div class="secHead"><span class="eyebrow">17 · Quiz</span><h2>The exam room is <span class="u">calm</span>.</h2>
+    <p class="lede">Options are at least 56 high and carry a letter chip. Once submitted, they lock. Correct and wrong always pair colour with an icon. The correct answer after a wrong pick shows as "revealed", with a dashed border. The timer turns butter at 5&nbsp;min and red at 1&nbsp;min, and announces both.</p></div>
+  <div class="grid g2">
+    <div class="qcard">
+      <div class="qhead"><span class="badge">Q 7 / 20</span><div class="row"><span class="timer safe"><i class="ph ph-timer"></i>42:10</span><button class="btn icon" aria-label="Flag question"><i class="ph ph-flag"></i></button></div></div>
+      <p class="qtitle">Which organelle modifies and packages proteins for secretion?</p>
+      <button class="opt"><span class="l">A</span>Mitochondrion</button>
+      <button class="opt sel" aria-pressed="true"><span class="l">B</span>Golgi apparatus<i class="ph-fill ph-circle ic" style="color:var(--merit-focus-ring)"></i></button>
+      <button class="opt"><span class="l">C</span>Lysosome</button>
+      <button class="opt"><span class="l">D</span>Ribosome</button>
+      <div class="row" style="justify-content:space-between;margin-top:16px"><button class="btn ghost sm"><i class="ph ph-arrow-left"></i> Back</button><button class="btn primary sm">Submit</button></div>
+    </div>
+    <div class="qcard">
+      <div class="qhead"><span class="badge">Answer review</span><div class="row"><span class="timer warn"><i class="ph ph-timer"></i>04:59</span><span class="timer crit"><i class="ph ph-timer"></i>00:58</span></div></div>
+      <p class="qtitle">Which organelle contains hydrolytic enzymes?</p>
+      <div class="opt" aria-disabled="true"><span class="l">A</span>Golgi apparatus</div>
+      <div class="opt bad" aria-disabled="true"><span class="l">B</span>Ribosome<i class="ph-bold ph-x-circle ic"></i></div>
+      <div class="opt rev" aria-disabled="true"><span class="l">C</span>Lysosome<i class="ph-bold ph-check ic"></i></div>
+      <div class="opt ok" aria-disabled="true"><span class="l">C</span>Lysosome · when picked<i class="ph-bold ph-check-circle ic"></i></div>
+      <div class="explain"><b><i class="ph-fill ph-lightbulb" style="color:var(--merit-reward-points)"></i> Why</b>Lysosomes hold hydrolytic enzymes that break down macromolecules, and are sometimes called "suicide bags".</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 18 FLASH ======================= -->
+<section class="sec" id="flash">
+  <div class="secHead"><span class="eyebrow">18 · Flashcards</span><h2>Flip, rate, repeat.</h2>
+    <p class="lede">The front takes the subject's category tint with a pattern corner. The back is white. The flip is 2 × <code>slow</code>, and becomes a crossfade under reduced motion. The four FSRS ratings run from coral through sand and sage to violet. Click the card to flip it.</p></div>
+  <div class="grid g2" style="align-items:center">
+    <button class="flash" id="flashCard" aria-label="Flashcard: flip">
+      <div class="in">
+        <div class="face" style="background:var(--merit-category-1)"><span class="corner"></span><span class="badge outline" style="align-self:flex-start">Biology · Cells</span><h3>What does the Golgi apparatus do?</h3><span class="muted" style="color:inherit">Tap to reveal</span></div>
+        <div class="face back"><span class="badge sage" style="align-self:flex-start">Answer</span><h3 style="color:var(--merit-text-primary)">Modifies, sorts and packages proteins and lipids for secretion.</h3><span class="muted">Tap to flip back</span></div>
+      </div>
+    </button>
+    <div class="panel"><span class="label">How well did you know it?</span><div class="rate">
+      <button style="background:var(--merit-grade-e-bg);color:var(--merit-grade-e-fg)">Again<small>1m</small></button>
+      <button style="background:var(--merit-sand-300);color:var(--merit-ink-900)">Hard<small>8m</small></button>
+      <button style="background:var(--merit-feedback-success);color:var(--merit-text-on-success)">Good<small>1d</small></button>
+      <button style="background:var(--merit-action-accent);color:var(--merit-text-on-accent)">Easy<small>4d</small></button>
+    </div></div>
+  </div>
+</section>
+
+<!-- ======================= 19 PATH ======================= -->
+<section class="sec" id="path">
+  <div class="secHead"><span class="eyebrow">19 · Learning path</span><h2>The hierarchy, as a <span class="u">path</span>.</h2>
+    <p class="lede">Subject → Topic → Subtopic, drawn as connected tiles (D14). Done is sage with a ✓. Current is a larger orange tile with a sparkle and its %. Locked is sunken with a lock icon. The path scrolls horizontally on mobile.</p></div>
+  <div class="panel"><div class="lpath" role="list" aria-label="Biology: Cell biology path">
+    <div class="node done" role="listitem"><span class="t">✓</span>Cell theory</div><span class="cn"></span>
+    <div class="node done" role="listitem"><span class="t">✓</span>Organelles</div><span class="cn"></span>
+    <div class="node cur" role="listitem" aria-current="step"><span class="t">64%<img class="sp twinkle" src="assets/v3/motifs/sparkle.svg" alt="" /></span>Enzymes</div><span class="cn"></span>
+    <div class="node lock" role="listitem"><span class="t"><i class="ph ph-lock-simple"></i></span>Cell division</div><span class="cn"></span>
+    <div class="node lock" role="listitem"><span class="t"><i class="ph ph-lock-simple"></i></span>Genetics</div>
+  </div></div>
+</section>
+
+<!-- ======================= 20 FEEDBACK ======================= -->
+<section class="sec" id="feedback">
+  <div class="secHead"><span class="eyebrow">20 · Empty &amp; error</span><h2>One picture, one line, <span class="u">one</span> action.</h2>
+    <p class="lede">Spot illustrations come from the patchwork kit. Skeletons are sunken blocks with no border, and the shimmer stops under reduced motion.</p></div>
+  <div class="grid g3">
+    <div class="panel empty"><img src="assets/v3/spots/empty.svg" alt="" /><h4>No flashcards yet</h4><p class="muted">Save a question to start a deck.</p><button class="btn primary sm">Browse topics</button></div>
+    <div class="panel empty"><img src="assets/v3/spots/offline.svg" alt="" /><h4>You're offline</h4><p class="muted">We'll sync your answers when you reconnect.</p><button class="btn ghost sm">Try again</button></div>
+    <div class="panel stack"><span class="label">Skeleton</span><div class="row"><div class="skel" style="width:56px;height:56px"></div><div class="stack" style="flex:1"><div class="skel" style="height:14px;width:70%"></div><div class="skel" style="height:12px;width:45%"></div></div></div><div class="skel" style="height:110px"></div></div>
+  </div>
+</section>
+
+<!-- ======================= 21 ILLUSTRATION ======================= -->
+<section class="sec" id="illus">
+  <div class="secHead"><span class="eyebrow">21 · Illustration kit</span><h2>Patchwork <span class="u">subjects</span>.</h2>
+    <p class="lede">A tile is a rounded square cut into geometric patches. Each patch is filled with a tint or a pattern (dots, stripes, checks or hatch) and outlined with a 1.5 ink line around a white focal patch. The motifs are a 4-point sparkle, a brush underline and a dotted connector. Everything is generated from tokens by <code>scripts/brand/build_v3_brand.py</code>, and the full set is in <a href="assets/v3/index.html">assets/v3</a>.</p></div>
+  <div class="grid g6" id="tiles"></div>
+  <div class="grid g4" style="margin-top:16px">
+    <div class="panel"><span class="label">Patterns</span><div class="row"><img src="assets/v3/patterns/dots.svg" width="44" alt="dots" /><img src="assets/v3/patterns/stripes.svg" width="44" alt="stripes" /><img src="assets/v3/patterns/checks.svg" width="44" alt="checks" /><img src="assets/v3/patterns/hatch.svg" width="44" alt="hatch" /></div></div>
+    <div class="panel"><span class="label">Sparkles</span><div class="row"><img src="assets/v3/motifs/sparkle.svg" width="32" alt="" /><img src="assets/v3/motifs/sparkle-warm.svg" width="24" alt="" /><img src="assets/v3/motifs/sparkle.svg" width="16" alt="" /></div></div>
+    <div class="panel"><span class="label">Brush underline</span><img src="assets/v3/motifs/brush-underline.svg" style="width:100%;height:14px" alt="" /></div>
+    <div class="panel"><span class="label">Connector</span><img src="assets/v3/motifs/connector.svg" style="width:100%" alt="" /></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="do"><b><i class="ph-fill ph-check-circle"></i> Do</b><ul><li>Use one tile per subject, assigned by category index</li><li>Use 2–3 sparkles per composition at most</li><li>Keep patterns as SVG and never raster</li></ul></div>
+    <div class="dont"><b><i class="ph-fill ph-x-circle"></i> Don't</b><ul><li>Put patchwork or sparkles on calm screens</li><li>Draw freehand people or stock illustration</li><li>Use gradients on tiles</li></ul></div>
+  </div>
+</section>
+
+<!-- ======================= 22 ICONS ======================= -->
+<section class="sec" id="icons">
+  <div class="secHead"><span class="eyebrow">22 · Iconography</span><h2>Phosphor, <span class="u">three</span> weights.</h2>
+    <p class="lede">D12: <b>Regular</b> by default (it matches the 1.5 outlines), <b>Fill</b> for active and selected states, and <b>Duotone</b> on category and feature chips. Use 20–24&nbsp;px in UI. Icons inherit text colour unless they are a reward glyph. Flutter uses <code>phosphor_flutter</code>, and the web uses <code>@phosphor-icons/react</code> through <code>@/lib/icons</code>.</p></div>
+  <div class="panel"><div class="iconGrid" id="iconGrid"></div></div>
+</section>
+
+<!-- ======================= 23 TRILINGUAL ======================= -->
+<section class="sec" id="trilingual">
+  <div class="secHead"><span class="eyebrow">23 · EN · SI · TA</span><h2>Three scripts, one rhythm.</h2>
+    <p class="lede">General Sans and Jakarta have no Sinhala or Tamil glyphs, so every stack falls back to Noto. For SI/TA: tracking 0, body line-height at least 1.6, no uppercase eyebrows (they render in normal case), and buttons and chips must wrap, because Tamil runs about 30–40% longer. The SI/TA strings here are specimen copy, and the shipped wording comes from the apps' i18n files after native review.</p></div>
+  <div class="panel tri">
+    <div class="ln"><span class="tag">EN</span><div><h3>Keep your streak alive</h3><p class="muted" style="margin:4px 0 0">Answer 10 questions today to keep your 12-day streak.</p></div></div>
+    <div class="ln"><span class="tag">SI</span><div lang="si"><h3>ඔබේ දිගු කාලීන ඉගෙනුම රැක ගන්න</h3><p class="muted" style="margin:4px 0 0">ඔබේ දින 12 ක ශ්‍රේණිය රැක ගැනීමට අද ප්‍රශ්න 10 කට පිළිතුරු දෙන්න.</p></div></div>
+    <div class="ln"><span class="tag">TA</span><div lang="ta"><h3>உங்கள் தொடர்ச்சியைத் தக்கவைத்துக் கொள்ளுங்கள்</h3><p class="muted" style="margin:4px 0 0">உங்கள் 12 நாள் தொடர்ச்சியைத் தக்கவைக்க இன்று 10 கேள்விகளுக்குப் பதிலளிக்கவும்.</p></div></div>
+    <div class="ln"><span class="tag">Buttons</span><div class="row"><button class="btn primary">Start practice</button><button class="btn primary" lang="si">පුහුණුව අරඹන්න</button><button class="btn primary" lang="ta">பயிற்சியைத் தொடங்குங்கள்</button></div></div>
+  </div>
+</section>
+
+<!-- ======================= 24 CHART ======================= -->
+<section class="sec" id="chart">
+  <div class="secHead"><span class="eyebrow">24 · Data viz</span><h2>Legend and tooltip, always.</h2>
+    <p class="lede">The categorical palette is <code>chart.1–5</code>: violet, orange, sage, butter, sky. The streak heatmap is a four-step orange ramp on sunken. Never rely on colour alone, so always include a legend and data labels.</p></div>
+  <div class="grid g2">
+    <div class="panel"><span class="label">Accuracy by subject</span><div class="bars" id="bars"></div><div class="legend" id="legend"></div></div>
+    <div class="panel"><span class="label">Study heatmap · last 15 weeks</span><div class="heat" id="heat"></div><div class="legend"><span>Less</span><span class="dot" style="background:var(--merit-surface-sunken)"></span><span class="dot" style="background:color-mix(in srgb,var(--merit-action-primary) 25%,var(--merit-surface-sunken))"></span><span class="dot" style="background:color-mix(in srgb,var(--merit-action-primary) 55%,var(--merit-surface-sunken))"></span><span class="dot" style="background:var(--merit-action-primary)"></span><span>More</span></div></div>
+  </div>
+</section>
+
+<!-- ======================= 25 DENSITY ======================= -->
+<section class="sec" id="density">
+  <div class="secHead"><span class="eyebrow">25 · Density</span><h2>Expressive vs compact.</h2>
+    <p class="lede">The student app and landing are expressive: 16–24 padding, e1–e2, patchwork. Admin and contributor screens are compact (D7): 8–12 padding, hairline rows, e0–e1, no patchwork in tables, and elevation only on primary actions and floating layers.</p></div>
+  <div class="panel compact tblWrap">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px"><h4>Questions</h4><button class="btn primary sm"><i class="ph ph-plus"></i> Add question</button></div>
+    <table class="spec">
+      <thead><tr><th>ID</th><th>Question</th><th>Subtopic</th><th>Lang</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Q-1042</td><td>Which organelle packages proteins…</td><td>Organelles</td><td>EN · SI</td><td><span class="badge sage">Published</span></td><td><button class="btn icon" aria-label="More"><i class="ph ph-dots-three"></i></button></td></tr>
+        <tr><td class="mono">Q-1043</td><td>Define enzyme specificity…</td><td>Enzymes</td><td>EN</td><td><span class="badge butter">In review</span></td><td><button class="btn icon" aria-label="More"><i class="ph ph-dots-three"></i></button></td></tr>
+        <tr><td class="mono">Q-1044</td><td>Stages of mitosis in order…</td><td>Cell division</td><td>TA</td><td><span class="badge">Draft</span></td><td><button class="btn icon" aria-label="More"><i class="ph ph-dots-three"></i></button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ======================= 26 LOGO ======================= -->
+<section class="sec" id="logo">
+  <div class="secHead"><span class="eyebrow">26 · Logo</span><h2>The patchwork <span class="u">mark</span>.</h2>
+    <p class="lede">The Merit mark is already a patchwork. v3 recolours it, drops the hard shadow and thins the outlines. The wordmark is General Sans Bold Italic with an orange full stop (D13). Keep clear space equal to the dot's diameter × 2. The coin turns butter.</p></div>
+  <div class="grid g3">
+    <div class="logoTile lt"><img src="assets/v3/brand/merit-lockup-horizontal.svg" alt="Merit Project horizontal lockup" /></div>
+    <div class="logoTile dk"><img src="assets/v3/brand/merit-lockup-horizontal-dark.svg" alt="Merit Project horizontal lockup, dark" /></div>
+    <div class="logoTile lt"><img src="assets/v3/brand/merit-lockup-stacked.svg" alt="Merit Project stacked lockup" /></div>
+    <div class="logoTile vi"><img src="assets/v3/brand/merit-mark-dark.svg" alt="Merit mark on violet" /></div>
+    <div class="logoTile lt"><img src="assets/v3/brand/merit-app-icon.svg" alt="App icon" style="border-radius:22%" /></div>
+    <div class="logoTile lt"><img src="assets/v3/brand/merit-coin.svg" alt="Merit coin" /></div>
+  </div>
+</section>
+
+<!-- ======================= 27 DARK ======================= -->
+<section class="sec" id="dark">
+  <div class="secHead"><span class="eyebrow">27 · Dark mode</span><h2>Violet-black, <span class="u">not</span> grey.</h2>
+    <p class="lede">The dark base is <code>#17121F</code>, so it still feels like the brand. Orange lifts to <code>#FF8A4C</code>, and links and focus use violet <code>#C9B3EA</code>. Depth comes mostly from surface steps, and the shadows are black. Use the toggle in the sidebar to re-render this whole page in dark. Every token pair is gated for contrast in both themes.</p></div>
+  <div class="grid g2" id="darkCompare"></div>
+</section>
+
+<!-- ======================= 28 SCREENS ======================= -->
+<section class="sec" id="screens">
+  <div class="secHead"><span class="eyebrow">28 · Screen specimens</span><h2>How it comes <span class="u">together</span>.</h2>
+    <p class="lede">These are reference compositions for the Flutter app, built only from the components above. They are not pixel specs, but each one shows its mode and its key tokens.</p></div>
+  <div class="phones">
+
+    <!-- Home -->
+    <div class="phone-f">
+      <div class="sb"><span>9:41</span><span><i class="ph-fill ph-cell-signal-full"></i> <i class="ph-fill ph-battery-full"></i></span></div>
+      <div class="grow">
+        <div class="row" style="justify-content:space-between"><div><span class="eyebrow">Good morning</span><h3>Hi, Dilini</h3></div><div class="hud"><span class="hchip"><i class="ph-fill ph-flame fl"></i>12</span><span class="hchip"><i class="ph-fill ph-coins co"></i>1,240</span></div></div>
+        <div class="search" style="box-shadow:var(--merit-elevation-e1)"><input aria-label="Search" placeholder="Search topics…" /><button aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button></div>
+        <div class="mini"><span class="eyebrow">Continue</span><div class="row" style="margin-top:8px"><span class="thumb"><img src="assets/v3/tiles/biology.svg" alt="" /></span><div style="flex:1"><b>Enzymes</b><div class="muted">Biology · 64%</div><div class="progress" style="margin-top:6px"><i data-w="64%"></i></div></div></div></div>
+        <div class="card reward" style="padding:14px"><div class="row" style="justify-content:space-between"><b>Daily quest</b><span class="badge" style="background:var(--merit-white);color:var(--merit-ink-900)">+50</span></div><p style="margin:4px 0 0;font-size:13px">Answer 10 Chemistry questions</p></div>
+        <div class="row" style="gap:10px"><img src="assets/v3/tiles/chemistry.svg" width="64" alt="Chemistry" /><img src="assets/v3/tiles/physics.svg" width="64" alt="Physics" /><img src="assets/v3/tiles/maths.svg" width="64" alt="Maths" /><img src="assets/v3/tiles/ict.svg" width="64" alt="ICT" /></div>
+        <nav class="tabbar" aria-label="Demo"><a class="on" href="#screens"><i class="ph-fill ph-house"></i>Home</a><a href="#screens"><i class="ph ph-books"></i>Study</a><a href="#screens"><i class="ph ph-exam"></i>Quiz</a><a href="#screens"><i class="ph ph-trophy"></i>Ranks</a><a href="#screens"><i class="ph ph-user"></i>Me</a></nav>
+      </div>
+      <div class="cap">Home · energy</div>
+    </div>
+
+    <!-- Quiz -->
+    <div class="phone-f">
+      <div class="sb"><span>9:41</span><span><i class="ph-fill ph-battery-full"></i></span></div>
+      <div class="grow">
+        <div class="row" style="justify-content:space-between"><button class="btn icon" aria-label="Close"><i class="ph ph-x"></i></button><span class="timer safe" style="font-size:17px"><i class="ph ph-timer"></i>42:10</span><button class="btn icon" aria-label="Flag"><i class="ph ph-flag"></i></button></div>
+        <div class="progress calm"><i data-w="35%"></i></div>
+        <span class="muted">Question 7 of 20 · Paper 2023</span>
+        <p class="qtitle" style="margin:0">Which organelle modifies and packages proteins for secretion?</p>
+        <div><button class="opt"><span class="l">A</span>Mitochondrion</button><button class="opt sel"><span class="l">B</span>Golgi apparatus</button><button class="opt"><span class="l">C</span>Lysosome</button><button class="opt"><span class="l">D</span>Ribosome</button></div>
+        <div class="row" style="margin-top:auto;justify-content:space-between"><button class="btn ghost">Skip</button><button class="btn primary" style="flex:1">Submit</button></div>
+      </div>
+      <div class="cap">Quiz-taking · calm</div>
+    </div>
+
+    <!-- Results -->
+    <div class="phone-f">
+      <div class="sb"><span>9:41</span><span><i class="ph-fill ph-battery-full"></i></span></div>
+      <div class="grow" style="align-items:center;text-align:center">
+        <div style="position:relative;margin-top:12px"><span class="grade" style="width:104px;height:104px;font-size:52px;border-radius:32px;background:var(--merit-grade-a-bg);color:var(--merit-grade-a-fg);box-shadow:var(--merit-elevation-e2)">A</span><img class="twinkle" src="assets/v3/motifs/sparkle-warm.svg" width="26" style="position:absolute;right:-18px;top:-10px" alt="" /><img class="twinkle" src="assets/v3/motifs/sparkle.svg" width="18" style="position:absolute;left:-16px;bottom:6px" alt="" /></div>
+        <h3>Brilliant <span class="u">work!</span></h3>
+        <div class="row" style="justify-content:center;gap:18px"><div><div class="num" style="font-size:28px">18/20</div><span class="muted">Correct</span></div><div><div class="num" style="font-size:28px">90%</div><span class="muted">Accuracy</span></div></div>
+        <div class="card reward" style="width:100%;padding:14px"><div class="row" style="justify-content:center"><i class="ph-fill ph-coins" style="font-size:24px"></i><span class="num" style="font-size:26px">+300</span></div><span style="font-size:12.5px">180 + 20 bonus × 1.5 Achiever</span></div>
+        <div class="stack" style="width:100%;margin-top:auto"><button class="btn primary">Review mistakes</button><button class="btn ghost">Back to topic</button></div>
+      </div>
+      <div class="cap">Results · celebration</div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="phone-f">
+      <div class="sb"><span>9:41</span><span><i class="ph-fill ph-battery-full"></i></span></div>
+      <div class="grow">
+        <h3>Leaderboard</h3>
+        <div class="seg"><button aria-pressed="true">School</button><button aria-pressed="false">District</button><button aria-pressed="false">Island</button></div>
+        <div class="podium"><div class="p"><span class="muted">Nimali</span><div class="blk" style="height:58px;width:64px;background:var(--merit-category-2)">2</div></div><div class="p"><i class="ph-fill ph-crown" style="color:var(--merit-reward-points)"></i><span class="muted">Kavin</span><div class="blk" style="height:80px;width:64px;background:var(--merit-reward-points-fill)">1</div></div><div class="p"><span class="muted">Aysha</span><div class="blk" style="height:44px;width:64px;background:var(--merit-category-3)">3</div></div></div>
+        <div class="lb"><div class="r"><span class="pos">4</span><span class="av" style="background:var(--merit-category-1)">TR</span><span class="nm">Tharindu</span><span class="pts">2,310</span></div><div class="r me"><span class="pos">5</span><span class="av" style="background:var(--merit-category-5)">DK</span><span class="nm">You</span><span class="pts">2,240</span></div><div class="r"><span class="pos">6</span><span class="av" style="background:var(--merit-category-6)">SM</span><span class="nm">Sahan</span><span class="pts">2,105</span></div></div>
+        <nav class="tabbar" aria-label="Demo"><a href="#screens"><i class="ph ph-house"></i>Home</a><a href="#screens"><i class="ph ph-books"></i>Study</a><a href="#screens"><i class="ph ph-exam"></i>Quiz</a><a class="on" href="#screens"><i class="ph-fill ph-trophy"></i>Ranks</a><a href="#screens"><i class="ph ph-user"></i>Me</a></nav>
+      </div>
+      <div class="cap">Leaderboard · energy</div>
+    </div>
+
+    <!-- Premium -->
+    <div class="phone-f">
+      <div class="sb"><span>9:41</span><span><i class="ph-fill ph-battery-full"></i></span></div>
+      <div class="grow">
+        <div class="band" style="padding:20px;border-radius:var(--merit-radius-xl);flex-direction:column;align-items:flex-start"><span class="seal"><i class="ph-fill ph-seal-check"></i> Achiever</span><h3 style="font-size:22px">Study without limits.</h3><p style="font-size:13px">Unlimited questions and papers, adaptive mode, 1.5× points.</p></div>
+        <div class="mini"><span class="eyebrow" style="color:var(--merit-text-tertiary)">Today on Wanderer</span><div class="row" style="justify-content:space-between;margin-top:8px"><span><b class="num">48</b> of 50 questions</span><span class="muted">2 left</span></div><div class="progress" style="margin-top:6px"><i data-w="96%"></i></div></div>
+        <div class="card selected" style="padding:14px"><div class="row" style="justify-content:space-between"><b>Yearly</b><span class="badge orange">Save 30%</span></div><div class="num" style="font-size:24px;margin-top:4px">Rs 4,990</div><span class="muted">Rs 416 / month</span></div>
+        <div class="card" style="padding:14px"><b>Monthly</b><div class="num" style="font-size:20px;margin-top:4px">Rs 599</div></div>
+        <div class="stack" style="margin-top:auto"><button class="btn primary">Go Achiever</button><button class="btn link" style="align-self:center">Restore purchase</button></div>
+      </div>
+      <div class="cap">Premium · energy</div>
+    </div>
+
+    <!-- Notes reader -->
+    <div class="phone-f">
+      <div class="sb"><span>9:41</span><span><i class="ph-fill ph-battery-full"></i></span></div>
+      <div class="grow">
+        <div class="row" style="justify-content:space-between"><button class="btn icon" aria-label="Back"><i class="ph ph-arrow-left"></i></button><div class="seg"><button aria-pressed="false">EN</button><button aria-pressed="true" lang="si">සිං</button><button aria-pressed="false" lang="ta">த</button></div></div>
+        <span class="muted">ජීව විද්‍යාව · එන්සයිම</span>
+        <h3 lang="si" style="letter-spacing:0;line-height:1.35">එන්සයිම ක්‍රියාකාරිත්වය</h3>
+        <p class="reading" lang="si" style="margin:0">එන්සයිම යනු ජෛව රසායනික ප්‍රතික්‍රියා වේගවත් කරන ප්‍රෝටීන වේ. ඒවා ප්‍රතික්‍රියාවේ සක්‍රියන ශක්තිය අඩු කරයි.</p>
+        <div class="plate">E + S ⇌ ES → E + P</div>
+        <div class="callout" lang="si"><b>මතක තබා ගන්න:</b> උෂ්ණත්වය ඉහළ යාමෙන් එන්සයිම විකෘති විය හැක.</div>
+      </div>
+      <div class="cap">Notes reader (SI) · calm</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 29 LANDING ======================= -->
+<section class="sec" id="landing">
+  <div class="secHead"><span class="eyebrow">29 · Landing specimen</span><h2>The front door.</h2>
+    <p class="lede">The landing page uses the same tokens as the product. School Times is retired (D13). The pattern runs: an eyebrow, a headline with one underlined word, one line of body, a pill search, then a patchwork cluster joined by a dotted path. A violet band with an orange cap closes the page.</p></div>
+  <div class="land">
+    <nav><span class="wmk">MERIT<b>.</b></span><a href="#landing">Subjects</a><a href="#landing">Past papers</a><a href="#landing">Pricing</a><a class="btn primary sm" href="#landing">Get started</a></nav>
+    <div class="hero2">
+      <div><span class="eyebrow">O/L &amp; A/L · Sinhala · Tamil · English</span>
+        <h2>Past papers, practice and <span class="u">progress</span>, in one place.</h2>
+        <p class="lede" style="font-size:15px">More than 10,000 questions mapped to the syllabus, with streaks, leaderboards and adaptive practice that finds your weak spots.</p>
+        <div class="search" style="margin-top:20px"><input aria-label="Search" placeholder="Search subject, topic, year…" /><button aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button></div>
+      </div>
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 100 86" style="position:absolute;inset:0;width:100%;height:100%" fill="none"><path d="M24 22H72V58H34V80" stroke="var(--merit-decor-connector)" stroke-width=".6" stroke-dasharray=".6 2.2" stroke-linecap="round"/></svg>
+        <img class="t" src="assets/v3/tiles/physics.svg" style="left:6%;top:4%" alt="" />
+        <img class="t" src="assets/v3/tiles/chemistry.svg" style="right:6%;top:10%;width:30%" alt="" />
+        <img class="t" src="assets/v3/tiles/biology.svg" style="left:34%;top:44%;width:36%" alt="" />
+        <img class="twinkle" src="assets/v3/motifs/sparkle-warm.svg" style="position:absolute;left:52%;top:6%;width:24px" alt="" />
+        <img class="twinkle" src="assets/v3/motifs/sparkle.svg" style="position:absolute;right:10%;bottom:6%;width:30px" alt="" />
+      </div>
+    </div>
+    <div class="prog">
+      <h3 style="font-size:26px">Three ways <br />to <span class="u">practise</span></h3>
+      <div class="items">
+        <div class="it"><img src="assets/v3/tiles/maths.svg" alt="" /><h4 style="margin-top:8px">Paper mode</h4><p class="muted">Timed past papers, marked instantly.</p></div>
+        <div class="it"><img src="assets/v3/tiles/biology.svg" alt="" /><h4 style="margin-top:8px">Mastery mode</h4><p class="muted">Topic by topic, at your pace.</p></div>
+        <div class="it"><img src="assets/v3/tiles/ict.svg" alt="" /><h4 style="margin-top:8px">Adaptive mode</h4><p class="muted">Your weak spots, first.</p></div>
+      </div>
+    </div>
+    <div class="band cta"><div><h3 style="margin:0">Start free today.</h3><p>Questions and past papers every day on Wanderer. No card needed.</p></div><a class="btn" href="#landing">Create account <i class="ph-bold ph-arrow-right"></i></a></div>
+  </div>
+</section>
+
+<!-- ======================= 30 TOKENS ======================= -->
+<section class="sec" id="tokens">
+  <div class="secHead"><span class="eyebrow">30 · Tokens</span><h2>Read live, never copied.</h2>
+    <p class="lede">These values are read at runtime from <code>build/css/merit-tokens.css</code>, which is generated from <code>tokens/*.tokens.json</code> by <code>npm run build</code>. The Flutter and web apps vendor the generated files, and CI fails on drift.</p></div>
+  <div class="panel tblWrap" id="tokenRefTable"></div>
+</section>
+
+<!-- ======================= 31 CHANGELOG ======================= -->
+<section class="sec" id="changelog">
+  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.0.0</h2></div>
+  <div class="panel">
+    <ul>
+      <li><b>Full reinvention</b> inspired by MindInventory's "Online Learning" shot. The palette, depth model, display face and illustration kit are all new (D8–D15).</li>
+      <li>Semantic token names are kept wherever their meaning holds. The hard-shadow tokens, <code>shadow.color</code>, <code>borderWidth.heavy</code>, <code>fontFamily.landing</code> and the v2 primitive names are removed.</li>
+      <li>Soft themed <code>elevation.e0–e3</code> is new. <code>text.onPrimary</code> is now ink.</li>
+      <li>The contrast gate runs 126 checks, and all pass AA in light and dark.</li>
+    </ul>
+    <p class="muted">The rename map is in <a href="CHANGELOG.md">CHANGELOG.md</a>, and consumer steps are in <a href="MIGRATION-v3.md">MIGRATION-v3.md</a>.</p>
+  </div>
+  <footer class="foot"><span>Merit Project · Design System v3.0.0</span><span>Reference: MindInventory UI/UX, Dribbble 18955306 (inspiration only)</span></footer>
+</section>
+
+    </div>
   </main>
 </div>
 
 <script src="merit-ds.js"></script>
-<script>
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "grain": "crunchy",
-  "spin": true
-}/*EDITMODE-END*/;
-
-window.MERIT_TWEAKS = {
-  title: 'Tweaks',
-  defaults: TWEAK_DEFAULTS,
-  controls: [
-    { section: 'Texture' },
-    { key: 'grain', label: 'Grain', type: 'radio', options: ['off', 'subtle', 'crunchy'] },
-    { section: 'Motion' },
-    { key: 'spin', label: 'Spin hero stickers', type: 'toggle' }
-  ],
-  apply: function (t) {
-    document.documentElement.setAttribute('data-grain', t.grain);
-    document.documentElement.setAttribute('data-spin', t.spin ? 'on' : 'off');
-  }
-};
-</script>
-<script src="merit-ds-tweaks.js"></script>
-
 </body>
 </html>

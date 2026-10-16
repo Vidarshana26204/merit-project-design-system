@@ -1,5 +1,8 @@
 # Merit Design System — Review & v2 Improvement Plan
 
+> **Superseded (2026-10-16).** This is the v2 plan. v3 replaces the visual language. See
+> `DECISIONS-v3.md`, `MIGRATION-v3.md` and `research/v3/`. Kept for history.
+
 **Date:** 2026-09-26 · **Scope:** `merit-project-design-system` (v1.0), checked against
 `merit-project-flutter` (shipped app) and `merit-project-frontend` (Next.js 16 +
 shadcn web: landing, admin, student, contributor).

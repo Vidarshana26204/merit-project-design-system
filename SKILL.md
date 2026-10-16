@@ -1,328 +1,360 @@
 ---
 name: merit-design-system
 description: >-
-  The Merit Project design system — a playful, neo-brutalist, gamified
+  The Merit Project design system v3: a warm, calm-to-study, gamified
   education brand for Sri Lankan O/L & A/L students. Use this skill whenever
   building or styling ANY Merit Project surface: the Flutter mobile app, the
-  marketing/landing website, or supporting graphics. It defines the canonical
-  color tokens, typography, the signature hard-shadow + black-border look,
-  component recipes (buttons, cards, inputs, pills, progress, badges, toggles,
-  tab bars), decorative motifs, dark-mode rules, and copy voice — with ready-to-
-  paste Flutter (Dart) and HTML/CSS snippets.
+  student/admin/contributor web app, the landing page, or supporting graphics.
+  It defines the canonical tokens (canvas, ink-slate, orange, violet, sage,
+  butter), General Sans + Plus Jakarta Sans typography, soft elevation, the
+  patchwork illustration kit, calm vs energy screen modes, component recipes
+  (buttons, cards, inputs, chips, progress, quiz options, flashcards, learning
+  path, gamification), dark mode, Phosphor icon rules and copy voice, with
+  ready-to-paste Flutter (Dart) and CSS snippets.
 ---
 
-# Merit Project — Design System
+# Merit Project: Design System v3
 
 > **Learn it. Level up. Earn Merit.**
-> A gamified exam-prep platform for Sri Lankan **O/L** and **A/L** students —
+> A gamified exam-prep platform for Sri Lankan **O/L** and **A/L** students:
 > quizzes, flashcards, past papers, streaks and adaptive practice across
 > **Sinhala, Tamil and English**.
 
-This skill is the single source of truth for the Merit brand across the
-**Flutter app** and the **landing page**. When the two references disagree, the
-priority order is: **Brand Board → Mobile App Screens → Landing**.
+This skill is the single source of truth for the Merit brand across the **Flutter app**, the
+**web frontend** (student, admin and contributor) and the **landing page**.
+
+**References:**
+- **Reference site:** `Merit Design System.html`
+- **Decisions:** `DECISIONS-v3.md` (D0–D15)
+- **Research:** `research/v3/`
+- **Migration from v2:** `MIGRATION-v3.md`
+
+**Inspiration:** MindInventory's "Online Learning" shot on Dribbble (18955306). We use its
+grammar only, never its layouts or art.
+
+> **Migration status (2026-10-16):** tokens v3.0.0 are built here. The Flutter and web apps
+> still vendor **v2.1.0** until each migrates on its own branch (`MIGRATION-v3.md`). When you
+> edit an app that hasn't migrated, follow that app's vendored tokens. Don't mix v2 and v3
+> values in one screen.
 
 ---
 
 ## 1. Brand essence
 
-Merit is **bold, playful, and unmistakably game-like** — but built for serious
-study. The look is **neo-brutalist**: flat saturated color blocks, **solid black
-2px outlines on everything**, and **hard offset drop-shadows** (no blur). It
-feels like a sticker sheet, an arcade, and a study planner at once.
+Merit is **warm, clear and quietly playful**. A calm canvas suits hours of study, and the game
+layer is bright enough that every streak feels earned.
 
 **Three pillars to keep in every screen:**
-1. **Outlined & chunky** — black borders + hard shadows give physical, tactile weight.
-2. **Gamified** — streaks 🔥, merit points 🪙, tiers, starbursts, leaderboards, progress bars.
-3. **Tri-lingual & local** — EN / SI / TA toggles are first-class; content is Sri-Lanka-specific (A/L streams, districts, schools).
+1. **Calm canvas.** A warm off-white page, ink-slate text, and soft depth with no hard outlines on UI chrome.
+2. **Earned energy.** Orange, sparkles and the brush underline are reserved for actions, rewards and celebration.
+3. **Patchwork learning.** Subjects are patchwork tiles, and topics connect as a dotted learning path. The illustration system is also the navigation.
 
-**Voice:** confident, encouraging, short. "Keep your streak alive." "Earn it."
-"Hit your weak spots first." Never corporate, never condescending. Emoji are fine
-in **copy** (push notifications, celebratory text) but are **not UI icons**. Streak,
-coins, rating, and timer glyphs use the icon set (D6: **Phosphor**, Bold weight to
-match 2px outlines, Fill for active states; `phosphor_flutter` in the app,
-`@phosphor-icons/react` on web). Brand glyphs `merit-flame` and `merit-coin` come from the DS icon kit
-(`merit-coin` ships in `assets/brand/`, see §11; use it, not Phosphor `Coins`, for Merit Points).
+Tri-lingual is first-class: EN / SI / TA switchers, and content that is specific to Sri Lanka
+(A/L streams, districts, schools).
+
+**Voice:** confident, encouraging, short. "Keep your streak alive." "Hit your weak spots
+first." "12 of 50 questions today." Never shaming ("You're falling behind!"), never corporate.
+Emoji are fine in **copy** (push notifications, celebratory text) but are **never UI icons**.
 
 ---
 
-## 2. Color tokens (canonical)
+## 2. Colour
 
-> **v2:** every value below is generated from `tokens/*.tokens.json` (see §10 for the
-> semantic token table). In new code, use **semantic tokens**: CSS
-> `var(--merit-text-primary)` or Flutter `context.meritColors.textPrimary`. Don't
-> use raw hex, and don't use primitives.
+**Use semantic tokens only.** In CSS that means `var(--merit-text-primary)`. In Flutter it means
+`context.meritColors.textPrimary`. Never use raw hex or primitives in screens. The full
+light/dark table is generated in §10.
 
-These six tones + black are the **whole system. No remix, no new hues.**
+**Families (D10):**
 
-| Token | Hex | Role |
+| Family | Key values | Role |
 |---|---|---|
-| **Purple** | `#8E55D7` | Primary — main actions, brand, active states |
-| **Purple Deep** | `#6E36B8` | Primary pressed / deep shade |
-| **Yellow** | `#FFCC00` | Accent — highlights, XP, rewards, secondary CTA |
-| **Mint** | `#9ED5B7` | Support — success, "done", positive stats |
-| **Cream** | `#FFEFD7` | Surface — light background, soft cards |
-| **Ink** | `#312A31` | Charcoal — primary text, dark cards |
-| **Ink-2** | `#1B161B` | Darkest — dark-mode background |
-| **White** | `#FFFFFF` | Base surface |
-| **Line / Border** | `#000000` | The black outline on *everything* |
+| **Canvas** | `#FBFAF4` / `#F4F1E6` / `#E9E4D4` | `bg.app`, `surface.sunken`, dividers |
+| **Ink-slate** | `#1E1B2E` / `#4A4760` / `#68667F` | Text primary / secondary / tertiary. Ink is also the illustration outline |
+| **Orange** | **`#F65E16`**, pressed `#EA540E`, strong `#B23F06` | `action.primary`, eyebrow text (700), energy |
+| **Coral / sand** | `#FC906C` / `#FCEBD3`, `#F0DEC0` | Patch tints, `bg.brand` (sand 100) |
+| **Violet** | **`#54306C`** (700), `#663696` (500), `#E7DCF2` (100), electric `#7E24DE` (sparkles only) | `action.accent`, feature band, Achiever, links, focus, selection |
+| **Sage** | `#A2D2AE` / `#E2F2E6` / `#2F6B43` | Success fill / subtle / text |
+| **Butter** | `#FFD66B` / `#F5B700` | Rewards, warning, coin glyph, Achiever seal |
+| **Blush / sky** | `#F6B5C3` / `#BCD6F2` | **Subject categories only** |
+| **Red** | `#C7362F` (light), `#FF9A8F` (dark) | Error |
+| **Night / mist** | `#17121F` / `#221B2C` … `#F7F3EA` | Dark mode (§6) |
 
-### Extended palette: supporting tints (roles approved in v2 decisions D1–D4)
-
-| Token | Hex | Use |
-|---|---|---|
-| Yellow (soft) | `#F2D43B` | **Large background fills and warning only.** Brand yellow for accents, CTAs, and rewards is `#FFCC00` (D1) |
-| Mint (soft) | `#9CE7C8` | **Dark-mode success** and category tint. Light-mode success is `#9ED5B7` (D2) |
-| Pink | `#FFB3C8` | Category accent (e.g. Arts, Biology) |
-| Blue | `#B3D8FF` | Category accent (e.g. Technology, ICT) |
-| Cream (warm) | `#FFF7ED` | **`bg.app`: page background for all product UI** (app + dashboards). `#FFEFD7` is for brand and landing bands (D3) |
-| Text | `#29261B` | `text.primary`. Ink `#312A31` is `surface.inverse` (dark buttons and cards), not text (D4) |
-| Text Dim | `#5A4A5A` | Secondary text |
-| Text Mute | `#685A68` | Tertiary / captions / placeholders (`text.tertiary`). Replaces `#7A6C7A`, which was 4.37:1 on cream and failed AA. Flutter still has the old value until Phase 2 |
-| Error | `#C4393A` | Error fill (white text 5.26:1). In dark mode use `#FF9A9A` (`feedback.error` dark), never `#C4393A` (3.39:1) |
-
-**Text-on-colour rule:** purple `#8E55D7` is a **fill** colour. Purple *text* or links on light
-surfaces use purple-deep `#6E36B8` (6.45:1). Purple `#8E55D7` on cream is only 4.19:1.
-
-### Flutter: `MeritColors` (real names, `lib/theme/merit_theme.dart`)
-
-**Don't redefine the palette.** Import `package:merit_project/theme/merit_theme.dart`.
-The app's constant *names* predate the DS names, so map them carefully:
-
-```dart
-// What the app defines today. Phase 2 adopts build/dart/merit_tokens.dart
-// (MeritPalette, MeritSemanticColors via context.meritColors, MeritSpace, MeritRadii…):
-MeritColors.purple      // #8E55D7  action.primary fill
-MeritColors.purpleDeep  // #6E36B8  pressed · purple text on light surfaces
-MeritColors.purpleLight // #EDE4F8  selected tint
-MeritColors.yellow      // #F2D43B  ⚠ = DS "yellow soft", NOT brand #FFCC00
-MeritColors.mint        // #9CE7C8  ⚠ = DS "mint soft", NOT #9ED5B7
-MeritColors.cream       // #FFF7ED  ⚠ = DS "cream warm" (bg.app, dark-mode border)
-MeritColors.ink         // #29261B  ⚠ = DS "text" (text.primary)
-MeritColors.inkDeep     // #1B161B  dark background
-MeritColors.inkSurface  // #2A232A  dark surface
-MeritColors.pink / .blue
-MeritColors.textDim / .textMute / .textDimDark / .textMuteDark
-MeritColors.error       // #C4393A
-
-// Deprecated aliases: do NOT use in new code (codemod pending):
-// sunglow→yellow, emerald→mint, moonstone→purple, brightPink→error,
-// indigoDye→inkDeep, mintGreen→mintLight, blueNCS→blue, neutral10…99
-```
-
-Never add `Color(0x…)` literals in `lib/features/**`. For borders and hard shadows, use
-`MeritBorders.resolve(context)` / `MeritShadows.brutal*(context)`, which flip to cream in dark mode.
+**Hard rules:**
+- **D9:** brand orange takes an **ink** label (`text.onPrimary`, 5.22:1). **White on orange
+  fails WCAG and is never used.** Dense or long labels use `action.primaryStrong` (`#B23F06`)
+  with white (5.82:1).
+- **Links, the focus ring and form selection are violet.** Orange is too light for focus on the
+  canvas (2.85:1).
+- **D5:** *selected* means violet with a white ✓. *Completed or achieved* means sage with an
+  ink ✓. The two must never look alike.
+- Correct and wrong answers always pair colour with an **icon** (✓/✕). Colour is never the only
+  signal.
+- No gradients, and no new hues. If a role is missing, add a semantic token here and don't
+  write a hex in the app.
 
 ---
 
 ## 3. Typography
 
-| Family | Where | Weights | Tracking |
-|---|---|---|---|
-| **Clash Display** | App UI headings, numbers, buttons, stat figures, labels-as-display (mobile app + admin/student/contributor web dashboards) | 500–700 (**700 is the heaviest cut; never 800**, which renders faux-bold) | tight: `-0.02em` (display down to `-0.04em`) |
-| **Plus Jakarta Sans** | Body copy, descriptions, form values, fine print — everywhere | 400–700 | normal |
-| **School Times** | Landing page (`meritproject.lk`) headings only — a punchier, more playful marketing-only display face, deliberately distinct from the in-app Clash Display | 400–700 | as authored, no extra tracking |
+| Family | Where | Weights |
+|---|---|---|
+| **General Sans** (D8) | Headings, titles, numbers, the wordmark, the italic emphasis voice. Product and landing alike (School Times is retired, D13) | 500 / 600 / 700, plus italics |
+| **Plus Jakarta Sans** | Body, labels, form values, eyebrows | 400–700 |
+| **Noto Sans Sinhala / Tamil** | Fallback in every stack for SI/TA glyphs | 400–700 |
 
-Font files (self-hosted, not Google Fonts): `assets/fonts/` in this repo —
-`ClashDisplay-{Medium,SemiBold,Bold}.ttf`,
-`PlusJakartaSans-{Regular,Medium,SemiBold,Bold}.ttf`,
-`SchoolTimes-Regular.otf`. Flutter bundles its own copies at
-`merit-project-flutter/assets/google_fonts/`; the backend landing bundles
-its own copy at `merit-project-backend/web/static/fonts/`. Despite the
-`google_fonts` directory name, none of these are loaded from Google
-Fonts — they're local asset files, which is exactly why they should be
-self-hosted on web too rather than substituted with a Google Fonts
-lookalike.
+**Type scale** (`--merit-type-*` / `MeritTypeScale.*`):
+- display xl/lg/md: 56/40/32, weight 600, tracking −0.03…−0.02em
+- title lg/md: 24/20, General Sans 600. title sm: 16, Jakarta 700
+- **emphasis lg/md:** 24/18, General Sans 600 *italic*
+- body lg/md/sm: 16/14/12, Jakarta 500
+- label md/sm and **eyebrow:** 12/11, 700, uppercase, tracked. **Nothing goes below 11px.**
+- numeric xl/lg/md: 48/32/20, 700, **tabular figures**. Use these for timers, points and ranks.
 
-**Sinhala / Tamil:** none of these three families contain Sinhala or Tamil glyphs, and
-no SI/TA font ships yet (v2 adds Noto Sans Sinhala and Noto Sans Tamil; see IMPROVEMENT-PLAN §4).
-Until then, for SI/TA strings: letter-spacing 0 (never negative), line-height ≥ 1.6,
-no UPPERCASE wide-tracked labels, and let buttons, pills, and tabs wrap or flex. Tamil
-runs about 30–40% longer than English.
+**Emphasis pattern:** use at most one key word per heading. Set it in the emphasis style
+and/or draw the **brush underline** under it (`decor.underline`,
+`assets/v3/motifs/brush-underline-mono.svg` as a CSS mask). The underline sits under the text
+box, so it works with Sinhala and Tamil.
 
-### Flutter typography
+**Eyebrow pattern:** a small uppercase `text.eyebrow` (orange 700) label above section
+headings. **SI/TA eyebrows are never uppercased and have tracking 0.**
 
-The fonts are declared in `pubspec.yaml` as local families: `ClashDisplay`
-(w500/600/700) and `PlusJakartaSans` (w400–700). **Do not use the `google_fonts`
-package.** In screens, use `Theme.of(context).textTheme.*` or `MeritTypography.*`
-(`lib/theme/merit_theme.dart`) rather than literal `fontSize:`. Label floor: 11.
+**SI/TA rules (C4):**
+- letter-spacing 0
+- body line-height ≥ 1.6, display ≥ 1.3
+- buttons, chips and tabs wrap and never truncate (Tamil runs +30–40%)
+- language names appear in their own script: English / සිංහල / தமிழ்
+
+**Fonts and licensing:**
+- General Sans is under the ITF Free Font License, which **forbids redistribution from a public
+  repo**. This repo gitignores it (`assets/fonts/README.md`).
+- The apps bundle and self-host their own copies. On Flutter the family is `GeneralSans`.
+- Never load it from Google Fonts. Don't use the `google_fonts` package.
 
 ```dart
-// MeritTypography (real) — display/headline/titleLarge = ClashDisplay,
-// titleMedium and below = PlusJakartaSans.
-Text('Keep the streak', style: Theme.of(context).textTheme.headlineMedium);
-Text('12 of 50 today', style: MeritTypography.labelMedium.copyWith(
-    color: Theme.of(context).colorScheme.onSurfaceVariant));
-// Live-updating numbers (timer, points): add tabular figures
-MeritTypography.headlineLarge.copyWith(
-    fontFeatures: const [FontFeature.tabularFigures()]);
+Text('Keep your streak alive', style: MeritTypeScale.titleLg.copyWith(color: context.meritColors.textPrimary));
+Text('04:59', style: MeritTypeScale.numericLg); // tabular figures built in
 ```
 
 ---
 
-## 4. The signature look — borders, shadows, radii
+## 4. Shape and depth (D11)
 
-| Property | Value | Notes |
+The neo-brutalist black outline and hard offset shadow are **retired**.
+
+| Property | Token | Notes |
 |---|---|---|
-| **Border** | `2px solid #000` | 3px on large/hero frames, 1.5px on tiny chips |
-| **Hard shadow — small** | `2px 2px 0` / `3px 3px 0` | chips, inputs |
-| **Hard shadow — card** | `4px 4px 0` / `5px 5px 0` | content cards |
-| **Hard shadow — hero** | `6px 6px 0` … up to `14px 14px 0` | bigger = more important |
-| **Radius — pill** | `999px` | buttons, toggles, tags, progress bars |
-| **Radius — card** | `18–28px` | content cards |
-| **Radius — large frame** | `32–46px` | phone bezel, image frames |
-| **Radius — icon chip** | `8–16px` | square-ish badges/icons |
+| **Elevation** | `elevation.e0–e3` → `--merit-elevation-e*` / `context.meritColors.elevationE*` | Soft, violet-tinted, at most 2 layers. e1 is cards, chips and search. e2 is the tab bar, toasts and hover. e3 is dialogs and sheets |
+| **Card border** | none | A card **never** combines a border with elevation |
+| **Border widths** | hairline 1 · base 1.5 · strong 2 | Base is for inputs, filter chips and patchwork outlines. Strong is for selected and focused edges |
+| **Radii** | xs 6 · sm 10 · md 16 · lg 20 · xl 24 · 2xl 32 · pill | Cards are xl. Inputs and quiz options are md. Sheets and bands are 2xl. Buttons and chips are pill |
+| **Ink outline** | `border.strong` / `category.outline` | Only on illustration, filter chips, patchwork tiles and learning-path nodes |
 
-### Flutter — `meritBox`
-
+```css
+.card { background: var(--merit-surface-default); border-radius: var(--merit-radius-xl); box-shadow: var(--merit-elevation-e1); }
+```
 ```dart
-BoxDecoration meritBox({
-  Color fill = MeritColors.white,
-  double radius = 18,
-  double offset = 4,
-  Color border = MeritColors.line,
-  Color? shadow,
-}) => BoxDecoration(
-  color: fill,
-  borderRadius: BorderRadius.circular(radius),
-  border: Border.all(color: border, width: 2),
-  boxShadow: [
-    BoxShadow(color: shadow ?? MeritColors.line,
-              offset: Offset(offset, offset), blurRadius: 0),
-  ],
+BoxDecoration(
+  color: context.meritColors.surfaceDefault,
+  borderRadius: BorderRadius.circular(MeritRadii.xl),
+  boxShadow: context.meritColors.elevationE1,
 );
 ```
 
 ---
 
-## 5. Components (quick reference)
+## 5. Components (quick reference; live demos in the reference site)
 
-### Buttons
-- **Primary** — purple fill, white text
-- **Accent** — yellow fill, ink text
-- **Dark** — ink fill, cream text, yellow circular arrow chip
-- **Ghost** — transparent, ink border
-- **Link** — purple underline, no border
+**Buttons**
+- Pills, S 36 / M 48 / L 56.
+- **Variants:**
+  - primary: orange with an ink label, e1
+  - strong: burnt orange with a white label
+  - accent: violet with white
+  - inverse: ink
+  - ghost: 1.5 inset border
+  - link: violet underline
+- **Loading:** a spinner replaces the label and the width stays locked.
+- **Disabled:** .4 opacity and no elevation.
+- **Press:** move down 1px and drop to e0.
 
-### Cards
-`meritBox` + padding 14–26px. White/cream = neutral, purple/ink = featured, yellow = reward, mint = success.
+**Cards:** borderless, xl, e1.
+- feature: violet `surface.feature`
+- reward: butter
+- success: sage-subtle
+- selected: a 2px violet inset
+- interactive: rises to e2 on hover
 
-### Inputs
-Radius 14px (not pill). UPPERCASE micro-label above. Focus → purple border + shadow.
+**Inputs**
+- md radius, 1.5 `border.default` (≥3:1).
+- **Focus:** violet border plus a soft violet ring.
+- **Label** always visible above the field. **Help and error text** go below, and errors carry an icon.
+- **Phone fields** use a `+94` prefix. **OTP** is 6 boxes.
 
-### Pills
-`.p` purple · `.y` yellow · `.m` mint · `.k` ink — 1.5–2px border, 99px radius.
+**Search pill:** a white pill on e2 with a round orange action button.
 
-### Progress
-Bordered track, accent fill, **black right-edge divider** on fill. Stepper: done=mint, current=purple, todo=white.
+**Chips and badges**
+- **Filter chip:** 1.5 ink outline. The selected chip fills violet.
+- **Badges:** flat, at least 24 high, 11.5px label.
+- **Subject badge:** category tint plus the patchwork tile thumbnail.
 
-### Toggles
-46×24 pill, ink→mint. Checkbox: 24×24 rounded-7px. **Form selection = purple fill + white ✓.
-Completion (todo done, stage cleared) = mint fill + ink ✓** (D5: "selected" must never read as "achieved").
+**Progress**
+- **Bar:** a sunken track. The fill is orange in energy screens and violet in calm screens.
+- **Ring:** carries a tabular number.
+- **Stepper:** done is sage ✓, current is orange, to-do is sunken, with a dotted connector between steps.
 
-### Tab bar
-`meritBox(radius:20, offset:3)`, 5 items max. Active = purple chip with white glyph.
-Label **11px minimum**. Touch target ≥ 48dp.
+**Toggles:** 48×28, with the on state violet. For checkboxes and radios, follow D5.
 
-### Gamification
-- Streak chip: white pill, flame icon + {n}, Clash 700
-- Coins chip: yellow pill, 🪙 {points}
-- Streak ribbon: done=purple ✓, today=yellow !, future=dashed
-- Leaderboard: dark card, "You" row highlighted purple, points yellow ★
-- Tier starburst: purple multi-point SVG
+**Tab bar:** floats on e2 with a 2xl radius, 5 items max. The active item is a
+`surface.selected` pill with a Fill icon. Labels are at least 11px, touch targets at least 48dp,
+and the bar respects the safe area.
+
+**Segmented control:** a sunken track. The active segment is white on e1.
+
+**Dialog / sheet:** e3, 2xl radius, over a 50% ink scrim. Sheets get a drag handle.
+
+**Toast:** the inverse surface on e2, shown for 4s, with an icon and at most one action.
+
+**Skeleton:** sunken blocks with no border. Shimmer is off under reduced motion.
+
+**Quiz option**
+- At least 56 high, with a letter chip. Options lock once the answer is submitted.
+- **States** (`quizOption.*`): idle · selected (violet) · correct (sage-subtle + ✓) · wrong (red-subtle + ✕) · revealed (dashed sage).
+
+**Timer:** neutral (safe), then butter (≤5 min), then red (≤1 min). Each change is announced to screen readers.
+
+**Flashcard:** the front is the category tint with a pattern corner, and the back is white. The flip runs 2 × `slow`, or crossfades under reduced motion. FSRS rating buttons are Again (coral), Hard (sand), Good (sage) and Easy (violet).
+
+**Learning path:** the topic hierarchy shown as tiles joined by dotted connectors.
+- **Node states:** done (sage ✓), current (larger, orange, sparkle, %), locked (sunken + lock).
+- On mobile the path scrolls horizontally.
+
+**Gamification**
+- **Header chips:** the streak is an orange Fill `flame`, and points are a butter Fill `coins`. Numbers are tabular.
+- **Streak ribbon:** done days are orange, today is butter with an ink ring, future days are a hairline outline.
+- **Leaderboard:** a podium, then rows. The "You" row is violet-selected and sticks when scrolled off-screen.
+- **Grades A–F:** sage, sage-subtle, butter, orange-300, coral, red. The letter is always shown.
+- **Points breakdown:** +10 per correct answer, +20 when accuracy is ≥80%, ×1.5 for Achiever.
+
+**Tiers (C6)**
+- **Wanderer:** neutral.
+- **Achiever band:** violet with a butter seal and an orange quarter-pill cap. At most one per screen.
+- **Quota meter copy:** "32 of 50 questions today", never shaming.
+
+**Empty / error / offline:** a spot illustration (`assets/v3/spots/`), one line of text and one CTA.
 
 ---
 
-## 6. Dark mode
+## 6. Modes and dark mode (D15)
+
+**Calm mode** (quiz-taking, paper mode, notes reader)
+- Canvas or white surfaces, slate text, violet selection.
+- **No** sparkles, patchwork or brush underlines.
+- At most **one** orange action.
+
+**Energy mode** (home, rewards, results, leaderboard, landing)
+- Orange, butter, patchwork and sparkles.
+- Celebration motion up to 600ms.
+
+**Dark mode** is a violet-black base, never neutral grey:
 
 | | Light | Dark |
 |---|---|---|
-| Background: product UI (app, dashboards) | `#FFF7ED` | `#1B161B` |
-| Background: brand / landing bands | `#FFEFD7` | `#1B161B` |
-| Surface | `#FFFFFF` | `#2A222A` |
-| Text | `#29261B` | `#FFF7ED` |
-| Border | `#000000` | `#FFF7ED` (cream!) |
+| `bg.app` | `#FBFAF4` | `#17121F` |
+| `surface.default` | `#FFFFFF` | `#221B2C` |
+| `text.primary` | `#1E1B2E` | `#F7F3EA` |
+| `action.primary` | `#F65E16` | `#FF8A4C` (still with an ink label) |
+| `text.link` / `focus.ring` | `#663696` | `#C9B3EA` |
+| Elevation | violet-tinted | black, stronger. Depth comes mostly from surface steps |
 
-**Key rule:** black outline → cream outline in dark mode.
-
----
-
-## 7. Do / Don't
-
-**Do:** outline everything · zero-blur hard shadows · Clash Display for loud text · six canonical colors · gamification everywhere · EN/SI/TA first-class.
-
-**Don't:** soft/blurred Material shadows · gradients or new hues · unstyled Material widgets · freehand illustration (use geometric sticker kit) · overuse emoji.
+**Theme scopes:**
+- **Light** applies on `:root`, `.light` and `[data-theme="light"]`.
+- **Dark** applies on `.dark` and `[data-theme="dark"]`.
+- You can nest either inside the other, for example a light island on a dark page.
 
 ---
 
-## 8. Web / shadcn mapping (merit-project-frontend)
+## 7. Motion
 
-> **v2 naming change:** the generated CSS uses stepped primitive names
-> (`--merit-purple-500`, `--merit-cream-100`, …) plus semantic names
-> (`--merit-bg-app`, `--merit-text-primary`, …). The frontend's current hand-written
-> `--merit-purple`, `--merit-cream`, and similar are the **v1 names**. In Phase 3 the
-> frontend vendors `build/css/merit-tokens.css` and re-points the shadcn variables at
-> semantic tokens; until then, the table below describes the frontend as it is today.
+| Duration | Value | Use |
+|---|---|---|
+| instant | 80 | — |
+| fast | 120 | Press |
+| base | 180 | Toggle, tab |
+| slow | 280 | Sheet, card-flip half |
+| celebrate | 600 | Grade, level-up |
 
-Added when the unified web frontend (`merit-project-frontend`) needed these
-tokens expressed as shadcn/Tailwind v4 CSS variables. Applied in
-`app/globals.css` — shadcn variable names are kept unprefixed so every
-`components/ui/*` primitive restyles automatically; the raw merit-ds values
-are also exposed as `--merit-*` for direct use outside the shadcn mapping.
-
-| shadcn var | Light | Dark | merit-ds source |
-|---|---|---|---|
-| `--background` | `#FFEFD7` (cream) | `#1B161B` (ink-2) | `--bg` |
-| `--card` / `--popover` | `#FFFFFF` | `#2A222A` | `--surface` |
-| `--foreground` | `#29261B` | `#FFF7ED` | `--text` |
-| `--primary` | `#8E55D7` (purple) | same | `--purple` |
-| `--secondary` | `#9ED5B7` (mint) | `#9CE7C8` (mint-soft) | `--mint` |
-| `--muted` | `#FFF7ED` (cream-warm) | `#241D24` | `--surface-2` |
-| `--accent` | `#FFCC00` (yellow) | same | `--yellow` |
-| `--destructive` | `#C4393A` | same | Flutter `MeritColors.error` (not yet in merit-ds.css root tokens — carried over from the mobile app for consistency) |
-| `--border` / `--input` | `#000000` | `#FFF7ED` | `--line` (dark-mode flip is merit-ds.css's own rule) |
-| `--radius` | `1.125rem` (18px) | same | §4 "Radius — card" |
-| `--chart-1..5` | purple/yellow/mint/pink/blue | same | categorical accent set |
-
-**Fonts:** self-hosted via `next/font/local`, not `next/font/google` — the
-same `.ttf`/`.otf` files this repo carries in `assets/fonts/` (§3), copied
-into `merit-project-frontend/public/fonts/`. Plus Jakarta Sans is the body
-face everywhere (`--font-merit-sans`); Clash Display is the display face
-for app UI headings (`--font-merit-display`, used in `app/admin`,
-`app/student`, `app/contributor`); School Times is loaded separately and
-scoped only to the landing route group (`app/(landing)/layout.tsx`) as
-`--font-landing-display`, matching the backend templ landing exactly.
-JetBrains Mono still loads from `next/font/google` (`--font-merit-mono`) —
-no local copy of it exists in this design system.
-
-**Known gaps, follow-up work:**
-- Component border-width (2px per §4) isn't retrofitted onto every
-  `components/ui/*` primitive yet — only the CSS variable color is mapped.
-  Hard-offset shadows (§4) aren't applied to shadcn cards/buttons either.
-- ~~No square favicon/app-icon asset~~ — done: favicon/app icon come from
-  `assets/brand/` (§11); the old `assets/logo.png` raster is gone.
-- This section covers step 1 (setup + skeletons) of the frontend unification
-  only. Full component-level parity with §5 (buttons/cards/inputs/pills/
-  progress/toggles/tab bar) lands as the real admin/student/contributor UI
-  gets built in later phases.
+- **Curves:** `standard` for movement in and within the screen, `exit` for things leaving.
+- **Reduced motion** (`MediaQuery.disableAnimationsOf` / `prefers-reduced-motion`): no shimmer, no sparkle twinkle, and a crossfade instead of the flip.
 
 ---
 
-## 9. v2 decisions (approved 2026-09-26)
+## 8. Iconography (D12)
 
-Full rationale, measured contrast data and the migration roadmap live in
-`IMPROVEMENT-PLAN.md`. Until the Phase 1 token pipeline lands, these rules
-override any older wording above.
+- **Phosphor only, on both platforms:** `phosphor_flutter` and `@phosphor-icons/react`. On web, import through `@/lib/icons`.
+- **Weights:**
+  - **Regular** by default. Bold is retired as the default.
+  - **Fill** for active and selected states.
+  - **Duotone** on category and feature chips.
+- **Size:** 20–24px in UI, 1.15em inside buttons.
+- **Colour:** icons inherit the text colour. Only reward glyphs carry their own colour: the orange `flame` and the butter `coins`.
+- No Material `Icons.*`, no lucide, no tabler, and no emoji as icons.
 
-| ID | Decision |
+---
+
+## 9. Illustration kit (D14)
+
+Everything is generated from tokens by `scripts/brand/build_v3_brand.py` into `assets/v3/`.
+`assets/v3/index.html` previews it.
+
+- **Patchwork tiles** (`tiles/*.svg`): a rounded square cut into patches, each filled with a tint
+  or a pattern, outlined in 1.5 ink around a white focal patch with a line glyph. Subjects map
+  deterministically by `category.1–6`:
+  1. Biology: sage
+  2. Physics: sky
+  3. Chemistry: coral
+  4. Maths: butter
+  5. ICT: lilac
+  6. Languages: blush
+- **Patterns** (`patterns/*.svg`): dots, stripes, checks, hatch. They are ink at partial
+  opacity, so they overlay any tint.
+- **Motifs** (`motifs/*.svg`):
+  - 4-point sparkle in violet, warm or `currentColor`
+  - brush underline (colour or mono mask)
+  - dotted connector with node circles
+- **Spots** (`spots/*.svg`): empty, error, offline, not-found, success.
+
+**Rules:**
+- At most 2–3 sparkles per composition.
+- No patchwork on calm screens or in admin tables.
+- No freehand people, stock art or gradients.
+- SVG only. Don't hand-edit the outputs: change the generator and re-run it.
+
+---
+
+## 9a. Web / shadcn mapping (merit-project-frontend, target for v3)
+
+The shadcn variables re-point at v3 semantics. The names are kept so `components/ui/*`
+restyles automatically.
+
+| shadcn | v3 token |
 |---|---|
-| D1 | Brand yellow = `#FFCC00` (accents, CTAs, rewards). `#F2D43B` = large fills + warning only |
-| D2 | `#9ED5B7` = light-mode success. `#9CE7C8` = dark-mode success + category tint |
-| D3 | `bg.app` = `#FFF7ED` for all product UI; `#FFEFD7` = brand / landing bands |
-| D4 | `text.primary` = `#29261B`; `surface.inverse` = `#312A31` |
-| D5 | Checkbox: form selection = purple + white ✓; completion = mint + ink ✓ |
-| D6 | One icon family on both platforms: Phosphor (Bold / Fill) + `merit-flame`, `merit-coin` |
-| D7 | Admin / contributor dashboards use **compact density**: 1.5px borders on table cells, s1–s2 shadows, 8–12 padding; full hard shadows only for primary actions and floating layers |
+| `--background` | `--merit-bg-app` |
+| `--card`, `--popover` | `--merit-surface-default` |
+| `--foreground` | `--merit-text-primary` |
+| `--primary` / `--primary-foreground` | `--merit-action-primary` / `--merit-text-on-primary` (**ink**) |
+| `--secondary` / `-foreground` | `--merit-surface-sunken` / `--merit-text-primary` |
+| `--accent` / `-foreground` | `--merit-action-accent` / `--merit-text-on-accent` |
+| `--muted` / `-foreground` | `--merit-surface-sunken` / `--merit-text-secondary` |
+| `--destructive` | `--merit-feedback-error` |
+| `--border`, `--input` | `--merit-border-default` |
+| `--ring` | `--merit-focus-ring` |
+| `--radius` | `--merit-radius-lg` |
+| `--chart-1..5` | `--merit-chart-1..5` |
+| `shadow-brutal-1…5` | **replaced by** `shadow-elev-1…3` (`--merit-elevation-e1…e3`) |
+
+The frontend guard `scripts/check-design-tokens.mjs` must change in two ways. It must
+**forbid** `shadow-brutal-*`, and it must **allow** `shadow-elev-*` while still forbidding
+Tailwind's `shadow-sm…2xl`. Keep the raw-hex and icon-import guards. See `MIGRATION-v3.md`.
 
 ---
 
@@ -334,9 +366,10 @@ Added 2026-10-01 after an audit found per-page drift. Enforced where noted by `m
 - **Page actions** ("Add …", "Import", "Create") live in `PageHeader actions`, never in a table/filter toolbar. Toolbars hold filters and search only, left-aligned.
 - **Form action rows:** `flex gap-3`, **left-aligned**, primary first (`Save` then `Cancel`), same button size throughout the form.
 - **Dialog footers:** right-aligned, `Cancel` then primary (the shadcn `DialogFooter` default).
-- **Header chrome controls** (sidebar trigger, search, theme, settings, avatar): all `h-9`, `rounded-full`, `border-2`, `shadow-brutal-2` — i.e. `Button variant="outline" size="icon"`; the search trigger is the same pill, wider.
-- **Sidebar:** same chrome as the content pane (`border-2 rounded-xl shadow-brutal-2`); menu items are pills; the active item is `bg-sidebar-primary` with a `border-2` and `shadow-brutal-1`. No translucency / `backdrop-blur` on layout chrome (guarded).
+- **Header chrome controls** (sidebar trigger, search, theme, settings, avatar): all `h-9` and `rounded-full`, i.e. `Button variant="outline" size="icon"`; the search trigger is the same pill, wider. v2: `border-2 shadow-brutal-2`. **v3:** no border, `shadow-elev-1` on a `surface.default` fill.
+- **Sidebar:** same chrome as the content pane; menu items are pills. v2: `border-2 rounded-xl shadow-brutal-2`, with the active item `bg-sidebar-primary border-2 shadow-brutal-1`. **v3:** `rounded-2xl shadow-elev-1`, no border, and the active item is a `surface.selected` pill with a Fill icon. No translucency / `backdrop-blur` on layout chrome (guarded).
 - **Links** to mode routes carry the mode prefix (`/admin/...`); build admin URLs with `lib/admin-routes.ts` (guarded).
+- **Density (D7):** admin and contributor screens are compact: 8–12 padding, hairline table rows, e0–e1, no patchwork in tables.
 
 ## 10. Token reference (generated)
 
@@ -411,42 +444,49 @@ Lowest five:
 
 ## 11. Logo & Merit Points coin
 
-Source of truth: `assets/brand/*.svg`, generated by `scripts/brand/build_brand.py`
-(`pip install fonttools` for the lockups). Never redraw or recolour by hand; change the
-script and regenerate. 1024px PNGs are in `assets/brand/png/`.
+**Sources:**
+- v3: `assets/v3/brand/*.svg`, generated by `scripts/brand/build_v3_brand.py`. It needs the local
+  General Sans `.ttf` files and fontTools.
+- v2 masters: `assets/brand/` (built by `scripts/brand/build_brand.py`). They stay until every
+  consumer has migrated.
 
-**The mark.** The original cube-in-pyramid, redrawn in the DS style: 2px-equivalent black
-outline on every facet plus one hard offset shadow. It's built on a 256 grid with every edge at
-30°/60°/90°. The cube's upper corners sit on the pyramid sides. The facets use only DS
-tokens: yellow/yellow-soft, mint/mint-soft and purple/purple-deep, with a cream cube top.
+Never redraw or recolour by hand. Change the script and regenerate.
 
-| File | Use |
-|---|---|
-| `merit-mark.svg` / `-dark.svg` | Default mark on light / dark (cream outline, §6) |
-| `merit-mark-small.svg` / `-small-dark.svg` | 24–32px: one tone per corner, heavier lines (sidebar tile, chips) |
-| `merit-cube.svg` | ≤16px and favicons. The full pyramid smudges at 16px |
-| `merit-mark-black.svg` / `-white.svg` | One colour (print, stamps, on purple). The cube is a real hole |
-| `merit-mark-achiever.svg` | Achiever (Pro) tier: purple summit, gold cube top |
-| `merit-app-icon.svg` | iOS/store icon: mark on cream `#FFEFD7` |
-| `merit-android-foreground.svg` / `-monochrome.svg` | Android adaptive icon (background `#FFEFD7`, mark sized to the 66dp safe zone, inset 0) and the Android 13 themed icon |
-| `merit-lockup-horizontal.svg` / `-dark.svg`, `merit-lockup-stacked.svg` | Mark + wordmark |
+**The mark.** The cube-in-pyramid is already a patchwork, which fits v3. v3 makes three changes:
+- recolours the facets to orange / coral / sage / violet with a sand cube top;
+- **drops the hard offset shadow**;
+- thins the outlines by 25%, in ink (`#1E1B2E`, or mist on dark).
 
-**Wordmark.** **MERIT** in Clash Display Bold, uppercase. Below it, **PROJECT** in Plus Jakarta
-Sans Bold, tracked out to exactly the width of MERIT. Both are outlined to paths in the lockup
-files. Live-text brand names in UI (navbar, sidebar) can stay "Merit Project".
-
-**Clear space and minimum size.** Keep one cube-width clear on every side. Minimum sizes are
-32px for the mark, 24px for the small cut and 16px for the cube.
-
-**`merit-coin`: Merit Points.** The pyramid alone, cut in gold facets (yellow/yellow-soft).
-It's a piece of Merit you collect.
+The filenames and uses are unchanged from v2:
 
 | File | Use |
 |---|---|
-| `merit-coin.svg` / `-dark.svg` | ≥32px: rewards, celebrations, store |
-| `merit-coin-small.svg` | 16–24px: a single ridge |
-| `merit-coin-glyph-fill.svg` | Single colour (`currentColor`), for inside chips and buttons. Flutter: `Assets.meritCoinGlyph` + `ColorFilter.mode(ink, srcIn)` |
-| `merit-coin-glyph-bold.svg` | Outline glyph. Avoid it below 20px, where it reads close to a ⚠ warning sign |
+| `merit-mark` / `-dark` | Default mark |
+| `merit-mark-small` / `-small-dark` | 24–32px |
+| `merit-cube` | 16px and favicons |
+| `merit-mark-black` / `-white` | Single colour |
+| `merit-mark-achiever` | Achiever tier |
+| `merit-app-icon` | iOS and store icons, on sand |
+| `merit-android-foreground` / `-monochrome` | Android adaptive and themed icons |
+| `merit-lockup-*` | Mark plus wordmark |
 
-Don't: recolour facets, rotate, add soft shadows or gradients (the hard shadow is part of
-the mark), stretch the cube, or set the wordmark in mixed case.
+**Wordmark (D13):**
+- **MERIT** is set in General Sans **Bold Italic**, uppercase, followed by an **orange full stop**
+  (`action.primary`).
+- **PROJECT** sits below or beside it in General Sans Semibold, tracked +0.32em, in `text.secondary`.
+- Both are outlined to paths in the lockups. A logo made with the font is not a derivative of the
+  font under the FFL.
+- In UI, live text can render the wordmark as `MERIT` plus an orange `.` in the emphasis style.
+
+**Clear space:** at least twice the dot's diameter on every side. **Minimum sizes:** the mark
+is 32px, the small cut 24px, the cube 16px.
+
+**`merit-coin` (Merit Points):** the pyramid cut in **butter** facets (`#FFD66B` / `#F5B700`) with
+ink outlines. Use `merit-coin-glyph-fill` (`currentColor`) inside chips. In UI, the Phosphor
+`coins` Fill icon in `reward.points` is the default glyph.
+
+**Don't:**
+- recolour facets outside the generator;
+- add shadows or gradients;
+- rotate or stretch the mark;
+- set the wordmark upright or in mixed case.
