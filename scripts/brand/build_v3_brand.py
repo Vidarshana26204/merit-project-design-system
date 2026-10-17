@@ -7,7 +7,7 @@
 Reads  assets/brand/*.svg (v2 masters) and assets/fonts/GeneralSans-*.ttf (local only,
         see assets/fonts/README.md).
 Writes assets/v3/brand/*.svg, assets/v3/patterns/*.svg, assets/v3/motifs/*.svg,
-        and assets/v3/spots/*.svg. Hierarchy patchworks: scripts/patchwork/.
+        assets/v3/banners/*.svg and assets/v3/spots/*.svg. Hierarchy patchworks: scripts/patchwork/.
 
 All colours come from build/json/merit-tokens.json (light theme), so a token change
 followed by a re-run keeps the art in sync. Output is deterministic.
@@ -15,7 +15,9 @@ followed by a re-run keeps the art in sync. Output is deterministic.
 from __future__ import annotations
 
 import json
+import math
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -197,6 +199,62 @@ SPOTS = {
 }
 
 
+# ── 5. Feature banners — violet stadium, orange disc, two dissolving patterns ──────────
+# Each context reserves one band pattern + one disc pattern (tokens: color.banner.*).
+sys.path.insert(0, str(ROOT / "scripts"))
+from patchwork import patterns as pw  # noqa: E402  (shared element engine, D16)
+
+BANNERS = {"cta": ("halftone", "chevron"), "achiever": ("diamonds", "arcs"),
+           "promo": ("plus", "waves"), "streak": ("dashes", "scales")}
+FIELD_W, FIELD_H, DISC = 640.0, 320.0, 320.0
+
+
+def banner_field(pattern: str) -> str:
+    """Band layer, anchored left: the pattern is densest at the left/top edge and gone
+    before the copy; three hairline circles run off the left edge (reference: D17)."""
+    kind, els, to_world, rot = pw.field(pattern, (0, 0, FIELD_W, FIELD_H), 22.0, 0)
+    ks = []
+    for el in els:
+        x, y = to_world(el.x, el.y)
+        el.weight = 1.0                          # banners fade by position, not by halftone ramp
+        ks.append(1 - pw.smoothstep(0.15, 1.0, x / 230 + y / 700))
+    body = pw.draw(kind, els, ks, c("banner.bandInk"), rot, 1.0, opacity_by_k=True)
+    arcs = "".join(f'<circle cx="{x}" cy="{y}" r="{r}"/>' for x, y, r in ((60, 30, 150), (-40, 250, 130), (170, 360, 190)))
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {FIELD_W:g} {FIELD_H:g}" width="{FIELD_W:g}" '
+            f'height="{FIELD_H:g}" preserveAspectRatio="xMinYMid slice" aria-hidden="true">'
+            f'<defs><clipPath id="b"><rect width="{FIELD_W:g}" height="{FIELD_H:g}"/></clipPath></defs>'
+            f'<g clip-path="url(#b)">{body}<g fill="none" stroke="{c("banner.arc")}" stroke-width="1.6" '
+            f'opacity=".45">{arcs}</g></g></svg>\n')
+
+
+def banner_disc(pattern: str) -> str:
+    """Disc layer, anchored top-right: an orange disc carrying its pattern, which
+    dissolves toward the disc's lower-left (into the band), plus one echo arc."""
+    cx, cy, r = 200.0, 110.0, 132.0
+    kind, els, to_world, rot = pw.field(pattern, (cx - r, cy - r, cx + r, cy + r), 18.0, 0)
+    ks = []
+    for el in els:
+        x, y = to_world(el.x, el.y)
+        if math.hypot(x - cx, y - cy) > r + 10:
+            ks.append(0.0)
+            continue
+        el.weight = 1.0
+        ks.append(1 - pw.smoothstep(0.45, 1.25, math.hypot(cx + r - x, y - (cy - r)) / (2 * r)))
+    body = pw.draw(kind, els, ks, c("banner.discInk"), rot, 1.0, opacity_by_k=True)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {DISC:g} {DISC:g}" width="{DISC:g}" height="{DISC:g}" aria-hidden="true">'
+            f'<defs><clipPath id="d"><circle cx="{cx:g}" cy="{cy:g}" r="{r:g}"/></clipPath></defs>'
+            f'<circle cx="{cx:g}" cy="{cy:g}" r="{r:g}" fill="{c("banner.disc")}"/>'
+            f'<g clip-path="url(#d)">{body}</g>'
+            f'<circle cx="{cx - 18:g}" cy="{cy + 16:g}" r="{r + 10:g}" fill="none" stroke="{c("banner.arc")}" '
+            f'stroke-width="1.6" opacity=".55"/></svg>\n')
+
+
+def build_banners() -> None:
+    for ctx, (band, disc) in BANNERS.items():
+        write(f"banners/{ctx}-field.svg", banner_field(band))
+        write(f"banners/{ctx}-disc.svg", banner_disc(disc))
+
+
 def spot(name: str, title: str, tint: str, drawing: str) -> str:
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160" role="img" aria-labelledby="t">'
@@ -220,9 +278,10 @@ def main() -> None:
     write("brand/merit-lockup-horizontal-dark.svg", lockup("horizontal", dark=True))
     build_patterns()
     build_motifs()
+    build_banners()
     for name, (title, tint, drawing) in SPOTS.items():
         write(f"spots/{name}.svg", spot(name, title, tint, drawing))
-    print(f"✓ {len(masters)} brand masters, 3 lockups, {len(PATTERNS)} patterns, 5 motifs, "
+    print(f"✓ {len(masters)} brand masters, 3 lockups, {len(PATTERNS)} patterns, 5 motifs, {len(BANNERS)} banners, "
           f"{len(SPOTS)} spots → {OUT.relative_to(ROOT)}")
 
 

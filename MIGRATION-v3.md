@@ -83,7 +83,7 @@ The specs are in SKILL.md §5 and the reference site.
 - `MeritSectionHeader`: eyebrow plus a title with an optional brush underline (a `CustomPainter` or the SVG). SI/TA versions get no uppercase.
 - `MeritAchieverBand`: replaces the `Color(0x…)` gradient in `premium/ui/premium_screen.dart`.
 
-### 1.4a `MeritPatchwork` (DS 3.1, SKILL.md §12)
+### 1.4a `MeritPatchwork` (DS 3.2, SKILL.md §12)
 **Data:** the backend adds `patchwork` to subject, topic and subtopic payloads (§3a). Add a
 Freezed model:
 ```dart
@@ -92,7 +92,8 @@ class Patchwork with _$Patchwork {
   const factory Patchwork({
     required String signature,
     required String version,
-    required PatchworkUrls urls, // tile, row, corner, mono
+    required PatchworkUrls urls, // tile, row, mono, wash? (topics + subtopics)
+    PatchworkInk? washInk,       // {light, dark} hex for the wash
   }) = _Patchwork;
 }
 ```
@@ -100,7 +101,7 @@ class Patchwork with _$Patchwork {
 ```dart
 MeritPatchwork(
   patchwork: node.patchwork,          // nullable
-  variant: PatchworkVariant.tile,     // tile | row | corner | mono
+  variant: PatchworkVariant.tile,     // tile | row | mono (wash: MeritPatchworkWash)
   fallbackCategory: subject.categoryIndex,
   semanticLabel: node.title,
 )
@@ -110,9 +111,12 @@ MeritPatchwork(
 - **Loading or missing:** draw the same frame with the `category.N` tint and a Phosphor
   **duotone** icon. Never show another node's patchwork.
 - **Mono:** `colorFilter: ColorFilter.mode(color, BlendMode.srcIn)`.
-- **Corner:** `ClipRRect` the card, then `Positioned(top: 0, right: 0)` with a 56×56 SVG
-  clipped to a bottom-left quarter circle (`ClipPath`), and a 1.5 `patchwork.seam` edge.
-- **Accessibility:** `tile` and `row` take the node title as their semantics label. `corner`
+- **Wash:** `MeritPatchworkWash(patchwork: subtopic.patchwork)` goes first in the card's
+  `Stack`, inside its `ClipRRect`: `Positioned(top: 0, right: 0, width: min(cardWidth, 360))`,
+  `SvgPicture.network(urls.wash, colorFilter: ColorFilter.mode(ink, BlendMode.srcIn))` inside an
+  `Opacity` of 0.26 (light, `washInk.light`) or 0.16 (dark, `washInk.dark`). No wash URL → draw
+  nothing (no fallback art behind copy). Content padding is unchanged.
+- **Accessibility:** `tile` and `row` take the node title as their semantics label. The wash
   is `excludeFromSemantics`.
 
 **Where each variant goes:**
@@ -123,9 +127,9 @@ MeritPatchwork(
 | `subject_details_screen` header | `row` (expanded) → `tile` (collapsed app bar) |
 | `enhanced_topic_card`, `topics_list`, `hierarchy_sliver_list` topic rows | `row` (or `tile` in grid layout) |
 | `enhanced_subtopic_card`, `subtopics_list` | `row` |
-| `flippable_study_card`, `study_card_stack`, `flashcard_dashboard_screen` deck tiles | subtopic `corner` |
-| Notes list and note tiles (study screen) | subtopic `corner` |
-| `hierarchy_breadcrumb_bar` | `corner` at 20dp (circle-clipped) |
+| `flippable_study_card` (front face), `study_card_stack`, `flashcard_dashboard_screen` deck tiles | subtopic `wash` |
+| Notes list and note tiles (study screen) | subtopic `wash` |
+| `hierarchy_breadcrumb_bar` | `mono` at 16dp |
 | Quiz option cards, quiz-taking body, notes reader body | **none** (calm mode) |
 | Empty / error / offline | **none**: line-art spots only |
 
@@ -184,12 +188,13 @@ In `lib/icons.tsx`, change the default weight from `bold` to `regular`. Audit th
 uses, which stay as they are.
 
 ### 2.5a Patchworks
-Add `components/merit/patchwork.tsx` (`<Patchwork patchwork={…} variant="tile|row|corner|mono" />`):
-- `tile`, `row` and `corner` render as `<img>`. Set `alt` to the node title, except `corner`, which gets `alt=""`.
+Add `components/merit/patchwork.tsx` (`<Patchwork patchwork={…} variant="tile|row|mono" />`) and `<PatchworkWash>`:
+- `tile` and `row` render as `<img>` with `alt` = the node title.
+- `wash` renders as an absolutely positioned `<span>` (top-right, `aria-hidden`) using the SVG as a CSS `mask` over `background: washInk.light|dark`, opacity 0.26 / 0.16 (see `.pwwash` in `merit-ds.css`).
 - `mono` renders as a CSS mask over `currentColor`.
 
 The fallback and the placement rules match Flutter §1.4a: subject, topic and subtopic cards and
-lists, note and flashcard tiles (corner), and breadcrumbs. Admin tables use `mono` only.
+lists, note and flashcard tiles (wash), and breadcrumbs (mono). Admin tables use `mono` only.
 
 ### 2.6 Landing (`app/(landing)`, `features/landing`)
 Rebuild the hero, programme grid and CTA band from the landing specimen (reference site §29).
@@ -224,7 +229,7 @@ Rebuild the hero, programme grid and CTA band from the landing specimen (referen
 - **Import:** `make patchworks-import MANIFEST=../merit-content/patchworks/manifest.json` upserts
   every node. Subjects resolve by `code`; topics and subtopics resolve by UUID.
 - **API:** hierarchy, subject and topic responses add
-  `patchwork: {signature, version, urls{tile,row,corner,mono}}`. The URLs are built from
+  `patchwork: {signature, version, urls{tile,row,mono[,wash]}, washInk?}`. The URLs are built from
   `CONTENT_CDN_BASE` + the variant path.
 - **Upload:** sync `merit-content/patchworks/out/` to the CDN bucket under `patchworks/`.
 

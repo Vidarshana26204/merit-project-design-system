@@ -1,5 +1,5 @@
 {
-  "version": "3.1.0",
+  "version": "3.2.0",
   "source": "tokens/*.tokens.json",
   "themes": {
     "light": {
@@ -149,6 +149,12 @@
       "color.tier.achiever.fg": "#FFFFFF",
       "color.tier.achiever.seal": "#FFD66B",
       "color.tier.achiever.cap": "#F65E16",
+      "color.banner.bg": "#54306C",
+      "color.banner.fg": "#FFFFFF",
+      "color.banner.bandInk": "#905AA8",
+      "color.banner.disc": "#F65E16",
+      "color.banner.discInk": "#FF9A63",
+      "color.banner.arc": "#C9B3EA",
       "color.reward.points": "#F5B700",
       "color.reward.pointsFill": "#FFD66B",
       "color.reward.streak": "#F65E16",
@@ -656,6 +662,12 @@
       "color.tier.achiever.fg": "#FFFFFF",
       "color.tier.achiever.seal": "#FFD66B",
       "color.tier.achiever.cap": "#F65E16",
+      "color.banner.bg": "#54306C",
+      "color.banner.fg": "#FFFFFF",
+      "color.banner.bandInk": "#905AA8",
+      "color.banner.disc": "#F65E16",
+      "color.banner.discInk": "#FF9A63",
+      "color.banner.arc": "#C9B3EA",
       "color.reward.points": "#F5B700",
       "color.reward.pointsFill": "#FFD66B",
       "color.reward.streak": "#F65E16",

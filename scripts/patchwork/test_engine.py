@@ -76,7 +76,7 @@ def test_keys_unique_and_siblings_add_different_patches(tmp_path):
 def test_deterministic_bytes():
     n = engine.Node("subject:X", "subject", "PHYSICS")
     a, b = engine.compose(n, None), engine.compose(n, None)
-    for v in ("tile", "row", "corner"):
+    for v in ("tile", "row", "wash"):
         assert engine.RENDERERS[v](a) == engine.RENDERERS[v](b)
 
 
@@ -88,8 +88,27 @@ def test_signature_depends_on_icon_checksum():
 def test_no_forbidden_svg():
     placed = place_all(tree(subjects=1, topics=3, subtopics=3), engine.Registry())
     for c in placed.values():
-        for v in ("tile", "row", "corner"):
-            assert not re.search(r"<(pattern|filter|image|linearGradient|radialGradient)\b", engine.RENDERERS[v](c))
+        for v in ("tile", "row", "wash"):
+            svg = engine.RENDERERS[v](c)
+            assert not re.search(r"<(pattern|filter|image|mask|radialGradient)\b", svg)
+            if v == "tile":   # v3: no ink seams, one blend gradient per ray
+                assert svg.count("<linearGradient") == len(c.rays)
+                assert svg.count(f'stroke-width="{engine.SEAM}"') == 1   # the plate only
+
+
+def test_children_add_a_pattern_and_get_a_wash():
+    placed = place_all(tree(subjects=1, topics=3, subtopics=3), engine.Registry())
+    for c in placed.values():
+        if c.node.level == "subject":
+            assert engine.render_wash(c) == ""
+        else:
+            assert c.styles[c.added].pattern
+            assert "currentColor" in engine.render_wash(c)
+
+
+def test_morph_dissolves_toward_seams():
+    ks = [patterns.smoothstep(engine.MORPH * 0.15, engine.MORPH, d) for d in range(0, 30, 2)]
+    assert ks[0] == 0 and ks[-1] == 1 and ks == sorted(ks)
 
 
 def test_all_patterns_render():

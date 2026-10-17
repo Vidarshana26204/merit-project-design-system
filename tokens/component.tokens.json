@@ -53,6 +53,15 @@
         "cap": { "$value": "{color.orange.500}" }
       }
     },
+    "banner": {
+      "$description": "Feature banners (SKILL.md §8): violet stadium, orange disc, hairline arcs. Each context pairs two of the 16 patterns (band · disc) that dissolve toward the copy: cta halftone·chevron, achiever diamonds·arcs, promo plus·waves, streak dashes·scales. Patterns only, never pack icons. Theme-fixed.",
+      "bg": { "$value": "{color.violet.700}" },
+      "fg": { "$value": "{color.white}" },
+      "bandInk": { "$value": "{color.violet.400}", "$description": "Band pattern, tone on tone" },
+      "disc": { "$value": "{color.orange.500}" },
+      "discInk": { "$value": "{color.orange.300}", "$description": "Disc pattern, tone on tone" },
+      "arc": { "$value": "{color.violet.300}", "$description": "Hairline circle outlines" }
+    },
     "reward": {
       "points": { "$value": "{color.butter.500}", "$description": "Coin glyph" },
       "pointsFill": { "$value": "{color.butter.300}" },

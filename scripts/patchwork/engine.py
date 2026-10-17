@@ -7,6 +7,11 @@ Layout (D16 rev 2): radial wedges that all meet at the centred icon. Patch count
 the hierarchy: subject 4, topic 5, subtopic 6 (quest 7). A child keeps its parent's patch
 styles in order and inserts exactly one new patch, so a topic reads as "its subject + 1".
 
+Engine v3 (D16 rev 3): no ink seams. Neighbouring patches blend across a morph band: a
+tint gradient strip runs along every ray and each pattern dissolves (its elements shrink
+to nothing) as it nears a seam. Subtopics also get a `wash`: the pattern they added,
+fading out from a card's top-right corner (replaces v2's `corner` swatch).
+
 The composition key (rays + per-patch style + plate) is unique across every node of every
 subject, and the added patch is unique among siblings; the Registry enforces both and
 records the salt so regeneration is reproducible.
@@ -15,6 +20,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import random
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,7 +28,7 @@ from pathlib import Path
 from . import geometry, patterns
 from .icon import Icon, markup
 
-ENGINE_VERSION = "2"
+ENGINE_VERSION = "3"
 ROOT = Path(__file__).resolve().parents[2]
 
 TILE = 256.0
@@ -134,13 +140,13 @@ def _rays(rng: random.Random, n: int) -> list[int]:
 
 
 def _new_style(rng: random.Random, fam: dict[str, list[str]], avoid_tints: set[str],
-               avoid_patterns: set[str], allow_wedge: bool) -> PatchStyle:
+               avoid_patterns: set[str], allow_wedge: bool, need_pattern: bool = False) -> PatchStyle:
     if allow_wedge and rng.random() < 0.5:
         return PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots", "halftone")), 0, 1, wedge=True)
     pool = fam["tints"] + rng.sample(GLOBAL_TINTS, 3)
     tints = [t for t in pool if t not in avoid_tints] or [t for t in GLOBAL_TINTS if t not in avoid_tints]
     tint = rng.choice(tints)
-    if rng.random() < 0.8:
+    if need_pattern or rng.random() < 0.8:
         pats = [p for p in PATTERN_NAMES if p not in avoid_patterns] or PATTERN_NAMES
         pat: str | None = rng.choice(pats)
         angle = rng.choice(patterns.ANGLES if pat in patterns.ROTATABLE else (0, 45))
@@ -176,7 +182,7 @@ def compose(node: Node, icon: Icon | None, salt: int = 0, parent: "Composition |
         added = rng.randrange(len(base) + 1)
         left, right = base[(added - 1) % len(base)], base[added % len(base)]
         new = _new_style(rng, fam, {left.tint, right.tint} | {s.tint for s in base if s.wedge},
-                         {s.pattern for s in base if s.pattern}, allow_wedge=False)
+                         {s.pattern for s in base if s.pattern}, allow_wedge=False, need_pattern=True)
         styles = base[:added] + [new] + base[added:]
     rays = _rays(rng, n)
     plate = rng.choice(PLATES)
@@ -193,27 +199,85 @@ ACCENT_SHADE = {  # a deeper sibling for the accent's darker twin
 }
 
 
+MORPH = 16.0          # how far from a seam a pattern dissolves (tile units, × pattern_scale)
+BLEND = 0.6           # tint gradient half-width, as a fraction of MORPH
+
+
+def _ray_dist(px: float, py: float, c: tuple[float, float], q: tuple[float, float]) -> float:
+    """Distance from p to the segment c→q."""
+    vx, vy = q[0] - c[0], q[1] - c[1]
+    t = max(0.0, min(1.0, ((px - c[0]) * vx + (py - c[1]) * vy) / (vx * vx + vy * vy)))
+    return math.hypot(px - c[0] - t * vx, py - c[1] - t * vy)
+
+
+def _angle(c: tuple[float, float], p: tuple[float, float]) -> float:
+    return math.atan2(p[1] - c[1], p[0] - c[0]) % math.tau
+
+
+def _seam_strip(c: tuple[float, float], q: tuple[float, float], toward: tuple[float, float],
+                a: str, b: str, band: float, gid: str) -> tuple[str, str]:
+    """A band along the ray c→q, graded across from tint a (one side) to tint b (`toward`'s side)."""
+    ux, uy = q[0] - c[0], q[1] - c[1]
+    ln = math.hypot(ux, uy)
+    nx, ny = -uy / ln, ux / ln
+    if (toward[0] - c[0]) * nx + (toward[1] - c[1]) * ny < 0:
+        nx, ny = -nx, -ny
+    mx, my = (c[0] + q[0]) / 2, (c[1] + q[1]) / 2
+    ext = 1 + band / ln                                   # run past the frame so the clip trims it
+    ex, ey = c[0] + ux * ext, c[1] + uy * ext
+    pts = [(c[0] - nx * band, c[1] - ny * band), (ex - nx * band, ey - ny * band),
+           (ex + nx * band, ey + ny * band), (c[0] + nx * band, c[1] + ny * band)]
+    grad = (f'<linearGradient id="{gid}" gradientUnits="userSpaceOnUse" x1="{patterns.f(mx - nx * band)}" '
+            f'y1="{patterns.f(my - ny * band)}" x2="{patterns.f(mx + nx * band)}" y2="{patterns.f(my + ny * band)}">'
+            f'<stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient>')
+    return grad, f'<path d="{geometry.poly_d(pts)}" fill="url(#{gid})"/>'
+
+
 def _body(layout: geometry.Layout, styles: list[PatchStyle], uid: str, clip_rx: float | None,
-          pattern_scale: float = 1.0) -> tuple[str, str]:
-    """Patches + patterns + seams. Returns (defs, markup)."""
+          pattern_scale: float = 1.0, plate_r: float = 0.0) -> tuple[str, str]:
+    """Wedge tints, seam blend strips, then dissolving patterns. Returns (defs, markup)."""
     w, h = layout.w, layout.h
-    defs = []
-    out = []
+    c = (w / 2, h / 2)
+    band = MORPH * pattern_scale
+    defs: list[str] = []
+    fills, strips, pats = [], [], []
+    n = len(layout.patches)
+    edges = [p.poly[1] for p in layout.patches]           # ray i ends where wedge i starts
+    for p, s in zip(layout.patches, styles):
+        fills.append(f'<path d="{p.d}" fill="{C[s.tint]}"/>')
+    for i in range(n):                                    # seam i: wedge i-1 | wedge i
+        prev, cur = layout.patches[(i - 1) % n], layout.patches[i]
+        cen = (sum(x for x, _ in cur.poly) / len(cur.poly), sum(y for _, y in cur.poly) / len(cur.poly))
+        g, strip = _seam_strip(c, edges[i], cen, C[styles[(i - 1) % n].tint], C[styles[i].tint], band * BLEND, f"{uid}g{i}")
+        defs.append(g)
+        strips.append(strip)
     for i, (p, s) in enumerate(zip(layout.patches, styles)):
-        out.append(f'<path d="{p.d}" fill="{C[s.tint]}"/>')
-        if s.pattern:
-            cid = f"{uid}p{i}"
-            defs.append(f'<clipPath id="{cid}"><path d="{p.d}"/></clipPath>')
-            ink = mix(C[s.tint], INK, 0.3 if s.wedge else 0.42)
-            out.append(f'<g clip-path="url(#{cid})">'
-                       f'{patterns.render(s.pattern, p.bbox, s.density, s.angle, ink, pattern_scale)}</g>')
-        # seam per patch, so a later overlay paints over the cuts it covers
-        out.append(f'<path d="{p.d}" fill="none" stroke="{INK}" stroke-width="{SEAM}" stroke-linejoin="round"/>')
+        if not s.pattern:
+            continue
+        q0, q1 = edges[i], edges[(i + 1) % n]
+        a0 = _angle(c, q0)
+        span = (_angle(c, q1) - a0) % math.tau or math.tau
+        kind, els, to_world, rot = patterns.field(s.pattern, p.bbox, s.density, s.angle, pattern_scale)
+        keep, ks = [], []
+        for el in els:
+            x, y = to_world(el.x, el.y)
+            if (_angle(c, (x, y)) - a0) % math.tau >= span:
+                continue                                  # anchor outside this wedge
+            if math.hypot(x - c[0], y - c[1]) < plate_r - band:
+                continue                                  # hidden under the plate
+            if not (-band <= x <= w + band and -band <= y <= h + band):
+                continue
+            d = min(_ray_dist(x, y, c, q0), _ray_dist(x, y, c, q1))
+            keep.append(el)
+            ks.append(patterns.smoothstep(band * 0.15, band, d))
+        ink = mix(C[s.tint], INK, 0.3 if s.wedge else 0.42)
+        pats.append(patterns.draw(kind, keep, ks, ink, rot, pattern_scale))
+    out = "".join(fills) + "".join(strips) + "".join(pats)
     if clip_rx is not None:
         fid = f"{uid}f"
         defs.append(f'<clipPath id="{fid}"><rect width="{patterns.f(w)}" height="{patterns.f(h)}" rx="{clip_rx}"/></clipPath>')
-        return "".join(defs), f'<g clip-path="url(#{fid})">{"".join(out)}</g>'
-    return "".join(defs), "".join(out)
+        return "".join(defs), f'<g clip-path="url(#{fid})">{out}</g>'
+    return "".join(defs), out
 
 
 def mix(a: str, b: str, t: float) -> str:
@@ -259,7 +323,7 @@ def _frame(w: float, h: float) -> str:
 
 
 def render_tile(comp: Composition) -> str:
-    defs, body = _body(comp.layout(TILE, TILE), comp.styles, "t", FRAME_RX)
+    defs, body = _body(comp.layout(TILE, TILE), comp.styles, "t", FRAME_RX, plate_r=78)
     c = TILE / 2
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img">'
             f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, c, c, 78)}'
@@ -268,23 +332,45 @@ def render_tile(comp: Composition) -> str:
 
 def render_row(comp: Composition) -> str:
     """Same rays and styles as the tile; the wedges stretch sideways around the centred icon."""
-    defs, body = _body(comp.layout(ROW_W, ROW_H), comp.styles, "r", FRAME_RX, pattern_scale=1.4)
+    defs, body = _body(comp.layout(ROW_W, ROW_H), comp.styles, "r", FRAME_RX, pattern_scale=1.4, plate_r=86)
     cx, cy = ROW_W / 2, ROW_H / 2
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 256" width="1024" height="256" role="img">'
             f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, cx, cy, 86)}'
             f'{_icon_g(comp, cx, cy, 136)}{_frame(ROW_W, ROW_H)}</svg>\n')
 
 
-def render_corner(comp: Composition) -> str:
-    """The tile's full patch body (tints + patterns, no icon, no frame) for card corners.
+WASH = 400.0
 
-    Widgets clip it (e.g. a quarter-circle or the card's top-right radius), so the whole
-    composition is kept: any crop still shows the node's own tints and patterns.
+
+def wash_inks(comp: Composition) -> dict[str, str] | None:
+    """Colours the app tints the wash with: the added patch's pattern ink (light theme)
+    and its tint (dark theme). Shipped in the manifest next to the wash variant."""
+    if comp.added is None:
+        return None
+    t = C[comp.styles[comp.added].tint]
+    return {"light": mix(t, INK, 0.42), "dark": t}
+
+
+def render_wash(comp: Composition) -> str:
+    """The pattern this node added, radiating from the top-right corner and fading out.
+
+    Transparent, ink = currentColor: the app tints it and sets the layer opacity per theme
+    (MIGRATION §1.4a). Drawn behind flashcard and note content, aligned top-right.
+    Only nodes that added a patch (topics, subtopics, quests) have one.
     """
-    defs, body = _body(comp.layout(TILE, TILE), comp.styles, "c", None)
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="96" height="96" aria-hidden="true">'
-            f'<defs>{defs}<clipPath id="cq"><rect width="256" height="256"/></clipPath></defs>'
-            f'<g clip-path="url(#cq)">{body}</g></svg>\n')
+    if comp.added is None or not comp.styles[comp.added].pattern:
+        return ""
+    st = comp.styles[comp.added]
+    kind, els, to_world, rot = patterns.field(st.pattern, (0, 0, WASH, WASH), st.density, st.angle, 1.5)
+    diag = math.hypot(WASH, WASH)
+    ks = []
+    for el in els:
+        x, y = to_world(el.x, el.y)
+        ks.append(1 - patterns.smoothstep(0.04, 0.46, math.hypot(WASH - x, y) / diag))
+    body = patterns.draw(kind, els, ks, "currentColor", rot, 1.5, opacity_by_k=True)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" aria-hidden="true">'
+            f'<defs><clipPath id="wq"><rect width="400" height="400"/></clipPath></defs>'
+            f'<g clip-path="url(#wq)">{body}</g></svg>\n')
 
 
 def render_mono(comp: Composition) -> str:
@@ -295,8 +381,8 @@ def render_mono(comp: Composition) -> str:
             f'fill="currentColor" role="img">{_title(comp)}{markup(comp.icon, {}, INK, mono=True)}</svg>\n')
 
 
-RENDERERS = {"tile": render_tile, "row": render_row, "corner": render_corner, "mono": render_mono}
-BUDGET = {"tile": 40_000, "row": 64_000, "corner": 40_000}   # bytes per variant
+RENDERERS = {"tile": render_tile, "row": render_row, "wash": render_wash, "mono": render_mono}
+BUDGET = {"tile": 48_000, "row": 72_000, "wash": 40_000}   # bytes per variant
 
 
 def within_budget(comp: Composition) -> bool:

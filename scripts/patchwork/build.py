@@ -17,7 +17,7 @@ Layout under <content>/patchworks/:
     icon-index.json                   [{id, set, name, sha256, view, tags}]
     maps/<SUBJECT>.json               curation: node code → {icon, how: curated|pool, why}
     registry.json                     signatures, salts, composition keys (append-only)
-    out/<node_key>/{tile,row,corner,mono}.svg
+    out/<node_key>/{tile,row,mono,wash}.svg (wash: nodes that added a patch)
     manifest.json                     node_key → {level, subject, code, signature, icon, variants}
     index.html                        contact sheet for review
 """
@@ -212,10 +212,14 @@ def cmd_generate(a: argparse.Namespace) -> None:
             variants = {}
             for v, fn in engine.RENDERERS.items():
                 svg = fn(comp)
+                if not svg:
+                    continue
                 p = base / "out" / key / f"{v}.svg"
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_text(svg)
                 variants[v] = {"path": f"out/{key}/{v}.svg", "sha256": iconlib.sha256_bytes(svg.encode()), "bytes": len(svg.encode())}
+                if v == "wash":
+                    variants[v]["ink"] = engine.wash_inks(comp)
             manifest[key] = {"node_id": n.id, "parent": n.parent, "level": n.level, "subject": subject,
                              "code": n.code, "title": n.title, "patches": len(comp.styles),
                              "signature": comp.signature, "icon": icon_id, "icon_sha256": ic.sha256,
@@ -273,8 +277,9 @@ def _card(k: str, m: dict, row: bool = False) -> str:
     meta = f'<div>{badge}<b>{html.escape(m["title"])}</b></div><div class="m">{html.escape(m["code"])} · {html.escape(m["icon"])}</div>'
     if row:
         return (f'<div class="t"><img class="tile" src="out/{k}/tile.svg" alt=""><div style="flex:1;min-width:260px">'
-                f'<img class="row" src="out/{k}/row.svg" alt="">{meta}</div>'
-                f'<img src="out/{k}/corner.svg" width="64" alt=""><img src="out/{k}/mono.svg" width="28" alt=""></div>')
+                f'<img class="row" src="out/{k}/row.svg" alt="">{meta}</div>' +
+                (f'<img src="out/{k}/wash.svg" width="64" alt="" style="color:#1E1B2E;background:#fff">' if "wash" in m["variants"] else "") +
+                f'<img src="out/{k}/mono.svg" width="28" alt=""></div>')
     return f'<div class="c"><img src="out/{k}/tile.svg" alt="">{meta}</div>'
 
 
@@ -313,9 +318,12 @@ def cmd_demo(a: argparse.Namespace) -> None:
         comp = reg.place(engine.Node(nid, level, subject, nid, title, parent), ic, placed.get(parent or ""))
         placed[nid] = comp
         for v, fn in engine.RENDERERS.items():
+            svg = fn(comp)
+            if not svg:
+                continue
             p = out / f"{nid.split(':')[1]}-{v}.svg"
             p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(fn(comp))
+            p.write_text(svg)
     tints = ["coral.300", "butter.300", "sage.300", "sky.300", "violet.100", "orange.300", "blush.300", "sand.300"]
     for i, name in enumerate(patterns.PATTERNS):
         tint = engine.C[tints[i % len(tints)]]
@@ -353,7 +361,7 @@ def audit(content: Path) -> None:
             svg = (base / info["path"]).read_text()
             if v in engine.BUDGET and info["bytes"] > engine.BUDGET[v]:
                 errors.append(f"{k}/{v}: {info['bytes']} B over budget")
-            if re.search(r"<(pattern|filter|image|linearGradient|radialGradient)\b", svg):
+            if re.search(r"<(pattern|filter|image|mask|radialGradient)\b", svg):
                 errors.append(f"{k}/{v}: forbidden element")
     total = sum(i["bytes"] for m in manifest.values() for i in m["variants"].values())
     curated = sum(1 for m in manifest.values() if m["how"] == "curated")
