@@ -92,7 +92,7 @@ class Patchwork with _$Patchwork {
   const factory Patchwork({
     required String signature,
     required String version,
-    required PatchworkUrls urls, // tile, row, mono, wash? (topics + subtopics)
+    required PatchworkUrls urls, // tile, mono, wash? (topics + subtopics)
     PatchworkInk? washInk,       // {light, dark} hex for the wash
   }) = _Patchwork;
 }
@@ -101,7 +101,7 @@ class Patchwork with _$Patchwork {
 ```dart
 MeritPatchwork(
   patchwork: node.patchwork,          // nullable
-  variant: PatchworkVariant.tile,     // tile | row | mono (wash: MeritPatchworkWash)
+  variant: PatchworkVariant.tile,     // tile | mono (wash: MeritPatchworkWash); row retired in DS 3.3
   fallbackCategory: subject.categoryIndex,
   semanticLabel: node.title,
 )
@@ -116,7 +116,15 @@ MeritPatchwork(
   `SvgPicture.network(urls.wash, colorFilter: ColorFilter.mode(ink, BlendMode.srcIn))` inside an
   `Opacity` of 0.26 (light, `washInk.light`) or 0.16 (dark, `washInk.dark`). No wash URL → draw
   nothing (no fallback art behind copy). Content padding is unchanged.
-- **Accessibility:** `tile` and `row` take the node title as their semantics label. The wash
+- **Card tones:** a flashcard or note card may take any `MeritFlashcardTone` (sage, sky, coral,
+  butter, violet, blush → `flashcard<Tone>Bg`, text `flashcardFg` in both themes). Pass it as
+  `MeritPatchworkWash(patchwork: …, tone: tone)`: the ink becomes `flashcard<Tone>Wash` at 0.30,
+  theme-fixed. `tone: null` (plain `surface.default`) keeps `washInk.light/dark` as above.
+- **Feature icons:** deferred (DS 3.3): features use Phosphor. If `features.json` ships later it
+  maps each feature to `color` and `mono` SVGs (`out/features/<key>/`).
+- **Avatars:** student avatars come from `merit-content/patchworks/avatars/avatars.json` (ids
+  with `active: true`), full colour, shown in a circle; upload them with the patchworks.
+- **Accessibility:** `tile` takes the node title as its semantics label. The wash
   is `excludeFromSemantics`.
 
 **Where each variant goes:**
@@ -124,9 +132,9 @@ MeritPatchwork(
 | Widget | Variant |
 |---|---|
 | `subjects_screen` grid, `enrollment_card` | `tile` |
-| `subject_details_screen` header | `row` (expanded) → `tile` (collapsed app bar) |
-| `enhanced_topic_card`, `topics_list`, `hierarchy_sliver_list` topic rows | `row` (or `tile` in grid layout) |
-| `enhanced_subtopic_card`, `subtopics_list` | `row` |
+| `subject_details_screen` header | `tile` at 64 beside the title (expanded) → 32 (collapsed app bar) |
+| `enhanced_topic_card`, `topics_list`, `hierarchy_sliver_list` topic rows | `tile` at 48–56, leading |
+| `enhanced_subtopic_card`, `subtopics_list` | `tile` at 40–48, leading |
 | `flippable_study_card` (front face), `study_card_stack`, `flashcard_dashboard_screen` deck tiles | subtopic `wash` |
 | Notes list and note tiles (study screen) | subtopic `wash` |
 | `hierarchy_breadcrumb_bar` | `mono` at 16dp |
@@ -188,8 +196,8 @@ In `lib/icons.tsx`, change the default weight from `bold` to `regular`. Audit th
 uses, which stay as they are.
 
 ### 2.5a Patchworks
-Add `components/merit/patchwork.tsx` (`<Patchwork patchwork={…} variant="tile|row|mono" />`) and `<PatchworkWash>`:
-- `tile` and `row` render as `<img>` with `alt` = the node title.
+Add `components/merit/patchwork.tsx` (`<Patchwork patchwork={…} variant="tile|mono" />`) and `<PatchworkWash>`:
+- `tile` renders as `<img>` with `alt` = the node title (the 4:1 `row` is retired in DS 3.3).
 - `wash` renders as an absolutely positioned `<span>` (top-right, `aria-hidden`) using the SVG as a CSS `mask` over `background: washInk.light|dark`, opacity 0.26 / 0.16 (see `.pwwash` in `merit-ds.css`).
 - `mono` renders as a CSS mask over `currentColor`.
 
@@ -229,7 +237,7 @@ Rebuild the hero, programme grid and CTA band from the landing specimen (referen
 - **Import:** `make patchworks-import MANIFEST=../merit-content/patchworks/manifest.json` upserts
   every node. Subjects resolve by `code`; topics and subtopics resolve by UUID.
 - **API:** hierarchy, subject and topic responses add
-  `patchwork: {signature, version, urls{tile,row,mono[,wash]}, washInk?}`. The URLs are built from
+  `patchwork: {signature, version, urls{tile,mono[,wash]}, washInk?}`. The URLs are built from
   `CONTENT_CDN_BASE` + the variant path.
 - **Upload:** sync `merit-content/patchworks/out/` to the CDN bucket under `patchworks/`.
 

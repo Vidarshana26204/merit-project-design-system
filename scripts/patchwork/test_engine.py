@@ -38,21 +38,26 @@ def test_patch_counts_and_inheritance():
     placed = place_all(tree(), engine.Registry())
     for n in tree():
         c = placed[n.id]
-        assert len(c.styles) == engine.LEVEL_PATCHES[n.level] == len(c.rays)
+        assert len(c.styles) == engine.LEVEL_PATCHES[n.level] == len(c.layout().patches)
         if n.parent:
             p = placed[n.parent]
-            kept = c.styles[:c.added] + c.styles[c.added + 1:]
-            assert kept == p.styles, "child keeps the parent's patches in order"
+            assert c.added == len(p.styles) and c.styles[:-1] == p.styles, "child nests one patch inside its parent's"
             assert c.styles[c.added].pattern not in {s.pattern for s in p.styles if s.pattern}
 
 
-def test_every_patch_touches_the_centre():
-    placed = place_all(tree(subjects=1, topics=2, subtopics=3), engine.Registry())
+def test_plate_shape_follows_level():
+    placed = place_all(tree(subjects=1, topics=1, subtopics=1), engine.Registry())
+    assert {c.node.level: c.plate for c in placed.values()} == {"subject": "hexagon", "topic": "pentagon", "subtopic": "square"}
+
+
+def test_touching_patches_never_share_a_tint():
+    placed = place_all(tree(), engine.Registry())
     for c in placed.values():
-        for w, h in ((engine.TILE, engine.TILE), (engine.ROW_W, engine.ROW_H)):
-            for p in c.layout(w, h).patches:
-                assert p.poly[0] == (w / 2, h / 2)
-                assert p.area > 0
+        tints = [s.tint for s in c.styles]
+        assert len(set(tints[:4])) == 4                  # the subject's four roles all touch
+        for role, near in geometry.NEIGHBOURS.items():
+            if role < len(tints):
+                assert tints[role] not in {tints[r] for r in near}
 
 
 def test_keys_unique_and_siblings_add_different_patches(tmp_path):
@@ -76,7 +81,7 @@ def test_keys_unique_and_siblings_add_different_patches(tmp_path):
 def test_deterministic_bytes():
     n = engine.Node("subject:X", "subject", "PHYSICS")
     a, b = engine.compose(n, None), engine.compose(n, None)
-    for v in ("tile", "row", "wash"):
+    for v in engine.RENDERERS:
         assert engine.RENDERERS[v](a) == engine.RENDERERS[v](b)
 
 
@@ -88,12 +93,12 @@ def test_signature_depends_on_icon_checksum():
 def test_no_forbidden_svg():
     placed = place_all(tree(subjects=1, topics=3, subtopics=3), engine.Registry())
     for c in placed.values():
-        for v in ("tile", "row", "wash"):
+        assert "row" not in engine.RENDERERS
+        for v in ("tile", "wash"):
             svg = engine.RENDERERS[v](c)
-            assert not re.search(r"<(pattern|filter|image|mask|radialGradient)\b", svg)
-            if v == "tile":   # v3: no ink seams, one blend gradient per ray
-                assert svg.count("<linearGradient") == len(c.rays)
-                assert svg.count(f'stroke-width="{engine.SEAM}"') == 1   # the plate only
+            assert not re.search(r"<(pattern|filter|image|mask|radialGradient|linearGradient)\b", svg)
+            if v == "tile":   # no ink seams: the plate is the only seam-weight stroke
+                assert svg.count(f'stroke-width="{engine.SEAM}"') == 1
 
 
 def test_children_add_a_pattern_and_get_a_wash():
@@ -117,8 +122,16 @@ def test_all_patterns_render():
             assert "<path" in patterns.render(name, (0, 0, 100, 80), 1, angle, "#000000")
 
 
-def test_radial_layout_covers_frame():
-    for rays in ([0, 24, 48, 72], [5, 20, 41, 60, 77, 90]):
-        for w, h in ((256.0, 256.0), (1024.0, 256.0)):
-            total = sum(p.area for p in geometry.radial_layout(rays, w, h).patches)
-            assert abs(total - w * h) < 1e-6 * w * h
+def test_layout_is_symmetric_and_nested():
+    s = 256.0
+    for n in (4, 5, 6, 7):
+        lay = geometry.square_in_square(n, s)
+        assert sorted(p.role for p in lay.patches) == list(range(n))
+        assert abs(sum(p.area for p in lay.patches[:2]) - s * s) < 1e-6      # the X tiles the square
+        pts = {p.role: {(round(x, 6), round(y, 6)) for poly in p.polys for x, y in poly} for p in lay.patches}
+        for role, ps in pts.items():                                          # half-turn symmetric
+            assert ps == {(round(s - x, 6), round(s - y, 6)) for x, y in ps}
+        assert pts[3] == {(round(s - x, 6), y) for x, y in pts[2]}                      # corner pairs mirror
+    # each level's new shape sits inside the frame and is visible outside the plate
+    for kind in ("hexagon", "pentagon", "square"):
+        assert geometry.plate_inradius(kind, s) < s * geometry.SQUARE

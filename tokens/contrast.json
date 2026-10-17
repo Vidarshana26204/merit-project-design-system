@@ -1,6 +1,12 @@
 {
   "$description": "WCAG 2.2 AA gates, checked in BOTH themes by the token build. 4.5 = text, 3 = non-text (control edges, focus, large text, fills that identify a control). Build fails if any pair drops below its minimum.",
   "pairs": [
+    ["color.flashcard.fg", "color.flashcard.sage.bg", 4.5],
+    ["color.flashcard.fg", "color.flashcard.sky.bg", 4.5],
+    ["color.flashcard.fg", "color.flashcard.coral.bg", 4.5],
+    ["color.flashcard.fg", "color.flashcard.butter.bg", 4.5],
+    ["color.flashcard.fg", "color.flashcard.violet.bg", 4.5],
+    ["color.flashcard.fg", "color.flashcard.blush.bg", 4.5],
     ["color.text.primary", "color.bg.app", 4.5],
     ["color.text.primary", "color.bg.brand", 4.5],
     ["color.text.primary", "color.surface.default", 4.5],

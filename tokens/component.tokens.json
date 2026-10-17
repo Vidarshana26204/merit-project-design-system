@@ -53,6 +53,16 @@
         "cap": { "$value": "{color.orange.500}" }
       }
     },
+    "flashcard": {
+      "$description": "Flashcard and note tones (SKILL.md §5). A card may take any tone; its subtopic wash (the pattern that subtopic added) is inked tone-on-tone: the tone mixed 42% toward ink, the same rule as patchwork pattern ink. The plain tone uses surface.default and the subtopic's own washInk from the manifest. Theme-fixed like the category tints: ink text in both themes.",
+      "fg": { "$value": "{color.ink.900}" },
+      "sage": { "bg": { "$value": "{color.sage.300}" }, "wash": { "$value": "#6B8578", "$description": "Wash ink; layer opacity .30" } },
+      "sky": { "bg": { "$value": "{color.sky.300}" }, "wash": { "$value": "#7A87A0", "$description": "Wash ink; layer opacity .30" } },
+      "coral": { "bg": { "$value": "{color.coral.300}" }, "wash": { "$value": "#9F5F52", "$description": "Wash ink; layer opacity .30" } },
+      "butter": { "bg": { "$value": "{color.butter.300}" }, "wash": { "$value": "#A08751", "$description": "Wash ink; layer opacity .30" } },
+      "violet": { "bg": { "$value": "{color.violet.100}" }, "wash": { "$value": "#938BA0", "$description": "Wash ink; layer opacity .30" } },
+      "blush": { "bg": { "$value": "{color.blush.300}" }, "wash": { "$value": "#9B7484", "$description": "Wash ink; layer opacity .30" } }
+    },
     "banner": {
       "$description": "Feature banners (SKILL.md §8): violet stadium, orange disc, hairline arcs. Each context pairs two of the 16 patterns (band · disc) that dissolve toward the copy: cta halftone·chevron, achiever diamonds·arcs, promo plus·waves, streak dashes·scales. Patterns only, never pack icons. Theme-fixed.",
       "bg": { "$value": "{color.violet.700}" },

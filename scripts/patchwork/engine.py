@@ -3,18 +3,21 @@
     signature = sha256(node_id | icon_sha256 | ENGINE_VERSION)
     seed      = sha256(signature | salt)            salt starts at 0, bumps on collision
 
-Layout (D16 rev 2): radial wedges that all meet at the centred icon. Patch count follows
-the hierarchy: subject 4, topic 5, subtopic 6 (quest 7). A child keeps its parent's patch
-styles in order and inserts exactly one new patch, so a topic reads as "its subject + 1".
+Layout (D16 rev 4, engine v4): **square in a square**. Fixed, symmetric cuts (geometry.py);
+patch count follows the hierarchy: subject 4, topic 5, subtopic 6 (quest 7), and each level
+nests one shape further in (subject: hourglass X + corner triangles; topic: + diamond;
+subtopic: + square). A child keeps its parent's patch styles and adds exactly one, so a
+topic reads as "its subject + 1". The icon plate's shape says the level: subject hexagon,
+topic pentagon, subtopic square.
 
-Engine v3 (D16 rev 3): no ink seams. Neighbouring patches blend across a morph band: a
-tint gradient strip runs along every ray and each pattern dissolves (its elements shrink
-to nothing) as it nears a seam. Subtopics also get a `wash`: the pattern they added,
-fading out from a card's top-right corner (replaces v2's `corner` swatch).
+Seams are crisp tint edges (no ink): each pattern dissolves, its elements shrinking to
+nothing, as it nears the edge of the region it shows in. Subtopics also get a `wash`: the
+pattern they added, fading out from a card's top-right corner. One variant per use:
+tile (1:1), wash, mono. The 4:1 row variant was retired in v4.
 
-The composition key (rays + per-patch style + plate) is unique across every node of every
-subject, and the added patch is unique among siblings; the Registry enforces both and
-records the salt so regeneration is reproducible.
+The composition key (per-patch styles) is unique across every node of every subject, and
+the added patch is unique among siblings; the Registry enforces both and records the salt
+so regeneration is reproducible.
 """
 from __future__ import annotations
 
@@ -28,13 +31,13 @@ from pathlib import Path
 from . import geometry, patterns
 from .icon import Icon, markup
 
-ENGINE_VERSION = "3"
+ENGINE_VERSION = "4"
 ROOT = Path(__file__).resolve().parents[2]
 
 TILE = 256.0
-ROW_W, ROW_H = 1024.0, 256.0
 FRAME_RX = 32.0
-SEAM, FRAME = 2.6, 3.6          # ≈1.5 / 2 px at a 128-px tile
+SEAM, FRAME = 2.6, 3.6          # plate / frame stroke: ≈1.5 / 2 px at a 128-px tile
+ICON = 136.0                    # icon box on the tile (v3: 124)
 
 
 def load_tokens() -> dict[str, str]:
@@ -70,7 +73,6 @@ FAMILIES: dict[str, dict[str, list[str]]] = {
 }
 SUBJECT_FAMILY = {"PHYSICS": "warm", "CHEMISTRY": "cool", "BIOLOGY": "fresh"}
 GLOBAL_TINTS = sorted({t for fam in FAMILIES.values() for t in fam["tints"]})
-PLATES = ("circle", "squircle", "hexagon")   # the plate hides where the seams meet
 LEVEL_PATCHES = {"subject": 4, "topic": 5, "subtopic": 6, "quest": 7}
 PATTERN_NAMES = list(patterns.PATTERNS)
 
@@ -101,18 +103,20 @@ class Composition:
     signature: str
     salt: int
     family: str
-    rays: list[int]                 # perimeter slots, sorted; len == patch count
-    styles: list[PatchStyle]        # one per wedge, clockwise from rays[0]
-    added: int | None               # index of the patch this node added to its parent's
-    plate: str
+    styles: list[PatchStyle]        # one per layout role (geometry.square_in_square), outermost first
+    added: int | None               # index of the patch this node added to its parent's (always the last)
     accent: str
 
-    def layout(self, w: float, h: float) -> geometry.Layout:
-        return geometry.radial_layout(self.rays, w, h)
+    @property
+    def plate(self) -> str:
+        return geometry.PLATE_BY_LEVEL.get(self.node.level, "square")
+
+    def layout(self, size: float = TILE) -> geometry.Layout:
+        return geometry.square_in_square(len(self.styles), size)
 
     def key(self) -> str:
         """Canonical, hashable description of what the tile looks like (minus the icon)."""
-        body = {"rays": self.rays, "plate": self.plate,
+        body = {"layout": "square-in-square", "plate": self.plate,
                 "patches": [(s.tint, s.pattern, s.angle, s.density, s.wedge) for s in self.styles]}
         return hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
 
@@ -125,18 +129,6 @@ class Composition:
 
 def signature(node: Node, icon_sha: str) -> str:
     return hashlib.sha256(f"{node.id}|{icon_sha}|{ENGINE_VERSION}".encode()).hexdigest()
-
-
-def _rays(rng: random.Random, n: int) -> list[int]:
-    """n rays spread round the perimeter with jitter, so wedges stay similar in size."""
-    slots = geometry.RAY_SLOTS
-    step = slots / n
-    jitter = max(1, int(step * 0.22))
-    offset = rng.randrange(slots)
-    rays = {(offset + round(k * step) + rng.randint(-jitter, jitter)) % slots for k in range(n)}
-    while len(rays) < n:                       # jitter collision: nudge until distinct
-        rays.add(rng.randrange(slots))
-    return sorted(rays)
 
 
 def _new_style(rng: random.Random, fam: dict[str, list[str]], avoid_tints: set[str],
@@ -164,30 +156,27 @@ def compose(node: Node, icon: Icon | None, salt: int = 0, parent: "Composition |
 
     added: int | None
     if parent is None:
-        # A root (subject): n fresh styles, cyclic neighbours never share a tint, at most one wedge.
+        # A root (subject): n fresh styles. Its four roles all touch, so every tint differs;
+        # at most one is a solid wedge.
         styles: list[PatchStyle] = []
         wedge_at = rng.randrange(n) if rng.random() < 0.6 else -1
         for i in range(n):
-            avoid = {styles[-1].tint} if styles else set()
-            if i == n - 1 and styles:
-                avoid.add(styles[0].tint)
+            avoid = {s.tint for s in styles}
             st = _new_style(rng, fam, avoid, {s.pattern for s in styles if s.pattern}, allow_wedge=False)
             if i == wedge_at:
                 st = PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots")), 0, 1, wedge=True)
             styles.append(st)
         added = None
     else:
-        # A child: the parent's styles in order + one new patch inserted between two of them.
+        # A child: the parent's styles + one new patch, nested inside them.
         base = list(parent.styles)
-        added = rng.randrange(len(base) + 1)
-        left, right = base[(added - 1) % len(base)], base[added % len(base)]
-        new = _new_style(rng, fam, {left.tint, right.tint} | {s.tint for s in base if s.wedge},
+        added = len(base)
+        touching = {base[r].tint for r in geometry.NEIGHBOURS.get(added, set()) if r < added}
+        new = _new_style(rng, fam, touching | {s.tint for s in base if s.wedge},
                          {s.pattern for s in base if s.pattern}, allow_wedge=False, need_pattern=True)
-        styles = base[:added] + [new] + base[added:]
-    rays = _rays(rng, n)
-    plate = rng.choice(PLATES)
+        styles = base + [new]
     accent = rng.choice(fam["accent"])
-    return Composition(node, icon, sig, salt, fam_name, rays, styles, added, plate, accent)
+    return Composition(node, icon, sig, salt, fam_name, styles, added, accent)
 
 
 # ── rendering ───────────────────────────────────────────────────────────────────────────
@@ -199,85 +188,43 @@ ACCENT_SHADE = {  # a deeper sibling for the accent's darker twin
 }
 
 
-MORPH = 16.0          # how far from a seam a pattern dissolves (tile units, × pattern_scale)
-BLEND = 0.6           # tint gradient half-width, as a fraction of MORPH
+MORPH = 16.0          # how far from a seam a pattern dissolves (tile units)
 
 
-def _ray_dist(px: float, py: float, c: tuple[float, float], q: tuple[float, float]) -> float:
-    """Distance from p to the segment c→q."""
-    vx, vy = q[0] - c[0], q[1] - c[1]
-    t = max(0.0, min(1.0, ((px - c[0]) * vx + (py - c[1]) * vy) / (vx * vx + vy * vy)))
-    return math.hypot(px - c[0] - t * vx, py - c[1] - t * vy)
-
-
-def _angle(c: tuple[float, float], p: tuple[float, float]) -> float:
-    return math.atan2(p[1] - c[1], p[0] - c[0]) % math.tau
-
-
-def _seam_strip(c: tuple[float, float], q: tuple[float, float], toward: tuple[float, float],
-                a: str, b: str, band: float, gid: str) -> tuple[str, str]:
-    """A band along the ray c→q, graded across from tint a (one side) to tint b (`toward`'s side)."""
-    ux, uy = q[0] - c[0], q[1] - c[1]
-    ln = math.hypot(ux, uy)
-    nx, ny = -uy / ln, ux / ln
-    if (toward[0] - c[0]) * nx + (toward[1] - c[1]) * ny < 0:
-        nx, ny = -nx, -ny
-    mx, my = (c[0] + q[0]) / 2, (c[1] + q[1]) / 2
-    ext = 1 + band / ln                                   # run past the frame so the clip trims it
-    ex, ey = c[0] + ux * ext, c[1] + uy * ext
-    pts = [(c[0] - nx * band, c[1] - ny * band), (ex - nx * band, ey - ny * band),
-           (ex + nx * band, ey + ny * band), (c[0] + nx * band, c[1] + ny * band)]
-    grad = (f'<linearGradient id="{gid}" gradientUnits="userSpaceOnUse" x1="{patterns.f(mx - nx * band)}" '
-            f'y1="{patterns.f(my - ny * band)}" x2="{patterns.f(mx + nx * band)}" y2="{patterns.f(my + ny * band)}">'
-            f'<stop offset="0" stop-color="{a}"/><stop offset="1" stop-color="{b}"/></linearGradient>')
-    return grad, f'<path d="{geometry.poly_d(pts)}" fill="url(#{gid})"/>'
-
-
-def _body(layout: geometry.Layout, styles: list[PatchStyle], uid: str, clip_rx: float | None,
-          pattern_scale: float = 1.0, plate_r: float = 0.0) -> tuple[str, str]:
-    """Wedge tints, seam blend strips, then dissolving patterns. Returns (defs, markup)."""
+def _body(layout: geometry.Layout, styles: list[PatchStyle], uid: str, clip_rx: float, hole_r: float) -> tuple[str, str]:
+    """Patch tints in paint order, then each pattern dissolving toward the edges of the region
+    its patch shows in (its own seams and those of every patch painted over it). Elements
+    under the plate (radius `hole_r`) are skipped. Returns (defs, markup)."""
     w, h = layout.w, layout.h
     c = (w / 2, h / 2)
-    band = MORPH * pattern_scale
-    defs: list[str] = []
-    fills, strips, pats = [], [], []
-    n = len(layout.patches)
-    edges = [p.poly[1] for p in layout.patches]           # ray i ends where wedge i starts
-    for p, s in zip(layout.patches, styles):
-        fills.append(f'<path d="{p.d}" fill="{C[s.tint]}"/>')
-    for i in range(n):                                    # seam i: wedge i-1 | wedge i
-        prev, cur = layout.patches[(i - 1) % n], layout.patches[i]
-        cen = (sum(x for x, _ in cur.poly) / len(cur.poly), sum(y for _, y in cur.poly) / len(cur.poly))
-        g, strip = _seam_strip(c, edges[i], cen, C[styles[(i - 1) % n].tint], C[styles[i].tint], band * BLEND, f"{uid}g{i}")
-        defs.append(g)
-        strips.append(strip)
-    for i, (p, s) in enumerate(zip(layout.patches, styles)):
+    band = MORPH
+    fills, pats = [], []
+    for p in layout.patches:
+        fills.append(f'<path d="{p.d}" fill="{C[styles[p.role].tint]}"/>')
+    for i, p in enumerate(layout.patches):
+        s = styles[p.role]
         if not s.pattern:
             continue
-        q0, q1 = edges[i], edges[(i + 1) % n]
-        a0 = _angle(c, q0)
-        span = (_angle(c, q1) - a0) % math.tau or math.tau
-        kind, els, to_world, rot = patterns.field(s.pattern, p.bbox, s.density, s.angle, pattern_scale)
+        above = [q for pl in layout.patches[i + 1:] for q in pl.polys]
+        seams = [e for poly in p.polys + above for e in geometry.edges(poly, w, h)]
+        kind, els, to_world, rot = patterns.field(s.pattern, p.bbox, s.density, s.angle)
         keep, ks = [], []
         for el in els:
             x, y = to_world(el.x, el.y)
-            if (_angle(c, (x, y)) - a0) % math.tau >= span:
-                continue                                  # anchor outside this wedge
-            if math.hypot(x - c[0], y - c[1]) < plate_r - band:
+            if not any(geometry.inside((x, y), poly) for poly in p.polys):
+                continue                                  # anchor outside this patch
+            if any(geometry.inside((x, y), poly) for poly in above):
+                continue                                  # covered by a later patch
+            if math.hypot(x - c[0], y - c[1]) < hole_r - band:
                 continue                                  # hidden under the plate
-            if not (-band <= x <= w + band and -band <= y <= h + band):
-                continue
-            d = min(_ray_dist(x, y, c, q0), _ray_dist(x, y, c, q1))
+            d = min((geometry.seg_dist((x, y), a, b) for a, b in seams), default=band)
             keep.append(el)
             ks.append(patterns.smoothstep(band * 0.15, band, d))
         ink = mix(C[s.tint], INK, 0.3 if s.wedge else 0.42)
-        pats.append(patterns.draw(kind, keep, ks, ink, rot, pattern_scale))
-    out = "".join(fills) + "".join(strips) + "".join(pats)
-    if clip_rx is not None:
-        fid = f"{uid}f"
-        defs.append(f'<clipPath id="{fid}"><rect width="{patterns.f(w)}" height="{patterns.f(h)}" rx="{clip_rx}"/></clipPath>')
-        return "".join(defs), f'<g clip-path="url(#{fid})">{out}</g>'
-    return "".join(defs), out
+        pats.append(patterns.draw(kind, keep, ks, ink, rot))
+    fid = f"{uid}f"
+    defs = f'<clipPath id="{fid}"><rect width="{patterns.f(w)}" height="{patterns.f(h)}" rx="{clip_rx}"/></clipPath>'
+    return defs, f'<g clip-path="url(#{fid})">{"".join(fills)}{"".join(pats)}</g>'
 
 
 def mix(a: str, b: str, t: float) -> str:
@@ -287,19 +234,10 @@ def mix(a: str, b: str, t: float) -> str:
     return "#" + "".join(f"{round(x + (y - x) * t):02X}" for x, y in zip(ca, cb))
 
 
-def _plate(kind: str, cx: float, cy: float, r: float) -> str:
-    attrs = f'fill="{WHITE}" stroke="{INK}" stroke-width="{SEAM}" stroke-linejoin="round"'
-    if kind == "circle":
-        return f'<circle cx="{patterns.f(cx)}" cy="{patterns.f(cy)}" r="{patterns.f(r)}" {attrs}/>'
-    if kind == "squircle":
-        return (f'<rect x="{patterns.f(cx - r)}" y="{patterns.f(cy - r)}" width="{patterns.f(2 * r)}" '
-                f'height="{patterns.f(2 * r)}" rx="{patterns.f(r * 0.42)}" {attrs}/>')
-    if kind == "hexagon":
-        import math
-        pts = " ".join(f"{patterns.f(cx + r * 1.08 * math.cos(math.radians(60 * k + 30)))},"
-                       f"{patterns.f(cy + r * 1.08 * math.sin(math.radians(60 * k + 30)))}" for k in range(6))
-        return f'<polygon points="{pts}" {attrs}/>'
-    return ""
+def _plate(kind: str, cx: float, cy: float) -> str:
+    pts = geometry.plate_points(kind, cx, cy, TILE)
+    d = geometry.rounded_d(pts, TILE * geometry.PLATE_ROUND[kind])
+    return f'<path d="{d}" fill="{WHITE}" stroke="{INK}" stroke-width="{SEAM}" stroke-linejoin="round"/>'
 
 
 def _icon_g(comp: Composition, cx: float, cy: float, size: float) -> str:
@@ -323,20 +261,11 @@ def _frame(w: float, h: float) -> str:
 
 
 def render_tile(comp: Composition) -> str:
-    defs, body = _body(comp.layout(TILE, TILE), comp.styles, "t", FRAME_RX, plate_r=78)
     c = TILE / 2
+    defs, body = _body(comp.layout(), comp.styles, "t", FRAME_RX, geometry.plate_inradius(comp.plate, TILE))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img">'
-            f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, c, c, 78)}'
-            f'{_icon_g(comp, c, c, 124)}{_frame(TILE, TILE)}</svg>\n')
-
-
-def render_row(comp: Composition) -> str:
-    """Same rays and styles as the tile; the wedges stretch sideways around the centred icon."""
-    defs, body = _body(comp.layout(ROW_W, ROW_H), comp.styles, "r", FRAME_RX, pattern_scale=1.4, plate_r=86)
-    cx, cy = ROW_W / 2, ROW_H / 2
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 256" width="1024" height="256" role="img">'
-            f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, cx, cy, 86)}'
-            f'{_icon_g(comp, cx, cy, 136)}{_frame(ROW_W, ROW_H)}</svg>\n')
+            f'{_title(comp)}<defs>{defs}</defs>{body}{_plate(comp.plate, c, c)}'
+            f'{_icon_g(comp, c, c, ICON)}{_frame(TILE, TILE)}</svg>\n')
 
 
 WASH = 400.0
@@ -381,8 +310,8 @@ def render_mono(comp: Composition) -> str:
             f'fill="currentColor" role="img">{_title(comp)}{markup(comp.icon, {}, INK, mono=True)}</svg>\n')
 
 
-RENDERERS = {"tile": render_tile, "row": render_row, "wash": render_wash, "mono": render_mono}
-BUDGET = {"tile": 48_000, "row": 72_000, "wash": 40_000}   # bytes per variant
+RENDERERS = {"tile": render_tile, "wash": render_wash, "mono": render_mono}
+BUDGET = {"tile": 48_000, "wash": 40_000}   # bytes per variant
 
 
 def within_budget(comp: Composition) -> bool:

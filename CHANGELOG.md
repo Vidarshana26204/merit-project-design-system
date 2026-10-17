@@ -5,6 +5,38 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## 3.3.0 — 2026-10-18
+
+Square-in-a-square patchworks (D16 rev 4), flashcard tones and the banner action rule.
+Adds tokens, no token renames or removals. The patchwork `row` variant is retired.
+
+### Added
+- `color.flashcard.fg` and `color.flashcard.<sage|sky|coral|butter|violet|blush>.{bg,wash}`: card tones;
+  the wash goes tone-on-tone on a toned card. `.tone .tone-<name>` in `merit-ds.css`.
+- Indexer: the "30 X Icons" packs (Colorline + Outline stacked into the filled-outline structure:
+  sets `EcologyLine`, `EducationLine`, `Genetics`, `Healthcare`, `MedicalLine`), numbered packs
+  (`146 - Chemistry - …` → set `Chemistry`) and avatar packs (copied verbatim to `avatars/` with
+  `avatars.json`, never in the node pool).
+- Feature-icon groundwork, **deferred**: `maps/_features.json` (merit-content) can reserve a pack
+  icon per app feature and `generate` then writes `out/features/`. None are set; the app keeps
+  Phosphor for features.
+
+### Changed
+- **Engine v4, square in a square:** fixed symmetric cuts replace the jittered radial wedges.
+  Subject: hourglass X + corner triangles (4 patches); topic: + a diamond (5); subtopic: + a
+  square over the diamond (6); quest: + a band under it (7). Each level nests one shape inside
+  its parent's, and the child's patch is always the innermost. Uniqueness comes from tints,
+  patterns, pattern angle and density only. Seams are crisp tint edges; patterns still dissolve
+  toward them (the v3 gradient strips are gone). Every signature changes: regenerate and
+  re-import. Output: 12.7 → 5.0 MB for 296 nodes.
+- **Plate shape says the level:** subject hexagon, topic pentagon, subtopic (and quest) square,
+  with rounded corners. Plates are larger and the icon box grows 124 → 136 (of 256).
+- `.band` action sits on the copy's row at the right and wraps to its own right-aligned row when
+  it cannot fit, instead of dropping under the copy on the left.
+
+### Removed
+- Patchwork `row` (4:1) variant. Use the tile everywhere; lists and headers show it at 40–64 px.
+
 ## 3.2.0 — 2026-10-17
 
 Patchwork refinements (D16 rev 3) and feature banners (D17). Adds tokens, no renames or removals.

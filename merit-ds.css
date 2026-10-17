@@ -287,10 +287,14 @@ section.sec { padding-top: 88px; scroll-margin-top: 8px; }
 .band.promo { --band-field: url("assets/v3/banners/promo-field.svg"); --band-disc: url("assets/v3/banners/promo-disc.svg"); }
 .band.streak { --band-field: url("assets/v3/banners/streak-field.svg"); --band-disc: url("assets/v3/banners/streak-disc.svg"); }
 .band > * { position: relative; z-index: 1; }
+/* Copy flexes; the action sits on the copy's row at the right, and when it cannot fit it wraps to its own row, still right-aligned (thumb side). */
+.band > div:first-child:not(:only-child) { flex: 1 1 20rem; min-width: 0; }
+.band > .btn, .band > .search, .band > .actions { flex: 0 1 auto; margin-left: auto; }
+.band > .actions { display: flex; gap: 10px; }
 .band h3 { color: var(--merit-banner-fg); font-size: 24px; margin-top: 10px; }
 .band p { margin: 4px 0 0; opacity: .85; max-width: 44ch; }
 .band .btn { background: var(--merit-white); color: var(--merit-ink-900); }
-.band .search { flex: 0 1 380px; background: var(--merit-white); }
+.band .search { flex: 0 1 360px; min-width: min(260px, 100%); background: var(--merit-white); }
 .band .search input { color: var(--merit-ink-900); }
 @media (max-width: 760px) { .band { border-radius: var(--merit-radius-2xl); padding: 28px 24px; } .band::after { width: 180px; right: -60px; top: -70px; } }
 
@@ -459,6 +463,24 @@ hr.sep { border: 0; border-top: var(--merit-border-width-hairline) solid var(--m
 html:root .pwwash.pwwash-sw { position: relative; width: 56px; border-radius: 12px; outline: 1.5px solid var(--merit-border-default); opacity: .7; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pwwash { background: var(--wash-ink-dark); opacity: .16; } }
 :root[data-theme="dark"] .pwwash { background: var(--wash-ink-dark); opacity: .16; }
+/* Card tones (token color.flashcard.*): class="tone tone-<name>". Any tone; the wash goes tone-on-tone and stays theme-fixed. */
+.tone-sage { --tone-bg: var(--merit-flashcard-sage-bg); --tone-wash: var(--merit-flashcard-sage-wash); }
+.tone-sky { --tone-bg: var(--merit-flashcard-sky-bg); --tone-wash: var(--merit-flashcard-sky-wash); }
+.tone-coral { --tone-bg: var(--merit-flashcard-coral-bg); --tone-wash: var(--merit-flashcard-coral-wash); }
+.tone-butter { --tone-bg: var(--merit-flashcard-butter-bg); --tone-wash: var(--merit-flashcard-butter-wash); }
+.tone-violet { --tone-bg: var(--merit-flashcard-violet-bg); --tone-wash: var(--merit-flashcard-violet-wash); }
+.tone-blush { --tone-bg: var(--merit-flashcard-blush-bg); --tone-wash: var(--merit-flashcard-blush-wash); }
+html:root .tone, .flash .face.front.tone { background: var(--tone-bg); color: var(--merit-flashcard-fg); }
+html:root .tone .muted, html:root .tone .eyebrow { color: var(--merit-flashcard-fg); opacity: .78; }
+html:root .tone .badge.outline { border-color: var(--merit-flashcard-fg); color: var(--merit-flashcard-fg); }
+html:root .tone .pwwash { background: var(--tone-wash); opacity: .30; }
+.tones { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.tones .card { min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px; }
+.pwnest { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.pwnest figure { margin: 0; flex: 0 1 160px; text-align: center; font-size: 13px; }
+.pwnest img { width: 100%; max-width: 160px; display: block; margin: 0 auto 6px; }
+.pwnest > i { font-size: 22px; color: var(--merit-text-secondary); }
+@media (max-width: 560px) { .pwnest > i { display: none; } .pwnest figure { flex-basis: calc(33% - 8px); } }
 .pwpatterns { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 12px; margin-top: 8px; }
 .pwpatterns figure { margin: 0; text-align: center; font-size: 12px; color: var(--merit-text-secondary); }
 .pwpatterns img { width: 100%; max-width: 72px; display: block; margin: 0 auto 4px; }
