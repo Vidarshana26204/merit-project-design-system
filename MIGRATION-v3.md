@@ -124,6 +124,10 @@ MeritPatchwork(
   maps each feature to `color` and `mono` SVGs (`out/features/<key>/`).
 - **Avatars:** student avatars come from `merit-content/patchworks/avatars/avatars.json` (ids
   with `active: true`), full colour, shown in a circle; upload them with the patchworks.
+- **Subject colour (DS 3.4):** a branch's patchworks are generated from its subject's
+  `color_hex`, so any node UI that tints by subject (chips, progress bars, topic and subtopic
+  headers) should use `subject_color` from the same subject. Changing a subject's colour in admin
+  needs a patchwork regenerate + re-import; until then the importer reports colour drift.
 - **Accessibility:** `tile` takes the node title as its semantics label. The wash
   is `excludeFromSemantics`.
 

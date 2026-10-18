@@ -23,7 +23,7 @@
       <img class="lt-only" src="assets/v3/brand/merit-mark.svg" alt="" /><img class="dk-only" src="assets/v3/brand/merit-mark-dark.svg" alt="" />
       <div class="wm">MERIT<b>.</b><small>Design System</small></div>
     </div>
-    <div class="ver"><span>Tokens</span><b>v3.3.0</b></div>
+    <div class="ver"><span>Tokens</span><b>v3.4.0</b></div>
 
     <nav class="toc" aria-label="Sections">
       <div class="grp">Foundations</div>
@@ -487,23 +487,23 @@ FilledButton(
 <!-- ======================= 21 ILLUSTRATION ======================= -->
 <section class="sec" id="illus">
   <div class="secHead"><span class="eyebrow">21 · Hierarchy patchworks</span><h2>Every node, its own <span class="u">patchwork</span>.</h2>
-    <p class="lede">Each Subject, Topic and Subtopic gets a generated patchwork cut as a <b>square in a square</b>, the classic economy quilt block: symmetric on both axes and both diagonals. A subject is an hourglass X with corner triangles (4 patches); a topic keeps those and nests a diamond inside (5); a subtopic nests a square over the diamond (6). Every patch is a tint or one of 16 geometric patterns, and patterns dissolve toward the crisp seams. The icon plate's shape says the level: <b>hexagon</b> subject, <b>pentagon</b> topic, <b>square</b> subtopic. Subject icons are unique across the app, topic and subtopic icons are unique within their subject, and <b>no two nodes share a composition</b>. Patchworks are for hierarchy widgets only. Generator: <code>scripts/patchwork/</code> (SKILL.md §12). The demo below uses MIT Phosphor glyphs; production icons live in the private content repo.</p></div>
+    <p class="lede">Each Subject, Topic and Subtopic gets a generated patchwork cut as a <b>square in a square</b>, the classic economy quilt block: symmetric on both axes and both diagonals. A subject is an hourglass X with corner triangles (4 patches); a topic keeps those and nests a diamond inside (5); a subtopic nests a square over the diamond (6). Every patch is a tint or one of 16 geometric patterns, and patterns dissolve toward the crisp seams. The icon plate has as many sides as the tile has patches: <b>square</b> subject (4), <b>pentagon</b> topic (5), <b>hexagon</b> subtopic (6). <b>Colour comes from the subject:</b> its <code>color_hex</code> sets the hue of every tint, the solid patch and the icon accent for the subject and every node below it. Subject icons are unique across the app, topic and subtopic icons are unique within their subject, and <b>no two nodes share a composition</b>. Patchworks are for hierarchy widgets only. Generator: <code>scripts/patchwork/</code> (SKILL.md §12). The demo below uses MIT Phosphor glyphs; production icons live in the private content repo.</p></div>
   <span class="label">Subjects · tile</span>
   <div class="grid g6" id="tiles"></div>
   <span class="label" style="display:block;margin-top:20px">Nesting · each level adds one shape inside its parent's</span>
   <div class="pwnest">
-    <figure><img src="assets/v3/patchwork-demo/physics-tile.svg" alt="Physics" /><figcaption><b>Subject</b> · hexagon<br><span class="muted">X + corners · 4</span></figcaption></figure>
+    <figure><img src="assets/v3/patchwork-demo/physics-tile.svg" alt="Physics" /><figcaption><b>Subject</b> · square<br><span class="muted">X + corners · 4</span></figcaption></figure>
     <i class="ph ph-caret-right" aria-hidden="true"></i>
     <figure><img src="assets/v3/patchwork-demo/magnetism-tile.svg" alt="Magnetic field" /><figcaption><b>Topic</b> · pentagon<br><span class="muted">+ diamond · 5</span></figcaption></figure>
     <i class="ph ph-caret-right" aria-hidden="true"></i>
-    <figure><img src="assets/v3/patchwork-demo/current-tile.svg" alt="Electromagnetic induction" /><figcaption><b>Subtopic</b> · square<br><span class="muted">+ square · 6</span></figcaption></figure>
+    <figure><img src="assets/v3/patchwork-demo/current-tile.svg" alt="Electromagnetic induction" /><figcaption><b>Subtopic</b> · hexagon<br><span class="muted">+ square · 6</span></figcaption></figure>
   </div>
   <div class="grid g3" style="margin-top:16px">
     <div class="panel"><span class="label">Subtopic · wash</span><p class="muted" style="margin:4px 0 12px">Flashcard and note tiles carry the pattern their subtopic added, fading from the top-right corner. No icon, no seams; text sits on ≤ 6% ink. Questions don't.</p>
       <div class="card pwcard"><span class="pwwash" style="--pw:url(assets/v3/patchwork-demo/leaf-wash.svg);--wash-ink:#81739B;--wash-ink-dark:#C9B3EA"></span><span class="eyebrow">Note · Leaf structure</span><h4 style="margin-top:6px">Guard cells open and close the stomata.</h4><p class="muted" style="margin:4px 0 0">3 min read</p></div></div>
     <div class="panel"><span class="label">Variants</span><div class="row" style="gap:12px;align-items:flex-end;flex-wrap:wrap"><img src="assets/v3/patchwork-demo/thermal-tile.svg" width="72" alt="tile" /><span class="pwwash pwwash-sw" role="img" aria-label="wash" style="--pw:url(assets/v3/patchwork-demo/thermal-wash.svg);--wash-ink:#9B7484;--wash-ink-dark:#F6B5C3"></span><span class="pwmono" role="img" aria-label="mono" style="--pw:url(assets/v3/patchwork-demo/thermal-mono.svg)"></span></div>
       <p class="muted" style="margin:10px 0 0"><b>tile</b> 1:1 everywhere (grids at 96–160, lists and headers at 40–64) · <b>wash</b> flashcard and note backgrounds · <b>mono</b> <code>currentColor</code> for dense tables and chips. The 4:1 row was retired in v3.3.</p></div>
-    <div class="panel"><span class="label">Signature</span><p class="muted" style="margin:4px 0 0"><code>sha256(node_id ‖ icon_sha256 ‖ engine)</code> seeds the tints and patterns (the cuts and plate are fixed per level). A registry checks the composition key across every node in every subject and re-rolls a salt on collision, so outputs are stable and unique. The <code>quest:&lt;subtopic&gt;:&lt;n&gt;</code> namespace is reserved for Quests.</p></div>
+    <div class="panel"><span class="label">Signature</span><p class="muted" style="margin:4px 0 0"><code>sha256(node_id ‖ icon_sha256 ‖ subject colour ‖ engine)</code> seeds which palette tints and patterns each patch takes; the subject's <code>color_hex</code> sets the palette (the cuts and plate are fixed per level). A registry checks the composition key across every node in every subject and re-rolls a salt on collision, so outputs are stable and unique. The <code>quest:&lt;subtopic&gt;:&lt;n&gt;</code> namespace is reserved for Quests.</p></div>
   </div>
   <span class="label" style="display:block;margin-top:20px">16 patterns</span>
   <div class="pwpatterns" id="pwPatterns"></div>
@@ -714,9 +714,10 @@ FilledButton(
 
 <!-- ======================= 31 CHANGELOG ======================= -->
 <section class="sec" id="changelog">
-  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.3.0</h2></div>
+  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.4.0</h2></div>
   <div class="panel">
     <ul>
+      <li><b>v3.4.0 · Subject colour drives patchworks (D16 rev 5).</b> A subject's <code>color_hex</code> becomes its palette (pastel tints, the colour itself as the solid patch, icon accents), shared by every topic and subtopic below it. Plate sides now equal the patch count: square subject, pentagon topic, hexagon subtopic (§21).</li>
       <li><b>v3.3.0 · Square-in-a-square patchworks (D16 rev 4).</b> Patchworks are cut as a symmetric economy block that nests one shape per level: X + corners, then a diamond, then a square. The plate's shape says the level (hexagon, pentagon, square) and the icon is larger. The row variant is retired; use the tile (§21). Flashcards take any tone and the wash goes tone-on-tone (§18). A banner's action stays on the copy's row at the right, or wraps right-aligned (§16, §29).</li>
       <li><b>v3.2.0 · Softer patchworks, washes and banners (D16 rev 3, D17).</b> Patchwork seams stopped drawing ink lines and patterns dissolve as they near a seam. Flashcard and note tiles carry their subtopic's wash (§18, §21). Feature banners are patterned violet stadiums with an orange disc (§16, §29).</li>
       <li><b>v3.1.0 · Hierarchy patchworks (D16).</b> Every subject, topic and subtopic gets its own generated patchwork with 16 patterns, a signature and a uniqueness registry (§21). State spots are now line art. The new tokens are <code>patchwork.*</code>, and the six shared category tiles are removed.</li>
@@ -727,7 +728,7 @@ FilledButton(
     </ul>
     <p class="muted">The rename map is in <a href="CHANGELOG.md">CHANGELOG.md</a>, and consumer steps are in <a href="MIGRATION-v3.md">MIGRATION-v3.md</a>.</p>
   </div>
-  <footer class="foot"><span>Merit Project · Design System v3.3.0</span><span>Reference: MindInventory UI/UX, Dribbble 18955306 (inspiration only)</span></footer>
+  <footer class="foot"><span>Merit Project · Design System v3.4.0</span><span>Reference: MindInventory UI/UX, Dribbble 18955306 (inspiration only)</span></footer>
 </section>
 
     </div>

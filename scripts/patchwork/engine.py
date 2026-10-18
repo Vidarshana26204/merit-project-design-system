@@ -1,14 +1,18 @@
 """Patchwork engine: node + icon (+ parent) → deterministic, unique composition → SVG.
 
-    signature = sha256(node_id | icon_sha256 | ENGINE_VERSION)
+    signature = sha256(node_id | icon_sha256 | subject_color | ENGINE_VERSION)
     seed      = sha256(signature | salt)            salt starts at 0, bumps on collision
 
 Layout (D16 rev 4, engine v4): **square in a square**. Fixed, symmetric cuts (geometry.py);
 patch count follows the hierarchy: subject 4, topic 5, subtopic 6 (quest 7), and each level
 nests one shape further in (subject: hourglass X + corner triangles; topic: + diamond;
 subtopic: + square). A child keeps its parent's patch styles and adds exactly one, so a
-topic reads as "its subject + 1". The icon plate's shape says the level: subject hexagon,
-topic pentagon, subtopic square.
+topic reads as "its subject + 1". The icon plate has as many sides as the tile has patches:
+subject square (4), topic pentagon (5), subtopic hexagon (6), quest heptagon (7).
+
+Colour (engine v5, D16 rev 5): the subject's `color_hex` sets the palette of the subject and
+every node below it (palette.py): pastel patch tints around its hue, the subject colour as the
+solid patch, and icon accents. Subjects without a colour fall back to a token family.
 
 Seams are crisp tint edges (no ink): each pattern dissolves, its elements shrinking to
 nothing, as it nears the edge of the region it shows in. Subtopics also get a `wash`: the
@@ -28,10 +32,10 @@ import random
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import geometry, patterns
+from . import geometry, palette, patterns
 from .icon import Icon, markup
 
-ENGINE_VERSION = "4"
+ENGINE_VERSION = "5"
 ROOT = Path(__file__).resolve().parents[2]
 
 TILE = 256.0
@@ -71,8 +75,7 @@ FAMILIES: dict[str, dict[str, list[str]]] = {
         "accent": ["butter.300", "sky.300", "coral.300"],
     },
 }
-SUBJECT_FAMILY = {"PHYSICS": "warm", "CHEMISTRY": "cool", "BIOLOGY": "fresh"}
-GLOBAL_TINTS = sorted({t for fam in FAMILIES.values() for t in fam["tints"]})
+SUBJECT_FAMILY = {"PHYSICS": "warm", "CHEMISTRY": "cool", "BIOLOGY": "fresh"}   # fallback only
 LEVEL_PATCHES = {"subject": 4, "topic": 5, "subtopic": 6, "quest": 7}
 PATTERN_NAMES = list(patterns.PATTERNS)
 
@@ -85,6 +88,7 @@ class Node:
     code: str = ""
     title: str = ""
     parent: str | None = None   # parent node id (topic → subject, subtopic → topic)
+    color: str | None = None    # the subject's color_hex (same for every node of the subject)
 
 
 @dataclass
@@ -102,10 +106,11 @@ class Composition:
     icon: Icon | None
     signature: str
     salt: int
-    family: str
+    family: str                     # "#RRGGBB" (subject colour) or a fallback token family
     styles: list[PatchStyle]        # one per layout role (geometry.square_in_square), outermost first
     added: int | None               # index of the patch this node added to its parent's (always the last)
     accent: str
+    accent_shade: str
 
     @property
     def plate(self) -> str:
@@ -128,15 +133,29 @@ class Composition:
 
 
 def signature(node: Node, icon_sha: str) -> str:
-    return hashlib.sha256(f"{node.id}|{icon_sha}|{ENGINE_VERSION}".encode()).hexdigest()
+    return hashlib.sha256(f"{node.id}|{icon_sha}|{node.color or ''}|{ENGINE_VERSION}".encode()).hexdigest()
 
 
-def _new_style(rng: random.Random, fam: dict[str, list[str]], avoid_tints: set[str],
+def _token_palette(name: str) -> palette.Palette:
+    fam = FAMILIES[name]
+    return palette.Palette(C[fam["wedges"][0]], [C[t] for t in fam["tints"]], [C[w] for w in fam["wedges"]],
+                           [(C[a], C[ACCENT_SHADE.get(a, a)]) for a in fam["accent"]])
+
+
+def subject_palette(node: Node) -> tuple[str, palette.Palette]:
+    """The subject colour's palette, or (no colour) a token family by subject code."""
+    if node.color:
+        return palette.norm(node.color), palette.palette(node.color)
+    name = SUBJECT_FAMILY.get(node.subject) or list(FAMILIES)[
+        int(hashlib.sha256(node.subject.encode()).hexdigest(), 16) % len(FAMILIES)]
+    return name, _token_palette(name)
+
+
+def _new_style(rng: random.Random, pal: palette.Palette, avoid_tints: set[str],
                avoid_patterns: set[str], allow_wedge: bool, need_pattern: bool = False) -> PatchStyle:
     if allow_wedge and rng.random() < 0.5:
-        return PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots", "halftone")), 0, 1, wedge=True)
-    pool = fam["tints"] + rng.sample(GLOBAL_TINTS, 3)
-    tints = [t for t in pool if t not in avoid_tints] or [t for t in GLOBAL_TINTS if t not in avoid_tints]
+        return PatchStyle(rng.choice(pal.solids), rng.choice((None, "dots", "halftone")), 0, 1, wedge=True)
+    tints = [t for t in pal.tints if t not in avoid_tints] or pal.tints
     tint = rng.choice(tints)
     if need_pattern or rng.random() < 0.8:
         pats = [p for p in PATTERN_NAMES if p not in avoid_patterns] or PATTERN_NAMES
@@ -149,9 +168,7 @@ def _new_style(rng: random.Random, fam: dict[str, list[str]], avoid_tints: set[s
 def compose(node: Node, icon: Icon | None, salt: int = 0, parent: "Composition | None" = None) -> Composition:
     sig = signature(node, icon.sha256 if icon else "noicon")
     rng = random.Random(int(hashlib.sha256(f"{sig}|{salt}".encode()).hexdigest(), 16))
-    fam_name = SUBJECT_FAMILY.get(node.subject) or list(FAMILIES)[
-        int(hashlib.sha256(node.subject.encode()).hexdigest(), 16) % len(FAMILIES)]
-    fam = FAMILIES[fam_name]
+    fam_name, pal = subject_palette(node)
     n = LEVEL_PATCHES.get(node.level, 4) if parent is None else len(parent.styles) + 1
 
     added: int | None
@@ -162,9 +179,9 @@ def compose(node: Node, icon: Icon | None, salt: int = 0, parent: "Composition |
         wedge_at = rng.randrange(n) if rng.random() < 0.6 else -1
         for i in range(n):
             avoid = {s.tint for s in styles}
-            st = _new_style(rng, fam, avoid, {s.pattern for s in styles if s.pattern}, allow_wedge=False)
+            st = _new_style(rng, pal, avoid, {s.pattern for s in styles if s.pattern}, allow_wedge=False)
             if i == wedge_at:
-                st = PatchStyle(rng.choice(fam["wedges"]), rng.choice((None, "dots")), 0, 1, wedge=True)
+                st = PatchStyle(rng.choice(pal.solids), rng.choice((None, "dots")), 0, 1, wedge=True)
             styles.append(st)
         added = None
     else:
@@ -172,11 +189,11 @@ def compose(node: Node, icon: Icon | None, salt: int = 0, parent: "Composition |
         base = list(parent.styles)
         added = len(base)
         touching = {base[r].tint for r in geometry.NEIGHBOURS.get(added, set()) if r < added}
-        new = _new_style(rng, fam, touching | {s.tint for s in base if s.wedge},
+        new = _new_style(rng, pal, touching | {s.tint for s in base if s.wedge},
                          {s.pattern for s in base if s.pattern}, allow_wedge=False, need_pattern=True)
         styles = base + [new]
-    accent = rng.choice(fam["accent"])
-    return Composition(node, icon, sig, salt, fam_name, styles, added, accent)
+    accent, shade = rng.choice(pal.accents)
+    return Composition(node, icon, sig, salt, fam_name, styles, added, accent, shade)
 
 
 # ── rendering ───────────────────────────────────────────────────────────────────────────
@@ -200,7 +217,7 @@ def _body(layout: geometry.Layout, styles: list[PatchStyle], uid: str, clip_rx: 
     band = MORPH
     fills, pats = [], []
     for p in layout.patches:
-        fills.append(f'<path d="{p.d}" fill="{C[styles[p.role].tint]}"/>')
+        fills.append(f'<path d="{p.d}" fill="{styles[p.role].tint}"/>')
     for i, p in enumerate(layout.patches):
         s = styles[p.role]
         if not s.pattern:
@@ -220,7 +237,7 @@ def _body(layout: geometry.Layout, styles: list[PatchStyle], uid: str, clip_rx: 
             d = min((geometry.seg_dist((x, y), a, b) for a, b in seams), default=band)
             keep.append(el)
             ks.append(patterns.smoothstep(band * 0.15, band, d))
-        ink = mix(C[s.tint], INK, 0.3 if s.wedge else 0.42)
+        ink = mix(s.tint, INK, 0.3 if s.wedge else 0.42)
         pats.append(patterns.draw(kind, keep, ks, ink, rot))
     fid = f"{uid}f"
     defs = f'<clipPath id="{fid}"><rect width="{patterns.f(w)}" height="{patterns.f(h)}" rx="{clip_rx}"/></clipPath>'
@@ -243,8 +260,7 @@ def _plate(kind: str, cx: float, cy: float) -> str:
 def _icon_g(comp: Composition, cx: float, cy: float, size: float) -> str:
     if not comp.icon:
         return ""
-    colors = {**ICON_COLORS_BASE, "accent": C[comp.accent],
-              "accentShade": C[ACCENT_SHADE.get(comp.accent, comp.accent)]}
+    colors = {**ICON_COLORS_BASE, "accent": comp.accent, "accentShade": comp.accent_shade}
     k = size / comp.icon.view
     return (f'<g transform="translate({patterns.f(cx - size / 2)} {patterns.f(cy - size / 2)}) scale({k:.4f})">'
             f'{markup(comp.icon, colors, C['patchwork.iconLine'])}</g>')
@@ -276,7 +292,7 @@ def wash_inks(comp: Composition) -> dict[str, str] | None:
     and its tint (dark theme). Shipped in the manifest next to the wash variant."""
     if comp.added is None:
         return None
-    t = C[comp.styles[comp.added].tint]
+    t = comp.styles[comp.added].tint
     return {"light": mix(t, INK, 0.42), "dark": t}
 
 

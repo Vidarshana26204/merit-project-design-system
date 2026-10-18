@@ -5,6 +5,28 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## 3.4.0 — 2026-10-18
+
+Subject colour drives patchworks (D16 rev 5). No token changes.
+
+### Added
+- `scripts/patchwork/palette.py`: one subject `color_hex` → its palette in OKLCH (7 pastel patch
+  tints around the hue incl. a soft complement, the subject colour as the solid patch plus a
+  deeper twin, 3 icon accents with shades). Out-of-gamut colours lose chroma until they fit.
+- `subjects/<S>/subject.json` → `color_hex` (merit-content, = backend `subjects.color_hex`) is the
+  generator's input; `manifest.json` records `subject_color` per node.
+- Subject colour set: one brand-safe, distinct colour per subject (merit-content
+  `subjects/_subject-colors.json`, backend migration `000047_subject_colors`). Physics `#4C88D3`,
+  Chemistry `#03999A`, Biology `#4E9A52`, Agricultural Science `#A6801F`, ICT `#A8B35E`.
+
+### Changed
+- **Engine v5:** every node of a subject draws its tints, solid patch and icon accent from the
+  subject's palette, so a branch reads as its subject's colour. The signature includes the
+  colour: changing a subject's `color_hex` re-signs its whole branch. Subjects without a colour
+  fall back to the token families (warm, cool, fresh, mixed).
+- **Plate sides = patches:** subject **square** (4), topic pentagon (5), subtopic **hexagon** (6),
+  quest heptagon (7). Subject and subtopic shapes are swapped from 3.3.0.
+
 ## 3.3.0 — 2026-10-18
 
 Square-in-a-square patchworks (D16 rev 4), flashcard tones and the banner action rule.

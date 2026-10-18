@@ -169,15 +169,16 @@ def hierarchy(content: Path, subject: str) -> list[engine.Node]:
     meta = json.loads((sdir / "subject.json").read_text())
     h = json.loads((sdir / "hierarchy.json").read_text())
     sid = f"subject:{meta['code']}"
-    nodes = [engine.Node(sid, "subject", subject, meta["code"], meta.get("name", subject))]
+    color = meta.get("color_hex")      # = backend subjects.color_hex; drives the whole branch's palette
+    nodes = [engine.Node(sid, "subject", subject, meta["code"], meta.get("name", subject), color=color)]
     for t in sorted(h["topics"], key=lambda t: t.get("display_order", 0)):
         if not t.get("is_active", True):
             continue
-        nodes.append(engine.Node(t["id"], "topic", subject, t["code"], t["translations"]["en"]["title"], parent=sid))
+        nodes.append(engine.Node(t["id"], "topic", subject, t["code"], t["translations"]["en"]["title"], parent=sid, color=color))
         for st in sorted(t.get("subtopics", []), key=lambda s: s.get("display_order", 0)):
             if st.get("is_active", True):
                 nodes.append(engine.Node(st["id"], "subtopic", subject, st["code"],
-                                         st["translations"]["en"]["title"], parent=t["id"]))
+                                         st["translations"]["en"]["title"], parent=t["id"], color=color))
     return nodes
 
 
@@ -293,7 +294,8 @@ def cmd_generate(a: argparse.Namespace) -> None:
             manifest[key] = {"node_id": n.id, "parent": n.parent, "level": n.level, "subject": subject,
                              "code": n.code, "title": n.title, "patches": len(comp.styles),
                              "signature": comp.signature, "icon": icon_id, "icon_sha256": ic.sha256,
-                             "how": how, "why": why, "family": comp.family, "engine_version": engine.ENGINE_VERSION,
+                             "how": how, "why": why, "family": comp.family, "subject_color": n.color,
+                             "engine_version": engine.ENGINE_VERSION,
                              "variants": variants}
             count += 1
     reg.save()
@@ -408,7 +410,7 @@ def _card(k: str, m: dict, wide: bool = False) -> str:
 
 
 # ── demo (public, licence-safe) ───────────────────────────────────────────────────────
-DEMO_NODES = [  # (id, level, subject family key, title, Phosphor glyph, parent id) — parents first
+DEMO_NODES = [  # (id, level, subject code, title, Phosphor glyph, parent id) — parents first
     ("demo:physics", "subject", "PHYSICS", "Physics", "atom", None),
     ("demo:chemistry", "subject", "CHEMISTRY", "Chemistry", "flask", None),
     ("demo:biology", "subject", "BIOLOGY", "Biology", "dna", None),
@@ -427,6 +429,12 @@ DEMO_NODES = [  # (id, level, subject family key, title, Phosphor glyph, parent 
 ]
 
 
+# Demo subject colours (backend seed values where they exist; ICT shifted to indigo so the demo
+# shows six distinct hues, since the seed gives ICT and Combined Maths the same blue).
+DEMO_COLORS = {"PHYSICS": "#EF4444", "CHEMISTRY": "#10B981", "BIOLOGY": "#0EA5E9", "MATHS": "#3B82F6",
+               "ICT": "#6366F1", "LANGUAGES": "#F59E0B"}
+
+
 def cmd_demo(a: argparse.Namespace) -> None:
     """Patchworks from MIT Phosphor glyphs + one swatch per pattern → assets/v3/patchwork-demo/."""
     from . import patterns
@@ -439,7 +447,7 @@ def cmd_demo(a: argparse.Namespace) -> None:
     placed: dict[str, engine.Composition] = {}
     for nid, level, subject, title, glyph, parent in DEMO_NODES:
         ic = iconlib.load(glyphs / f"{glyph}.svg", f"phosphor/{glyph}")
-        comp = reg.place(engine.Node(nid, level, subject, nid, title, parent), ic, placed.get(parent or ""))
+        comp = reg.place(engine.Node(nid, level, subject, nid, title, parent, DEMO_COLORS.get(subject)), ic, placed.get(parent or ""))
         placed[nid] = comp
         for v, fn in engine.RENDERERS.items():
             svg = fn(comp)

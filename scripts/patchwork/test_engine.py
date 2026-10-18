@@ -1,11 +1,12 @@
 """python -m pytest scripts/patchwork  (from the DS repo root, venv with fonttools + pytest)"""
 from __future__ import annotations
 
+import dataclasses
 import random
 import re
 import uuid
 
-from patchwork import engine, geometry, patterns
+from patchwork import engine, geometry, palette, patterns
 
 
 def uid(rng: random.Random) -> str:
@@ -47,7 +48,33 @@ def test_patch_counts_and_inheritance():
 
 def test_plate_shape_follows_level():
     placed = place_all(tree(subjects=1, topics=1, subtopics=1), engine.Registry())
-    assert {c.node.level: c.plate for c in placed.values()} == {"subject": "hexagon", "topic": "pentagon", "subtopic": "square"}
+    assert {c.node.level: c.plate for c in placed.values()} == {"subject": "square", "topic": "pentagon", "subtopic": "hexagon"}
+    for c in placed.values():                            # sides = patches
+        assert geometry.PLATE_SIDES[c.plate] == len(c.styles)
+
+
+def test_subject_colour_drives_the_whole_branch():
+    nodes = [dataclasses.replace(n, color="#10B981") for n in tree(subjects=1, topics=2, subtopics=3)]
+    pal = palette.palette("#10B981")
+    allowed = set(pal.tints) | set(pal.solids)
+    placed = place_all(nodes, engine.Registry())
+    for c in placed.values():
+        assert c.family == "#10B981"
+        assert {s.tint for s in c.styles} <= allowed
+        assert (c.accent, c.accent_shade) in pal.accents
+    other = place_all([dataclasses.replace(n, color="#EF4444") for n in nodes], engine.Registry())
+    n0 = nodes[0].id
+    assert other[n0].signature != placed[n0].signature   # a colour change re-signs every node
+
+
+def test_palette_round_trips_and_stays_in_gamut():
+    for h in ("#EF4444", "#10B981", "#0EA5E9", "#F43F5E", "#3B82F6", "#663696", "#808080"):
+        assert palette.from_oklch(*palette.to_oklch(h)) == h
+        pal = palette.palette(h)
+        assert len(pal.tints) >= 6 and pal.solids and len(pal.accents) == 3
+        for t in pal.tints:                               # tints stay light enough for ink patterns
+            assert palette.to_oklch(t)[0] > 0.84
+    assert palette.palette("#EF4444").solids[0] == "#EF4444"   # a mid-light subject colour is used as is
 
 
 def test_touching_patches_never_share_a_tint():

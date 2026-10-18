@@ -113,24 +113,27 @@ def square_in_square(n: int, s: float) -> Layout:
 NEIGHBOURS = {4: {0, 1}, 5: {0, 1, 4}, 6: {0, 1, 2, 3, 4}}
 
 
-# ── plates: one shape per level ───────────────────────────────────────────────────────
-PLATE_BY_LEVEL = {"subject": "hexagon", "topic": "pentagon", "subtopic": "square", "quest": "square"}
-PLATE_SIZE = {"hexagon": 0.375, "pentagon": 0.365, "square": 0.32}   # circumradius / half-side, × tile
-PLATE_ROUND = {"hexagon": 0.045, "pentagon": 0.045, "square": 0.08}  # corner radius, × tile
+# ── plates: one shape per level, as many sides as the tile has patches ──────────────────
+PLATE_BY_LEVEL = {"subject": "square", "topic": "pentagon", "subtopic": "hexagon", "quest": "heptagon"}
+PLATE_SIDES = {"square": 4, "pentagon": 5, "hexagon": 6, "heptagon": 7}
+PLATE_SIZE = {"square": 0.32, "pentagon": 0.365, "hexagon": 0.36, "heptagon": 0.36}   # inner half-side (square) / circumradius, × tile
+PLATE_ROUND = {"square": 0.08, "pentagon": 0.045, "hexagon": 0.045, "heptagon": 0.04}  # corner radius, × tile
 
 
 def plate_points(kind: str, cx: float, cy: float, s: float) -> list[Point]:
+    """Regular polygon: square axis-aligned, pentagon and heptagon point-up, hexagon flat-top."""
     r = s * PLATE_SIZE[kind]
     if kind == "square":
         return [(cx - r, cy - r), (cx + r, cy - r), (cx + r, cy + r), (cx - r, cy + r)]
-    sides, start = (6, 0.0) if kind == "hexagon" else (5, -90.0)    # flat-top hexagon, point-up pentagon
+    sides = PLATE_SIDES[kind]
+    start = 0.0 if kind == "hexagon" else -90.0
     return [(cx + r * math.cos(math.radians(start + 360 * i / sides)),
              cy + r * math.sin(math.radians(start + 360 * i / sides))) for i in range(sides)]
 
 
 def plate_inradius(kind: str, s: float) -> float:
     r = s * PLATE_SIZE[kind]
-    return r if kind == "square" else r * math.cos(math.pi / (6 if kind == "hexagon" else 5))
+    return r if kind == "square" else r * math.cos(math.pi / PLATE_SIDES[kind])
 
 
 def rounded_d(pts: list[Point], r: float) -> str:
