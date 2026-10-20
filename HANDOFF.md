@@ -1,20 +1,20 @@
-# Handoff — 2026-10-20
+# Handoff — 2026-10-21
 
-Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks are done, the mobile wireframes are
-decided, and the wireframe rulings shipped as 3.5.0 (D18–D20). **Next: the Flutter restyle** (MIGRATION §1,
-branch `feat/design-system-v3` in the app, set up at `920b5bb`), alongside the backend gap work. The landing page
+Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks are done, the mobile wireframes are decided,
+the wireframe rulings shipped as 3.5.0 (D18–D20), and the backend now serves everything the picked screens need.
+**Next: the Flutter screens** (`MIGRATION-v3.md` §1.3 shared widgets, then §1.6 screen order). The landing page
 comes after.
 
 ## Where things stand
 
 | Repo | Branch | State |
 |---|---|---|
-| `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board |
-| `merit-project-flutter` | `feat/design-system-v3` | v3.5.0 tokens, General Sans, theme remap, guard (`920b5bb`); screens next |
-| `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling |
-| `merit-project-backend` | `feat/patchworks` | `hierarchy_patchworks` API, migrations 000047–000048 (renumbered after the revenuecat-sandbox rebase), importer in the image, `CONTENT_CDN_BASE` in deploy |
+| `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
+| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`) | Setup done at `920b5bb`: v3.5.0 tokens (`.design-tokens-ref` pinned), General Sans bundled, School Times + `google_fonts` dropped, theme remap, guard. **Committed, not pushed.** Screens next |
+| `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
+| `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
 
-None of the branches is merged. The backend deploy change only takes effect once `feat/patchworks` lands on `main`.
+None of the branches is merged. The backend changes only deploy once `feat/patchworks` lands on `main`.
 
 **Patchworks in one paragraph.** Every Subject, Topic and Subtopic has a generated tile: a
 square-in-a-square quilt block. A subject's 4 patches gain a nested diamond at topic level (5)
@@ -23,50 +23,117 @@ and a square at subtopic level (6). The icon plate has as many sides as the tile
 `tile`, `wash` (behind flashcards and notes) and `mono`. Rules: `SKILL.md` §12. Decisions:
 `DECISIONS-v3.md` D16 revs 1–5. Specimens: reference site §21.
 
+## Mobile wireframing (decided)
+
+- **Board:** `wireframes.html` (linked from the reference site §28), using `wireframes/{wf.css, wf.js, icons.js}`. It is
+  published as a private claude.ai artifact with a shared pick tracker (`picks/<screen>`). 10 flows at 360dp, 3 candidates
+  per screen, plus revised rows for rounds 8–9 (Compete root, Tasks & Quests, onboarding with language rows).
+- **Decisions:** `wireframes/DECISIONS.md`. Navigation B (Today · Learn · Compete · Me), the subject hub with a tinted hero and
+  type-scale sections, Learn as a patchwork quilt map with a subtopic sheet (recipe ring plus Read → Remember → Prove),
+  and `MeritShareCard` for quiz results. Only subject content is localized; the UI stays English.
+- **DS rulings (3.5.0):**
+  - **D18:** patchwork mastery fill, the one allowed tile alteration.
+  - **D19:** colour-only timer (`timer.text / warnText / criticalText`; the pill tokens are deprecated).
+  - **D20:** subject tint 0.30 light / 0.24 dark, gated for all 62 subjects with `npm run check:subjects -- <subject-colors.json>`.
+    The board's 58% mix failed on real mid-tone subject colours.
+
+## Backend for the picked screens (`feat/patchworks`)
+
+Status per feature: `wireframes/BACKEND-GAPS.md`.
+
+**Migrations.** The patchwork migrations were renumbered to 000047–000048, because revenuecat-sandbox owns 000046.
+New migrations 000049–000052 add achievements, avatars, daily plans and push/reminders. Local databases that ran the old
+patchwork numbers need `migrate force 46` before migrating up.
+
+**Error codes.** Error responses carry a top-level `code` the app branches on:
+`DAILY_LIMIT_REACHED` opens the limit sheet, `PREMIUM_REQUIRED` opens the paywall. The others are `NOT_ENROLLED`,
+`ENROLLMENT_LIMIT_REACHED`, `SUBTOPIC_LOCKED` and `INSUFFICIENT_POINTS`.
+
+**New endpoints:**
+- **Achievements:** `GET /students/me/achievements`. Quiz completion also returns `achievements_unlocked`.
+- **Tasks:** `GET /tasks?state=pending|completed|expired|all`.
+- **Avatars:** `GET /avatars`, and `PUT /user {"user": {"avatar_id"}}` to pick one.
+- **Subtopic progress:** `GET /progress/subtopics/:id` returns `mastery_parts` (read / remember / prove). Default weights are
+  notes 0.15, cards 0.10, quiz 0.75, so the ring must read them from the API.
+- **Stats:** `GET /subjects/:id/prediction` and `GET /subjects/:id/insights`.
+- **Today:** `GET /today/plan` (up to 3 items; 30 points once when all are done).
+- **Notifications:** `POST|DELETE /devices`, `GET|PUT /students/me/reminders`, `POST /quests/notify-me`, and
+  `cron send-reminders` every 15 minutes.
+- **Enrollments:** both the create and the language update reject languages missing from `available_languages`.
+
+**Removed:**
+- The templ landing (`internal/web`, `web/static`, the templ build steps and dependency).
+- 35 unreachable functions, 85 unused queries and 10 dead environment bindings.
+- Swagger regenerates again.
+
+**Verified:**
+- Unit tests pass.
+- Migrations ran up, down and up on a copy of the local database.
+- Every new endpoint was called against a running server with a real student.
+
+## Before the backend release
+
+- **Root domain cutover:** deploy `merit-project-frontend` (port 3001) and point `meritproject.lk` and `www` at it in the
+  same release (nginx block in the monorepo `Deployment.md`). Otherwise the root domain, `/privacy-policy` and
+  `/terms-and-conditions` return 404. The frontend has no deploy workflow yet.
+- **Push:** create a Firebase project, mount a service-account JSON, and set `FCM_PROJECT_ID` and `FCM_CREDENTIALS_FILE`.
+  Then add the cron line (`docs/cron-setup-guide.md`). Until then reminders are a no-op.
+- **Patchworks go-live (manual):** merit-content `docs/PATCHWORKS-RELEASE.md`. One-time setup: public read on
+  `content-assets/patchworks/*`, an upload key, and the GitHub variable `CONTENT_CDN_BASE`. Then push and run the importer
+  with `--avatars`.
+
+## Open decisions
+
+- **Daily plan "done":** built as "every item done", which pays 30 points. Confirm it.
+- **Prices:** Rs 4,990/yr and Rs 599/mo, or the "$4.99/mo" on the current Profile screen.
+- **Share card privacy:** can username, school and district appear on shared images?
+- **Day boundary:** streaks and the daily plan use the UTC day, so it rolls over at 05:30 Sri Lanka time. Decide whether to
+  switch both to Sri Lanka midnight.
+- **Grade prediction with little data:** it shows a low-confidence grade (often F) for new students. Consider hiding the
+  grade below some coverage level.
+- **Achievement points for existing students:** they get retroactive unlocks and points on their first evaluation.
+
 ## Open items carried over
 
-- **Patchworks go-live (manual):** merit-content `docs/PATCHWORKS-RELEASE.md`. One-time setup is
-  still to do: public read on `content-assets/patchworks/*`, an upload key, and the GitHub
-  variable `CONTENT_CDN_BASE`. Then push and import. merit-content CI warns until it's done.
-- **Agricultural Science and ICT** have colours but no icon maps, so they have no patchworks yet.
-- **Feature icons** (flashcards, notes, quiz modes…) are deferred, so the app uses Phosphor.
+- **Agricultural Science and ICT** have colours but no icon maps, so they have no patchworks yet. They use the
+  §1.4a fallback.
+- **Feature icons** (flashcards, notes, quiz modes…) are deferred; the app uses Phosphor.
   The groundwork is `patchwork_jev.py --features`.
 - **Jev icon audit:** 45 flagged and 61 weak remain (optional polish). Picker:
   `tools/run.sh tools/patchwork_review.py serve` in merit-content.
-- **Landing:** decided: `merit-project-frontend` is canonical; the backend templ landing is being removed.
-- **Clash Display licence:** the v2 Clash Display (FFL) files are still committed here (public). Remove them and
+- **Clash Display licence:** the v2 Clash Display (FFL) files are still committed here (public repo). Remove them and
   decide on history before v3 ships (`assets/fonts/README.md`).
+- **Quests and structured questions** have no backend yet. Quests ships as a coming-soon tab.
 
-## Mobile wireframing (decided)
+## Next: Flutter screens
 
-- **Board:** `wireframes.html` at the repo root (linked from the reference site §28). It uses `wireframes/{wf.css, wf.js, icons.js}`
-  and is published as a private claude.ai artifact with a shared pick tracker (`picks/<screen>` in the artifact db).
-  It covers 10 flows (00 shell → 09 states) at 360dp, with 3 candidates per screen.
-- **Decisions so far:** `wireframes/DECISIONS.md`. Navigation is B (Today · Learn · Compete · Me), the subject hub has a tinted hero and
-  type-scale sections, Learn is a patchwork quilt map, and quiz results share through a `MeritShareCard` template.
-  Only subject content is localized; the UI stays English.
-- **All screens are picked** (2026-10-20). Register and onboarding keep the existing flow, with v3 styling only.
-- **Backend work surfaced:** `wireframes/BACKEND-GAPS.md` (daily-limit mismatch, achievements endpoint, grade prediction,
-  avatar catalogue, reminders…).
-- **DS rulings (done, 3.5.0):** mastery fill allowed as the §12 exception (D18); colour-only timer tokens
-  `timer.text / warnText / criticalText` (D19); subject tint 0.30 light / 0.24 dark, checked for all 62 subjects with
-  `npm run check:subjects` (D20).
-- **Then:** `MIGRATION-v3.md` §1 from §1.3 (shared widgets), then screens in §1.6 order.
+1. Optionally push `feat/design-system-v3` in the Flutter repo.
+2. Restyle the shared widgets (`MIGRATION-v3.md` §1.3). As uses fall, lower the guard baselines in
+   `tool/check_design_tokens.dart`: `MeritColors.` 687, `MeritShadows.brutal` 2, `MeritBorders.` 126.
+3. Build the new widgets (§1.4): navigation shell, `MeritHubHeader`, `MeritQuiltMap` + subtopic sheet,
+   `MeritShareCard`, and the Compete, task, stream and subject-language rows.
+4. Build the screens in §1.6 order, starting with the shell. Fix the client bugs in `BACKEND-GAPS.md` along the way:
+   - hardcoded 20/1 limits
+   - limit and premium snackbars (switch to the error `code`)
+   - paper timer counting up
+   - pause copy
+   - purchase success
+   - forgot password
+   - notes reader
+   - enrol after onboarding
 
 ## Then: landing page
 
-- **Spec:** reference site §29 (landing specimen): eyebrow, headline with one underlined word,
-  one line of body, pill CTA, programme grid, CTA band. Uses the same tokens as the product,
-  General Sans (self-hosted), and patchwork tiles as hero art.
-- **Code:** `merit-project-frontend/app/(landing)` + `features/landing` (`MIGRATION-v3.md` §2.6),
-  or the backend templ landing (§3). Decide which first.
-- **Inputs to gather:** final copy (EN, and SI/TA if it ships trilingual), pricing (Wanderer vs
-  Achiever), and app store links.
+- **Spec:** reference site §29 (landing specimen): eyebrow, headline with one underlined word, one line of body, pill CTA,
+  programme grid, CTA band. Same tokens as the product, General Sans (self-hosted), patchwork tiles as hero art.
+- **Code:** `merit-project-frontend/app/(landing)` + `features/landing` (`MIGRATION-v3.md` §2.6). The frontend is the
+  canonical landing; the backend templ landing is gone (§3).
+- **Inputs to gather:** final copy (EN, and SI/TA if it ships trilingual), pricing (Wanderer vs Achiever), app store links.
 
 ## How to work here
 
-- `npm run build && npm run check` (tokens + contrast gate) before committing.
-- Patchwork engine: `scripts/patchwork/`; run its tests with
-  `python -m pytest -q scripts/patchwork` (needs fonttools).
-- The licensed icon pack and production patchworks never enter this public repo, only the
-  Phosphor demo set (`assets/v3/patchwork-demo/`).
+- `npm run build && npm run check` (tokens + contrast gate) before committing. After a token or subject-colour change,
+  also run `npm run check:subjects -- ../merit-content/subjects/_subject-colors.json`.
+- Patchwork engine: `scripts/patchwork/`; run its tests with `python -m pytest -q scripts/patchwork` (needs fonttools).
+- The licensed icon pack and production patchworks never enter this public repo, only the Phosphor demo set
+  (`assets/v3/patchwork-demo/`).
