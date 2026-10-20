@@ -1,7 +1,7 @@
 # Handoff — 2026-10-20
 
 Design system **v3.4.0** (branch `feat/design-system-v3`). The patchwork work is done and pushed;
-next up is **mobile wireframing**, then the **landing page**.
+mobile wireframes are drawn and decided (see below); after that comes the **landing page**.
 
 ## Where things stand
 
@@ -32,25 +32,19 @@ and a square at subtopic level (6). The icon plate has as many sides as the tile
   `tools/run.sh tools/patchwork_review.py serve` in merit-content.
 - **Templ vs Next.js landing:** decide which one is canonical before building (`MIGRATION-v3.md` §3).
 
-## Next: mobile wireframing (`merit-project-flutter`)
+## Mobile wireframing (decided)
 
-Goal: low-fi wireframes for the v3 app before any Flutter restyle, so layout and flow get
-agreed while they are still cheap to change.
-
-- **Start from:** `MIGRATION-v3.md` §1.6 for screen order: home → quiz (mode select, taking,
-  completion, attempt detail) → study / flashcards → subjects / subject detail / hierarchy →
-  leaderboard / points → premium → profile / settings → auth / onboarding.
-- **Constraints already set:**
-  - calm vs energy modes (SKILL §6);
-  - patchwork placement per screen (`MIGRATION-v3.md` §1.4a table, with tiles at 40–64 in lists);
-  - flashcard tones and washes (§18);
-  - banners and their action rule (§16, §29);
-  - avatars: students pick any of 30 (merit-content `patchworks/avatars/`);
-  - freemium gates (Wanderer vs Achiever, adaptive mode is Pro only).
-- **Existing feature folders** to map: `lib/features/{home,quiz,study,subjects,hierarchy,leaderboards,points,premium,profile,onboarding,authentication,progress,streams,enrollments}`.
-- **Suggested output:** one artifact or page per flow at phone width (360–390), grey-box plus
-  real copy, with each screen annotated with the DS components it uses. Review those before
-  starting `MIGRATION-v3.md` §1.
+- **Board:** `wireframes.html` at the repo root (linked from the reference site §28). It uses `wireframes/{wf.css, wf.js, icons.js}`
+  and is published as a private claude.ai artifact with a shared pick tracker (`picks/<screen>` in the artifact db).
+  It covers 10 flows (00 shell → 09 states) at 360dp, with 3 candidates per screen.
+- **Decisions so far:** `wireframes/DECISIONS.md`. Navigation is B (Today · Learn · Compete · Me), the subject hub has a tinted hero and
+  type-scale sections, Learn is a patchwork quilt map, and quiz results share through a `MeritShareCard` template.
+  Only subject content is localized; the UI stays English.
+- **All screens are picked** (2026-10-20). Register and onboarding keep the existing flow, with v3 styling only.
+- **Backend work surfaced:** `wireframes/BACKEND-GAPS.md` (daily-limit mismatch, achievements endpoint, grade prediction,
+  avatar catalogue, reminders…).
+- **DS rulings needed:** patchwork mastery fill (§12 exception), `timer.warnFg/criticalFg` tokens, subject tint in dark mode.
+- **Then:** start `MIGRATION-v3.md` §1, following the decided layouts.
 
 ## Then: landing page
 
