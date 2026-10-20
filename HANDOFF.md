@@ -1,13 +1,16 @@
 # Handoff — 2026-10-20
 
-Design system **v3.4.0** (branch `feat/design-system-v3`). The patchwork work is done and pushed;
-mobile wireframes are drawn and decided (see below); after that comes the **landing page**.
+Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks are done, the mobile wireframes are
+decided, and the wireframe rulings shipped as 3.5.0 (D18–D20). **Next: the Flutter restyle** (MIGRATION §1,
+branch `feat/design-system-v3` in the app, set up at `920b5bb`), alongside the backend gap work. The landing page
+comes after.
 
 ## Where things stand
 
 | Repo | Branch | State |
 |---|---|---|
-| `merit-project-design-system` (public) | `feat/design-system-v3` | v3.4.0: tokens, reference site, SKILL.md, patchwork engine v5 |
+| `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board |
+| `merit-project-flutter` | `feat/design-system-v3` | v3.5.0 tokens, General Sans, theme remap, guard (`920b5bb`); screens next |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling |
 | `merit-project-backend` | `feat/patchworks` | `hierarchy_patchworks` API, migrations 000046–000047, importer in the image, `CONTENT_CDN_BASE` in deploy |
 
@@ -30,7 +33,9 @@ and a square at subtopic level (6). The icon plate has as many sides as the tile
   The groundwork is `patchwork_jev.py --features`.
 - **Jev icon audit:** 45 flagged and 61 weak remain (optional polish). Picker:
   `tools/run.sh tools/patchwork_review.py serve` in merit-content.
-- **Templ vs Next.js landing:** decide which one is canonical before building (`MIGRATION-v3.md` §3).
+- **Landing:** decided: `merit-project-frontend` is canonical; the backend templ landing is being removed.
+- **Clash Display licence:** the v2 Clash Display (FFL) files are still committed here (public). Remove them and
+  decide on history before v3 ships (`assets/fonts/README.md`).
 
 ## Mobile wireframing (decided)
 
@@ -43,8 +48,10 @@ and a square at subtopic level (6). The icon plate has as many sides as the tile
 - **All screens are picked** (2026-10-20). Register and onboarding keep the existing flow, with v3 styling only.
 - **Backend work surfaced:** `wireframes/BACKEND-GAPS.md` (daily-limit mismatch, achievements endpoint, grade prediction,
   avatar catalogue, reminders…).
-- **DS rulings needed:** patchwork mastery fill (§12 exception), `timer.warnFg/criticalFg` tokens, subject tint in dark mode.
-- **Then:** start `MIGRATION-v3.md` §1, following the decided layouts.
+- **DS rulings (done, 3.5.0):** mastery fill allowed as the §12 exception (D18); colour-only timer tokens
+  `timer.text / warnText / criticalText` (D19); subject tint 0.30 light / 0.24 dark, checked for all 62 subjects with
+  `npm run check:subjects` (D20).
+- **Then:** `MIGRATION-v3.md` §1 from §1.3 (shared widgets), then screens in §1.6 order.
 
 ## Then: landing page
 

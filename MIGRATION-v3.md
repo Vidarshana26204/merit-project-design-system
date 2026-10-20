@@ -12,7 +12,11 @@ is done and the top screens have been reviewed.
 
 ## 1. Flutter (`merit-project-flutter`)
 
-**Branch:** `feat/design-system-v3` from `dev`.
+**Branch:** `feat/design-system-v3` from `dev`. **Layouts:** follow `wireframes/DECISIONS.md` (the picked
+variants on `wireframes.html`); this section says how, the board says what.
+
+**Status (2026-10-21):** §1.1, §1.2 and the guard are done on the Flutter branch (`920b5bb`, DS 3.5.0 pinned).
+Next is §1.3.
 
 ### 1.1 Tokens and fonts
 1. Copy `build/dart/merit_tokens.dart` to `lib/theme/merit_tokens.dart` exactly as generated.
@@ -62,6 +66,11 @@ is done and the top screens have been reviewed.
   - `colorScheme.primary` is `actionPrimary` and `onPrimary` is `textOnPrimary`.
   - `focusColor` is `focusRing`.
 
+- **Subject tint (D20):** `context.meritColors.subjectHeaderTint(color, brightness)` and `subjectHeaderRim` in
+  `merit_theme.dart`. Text on a tint uses `textPrimary` / `textSecondary` only.
+- **Guard:** `tool/check_design_tokens.dart` caps legacy `MeritColors.` / `MeritShadows.brutal` / `MeritBorders.`
+  uses in `lib/features` at a baseline (lower it as screens are restyled) and bans the deprecated pill-timer tokens.
+
 ### 1.3 Shared widgets (`lib/features/common/ui/widgets/`)
 Restyle these first, in this order:
 1. `merit_button`
@@ -74,14 +83,29 @@ Restyle these first, in this order:
 8. `merit_quiz_option`
 9. `merit_gamer_header`, `merit_leaderboard_row`, `merit_achievement_badge`
 10. `merit_dialog`, `merit_snack_bar`, `merit_empty_data` / `merit_error` / `offline_container` (switch to the line-art `assets/v3/spots/*` SVGs; never a patchwork), `merit_shimmer`
+11. `MeritIllusBlock` + deco shapes (`merit_decoration_shapes.dart`): keep the art, drop the 2px line border and
+    hard offset shadow, radius `xxl`, recolour to v3 primitives (register + onboarding step 1, board 08).
+12. Quiz timer: colour-only (D19): digits + icon in `timerText` → `timerWarnText` (≤5 min) → `timerCriticalText`
+    (≤1 min), no pill; paper timers count **down** from `duration_minutes`.
 
 The specs are in SKILL.md §5 and the reference site.
 
-### 1.4 New widgets
-- `MeritPatchwork`: per-node hierarchy patchworks (§1.4a below). Replaces the v3.0 category tiles.
-- `MeritLearningPath`: replaces the plain hierarchy tree in `hierarchy_navigator`.
-- `MeritSectionHeader`: eyebrow plus a title with an optional brush underline (a `CustomPainter` or the SVG). SI/TA versions get no uppercase.
-- `MeritAchieverBand`: replaces the `Color(0x…)` gradient in `premium/ui/premium_screen.dart`.
+### 1.4 New widgets (from the wireframe decisions)
+| Widget | Board | Notes |
+|---|---|---|
+| Navigation shell | 00 B | Four tabs: Today · Learn · Compete · Me (floating bar, e2). Quiz taking, reviews, card sessions and the notes reader are full-screen, no tab bar. |
+| `MeritHubHeader` | 04 hub header A + C tabs | Subject tint hero (D20), ring + tile 72–78, type-scale section switcher (Learn / Practise / Cards / Stats); collapses to a 56dp bar with tile 32. |
+| `MeritQuiltMap` | 04 Learn A | Topic tiles in a 3-column quilt with the mastery fill (D18); tapping a topic opens its subtopics inline. Replaces the tree explorers (`tree_sliver_hierarchy_explorer`, `animated_tree_hierarchy_explorer`). |
+| Subtopic sheet | 04 Subtopic A (revised) | Bottom sheet over the quilt: recipe ring (arcs = mastery parts, weights from the API) + Read → Remember → Prove rows whose bars match the arcs. |
+| `MeritShareCard` | 02 Complete A (revised) | One 1080×1350 theme-independent template (light ticket on violet); quiz results first, later streaks, rank-ups, achievements. |
+| Compete row | 05 Compete root | 84dp row: icon tile, title, teaser value (balance, rank, pending, progress). |
+| Task row + state filter | 05 Tasks & Quests | Segmented Tasks / Quests; chips All · Pending · Completed · Expired with counts; referral tiers strip. |
+| Stream row | 08 step 2 | Selectable row: category-tint icon tile, name, text subject labels, radio. No patchworks. |
+| Subject-language row | 07 settings, 08 step 3 | Checkbox, tile 40, name, EN / සිං / த segmented switch (shown when ticked); greys languages missing from `available_languages`. |
+| `MeritSectionHeader` | all | Eyebrow plus a title with an optional brush underline. SI/TA versions get no uppercase. |
+| `MeritAchieverBand` | 06 Paywall A | Replaces the `Color(0x…)` gradient in `premium/ui/premium_screen.dart`. |
+
+`MeritLearningPath` is **dropped**: Learn picked the quilt map (A), not the path (B).
 
 ### 1.4a `MeritPatchwork` (DS 3.2, SKILL.md §12)
 **Data:** the backend adds `patchwork` to subject, topic and subtopic payloads (§3a). Add a
@@ -135,8 +159,9 @@ MeritPatchwork(
 
 | Widget | Variant |
 |---|---|
-| `subjects_screen` grid, `enrollment_card` | `tile` |
-| `subject_details_screen` header | `tile` at 64 beside the title (expanded) → 32 (collapsed app bar) |
+| `subjects_screen` rows (04 Subjects list A), `enrollment_card`, onboarding step 3 rows | `tile` at 40–56, leading |
+| Learn quilt (`MeritQuiltMap`), Home subject row | `tile` with mastery fill (D18) |
+| `MeritHubHeader` (replaces the `subject_details_screen` header) | `tile` at 72–78 in the ring (expanded) → 32 (collapsed bar) |
 | `enhanced_topic_card`, `topics_list`, `hierarchy_sliver_list` topic rows | `tile` at 48–56, leading |
 | `enhanced_subtopic_card`, `subtopics_list` | `tile` at 40–48, leading |
 | `flippable_study_card` (front face), `study_card_stack`, `flashcard_dashboard_screen` deck tiles | subtopic `wash` |
@@ -152,9 +177,19 @@ MeritPatchwork(
 - Replace the 143 Material `Icons.*` uses with Phosphor equivalents.
 
 ### 1.6 Screens (impact order)
-home → quiz (mode select, taking, completion, attempt detail) → study / flashcards → subjects /
-subject detail / hierarchy → leaderboard / points → premium → profile / settings → auth /
-onboarding.
+Shell first, because navigation B reshapes everything below it:
+1. **Shell:** 4-tab bar (Today · Learn · Compete · Me) in `main_screen`, routes in `lib/routing/`.
+2. **Today** (01 Home B + A's subject row).
+3. **Subject hub:** header, Learn quilt + subtopic sheet, Practise, Cards, Stats (B + C's prediction card).
+4. **Quiz:** taking A (colour timer), complete A revised + share card, review A, limit sheet → paywall.
+5. **Study:** cards A, session A, notes reader A (progress in the header).
+6. **Compete:** root rows → Points A, Leaderboard A, Tasks & Quests, Achievements B.
+7. **Premium:** paywall A + limit sheet C.
+8. **Me** A + settings (subject languages).
+9. **Auth / onboarding:** register A, onboarding A revised (illustrations kept, stream rows, language rows).
+
+Screens that need backend work first are listed in `wireframes/BACKEND-GAPS.md`; build them against the
+fallbacks shown on the board until the endpoints land.
 
 ### 1.7 Verify
 - `fvm flutter analyze` is clean.
@@ -219,17 +254,12 @@ Rebuild the hero, programme grid and CTA band from the landing specimen (referen
 
 ---
 
-## 3. Backend templ landing (`merit-project-backend/internal/web/templates/`)
+## 3. Backend templ landing: retired (2026-10-21)
 
-- Delete the hand-copied `--purple`, `--yellow`, `--mint`, `--cream`, `--ink` and `--line`
-  variables and the inline hard shadows in `layout.templ`.
-- Serve a vendored copy of `build/css/merit-tokens.css` from `web/static/css/`, and add a drift
-  check to its CI.
-- Replace School Times with self-hosted General Sans. The FFL allows self-hosting on our own site.
-- Restyle the components (navbar, hero, about, features, subjects, pricing, testimonials,
-  community, faq, cta, footer) to the landing specimen.
-- Or, if the Next.js `(landing)` route is now canonical, retire the templ landing instead.
-  **Decide this before investing in it.**
+The Next.js `(landing)` route in `merit-project-frontend` is canonical (it already has the landing, privacy
+policy and terms pages). The backend templ landing (`internal/web/`, `web/static/`, the templ build step) is
+removed on `feat/patchworks`; `meritproject.lk` and `www` point at the frontend in the same deploy. Build the v3
+landing in §2.6 only.
 
 ---
 
