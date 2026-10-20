@@ -552,7 +552,7 @@ in **hue**, since two subjects with one hue get look-alike branches. Without a `
 falls back to a token family (warm, cool, fresh, mixed).
 **Subject colours** are proposed per subject by `merit-content/tools/subject_colors.py` →
 `subjects/_subject-colors.json` (62 subjects, unique; stream-mates ≥ 0.10 ΔE in the core
-streams; no hues 18–55° or 294–314°) and applied by backend migration `000047_subject_colors`.
+streams; no hues 18–55° or 294–314°) and applied by backend migration `000048_subject_colors`.
 
 **Variants** (per node)
 

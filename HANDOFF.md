@@ -12,7 +12,7 @@ comes after.
 | `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board |
 | `merit-project-flutter` | `feat/design-system-v3` | v3.5.0 tokens, General Sans, theme remap, guard (`920b5bb`); screens next |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling |
-| `merit-project-backend` | `feat/patchworks` | `hierarchy_patchworks` API, migrations 000046–000047, importer in the image, `CONTENT_CDN_BASE` in deploy |
+| `merit-project-backend` | `feat/patchworks` | `hierarchy_patchworks` API, migrations 000047–000048 (renumbered after the revenuecat-sandbox rebase), importer in the image, `CONTENT_CDN_BASE` in deploy |
 
 None of the branches is merged. The backend deploy change only takes effect once `feat/patchworks` lands on `main`.
 

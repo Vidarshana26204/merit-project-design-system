@@ -278,7 +278,7 @@ landing in §2.6 only.
   `s3://merit-project-static-prod/content-assets/patchworks/`, then `./patchworksimport` runs inside
   the backend container. `CONTENT_CDN_BASE` (GitHub variable, environment `production`) =
   `https://merit-project-static-prod.s3.ap-southeast-1.amazonaws.com/content-assets`; empty = off.
-  Migrations (`000046`, `000047`) apply automatically when the server starts.
+  Migrations (`000047`, `000048`; renumbered 2026-10-21) apply automatically when the server starts.
 
 ## 4. Out of scope
 - `merit-project-admin` (legacy, folded into the frontend).
