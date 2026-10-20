@@ -1,6 +1,6 @@
 {
   "name": "merit-design-system",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "private": true,
   "description": "Merit Project design tokens + reference site. Zero runtime dependencies.",
   "type": "module",
@@ -10,6 +10,7 @@
   "scripts": {
     "build": "node scripts/build-tokens.mjs",
     "check": "node scripts/build-tokens.mjs --check",
-    "drift": "node scripts/check-drift.mjs"
+    "drift": "node scripts/check-drift.mjs",
+    "check:subjects": "node scripts/check-subject-tints.mjs"
   }
 }

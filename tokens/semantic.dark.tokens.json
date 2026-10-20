@@ -45,8 +45,12 @@
       "successSubtle": { "$value": "{color.sage.900}" },
       "successText": { "$value": "{color.sage.300}" },
       "warning": { "$value": "{color.butter.300}" },
+      "warningText": { "$value": "{color.butter.300}", "$description": "Warning text and icons on bg.app / surfaces (timer ≤5 min). Butter fails as text on light" },
       "error": { "$value": "{color.red.300}" },
       "errorSubtle": { "$value": "{color.red.900}" }
+    },
+    "subject": {
+      "headerBase": { "$value": "{color.night.850}", "$description": "Ground the subject colour mixes into for hub headers: mix(color_hex, headerBase, opacity.subjectTintDark). Text on it: text.primary / text.secondary only" }
     },
     "focus": {
       "ring": { "$value": "{color.violet.300}" }

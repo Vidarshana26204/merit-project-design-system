@@ -69,6 +69,13 @@
     ["color.category.fg", "color.category.3", 4.5],
     ["color.category.fg", "color.category.4", 4.5],
     ["color.category.fg", "color.category.5", 4.5],
-    ["color.category.fg", "color.category.6", 4.5]
+    ["color.category.fg", "color.category.6", 4.5],
+    ["color.feedback.warningText", "color.bg.app", 4.5],
+    ["color.feedback.warningText", "color.surface.default", 4.5],
+    ["color.timer.text", "color.bg.app", 4.5],
+    ["color.timer.warnText", "color.bg.app", 4.5],
+    ["color.timer.criticalText", "color.bg.app", 4.5],
+    ["color.text.primary", "color.subject.headerBase", 4.5],
+    ["color.text.secondary", "color.subject.headerBase", 4.5]
   ]
 }

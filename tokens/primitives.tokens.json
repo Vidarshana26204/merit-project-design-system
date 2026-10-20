@@ -124,7 +124,10 @@
     "$type": "number",
     "disabled": { "$value": 0.4 },
     "scrimLight": { "$value": 0.5 },
-    "scrimDark": { "$value": 0.7 }
+    "scrimDark": { "$value": 0.7 },
+    "subjectTintLight": { "$value": 0.3, "$description": "Share of a subject's color_hex in its hub header tint (light), mixed into subject.headerBase" },
+    "subjectTintDark": { "$value": 0.24, "$description": "Share of a subject's color_hex in its hub header tint (dark)" },
+    "subjectRimDark": { "$value": 0.4, "$description": "Dark only: subject colour at this alpha as a 1.5 bottom rim on hub headers" }
   },
   "zIndex": {
     "$type": "number",

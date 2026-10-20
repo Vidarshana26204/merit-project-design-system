@@ -23,7 +23,7 @@
       <img class="lt-only" src="assets/v3/brand/merit-mark.svg" alt="" /><img class="dk-only" src="assets/v3/brand/merit-mark-dark.svg" alt="" />
       <div class="wm">MERIT<b>.</b><small>Design System</small></div>
     </div>
-    <div class="ver"><span>Tokens</span><b>v3.4.0</b></div>
+    <div class="ver"><span>Tokens</span><b>v3.5.0</b></div>
 
     <nav class="toc" aria-label="Sections">
       <div class="grp">Foundations</div>
@@ -231,7 +231,7 @@ DecoratedBox(
     <div class="panel">
       <span class="modeTag calm"><i class="ph-fill ph-moon-stars"></i> Calm</span>
       <h3 style="margin-top:10px">Quiz-taking, paper mode, notes</h3>
-      <ul class="muted"><li>Canvas or white surfaces, slate text, violet selection</li><li>No sparkles, patchwork or brush underlines</li><li>One orange action at most ("Submit")</li><li>The timer stays neutral until 5&nbsp;min, then turns butter, then red</li></ul>
+      <ul class="muted"><li>Canvas or white surfaces, slate text, violet selection</li><li>No sparkles, patchwork or brush underlines</li><li>One orange action at most ("Submit")</li><li>The timer stays neutral until 5&nbsp;min, then its text turns orange (butter in dark), then red</li></ul>
     </div>
     <div class="panel">
       <span class="modeTag energy"><i class="ph-fill ph-lightning"></i> Energy</span>
@@ -417,7 +417,7 @@ FilledButton(
 <!-- ======================= 17 QUIZ ======================= -->
 <section class="sec" id="quiz">
   <div class="secHead"><span class="eyebrow">17 · Quiz</span><h2>The exam room is <span class="u">calm</span>.</h2>
-    <p class="lede">Options are at least 56 high and carry a letter chip. Once submitted, they lock. Correct and wrong always pair colour with an icon. The correct answer after a wrong pick shows as "revealed", with a dashed border. The timer turns butter at 5&nbsp;min and red at 1&nbsp;min, and announces both.</p></div>
+    <p class="lede">Options are at least 56 high and carry a letter chip. Once submitted, they lock. Correct and wrong always pair colour with an icon. The correct answer after a wrong pick shows as "revealed", with a dashed border. The timer has no pill: its digits and icon turn orange (butter in dark) at 5&nbsp;min and red at 1&nbsp;min, and it announces both.</p></div>
   <div class="grid g2">
     <div class="qcard">
       <div class="qhead"><span class="badge">Q 7 / 20</span><div class="row"><span class="timer safe"><i class="ph ph-timer"></i>42:10</span><button class="btn icon" aria-label="Flag question"><i class="ph ph-flag"></i></button></div></div>
@@ -715,9 +715,10 @@ FilledButton(
 
 <!-- ======================= 31 CHANGELOG ======================= -->
 <section class="sec" id="changelog">
-  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.4.0</h2></div>
+  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.5.0</h2></div>
   <div class="panel">
     <ul>
+      <li><b>v3.5.0 · Wireframe rulings (D18–D20).</b> The timer is colour-only: <code>timer.text</code>, <code>timer.warnText</code>, <code>timer.criticalText</code> (pill tokens deprecated). Subject hub headers mix <code>color_hex</code> into <code>subject.headerBase</code> at 0.30 light / 0.24 dark, checked for every subject. Patchwork tiles may show a mastery fill where they report progress (SKILL §12). Mobile layouts are decided on the <a href="wireframes.html">wireframe board</a>.</li>
       <li><b>v3.4.0 · Subject colour drives patchworks (D16 rev 5).</b> A subject's <code>color_hex</code> becomes its palette (pastel tints, the colour itself as the solid patch, icon accents), shared by every topic and subtopic below it. Plate sides now equal the patch count: square subject, pentagon topic, hexagon subtopic (§21).</li>
       <li><b>v3.3.0 · Square-in-a-square patchworks (D16 rev 4).</b> Patchworks are cut as a symmetric economy block that nests one shape per level: X + corners, then a diamond, then a square. The plate's shape says the level (hexagon, pentagon, square) and the icon is larger. The row variant is retired; use the tile (§21). Flashcards take any tone and the wash goes tone-on-tone (§18). A banner's action stays on the copy's row at the right, or wraps right-aligned (§16, §29).</li>
       <li><b>v3.2.0 · Softer patchworks, washes and banners (D16 rev 3, D17).</b> Patchwork seams stopped drawing ink lines and patterns dissolve as they near a seam. Flashcard and note tiles carry their subtopic's wash (§18, §21). Feature banners are patterned violet stadiums with an orange disc (§16, §29).</li>

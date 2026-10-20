@@ -5,6 +5,29 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## 3.5.0 — 2026-10-21
+
+Rulings from the mobile wireframe review (D18–D20). Adds tokens; no renames or removals.
+
+### Added
+- `color.timer.text`, `color.timer.warnText`, `color.timer.criticalText`: the colour-only timer
+  (digits + icon, no pill). Light warns in orange-700 because butter fails as text.
+- `color.feedback.warningText` (light orange-700, dark butter-300).
+- `color.subject.headerBase` (light canvas-50, dark night-850) and `opacity.subjectTintLight` 0.30,
+  `opacity.subjectTintDark` 0.24, `opacity.subjectRimDark` 0.40 for subject hub headers.
+- `scripts/check-subject-tints.mjs` (`npm run check:subjects -- <file>`): gates text.primary and
+  text.secondary on every subject's header tint in both themes. All 62 subjects pass.
+- Contrast pairs for the new tokens (152 checks).
+- Mobile wireframe board (`wireframes.html`, `wireframes/DECISIONS.md`, `wireframes/BACKEND-GAPS.md`).
+
+### Changed
+- SKILL §12: a tile showing progress may carry a mastery fill (greyscale base + colour clipped to
+  the %); the only sanctioned alteration (D18).
+- SKILL §5: timer and subject hub header specs. Reference site timer specimens are colour-only.
+
+### Deprecated
+- `color.timer.safe`, `.warn`, `.critical`, `.fg`, `.criticalFg` (pill timer). Removed in v4.
+
 ## 3.4.0 — 2026-10-18
 
 Subject colour drives patchworks (D16 rev 5). No token changes.

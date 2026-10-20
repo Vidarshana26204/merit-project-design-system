@@ -33,12 +33,15 @@
       }
     },
     "timer": {
-      "$description": "Calm until it matters (C2): neutral → butter → red",
+      "$description": "Calm until it matters (C2). v3.5: colour-only — text + icon change colour, no pill (safe/warn/critical/fg/criticalFg are deprecated)",
       "safe": { "$value": "{color.surface.sunken}" },
       "warn": { "$value": "{color.butter.300}" },
       "critical": { "$value": "{color.red.600}" },
-      "fg": { "$value": "{color.ink.900}" },
-      "criticalFg": { "$value": "{color.white}" }
+      "fg": { "$value": "{color.ink.900}", "$description": "Deprecated (pill timer, v3.0–3.4); remove in v4" },
+      "criticalFg": { "$value": "{color.white}", "$description": "Deprecated (pill timer, v3.0–3.4); remove in v4" },
+      "text": { "$value": "{color.text.primary}", "$description": "v3.5 colour-only timer: digits + icon, >5 min" },
+      "warnText": { "$value": "{color.feedback.warningText}", "$description": "v3.5 colour-only timer: ≤5 min" },
+      "criticalText": { "$value": "{color.feedback.error}", "$description": "v3.5 colour-only timer: ≤1 min" }
     },
     "tier": {
       "wanderer": {

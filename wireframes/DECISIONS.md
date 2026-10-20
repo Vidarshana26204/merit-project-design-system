@@ -49,10 +49,9 @@ candidates on that page. All screens are decided as of 2026-10-20. Round 8 revis
 Shared, no pick needed: quiz states, card session end, hub pieces (collapsed header, unlock dialogs, enrol), streak pieces,
 gates, avatar picker and settings, sign in / OTP / forgot password, system states.
 
-## Needs a design-system ruling
+## Design-system rulings (resolved in DS 3.5.0, 2026-10-21)
 
-- **Patchwork mastery fill** (Learn A, Home C, the subjects quilt). The tile is drawn twice, a grey base plus a colour copy clipped to the
-  mastery percentage. SKILL §12 says tiles are theme-fixed and unaltered, so it needs an exception for progress display, or a
-  ring or bar around an untouched tile instead.
-- **`timer.warnFg` / `timer.criticalFg`** tokens (above).
-- **Subject tint** for hub headers: light `color-mix(color_hex 58%, bg.app)`, dark `color-mix(color_hex 24%, night-850)` plus a 40% rim. Proposed as `subject.headerTint` / `subject.headerRim`; needs a per-subject dark check.
+- **Patchwork mastery fill:** allowed as the one exception for tiles that show progress (D18, SKILL §12).
+- **Timer:** `timer.text / warnText / criticalText` tokens (D19). The pill tokens are deprecated.
+- **Subject tint:** 0.30 light / 0.24 dark into `subject.headerBase`, plus a 0.40 rim in dark (D20). The board's 58% used a
+  pastel demo colour; real subject colours (e.g. Economics) failed at 58%. Header text is primary/secondary only.

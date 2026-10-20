@@ -441,10 +441,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .slot { position: relative; }
 .slot::before { content: attr(data-slot); position: absolute; left: -6px; top: -7px; z-index: 3; font: 700 9px/1 ui-monospace, Menlo, monospace; background: var(--wf-api); color: var(--merit-white); padding: 2px 4px; border-radius: 4px; }
 
-/* Subject hub headers (04). --subj = the subject's color_hex (Biology demo #A8D8F8). */
+/* Subject hub headers (04). --subj = the subject's color_hex (Biology #4E9A52). */
 /* Light: 58% pastel wash. Dark: a deep 24% tint on night-850 (a 58% mix lands mid-grey and fails contrast with mist text),
    plus a subject-coloured rim so the subject still reads. */
-:root { --subj-mix: 58%; --subj-base: var(--merit-bg-app); --subj-rim: 0%; }
+:root { --subj-mix: 30%; --subj-base: var(--merit-bg-app); --subj-rim: 0%; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --subj-mix: 24%; --subj-base: var(--merit-night-850); --subj-rim: 40%; } }
 :root[data-theme="dark"] { --subj-mix: 24%; --subj-base: var(--merit-night-850); --subj-rim: 40%; }
 .ph.subj { --hdr: color-mix(in srgb, var(--subj) var(--subj-mix), var(--subj-base)); --hdr-rim: color-mix(in srgb, var(--subj) var(--subj-rim, 0%), transparent); }
@@ -698,3 +698,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .lseg { padding: 3px; flex: none; }
 .lseg span { padding: 5px 7px; min-height: 30px; }
 .lseg span.na { opacity: .35; }
+
+/* DS 3.5 (D20): only text.primary / text.secondary on a subject tint */
+.ph.subj :is(.hub-a, .hub-b, .hub-c, .hub-mini) :is(.ey, .ttabs span, .t3) { color: var(--merit-text-secondary); }
+.ph.subj :is(.hub-a, .hub-b, .hub-c, .hub-mini) .ttabs span.on { color: var(--merit-text-primary); }
