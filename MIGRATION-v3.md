@@ -243,7 +243,12 @@ Rebuild the hero, programme grid and CTA band from the landing specimen (referen
 - **API:** hierarchy, subject and topic responses add
   `patchwork: {signature, version, urls{tile,mono[,wash]}, washInk?}`. The URLs are built from
   `CONTENT_CDN_BASE` + the variant path.
-- **Upload:** sync `merit-content/patchworks/out/` to the CDN bucket under `patchworks/`.
+- **Upload + go live:** a manual content release, not part of any deploy. Follow merit-content
+  `docs/PATCHWORKS-RELEASE.md`: `tools/publish_patchworks.py push` uploads `out/` and `avatars/` to
+  `s3://merit-project-static-prod/content-assets/patchworks/`, then `./patchworksimport` runs inside
+  the backend container. `CONTENT_CDN_BASE` (GitHub variable, environment `production`) =
+  `https://merit-project-static-prod.s3.ap-southeast-1.amazonaws.com/content-assets`; empty = off.
+  Migrations (`000046`, `000047`) apply automatically when the server starts.
 
 ## 4. Out of scope
 - `merit-project-admin` (legacy, folded into the frontend).

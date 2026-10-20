@@ -586,6 +586,7 @@ $VENV/bin/python -m scripts.patchwork.build demo     # public demo set (MIT Phos
 - **Feature icons (deferred, 2026-10-18):** app features use **Phosphor** like every other UI glyph. The groundwork stays: `maps/_features.json` can reserve one pack icon per feature (no node may reuse it; the audit fails otherwise), `generate` would then write `out/features/<key>/{color,mono}.svg`, and `patchwork_jev.py --features` re-suggests candidates.
 - **Avatars:** avatar packs are indexed to `merit-content/patchworks/avatars/` with `avatars.json` (full colour, verbatim, never in the node pool). The review page has an Avatars tab to drop any from the student set.
 - **Delivery:** the backend table `hierarchy_patchworks` (imported from `manifest.json`) exposes `patchwork {signature, version, urls{tile,mono[,wash]}, washInk?{light,dark}}` on hierarchy responses.
+- **Going live is a manual release** (S3 upload + server import), not part of any deploy: merit-content `docs/PATCHWORKS-RELEASE.md`. Its CI warns until it's done.
 - **Fallback:** if the URLs are missing, render the `category.N` tint + a Phosphor duotone icon in the same frame. Never borrow another node's patchwork.
 
 **Don't:**
