@@ -7,7 +7,7 @@
 
 <header class="wf-top">
   <div class="wf-top-row">
-    <div class="wf-brand"><h1>Merit wireframes</h1><span>v3 mobile · flutter app · round 7</span></div>
+    <div class="wf-brand"><h1>Merit wireframes</h1><span>v3 mobile · flutter app · round 9</span></div>
     <div class="wf-ctrls">
       <span class="wf-tally" aria-live="polite"></span>
       <div class="wf-seg" data-seg="width" role="group" aria-label="Phone width">
@@ -1184,9 +1184,9 @@
         <div class="ph">
           <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
           <div class="scr calm" style="gap:16px">
-            <div class="tb"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><span class="sp"></span><span class="ibtn flat" aria-label="Bookmark"><svg class="i"><use href="#i-bookmark-simple"/></svg></span></div>
+            <div class="tb nhd"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><div class="st sp" style="gap:5px"><div class="stepper"><i class="d"></i><i class="d"></i><i class="c"></i><i></i></div><span class="xs t3">12 min · 2 of 4 sections done</span></div><span class="ibtn flat" aria-label="Save"><svg class="i"><use href="#i-bookmark-simple"/></svg></span></div>
             <div class="crumb"><img class="mono" src="assets/v3/patchwork-demo/biology-mono.svg" alt="">Biology<svg class="i"><use href="#i-caret-right"/></svg><img class="mono" src="assets/v3/patchwork-demo/plants-mono.svg" alt="">Plant form<svg class="i"><use href="#i-caret-right"/></svg>Leaf structure</div>
-            <div class="st" style="gap:6px"><h4 class="h-xl">Leaf structure</h4><div class="rw sm t3" style="gap:8px"><span>12 min</span><span>·</span><span>2 of 4 sections done</span></div><div class="stepper"><i class="d"></i><i class="d"></i><i class="c"></i><i></i></div></div>
+            <h4 class="h-xl">Leaf structure</h4>
             <div class="prose">
               <h5>3. Mesophyll</h5>
               <p>The mesophyll has two layers. <b>Palisade</b> cells sit under the upper epidermis. They are long, tightly packed and full of chloroplasts.</p>
@@ -1199,7 +1199,7 @@
           <div class="ph-gest"></div>
         </div>
         <div class="wf-note">
-          <p><span class="tag gap">Revised</span> Language toggle removed per your note.</p>
+          <p><span class="tag gap">Revised</span> Language toggle removed per your note. Round 8: progress bar, reading time and section count moved into the header, between Back and Save. The header stays pinned while reading, so progress is always in view.</p>
           <p class="pro">Feels like a textbook, and checkpoints reward real reading rather than scrolling. Simple to build with a sliver list.</p>
           <p class="con">A long note means a long scroll. The only way to see what's ahead is to scroll there.</p>
           <div class="wf-comps"><code>breadcrumb mono 16</code><code>stepper</code><code>callout</code><code>checkpoint</code></div>
@@ -1370,6 +1370,7 @@
         <div class="wf-note">
           <p class="pro">The subject colour floods the top, so you always know which subject you're in. The mastery ring wraps the patchwork. The switcher floats over the seam as a pill, active section in inverse ink, which reads as a control, not a web tab.</p>
           <p class="con">The tall hero (≈230dp) costs a third of a 360×780 screen until it collapses.</p>
+          <p><span class="tag gap">Revised</span> Round 8, dark mode: the 58% tint landed on a mid-grey that mist text couldn't read against. Dark now uses a deep 24% tint on <code>night-850</code>, with a 40% subject-colour rim along the bottom edge and lightly tinted icon buttons. Light mode is unchanged. Applies to every hub frame (toggle Dark at the top to check).</p>
           <div class="wf-comps"><code>subject tint (color-mix 58%)</code><code>ring + tile 78</code><code>floating segmented e2</code><code>header chip</code></div>
           <div class="wf-pick"><button type="button" aria-pressed="false">Pick A</button></div>
         </div>
@@ -1603,18 +1604,22 @@
           <div class="scr"><div class="hub-a v2" style="height:200px"></div><div class="tmap" style="opacity:.6"><div class="card" style="height:90px"></div><div class="card" style="height:90px"></div><div class="card" style="height:90px"></div></div></div>
           <div class="scrim"></div>
           <div class="sheet">
-            <div class="rw"><img class="tile" style="--s:52px" src="assets/v3/patchwork-demo/leaf-tile.svg" alt=""><div class="sp st" style="gap:2px"><span class="ey">Plant form &amp; function</span><b class="h-md">Leaf structure</b></div><b class="num" style="font-size:22px">64%</b></div>
-            <div class="bar"><i style="--v:64%"></i></div>
-            <div class="list" style="box-shadow:none;background:var(--merit-surface-sunken)">
-              <div class="li"><span class="mode-ic" style="background:var(--merit-category-2)"><svg class="i"><use href="#i-book-open"/></svg></span><div class="sp st" style="gap:0"><span class="ttl">Read the note</span><span class="meta">2 of 4 sections · 6 min left</span></div><svg class="i"><use href="#i-caret-right"/></svg></div>
-              <div class="li"><span class="mode-ic" style="background:var(--merit-category-1)"><svg class="i"><use href="#i-cards-three"/></svg></span><div class="sp st" style="gap:0"><span class="ttl">Review cards</span><span class="meta">6 due of 14</span></div><svg class="i"><use href="#i-caret-right"/></svg></div>
-              <div class="li"><span class="mode-ic" style="background:var(--merit-category-4)"><svg class="i"><use href="#i-target"/></svg></span><div class="sp st" style="gap:0"><span class="ttl">Mastery quiz</span><span class="meta">Best 80% · 10 questions</span></div><svg class="i"><use href="#i-caret-right"/></svg></div>
+            <div class="rw"><div class="sp st" style="gap:2px"><span class="ey">Plant form &amp; function</span><b class="h-md">Leaf structure</b></div><span class="ibtn flat" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></span></div>
+            <div class="rw" style="gap:16px">
+              <div class="recipe" style="--sz:132px;margin:0"><div class="st" style="align-items:center;gap:2px"><img class="tile" style="--s:56px" src="assets/v3/patchwork-demo/leaf-tile.svg" alt=""><b class="num" style="font-size:18px">64%</b></div></div>
+              <div class="st sp" style="gap:6px"><span class="lg" style="--c:var(--merit-sky-500)">Read · 20</span><span class="lg" style="--c:var(--merit-sage-500)">Remember · 30</span><span class="lg" style="--c:var(--merit-action-primary)">Prove · 50</span><span class="xs t3">70% unlocks Transpiration</span></div>
             </div>
-            <button class="btn full" type="button">Continue reading</button>
+            <div class="st" style="gap:8px">
+              <div class="card tight flat" style="flex-direction:row;align-items:center"><span class="mode-ic" style="background:var(--merit-category-2)"><svg class="i"><use href="#i-book-open"/></svg></span><div class="sp st" style="gap:2px"><div class="rw"><b class="sm sp">1 · Read</b><span class="xs t3">20 of 20</span></div><div class="bar thin"><i style="--v:100%;--bar:var(--merit-sky-500)"></i></div><span class="xs t3">Note finished · re-read anytime</span></div><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+              <div class="card tight flat" style="flex-direction:row;align-items:center"><span class="mode-ic" style="background:var(--merit-category-1)"><svg class="i"><use href="#i-cards-three"/></svg></span><div class="sp st" style="gap:2px"><div class="rw"><b class="sm sp">2 · Remember</b><span class="xs t3">18 of 30</span></div><div class="bar thin"><i style="--v:60%;--bar:var(--merit-sage-500)"></i></div><span class="xs t3">6 cards due of 14</span></div><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+              <div class="card tight flat" style="flex-direction:row;align-items:center"><span class="mode-ic" style="background:var(--merit-category-4)"><svg class="i"><use href="#i-target"/></svg></span><div class="sp st" style="gap:2px"><div class="rw"><b class="sm sp">3 · Prove</b><span class="xs t3">26 of 50</span></div><div class="bar thin"><i style="--v:52%"></i></div><span class="xs t3">Best quiz 80% · biggest gain left</span></div><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+            </div>
+            <button class="btn full" type="button">Review 6 due cards</button>
           </div>
           <div class="ph-gest"></div>
         </div>
         <div class="wf-note">
+          <p><span class="tag gap">Revised</span> Round 8: the sheet now carries C's recipe ring (each arc is one mastery part, patchwork in the middle) and B's Read → Remember → Prove rows. Row bar colours match the ring arcs, and each row opens that step. Weights (20/30/50) still need the API (see C).</p>
           <p class="pro">Never leaves the map, and it's quick for jumping between subtopics. Swiping down returns to the quilt.</p>
           <p class="con">There's no room for the note's outline or past attempts.</p>
           <div class="wf-comps"><code>sheet</code><code>tile 52</code><code>list on sunken</code><code>btn primary</code></div>
@@ -1908,9 +1913,83 @@
     <div class="wf-legend"><span class="tag energy">Energy mode</span><span class="tag api">Needs API</span><span class="tag gap">Fixes a current gap</span></div>
   </div>
 
+  <article class="wf-screen" data-screen="compete-rev">
+    <div class="wf-screen-h">
+      <h3>Compete tab · revised (round 8)</h3><span class="tag energy">Energy</span><span class="tag gap">Decided</span><span class="tag api">Needs API · task history</span>
+      <p>Your notes applied: the Compete tab root becomes a list of four rows. Points opens Points A (summary + history), Leaderboard opens Leaderboard A (podium + sticky you, now pushed with a back arrow), and Achievements opens Achievements B. Tasks &amp; Quests is a new two-tab page. Today's feedback survey and Referrals go under Tasks, and Quests is a placeholder for the coming feature.</p>
+      <span class="wf-data">GET /points/summary · /leaderboards/me/ranks · /tasks · /students/me/referrals · /students/me/achievements (needs API) · POST /tasks/:id/complete</span>
+    </div>
+    <div class="wf-vars">
+      <div class="wf-cand">
+        <div class="wf-cand-h"><b>1</b><span>Compete (tab root)</span><em>Decided</em></div>
+        <div class="ph">
+          <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
+          <div class="scr">
+            <div class="hd"><div class="st sp" style="gap:2px"><span class="ey">Gampaha · A/L 2027</span><h4 class="h-lg">Compete</h4></div><span class="hchip fl"><svg class="i"><use href="#i-flame-fill"/></svg>12</span></div>
+            <div class="st" style="gap:12px">
+              <div class="crow"><span class="mode-ic" style="background:var(--merit-butter-100)"><img src="assets/v3/brand/merit-coin.svg" alt="" style="width:34px;height:34px"></span><div class="st sp" style="gap:2px;min-width:0"><span class="ttl">Points</span><span class="meta">+124 today · +610 this week</span></div><span class="val">1,240</span><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+              <div class="crow"><span class="mode-ic" style="background:var(--merit-category-5)"><svg class="i"><use href="#i-ranking-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="ttl">Leaderboard</span><span class="meta">Gampaha district · #812 island-wide</span></div><span class="val">#38</span><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+              <div class="crow"><span class="mode-ic" style="background:var(--merit-category-2)"><svg class="i"><use href="#i-list-checks-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="ttl">Tasks &amp; Quests</span><span class="meta">2 pending · up to +550 points</span></div><span class="badge hot">2 new</span><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+              <div class="crow"><span class="mode-ic" style="background:var(--merit-category-1)"><svg class="i"><use href="#i-medal-fill"/></svg></span><div class="st sp" style="gap:4px;min-width:0"><span class="ttl">Achievements</span><span class="meta">7 of 24 · next: Week warrior</span><div class="bar thin"><i style="--v:29%;--bar:var(--merit-sage-500)"></i></div></div><svg class="i t3"><use href="#i-caret-right"/></svg></div>
+            </div>
+          </div>
+          <nav class="tabbar"><a><svg class="i"><use href="#i-sun"/></svg>Today</a><a><svg class="i"><use href="#i-books"/></svg>Learn</a><a class="on"><svg class="i"><use href="#i-trophy-fill"/></svg>Compete</a><a><svg class="i"><use href="#i-user-circle"/></svg>Me</a></nav>
+          <div class="ph-gest"></div>
+        </div>
+        <div class="wf-note"><p>Four large rows (84dp), each with the one number that matters as a teaser: balance, rank, pending tasks, unlock progress. The header chips stay (the coins chip still deep-links to Points). Only Tasks gets an orange "new" badge, so there's one attention cue per screen. Pushed pages keep the tab bar.</p><div class="wf-comps"><code>compete row</code><code>coin 34</code><code>badge.hot</code><code>bar thin</code></div></div>
+      </div>
+
+      <div class="wf-cand">
+        <div class="wf-cand-h"><b>2</b><span>Tasks &amp; Quests · Tasks</span><em>Decided</em></div>
+        <div class="ph">
+          <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
+          <div class="scr calm" style="gap:12px">
+            <div class="tb"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><b class="h-sm sp">Tasks &amp; Quests</b></div>
+            <div class="segc"><span class="on">Tasks</span><span>Quests</span></div>
+            <div class="chips"><span class="chip on">All <span class="ct">6</span></span><span class="chip">Pending <span class="ct">2</span></span><span class="chip">Completed <span class="ct">3</span></span><span class="chip">Expired <span class="ct">1</span></span></div>
+            <div class="sec-h"><b class="sm">Surveys</b><span class="xs t3">Tell us what you think</span></div>
+            <div class="list">
+              <div class="trow"><span class="mode-ic" style="background:var(--merit-category-2)"><svg class="i"><use href="#i-chat-circle-text-fill"/></svg></span><div class="st sp" style="gap:1px;min-width:0"><span class="ttl">Quick survey: study habits</span><span class="meta">About 3 min · ends in 4 days</span></div><div class="st" style="align-items:flex-end;gap:4px"><span class="pts">+50</span><button class="btn s" type="button" style="height:32px">Start</button></div></div>
+              <div class="trow"><span class="mode-ic" style="background:var(--merit-surface-sunken);color:var(--merit-text-tertiary)"><svg class="i"><use href="#i-lock"/></svg></span><div class="st sp" style="gap:3px;min-width:0"><span class="ttl">App feedback</span><span class="meta">Unlocks after 5 study days · 3 of 5</span><div class="bar thin"><i style="--v:60%;--bar:var(--merit-action-accent)"></i></div></div><span class="pts t3">+100</span></div>
+              <div class="trow"><span class="mode-ic" style="background:var(--merit-feedback-success-subtle);color:var(--merit-feedback-success-text)"><svg class="i"><use href="#i-check-circle-fill"/></svg></span><div class="st sp" style="gap:1px;min-width:0"><span class="ttl">Exam goals survey</span><span class="meta">Done 2 Oct</span></div><span class="badge ok">+50</span></div>
+              <div class="trow exp"><span class="mode-ic" style="background:var(--merit-surface-sunken);color:var(--merit-text-tertiary)"><svg class="i"><use href="#i-hourglass"/></svg></span><div class="st sp" style="gap:1px;min-width:0"><span class="ttl">Vesak week feedback</span><span class="meta">Expired 18 May</span></div><span class="pts">+30</span></div>
+            </div>
+            <div class="sec-h"><b class="sm">Referrals</b><a class="lnk">How it works</a></div>
+            <div class="card" style="gap:12px">
+              <div class="rw"><span class="mode-ic" style="background:var(--merit-category-6)"><svg class="i"><use href="#i-user-plus-fill"/></svg></span><div class="st sp" style="gap:1px;min-width:0"><b class="sm">Study Squad · 2 of 5 friends</b><span class="xs t3">3 more friends → +500</span></div></div>
+              <div class="tiers"><span class="d"><i></i>Icebreaker<br>+50</span><span class="c"><i></i>Study Squad<br>+500</span><span><i></i>Networker<br>+1,500</span><span><i></i>Ambassador<br>+5,000</span></div>
+              <div class="rw"><div class="inp sp" style="height:44px;font:700 15px var(--fd);letter-spacing:.06em">DILINI7<span class="sp"></span><svg class="i t3"><use href="#i-copy"/></svg></div><button class="btn s ac" type="button" style="height:44px"><svg class="i"><use href="#i-share-network"/></svg>Invite</button></div>
+            </div>
+          </div>
+          <div class="ph-gest"></div>
+        </div>
+        <div class="wf-note">
+          <p>The filter maps to backend data: <b>Pending</b> means active and inside the <code>starts_at</code>/<code>ends_at</code> window but not completed, including tasks still locked behind the <code>study_days</code> rule (shown with progress). <b>Completed</b> means there's a <code>task_completions</code> row. <b>Expired</b> means <code>ends_at</code> passed with no completion. Referral milestones count as tasks too: a reached tier is Completed and the next tier is Pending.</p>
+          <p class="con">Today <code>GET /tasks</code> returns only active, uncompleted tasks, so the Completed and Expired filters need a student task-history endpoint that returns each task's state, completion date and points.</p>
+          <div class="wf-comps"><code>segmented</code><code>filter chips + count</code><code>task row ×4 states</code><code>referral tiers</code></div>
+        </div>
+      </div>
+
+      <div class="wf-cand">
+        <div class="wf-cand-h"><b>3</b><span>Tasks &amp; Quests · Quests</span><em>Decided</em></div>
+        <div class="ph">
+          <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
+          <div class="scr calm" style="gap:12px">
+            <div class="tb"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><b class="h-sm sp">Tasks &amp; Quests</b></div>
+            <div class="segc"><span>Tasks</span><span class="on">Quests</span></div>
+            <div class="state" style="padding-top:48px"><img src="assets/v3/spots/empty.svg" alt=""><span class="badge pro"><svg class="i"><use href="#i-map-trifold-fill"/></svg>Coming soon</span><b class="h-md">Quests are on the way</b><span class="sm t2" style="max-width:260px">Multi-day challenges with bigger rewards, like "Finish Plant form in a week". We'll let you know when the first one opens.</span><button class="btn gh s" type="button"><svg class="i"><use href="#i-bell"/></svg>Notify me</button></div>
+          </div>
+          <div class="ph-gest"></div>
+        </div>
+        <div class="wf-note"><p>The tab exists from day one, so adding Quests later won't need a navigation change. Until then it shows the empty-state spot plus a "Coming soon" badge. The filter chips are hidden here because there's nothing to filter. "Notify me" depends on push (see BACKEND-GAPS, study reminders).</p><span class="tag api">Needs API · quests</span></div>
+      </div>
+    </div>
+    <div class="wf-feedback"><label for="fb-compete-rev">Notes on revised Compete tab</label><textarea id="fb-compete-rev" rows="2"></textarea><span class="wf-saved"></span></div>
+  </article>
+
   <article class="wf-screen" data-screen="leaderboard">
     <div class="wf-screen-h">
-      <h3>Leaderboard (Compete tab root)</h3><span class="tag energy">Energy</span>
+      <h3>Leaderboard (from the Compete root)</h3><span class="tag energy">Energy</span>
       <p>Dilini is #38 in Gampaha district with 1,240 points, #812 island-wide and #4 at school.</p>
       <span class="wf-data">GET /leaderboards/global · /districts/:name · /schools/:name · /subjects/:id · /leaderboards/me/ranks</span>
     </div>
@@ -2670,7 +2749,7 @@
   <article class="wf-screen" data-screen="auth-rev">
     <div class="wf-screen-h">
       <h3>Register + onboarding · A revised (existing flow, v3 styling)</h3><span class="tag calm">Calm</span><span class="tag gap">Revised</span>
-      <p>Your notes applied: today's steps and fields stay, and only the design system changes. Register keeps Confirm password and the language choice (stored as <code>preferred_language</code>). It becomes each subject's default content language, so onboarding needs no medium step. Patchworks show only where they mean a subject: the stream cards and the subject grid. Stream cards for subjects without art fall back to a category tint plus a duotone icon (§1.4a).</p>
+      <p>Your notes applied: today's steps and fields stay, and only the design system changes. Register keeps Confirm password and the language choice (stored as <code>preferred_language</code>). It becomes each subject's default content language, so onboarding needs no medium step. Round 8: today's illustrations are kept (only their containers change), step 1 is compacted, and stream rows drop patchworks for a v3 selectable row. Patchworks stay only in the step 3 subject rows. Round 9: step 3 becomes rows with a per-subject content-language switch.</p>
       <span class="wf-data">POST /auth/register {preferred_language} → /otp → POST /students/me → GET /streams/all-with-subjects → POST /enrollments (bulk) → /complete-onboarding</span>
     </div>
     <div class="wf-vars">
@@ -2679,8 +2758,15 @@
         <div class="ph">
           <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
           <div class="scr calm has-abar" style="gap:12px">
-            <div class="rw" style="margin-top:6px"><img src="assets/v3/brand/merit-lockup-horizontal.svg" alt="Merit Project" style="height:28px;width:auto"></div>
-            <div class="st" style="gap:2px"><span class="ey">Earn Merit</span><h4 class="h-lg">Create your account</h4></div>
+            <div class="illus-wrap" style="margin-top:6px">
+              <div class="illus" style="--ib:var(--merit-violet-500);--h:104px">
+                <span class="dk star" style="--c:var(--merit-butter-300);top:14px;left:18px"></span>
+                <span class="dk dot" style="--c:var(--merit-canvas-100);bottom:18px;left:80px"></span>
+                <span class="dk arc" style="--c:var(--merit-butter-300);top:-40px;right:-28px"></span>
+              </div>
+              <img class="appic" src="assets/v3/brand/merit-app-icon.svg" alt="Merit Project">
+            </div>
+            <div class="st" style="gap:4px"><h4 class="h-xl">Earn <span class="hl">Merit</span>.</h4><span class="sm t2">Free forever. Streaks, points, and quizzes in Sinhala, Tamil &amp; English.</span></div>
             <div class="fld"><label>Full name</label><div class="inp">Dilini Perera</div></div>
             <div class="fld"><label>Email (optional)</label><div class="inp ph-in">For password resets</div></div>
             <div class="fld"><label>Mobile number</label><div class="inp focus"><span class="cc">+94</span>77 123 4567</div></div>
@@ -2692,25 +2778,34 @@
           <div class="abar col"><button class="btn full" type="button">Create account</button><span class="sm t2">Have an account? <a class="lnk">Sign in</a></span></div>
           <div class="ph-gest"></div>
         </div>
-        <div class="wf-note"><p>Same fields as today. v3 changes: inputs with labels above, a 1.5 border and a md radius; the <code>+94</code> prefix; show/hide on the password; a segmented language control instead of the pill row; the primary pill button.</p></div>
+        <div class="wf-note"><p><span class="tag gap">Revised</span> Round 8: today's illustration is back. It's the same <code>MeritIllusBlock</code> art: violet block, butter star, cream dot, butter arc, and the app icon overlapping the bottom edge. Only the container changes: no 2px line border or hard offset shadow, a 2xl radius, and the icon gets a canvas ring plus e2 instead of the cream silhouette. The "Earn Merit" title and subtitle return too. Fields are unchanged from today.</p></div>
       </div>
 
       <div class="wf-cand">
         <div class="wf-cand-h"><b>2</b><span>Onboarding · step 1</span><em>Decided</em></div>
         <div class="ph">
           <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
-          <div class="scr calm has-abar" style="gap:14px">
-            <div class="tb"><span class="ibtn flat" style="visibility:hidden"></span><div class="stepper sp"><i class="c"></i><i></i><i></i></div><span class="sm t3">1/3</span></div>
-            <h4 class="h-lg">Let's personalise your <span class="ul">journey</span></h4>
-            <div class="fld"><label>Exam</label><div class="g2"><div class="opt-card"><b class="h-sm">O/L</b><span class="xs t3">Ordinary Level</span></div><div class="opt-card on"><b class="h-sm">A/L</b><span class="xs t3">Advanced Level</span></div></div></div>
-            <div class="fld"><label>Exam year</label><div class="chips" style="margin:0;padding:0"><span class="chip">2026</span><span class="chip on">2027</span><span class="chip">2028</span></div></div>
-            <div class="fld"><label>District (optional)</label><div class="inp">Gampaha<span class="sp"></span><svg class="i"><use href="#i-caret-down"/></svg></div></div>
-            <div class="fld"><label>School (optional)</label><div class="inp ph-in">Start typing your school</div></div>
+          <div class="scr calm has-abar" style="gap:16px">
+            <div class="tb"><div class="stepper sp"><i class="c"></i><i></i><i></i></div><span class="sm t3">1 of 3</span></div>
+            <div class="illus" style="--ib:var(--illus-cream);--h:88px">
+              <span class="dk star" style="--c:var(--merit-violet-500);top:14px;left:20px"></span>
+              <span class="dk dot" style="--c:var(--merit-violet-500);top:16px;right:24px"></span>
+              <span class="dk arc" style="--c:var(--merit-sage-500);--s:90px;bottom:-50px;left:-28px"></span>
+              <span class="dk blob" style="--c:var(--merit-butter-300);bottom:12px;right:30px"></span>
+              <svg class="i" style="font-size:44px;color:var(--merit-text-primary);opacity:.5"><use href="#i-star-fill"/></svg>
+            </div>
+            <div class="st" style="gap:4px"><h4 class="h-lg">Let's personalise your journey.</h4><span class="sm t2">Tell us about your academic goals.</span></div>
+            <div class="fld"><label>Exam level</label><div class="segc"><span>O/L</span><span class="on">A/L</span></div></div>
+            <div class="fld"><label>Exam year</label><div class="segc"><span>This year</span><span class="on">2027</span><span>2028</span><span>2029</span></div></div>
+            <div class="g2">
+              <div class="fld" style="min-width:0"><label>District <span class="t3" style="font-weight:600">· optional</span></label><div class="inp" style="height:48px">Gampaha<span class="sp"></span><svg class="i t3"><use href="#i-caret-down"/></svg></div></div>
+              <div class="fld" style="min-width:0"><label>School <span class="t3" style="font-weight:600">· optional</span></label><div class="inp ph-in" style="height:48px;overflow:hidden;white-space:nowrap">Search</div></div>
+            </div>
           </div>
-          <div class="abar"><button class="btn" type="button">Next</button></div>
+          <div class="abar"><button class="btn full" type="button">Next</button></div>
           <div class="ph-gest"></div>
         </div>
-        <div class="wf-note"><p>Same step as today. Option cards replace the bordered level cards, and year chips replace the picker. No patchwork here, because exam level isn't part of the subject hierarchy.</p></div>
+        <div class="wf-note"><p><span class="tag gap">Revised</span> Round 8, compact and aligned: one left edge, one 16dp rhythm, and every control is full width. The original cream illustration (violet star and dot, sage arc, butter blob, ink star) shrinks to 88dp. Level and year become two segmented controls. Year keeps today's four slider stops (this year plus 3), and the year control appears once a level is picked, as today. District and School share a row, both optional. School opens a search sheet. Everything fits on one 360×780 screen with no scrolling.</p></div>
       </div>
 
       <div class="wf-cand">
@@ -2718,21 +2813,20 @@
         <div class="ph">
           <div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div>
           <div class="scr calm has-abar" style="gap:14px">
-            <div class="tb"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><div class="stepper sp"><i class="d"></i><i class="c"></i><i></i></div><span class="sm t3">2/3</span></div>
-            <h4 class="h-lg">Choose your stream</h4>
-            <div class="g2">
-              <div class="opt-card on" style="gap:8px"><div class="rw" style="gap:4px"><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/biology-tile.svg" alt=""><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/chemistry-tile.svg" alt=""><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/physics-tile.svg" alt=""></div><b class="sm">Biological Science</b></div>
-              <div class="opt-card" style="gap:8px"><div class="rw" style="gap:4px"><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/maths-tile.svg" alt=""><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/chemistry-tile.svg" alt=""><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/physics-tile.svg" alt=""></div><b class="sm">Physical Science</b></div>
-              <div class="opt-card" style="gap:8px"><div class="rw" style="gap:4px"><span class="tile" style="--s:30px;display:grid;place-items:center;background:var(--merit-category-4);color:var(--merit-ink-900)"><svg class="i"><use href="#i-calculator-fill"/></svg></span><span class="tile" style="--s:30px;display:grid;place-items:center;background:var(--merit-category-2);color:var(--merit-ink-900)"><svg class="i"><use href="#i-chart-bar-fill"/></svg></span><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/ict-tile.svg" alt=""></div><b class="sm">Commerce</b></div>
-              <div class="opt-card" style="gap:8px"><div class="rw" style="gap:4px"><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/languages-tile.svg" alt=""><span class="tile" style="--s:30px;display:grid;place-items:center;background:var(--merit-category-6);color:var(--merit-ink-900)"><svg class="i"><use href="#i-globe-fill"/></svg></span><span class="tile" style="--s:30px;display:grid;place-items:center;background:var(--merit-category-3);color:var(--merit-ink-900)"><svg class="i"><use href="#i-pen-nib-fill"/></svg></span></div><b class="sm">Arts</b></div>
-              <div class="opt-card" style="gap:8px"><div class="rw" style="gap:4px"><img class="tile" style="--s:30px" src="assets/v3/patchwork-demo/ict-tile.svg" alt=""><span class="tile" style="--s:30px;display:grid;place-items:center;background:var(--merit-category-1);color:var(--merit-ink-900)"><svg class="i"><use href="#i-leaf-fill"/></svg></span><span class="tile" style="--s:30px;display:grid;place-items:center;background:var(--merit-category-5);color:var(--merit-ink-900)"><svg class="i"><use href="#i-atom-fill"/></svg></span></div><b class="sm">Technology</b></div>
-              <div class="opt-card" style="gap:8px;justify-content:center"><b class="sm">Other</b><span class="xs t3">Pick subjects freely</span></div>
+            <div class="tb"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><div class="stepper sp"><i class="d"></i><i class="c"></i><i></i></div><span class="sm t3">2 of 3</span></div>
+            <div class="st" style="gap:4px"><h4 class="h-lg">Choose your stream.</h4><span class="sm t2">Select the A/L stream that matches your subjects.</span></div>
+            <div class="st" style="gap:10px">
+              <div class="srow on"><span class="mode-ic" style="background:var(--merit-category-1)"><svg class="i"><use href="#i-atom-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="nm">Science</span><span class="sub">Bio · Chem · Phys · Maths</span></div><span class="radio on"><svg class="i"><use href="#i-check"/></svg></span></div>
+              <div class="srow"><span class="mode-ic" style="background:var(--merit-category-4)"><svg class="i"><use href="#i-coins-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="nm">Commerce</span><span class="sub">Accounting · Econ · Business</span></div><span class="radio"></span></div>
+              <div class="srow"><span class="mode-ic" style="background:var(--merit-category-3)"><svg class="i"><use href="#i-pen-nib-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="nm">Arts</span><span class="sub">History · Geo · Sinhala/Tamil Lit</span></div><span class="radio"></span></div>
+              <div class="srow"><span class="mode-ic" style="background:var(--merit-category-2)"><svg class="i"><use href="#i-device-mobile-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="nm">Technology</span><span class="sub">ICT · Engineering Tech · Bio Tech</span></div><span class="radio"></span></div>
+              <div class="srow"><span class="mode-ic" style="background:var(--merit-surface-sunken);color:var(--merit-text-primary)"><svg class="i"><use href="#i-sparkle-fill"/></svg></span><div class="st sp" style="gap:2px;min-width:0"><span class="nm">Other</span><span class="sub">Build a custom subject set</span></div><span class="radio"></span></div>
             </div>
           </div>
-          <div class="abar"><button class="btn" type="button">Next</button></div>
+          <div class="abar"><button class="btn full" type="button">Next</button></div>
           <div class="ph-gest"></div>
         </div>
-        <div class="wf-note"><p>Each stream card shows its core subjects' patchworks at 30dp. Agricultural Science, ICT and others without art use the §1.4a fallback: a category tint plus a Phosphor icon, never another subject's patchwork. Skipped for O/L.</p></div>
+        <div class="wf-note"><p><span class="tag gap">Revised</span> Round 8: no patchworks here. <code>MeritStreamCard</code> becomes a v3 selectable row with a surface, e1 and xl radius. Selected rows get the selected surface and a 2dp focus-ring outline instead of the purple border and hard shadow. Each row has a 44dp category-tint icon tile, swapping the ⚛ / $ / A / ⌨ / ✦ glyphs for Phosphor. Today's text subject labels stay as the subtitle. A radio on the right replaces the square check. Names come from <code>/streams/all-with-subjects</code>. Skipped for O/L.</p></div>
       </div>
 
       <div class="wf-cand">
@@ -2742,20 +2836,21 @@
           <div class="scr calm has-abar" style="gap:14px">
             <div class="tb"><span class="ibtn flat"><svg class="i"><use href="#i-arrow-left"/></svg></span><div class="stepper sp"><i class="d"></i><i class="d"></i><i class="c"></i></div><span class="sm t3">3/3</span></div>
             <h4 class="h-lg">Pick your subjects</h4>
-            <div class="rw"><span class="sm t2 sp">Biological Science · up to 5</span><span class="badge">3 of 5</span></div>
-            <div class="g3">
-              <div class="subj-pick on"><span class="ck"><svg class="i"><use href="#i-check"/></svg></span><img class="tile" style="--s:56px" src="assets/v3/patchwork-demo/biology-tile.svg" alt="">Biology</div>
-              <div class="subj-pick on"><span class="ck"><svg class="i"><use href="#i-check"/></svg></span><img class="tile" style="--s:56px" src="assets/v3/patchwork-demo/chemistry-tile.svg" alt="">Chemistry</div>
-              <div class="subj-pick on"><span class="ck"><svg class="i"><use href="#i-check"/></svg></span><img class="tile" style="--s:56px" src="assets/v3/patchwork-demo/physics-tile.svg" alt="">Physics</div>
-              <div class="subj-pick"><img class="tile" style="--s:56px" src="assets/v3/patchwork-demo/languages-tile.svg" alt="">General English</div>
-              <div class="subj-pick"><img class="tile" style="--s:56px" src="assets/v3/patchwork-demo/ict-tile.svg" alt="">ICT</div>
-              <div class="subj-pick"><span class="tile" style="--s:56px;display:grid;place-items:center;background:var(--merit-category-1);color:var(--merit-ink-900);font-size:26px"><svg class="i"><use href="#i-leaf-fill"/></svg></span>Agricultural Science</div>
+            <div class="rw"><span class="sm t2 sp">Science · up to 5</span><span class="badge">3 of 5</span></div>
+            <span class="sm t2">Content starts in <b>Sinhala</b>, your preferred language. Change it per subject.</span>
+            <div class="list">
+              <div class="li sjrow on"><span class="ckb on"><svg class="i"><use href="#i-check"/></svg></span><img class="tile" style="--s:40px" src="assets/v3/patchwork-demo/biology-tile.svg" alt=""><div class="sp st" style="gap:0;min-width:0"><span class="ttl">Biology</span></div><div class="segc lseg"><span>EN</span><span class="on">සිං</span><span>த</span></div></div>
+              <div class="li sjrow on"><span class="ckb on"><svg class="i"><use href="#i-check"/></svg></span><img class="tile" style="--s:40px" src="assets/v3/patchwork-demo/chemistry-tile.svg" alt=""><div class="sp st" style="gap:0;min-width:0"><span class="ttl">Chemistry</span></div><div class="segc lseg"><span>EN</span><span class="on">සිං</span><span>த</span></div></div>
+              <div class="li sjrow on"><span class="ckb on"><svg class="i"><use href="#i-check"/></svg></span><img class="tile" style="--s:40px" src="assets/v3/patchwork-demo/physics-tile.svg" alt=""><div class="sp st" style="gap:0;min-width:0"><span class="ttl">Physics</span></div><div class="segc lseg"><span class="on">EN</span><span>සිං</span><span>த</span></div></div>
+              <div class="li sjrow"><span class="ckb"></span><img class="tile" style="--s:40px" src="assets/v3/patchwork-demo/languages-tile.svg" alt=""><div class="sp st" style="gap:0;min-width:0"><span class="ttl">General English</span><span class="meta">English only</span></div></div>
+              <div class="li sjrow"><span class="ckb"></span><img class="tile" style="--s:40px" src="assets/v3/patchwork-demo/ict-tile.svg" alt=""><div class="sp st" style="gap:0;min-width:0"><span class="ttl">ICT</span></div></div>
+              <div class="li sjrow"><span class="ckb"></span><span class="tile" style="--s:40px;display:grid;place-items:center;background:var(--merit-category-1);color:var(--merit-ink-900);font-size:20px"><svg class="i"><use href="#i-leaf-fill"/></svg></span><div class="sp st" style="gap:0;min-width:0"><span class="ttl">Agricultural Science</span></div></div>
             </div>
           </div>
-          <div class="abar"><button class="btn" type="button">Finish enrollment</button></div>
+          <div class="abar"><button class="btn full" type="button">Finish enrollment</button></div>
           <div class="ph-gest"></div>
         </div>
-        <div class="wf-note"><p>Same step as today, with subject tiles at 56dp. The X-of-Y count comes from <code>/enrollments/capacity</code>. Agricultural Science shows the fallback tile (its icon map is still pending). Finishing opens Today.</p></div>
+        <div class="wf-note"><p><span class="tag gap">Revised</span> Round 9: subject rows instead of tiles. Each row reuses the 07 Settings → Subject languages row: a 40dp patchwork, the name, and the EN / සිං / த switch. The switch appears only once a subject is ticked, and it starts on <code>preferred_language</code>. Each choice becomes that enrollment's content language, sent with <code>POST /enrollments</code>. Languages a subject has no content in yet are greyed (<code>available_languages</code>), as in Settings. The X-of-Y count comes from <code>/enrollments/capacity</code>. Agricultural Science keeps the §1.4a fallback tile. Finishing opens Today.</p></div>
       </div>
     </div>
     <div class="wf-feedback"><label for="fb-auth-rev">Notes on revised register + onboarding</label><textarea id="fb-auth-rev" rows="2"></textarea><span class="wf-saved"></span></div>

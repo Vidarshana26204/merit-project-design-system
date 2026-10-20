@@ -1,7 +1,7 @@
 # Mobile wireframe decisions (v3)
 
 Picks recorded in the review board (`wireframes.html`, published as a private claude.ai artifact). Variant letters refer to the
-candidates on that page. All screens are decided as of 2026-10-20.
+candidates on that page. All screens are decided as of 2026-10-20. Round 8 revisions (same day) are folded into the rows below.
 
 ## Cross-cutting rules
 
@@ -10,8 +10,8 @@ candidates on that page. All screens are decided as of 2026-10-20.
   full-screen with no tab bar.
 - **Localization:** only subject content is localized (subject, topic and subtopic names, questions, flashcards, notes).
   The app UI stays English. Content language is set per subject enrollment, so no screen has an in-place language toggle.
-  Register's Preferred language (`preferred_language`) seeds every enrollment's language. After that it changes only in
-  Settings → Subject languages.
+  Register's Preferred language (`preferred_language`) seeds every enrollment's language. Onboarding step 3 lets the student
+  override it per subject, and after that it changes only in Settings → Subject languages.
 - **Timer:** colour-only states (text and icon), no pill. Proposed tokens are `timer.warnFg` (light orange-700, dark butter-300)
   and `timer.criticalFg` (light red-600, dark red-300). Butter text fails contrast on canvas.
 - **Hierarchy navigation is a patchwork quilt:** topic tiles fill with mastery and subtopics open inline (Learn A).
@@ -30,19 +30,21 @@ candidates on that page. All screens are decided as of 2026-10-20.
 | 02 | Attempt review | A | |
 | 03 | Cards tab | A | |
 | 03 | Card session | A | |
-| 03 | Notes reader | A | No language toggle |
-| 04 | Hub header | A + C's tabs | Tinted hero (`color_hex`) with type-scale section names; collapses to a 56dp bar |
+| 03 | Notes reader | A, revised | No language toggle. Progress bar, reading time and section count sit in the pinned header between Back and Save |
+| 04 | Hub header | A + C's tabs | Tinted hero (`color_hex`) with type-scale section names; collapses to a 56dp bar. Dark mode uses a 24% tint on `night-850` plus a 40% subject rim (58% read as mid-grey) |
 | 04 | Learn | A | Topic quilt map with inline subtopics |
-| 04 | Subtopic | A | Bottom sheet over the quilt |
+| 04 | Subtopic | A, revised | Bottom sheet over the quilt, holding C's mastery recipe ring and B's Read → Remember → Prove rows (row bars match the ring arcs) |
 | 04 | Subjects list | A | Rows plus "Add a subject" |
 | 04 | Stats | B + C's card | Insights, with the "If the exam were today" predicted-grade card on top |
-| 05 | Leaderboard | A | Podium + sticky "You" row |
-| 05 | Points | A | |
+| 05 | Compete tab root | New (round 8) | Four rows: Points, Leaderboard, Tasks & Quests, Achievements, each with a teaser value |
+| 05 | Tasks & Quests | New (round 8) | Two tabs. Tasks: state filter (All / Pending / Completed / Expired), surveys and referral milestones. Quests: coming-soon placeholder |
+| 05 | Leaderboard | A | Podium + sticky "You" row, pushed from the Compete root |
+| 05 | Points | A | Pushed from the Compete root |
 | 05 | Achievements | B | Tiered list |
 | 06 | Paywall | A + C | The limit-reached sheet (C) is the entry point at the moment of need; its "Keep going with Achiever" row opens the full paywall (A). Profile opens A directly |
 | 07 | Me tab | A | Avatar opens the 30-avatar picker; settings via the Settings row |
-| 08 | Register | A, revised | Existing fields and flow kept (incl. Confirm password, Preferred language → `preferred_language`); v3 styling only |
-| 08 | Onboarding | A, revised | Existing 3 steps kept, no medium step; patchworks on stream cards (30dp) and the subject grid (56dp), §1.4a fallback for subjects without art |
+| 08 | Register | A, revised | Existing fields and flow kept (incl. Confirm password, Preferred language → `preferred_language`); v3 styling only. Today's illustration (violet block, deco shapes, app icon) kept with a v3 container |
+| 08 | Onboarding | A, revised | Existing 3 steps kept, no medium step. Step 1 compact: original cream illustration at 88dp, segmented level and year, District + School on one row. Step 2: v3 stream rows (category icon tile, text subject labels, radio), no patchworks. Step 3 (round 9): subject rows (40dp patchwork, §1.4a fallback) reusing the Settings → Subject languages row; ticking a subject reveals its EN / SI / TA switch, defaulting to `preferred_language` and sent per enrollment |
 
 Shared, no pick needed: quiz states, card session end, hub pieces (collapsed header, unlock dialogs, enrol), streak pieces,
 gates, avatar picker and settings, sign in / OTP / forgot password, system states.
@@ -53,4 +55,4 @@ gates, avatar picker and settings, sign in / OTP / forgot password, system state
   mastery percentage. SKILL §12 says tiles are theme-fixed and unaltered, so it needs an exception for progress display, or a
   ring or bar around an untouched tile instead.
 - **`timer.warnFg` / `timer.criticalFg`** tokens (above).
-- **Subject tint** `color-mix(color_hex 58%, bg.app)` for hub headers. It needs a dark-mode check per subject colour.
+- **Subject tint** for hub headers: light `color-mix(color_hex 58%, bg.app)`, dark `color-mix(color_hex 24%, night-850)` plus a 40% rim. Proposed as `subject.headerTint` / `subject.headerRim`; needs a per-subject dark check.

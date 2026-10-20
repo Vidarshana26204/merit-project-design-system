@@ -20,6 +20,8 @@ Things the v3 mobile wireframes rely on that `merit-project-backend` doesn't pro
 
 | Feature | Used by | What's needed |
 |---|---|---|
+| Task history | 05 Tasks & Quests (Completed / Expired filters) | `GET /tasks` returns only active, uncompleted tasks. Needs a student history listing every task with state (pending / locked / completed / expired), `completed_at`, `ends_at`, points, plus referral tiers as task-like rows |
+| Quests | 05 Tasks & Quests (Quests tab) | Multi-day challenge definitions and progress. The tab ships as a coming-soon placeholder |
 | Achievements | 05 Achievements B, share card, 07 Me | `GET /students/me/achievements` (tier, progress_current/target, points_reward), unlock events → `achievement_unlock` ledger. Tables already exist. |
 | Grade prediction | 04 Stats (picked B + C card) | A per-subject predicted A/B/C/S/F grade from mastery, with calibrated bands |
 | Stats insights | 04 Stats B | Rule-based insight cards (trend, fading cards, Bloom pattern) |
