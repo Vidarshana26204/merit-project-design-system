@@ -167,3 +167,5 @@ in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) 
   `merit-project-flutter/docs/V3-PROGRESS.md`.
 - **Checkpoint 4:** Phase 4 Flutter client built (study-plan model, Stats forecast card, Practise "Recommended for you",
   Today exam countdown chip, questions/cards progress text). Phase 5 pending.
+- **Checkpoint 5:** Phase 5 Flutter client built (high-yield, memory on exam day and paper pacing Stats cards from one
+  `exam-insights` fetch; teaser copy updated). All detour phases have clients; end-to-end pass next.
