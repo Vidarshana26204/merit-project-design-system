@@ -10,7 +10,7 @@ comes after.
 | Repo | Branch | State |
 |---|---|---|
 | `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
-| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`); detour merged in (ff to `05a3cc5`); batch 2 merged (`518a98a`) | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** Batch 2 done; batch 3 next |
+| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`); detour merged in (ff to `05a3cc5`); batches 2-3 merged (head `a2a6c1d`) | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** All v3 batches done; device QA next |
 | `merit-project-frontend` (admin) | `dev` (local, ff from `feat/exam-intelligence` at `609a30b`; ahead of `origin/dev`) | Admin lives here now (`app/admin/*`, `features/admin/*`): exam-intelligence settings form and per-subject Exam weights page. `merit-project-admin` is retired; its branch is abandoned. Not pushed |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
 | `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed; local now ff to `62e8e67` with the detour, ahead of origin) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
@@ -119,8 +119,9 @@ bugs listed in `BACKEND-GAPS.md` were fixed on dev before v3.
    score), review route, study session with `MeritRatingButtons` + wash, notes reader. Backend gaps found (session
    detail omits `selected_option`; no note bookmark API; bonus/multiplier constants not in the quiz response) are listed
    in `V3-PROGRESS.md` known simplifications.
-2. Batch 3: Points / Leaderboard restyle, Premium paywall + limit sheet, Me + settings (subject languages, reminders,
-   avatar picker), auth / onboarding.
+2. Batch 3 done (merge `7fbe293`): Points, Leaderboard, paywall + limit sheet + Welcome Achiever, Me, Settings, Subject
+   languages, avatar picker, auth (register, OTP, forgot stepper, splash), onboarding (5 steps kept). Trial is 14 days
+   (user ruling, overrides the wireframes' 21).
 3. Optionally push `feat/design-system-v3` in the Flutter repo; lower the guard baselines in
    `tool/check_design_tokens.dart` as old uses fall.
 
