@@ -165,3 +165,5 @@ in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) 
 - **Contracts:** past-paper analysis, admin exam-weights and recompute are built; revise fields, peers and the
   duplicate/min-papers additions land with backend Phases 2-3; study plan and insights (Phases 4-5) pending. Full table:
   `merit-project-flutter/docs/V3-PROGRESS.md`.
+- **Checkpoint 4:** Phase 4 Flutter client built (study-plan model, Stats forecast card, Practise "Recommended for you",
+  Today exam countdown chip, questions/cards progress text). Phase 5 pending.
