@@ -11,6 +11,7 @@ comes after.
 |---|---|---|
 | `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
 | `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`), detour on `feat/exam-intelligence` | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** Batches 2-3 next, after the detour |
+| `merit-project-frontend` (admin) | `feat/exam-intelligence` (from `origin/dev`) | Admin lives here now (`app/admin/*`, `features/admin/*`): exam-intelligence settings form and per-subject Exam weights page. `merit-project-admin` is retired; its branch is abandoned. Not pushed |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
 | `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
 
@@ -140,7 +141,7 @@ bugs listed in `BACKEND-GAPS.md` were fixed on dev before v3.
 ## Detour: core prerequisites (2026-10-21)
 
 The Flutter reskin is paused to build learning-model prerequisites the screens depend on. Branch `feat/exam-intelligence`
-in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) and admin. Not pushed.
+in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) and `merit-project-frontend` (admin; `merit-project-admin` is retired). Not pushed.
 
 - **Past-paper analysis:** per topic/subtopic question distribution over official papers (all years, small floor for
   never-asked subtopics). Drives exam-weighted topic and subject mastery and the grade prediction.
@@ -155,3 +156,12 @@ in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) 
   (backend; clients + docs).
 - **Status:** docs done; Flutter Phase 0 client fixes and Phase 1 past-paper analysis card built against the agreed JSON
   contract; admin settings fields and exam-weights page built. Later phases pending.
+- **Checkpoint 3 (audit fixes):** Flutter analysis model realigned to the backend JSON (`by_year` list, `trend_slope_pp_per_year`,
+  `has_data`, `weighted`, `min_papers`); hub header uses the weighted `mastery_percentage`; desired retention stays a fixed
+  0.9. Admin exam-weights page rebuilt in `merit-project-frontend` with grouped topic/subtopic rows, recompute toasts,
+  plain-average badge and duplicate-paper warning.
+- **Rulings:** duplicate papers get an admin warning only; thin data uses setting `exam_weight_min_papers` (default 8) and
+  the plain-average roll-up below it; locked subtopics accrue and stay locked; admin moved to `merit-project-frontend`.
+- **Contracts:** past-paper analysis, admin exam-weights and recompute are built; revise fields, peers and the
+  duplicate/min-papers additions land with backend Phases 2-3; study plan and insights (Phases 4-5) pending. Full table:
+  `merit-project-flutter/docs/V3-PROGRESS.md`.
