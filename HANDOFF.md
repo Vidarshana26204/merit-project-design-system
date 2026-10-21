@@ -2,7 +2,7 @@
 
 Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks are done, the mobile wireframes are decided,
 the wireframe rulings shipped as 3.5.0 (D18–D20), and the backend now serves everything the picked screens need.
-**Next: the Flutter screens** (`MIGRATION-v3.md` §1.3 shared widgets, then §1.6 screen order). The landing page
+**Next: the remaining Flutter screens** (batches 2-3, after the exam-intelligence detour below). The landing page
 comes after.
 
 ## Where things stand
@@ -10,7 +10,7 @@ comes after.
 | Repo | Branch | State |
 |---|---|---|
 | `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
-| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`) | Setup done at `920b5bb`: v3.5.0 tokens (`.design-tokens-ref` pinned), General Sans bundled, School Times + `google_fonts` dropped, theme remap, guard. **Committed, not pushed.** Screens next |
+| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`), detour on `feat/exam-intelligence` | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** Batches 2-3 next, after the detour |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
 | `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
 
@@ -107,20 +107,19 @@ patchwork numbers need `migrate force 46` before migrating up.
 
 ## Next: Flutter screens
 
-1. Optionally push `feat/design-system-v3` in the Flutter repo.
-2. Restyle the shared widgets (`MIGRATION-v3.md` §1.3). As uses fall, lower the guard baselines in
-   `tool/check_design_tokens.dart`: `MeritColors.` 687, `MeritShadows.brutal` 2, `MeritBorders.` 126.
-3. Build the new widgets (§1.4): navigation shell, `MeritHubHeader`, `MeritQuiltMap` + subtopic sheet,
-   `MeritShareCard`, and the Compete, task, stream and subject-language rows.
-4. Build the screens in §1.6 order, starting with the shell. Fix the client bugs in `BACKEND-GAPS.md` along the way:
-   - hardcoded 20/1 limits
-   - limit and premium snackbars (switch to the error `code`)
-   - paper timer counting up
-   - pause copy
-   - purchase success
-   - forgot password
-   - notes reader
-   - enrol after onboarding
+Status and commit ranges: `merit-project-flutter/docs/V3-PROGRESS.md`.
+
+**Done (Flutter, branch `feat/design-system-v3`):** Phases 0-2 (data layer, shared widgets, new widgets) and Phase 3
+batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root + Add a subject). The client
+bugs listed in `BACKEND-GAPS.md` were fixed on dev before v3.
+
+**Remaining:**
+1. Batch 2: quiz taking (colour-only countdown timer + auto-submit, exit copy), quiz complete + `MeritShareCard`, review,
+   study session with `MeritRatingButtons`, notes reader.
+2. Batch 3: Points / Leaderboard restyle, Premium paywall + limit sheet, Me + settings (subject languages, reminders,
+   avatar picker), auth / onboarding.
+3. Optionally push `feat/design-system-v3` in the Flutter repo; lower the guard baselines in
+   `tool/check_design_tokens.dart` as old uses fall.
 
 ## Then: landing page
 
@@ -137,3 +136,22 @@ patchwork numbers need `migrate force 46` before migrating up.
 - Patchwork engine: `scripts/patchwork/`; run its tests with `python -m pytest -q scripts/patchwork` (needs fonttools).
 - The licensed icon pack and production patchworks never enter this public repo, only the Phosphor demo set
   (`assets/v3/patchwork-demo/`).
+
+## Detour: core prerequisites (2026-10-21)
+
+The Flutter reskin is paused to build learning-model prerequisites the screens depend on. Branch `feat/exam-intelligence`
+in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) and admin. Not pushed.
+
+- **Past-paper analysis:** per topic/subtopic question distribution over official papers (all years, small floor for
+  never-asked subtopics). Drives exam-weighted topic and subject mastery and the grade prediction.
+- **Exam clock + recommendations:** exam months are settings (A/L August, O/L December; date = 1st of the month in
+  `students.exam_year`). Everyone gets an exam-paced Today plan; Achiever gets the full engine and forecast.
+- **Retention decay:** Remember = average FSRS retrievability normalized to desired retention, recomputed daily; below
+  0.80 a note is flagged Revise and Read counts half. Paper and adaptive attempts now update mastery.
+- **Peers:** percentile and weekly pace against subject + level + exam-year cohort, hidden under 20 students.
+- **Insights:** high-yield gaps, trending topics, memory on exam day, paper pacing. All new Stats features are Achiever-only
+  with locked teasers for free users.
+- **Phases:** 0 foundations, 1 exam weights, 2 retention, 3 peers, 4 recommendations, 5 insights. Two agents in parallel
+  (backend; clients + docs).
+- **Status:** docs done; Flutter Phase 0 client fixes and Phase 1 past-paper analysis card built against the agreed JSON
+  contract; admin settings fields and exam-weights page built. Later phases pending.
