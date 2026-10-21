@@ -10,10 +10,10 @@ comes after.
 | Repo | Branch | State |
 |---|---|---|
 | `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
-| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`), detour on `feat/exam-intelligence` | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** Batches 2-3 next, after the detour |
-| `merit-project-frontend` (admin) | `feat/exam-intelligence` (from `origin/dev`) | Admin lives here now (`app/admin/*`, `features/admin/*`): exam-intelligence settings form and per-subject Exam weights page. `merit-project-admin` is retired; its branch is abandoned. Not pushed |
+| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`); detour merged in (ff to `05a3cc5`); batch 2 on `feat/v3-batch2-{quiz,study}` | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** Batch 2 in progress, then batch 3 |
+| `merit-project-frontend` (admin) | `dev` (local, ff from `feat/exam-intelligence` at `609a30b`; ahead of `origin/dev`) | Admin lives here now (`app/admin/*`, `features/admin/*`): exam-intelligence settings form and per-subject Exam weights page. `merit-project-admin` is retired; its branch is abandoned. Not pushed |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
-| `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
+| `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed; local now ff to `62e8e67` with the detour, ahead of origin) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
 
 None of the branches is merged. The backend changes only deploy once `feat/patchworks` lands on `main`.
 
@@ -115,8 +115,9 @@ batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn
 bugs listed in `BACKEND-GAPS.md` were fixed on dev before v3.
 
 **Remaining:**
-1. Batch 2: quiz taking (colour-only countdown timer + auto-submit, exit copy), quiz complete + `MeritShareCard`, review,
-   study session with `MeritRatingButtons`, notes reader.
+1. Batch 2 (in progress): quiz taking (colour-only countdown timer + auto-submit, pause copy), quiz complete +
+   `MeritShareCard` (username + score only), review as its own route, study session with `MeritRatingButtons`, notes
+   reader. Two agents in worktrees (`feat/v3-batch2-quiz`, `feat/v3-batch2-study`), merged into `feat/design-system-v3`.
 2. Batch 3: Points / Leaderboard restyle, Premium paywall + limit sheet, Me + settings (subject languages, reminders,
    avatar picker), auth / onboarding.
 3. Optionally push `feat/design-system-v3` in the Flutter repo; lower the guard baselines in
@@ -169,6 +170,8 @@ in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) 
   Today exam countdown chip, questions/cards progress text). Phase 5 pending.
 - **Checkpoint 5:** Phase 5 Flutter client built (high-yield, memory on exam day and paper pacing Stats cards from one
   `exam-insights` fetch; teaser copy updated). All detour phases have clients; end-to-end pass next.
+- **Merged (2026-10-21):** each `feat/exam-intelligence` fast-forwarded into its base (backend `feat/patchworks`,
+  Flutter `feat/design-system-v3`, frontend `dev`). Local only.
 - **Checkpoint 6 (end-to-end + fixes):** all phases verified end to end on a scratch DB copy (migrations 44→57, crons,
   Pro gating, real responses parse in Flutter, Revise round trip, peers, admin). Two fixes from it: far from the exam the
   first recommendation slot (study-plan question set and Today quiz) goes to the best unlocked subtopic (backend
