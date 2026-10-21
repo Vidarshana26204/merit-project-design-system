@@ -158,7 +158,7 @@ in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) 
   contract; admin settings fields and exam-weights page built. Later phases pending.
 - **Checkpoint 3 (audit fixes):** Flutter analysis model realigned to the backend JSON (`by_year` list, `trend_slope_pp_per_year`,
   `has_data`, `weighted`, `min_papers`); hub header uses the weighted `mastery_percentage`; desired retention stays a fixed
-  0.9. Admin exam-weights page rebuilt in `merit-project-frontend` with grouped topic/subtopic rows, recompute toasts,
+  0.9 (superseded in checkpoint 6). Admin exam-weights page rebuilt in `merit-project-frontend` with grouped topic/subtopic rows, recompute toasts,
   plain-average badge and duplicate-paper warning.
 - **Rulings:** duplicate papers get an admin warning only; thin data uses setting `exam_weight_min_papers` (default 8) and
   the plain-average roll-up below it; locked subtopics accrue and stay locked; admin moved to `merit-project-frontend`.
@@ -169,3 +169,10 @@ in the backend (from `feat/patchworks`), Flutter (from `feat/design-system-v3`) 
   Today exam countdown chip, questions/cards progress text). Phase 5 pending.
 - **Checkpoint 5:** Phase 5 Flutter client built (high-yield, memory on exam day and paper pacing Stats cards from one
   `exam-insights` fetch; teaser copy updated). All detour phases have clients; end-to-end pass next.
+- **Checkpoint 6 (end-to-end + fixes):** all phases verified end to end on a scratch DB copy (migrations 44→57, crons,
+  Pro gating, real responses parse in Flutter, Revise round trip, peers, admin). Two fixes from it: far from the exam the
+  first recommendation slot (study-plan question set and Today quiz) goes to the best unlocked subtopic (backend
+  `97717fb`); the retention target follows setting `flashcard_request_retention` instead of a fixed 0.9 (backend
+  `62e8e67`, exposed as `study_plan.desired_retention`, used by Flutter FSRS in `05a3cc5`). Run `recompute-retention`
+  after changing that setting. Remaining: iOS simulator pass of Stats (Pro, Wanderer) and Today; deployment blockers in
+  root `Deployment.md` §13 are deferred until feature work is done.
