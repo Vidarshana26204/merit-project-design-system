@@ -112,7 +112,7 @@ Status, commit ranges and known gaps: `merit-project-flutter/docs/V3-PROGRESS.md
 - **Batches 1–3** (merge heads `6525ec2`, `518a98a`, `7fbe293`): shell, Compete, Today, hub, Learn, quiz + results +
   review, study + notes, Points, Leaderboard, paywall + limit sheet, Me, avatar picker, auth, onboarding (5 steps).
   Trial is 14 days (user ruling, overrides the wireframes' 21).
-- **Round 10** (device test 2026-10-22; board `wireframes-r10.html`, picks in `wireframes/DECISIONS.md`; merges `355af91`,
+- **Round 10** (device test 2026-10-22; merged into `wireframes.html`, picks in `wireframes/DECISIONS.md`; merges `355af91`,
   `6439bf3`): Learn int→double crash (`c7f94c5`), calm points card + inline "Review N mistakes", one `MeritCoin` asset,
   `+94 7…` mobile field, Settings folded into Me, Today subjects 1–2 rows / 3–4 tiles, Compete with podium preview,
   week bars, streak dots and achievements shelf.

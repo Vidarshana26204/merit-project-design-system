@@ -58,7 +58,7 @@ gates, avatar picker and settings, sign in / OTP / forgot password, system state
 
 ## Round 10 (device test, 2026-10-22)
 
-Board: `wireframes-r10.html` (private artifact "Merit Wireframes Round 10").
+Board: merged into `wireframes.html` (round 10 blocks in the Quiz, Shell, Auth, Profile, Home and Compete flows; screen ids `r10-*`). Decisions D21–D24 in `DECISIONS-v3.md`.
 
 - **Quiz results:** A. Points card on the normal surface (yellow only in the coin and bar, Achiever slice violet); "Review
   mistakes" row under it expands the review cards in place; Done is the only bottom action.
@@ -69,4 +69,4 @@ Board: `wireframes-r10.html` (private artifact "Merit Wireframes Round 10").
 - **Today · Your subjects:** 3 → tiles 88, 4 → tiles 68 (space-around), 5+ → 4 most recent, 1–2 → Learn rows.
 - **Compete root:** A with B's podium preview: top-3 card with School / District / Island and a "You" row, then this
   week's points bars, streak week, achievements shelf, Tasks & Quests.
-- **Trial length:** 14 days (overrides the board's 21).
+- **Trial length:** 14 days. The board copy now says 14.
