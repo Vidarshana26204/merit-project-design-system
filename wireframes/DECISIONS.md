@@ -55,3 +55,18 @@ gates, avatar picker and settings, sign in / OTP / forgot password, system state
 - **Timer:** `timer.text / warnText / criticalText` tokens (D19). The pill tokens are deprecated.
 - **Subject tint:** 0.30 light / 0.24 dark into `subject.headerBase`, plus a 0.40 rim in dark (D20). The board's 58% used a
   pastel demo colour; real subject colours (e.g. Economics) failed at 58%. Header text is primary/secondary only.
+
+## Round 10 (device test, 2026-10-22)
+
+Board: `wireframes-r10.html` (private artifact "Merit Wireframes Round 10").
+
+- **Quiz results:** A. Points card on the normal surface (yellow only in the coin and bar, Achiever slice violet); "Review
+  mistakes" row under it expands the review cards in place; Done is the only bottom action.
+- **Points icon:** one `MeritCoin` from the brand coin asset (small cut ≤24dp, full cut above) everywhere points appear.
+- **Mobile number:** B. "+94" prefix; the first digit must be 7, anything else shows "Sri Lankan mobile numbers start
+  with 7".
+- **Me:** Settings page removed; Study / App / Account sections live on Me. Subscription moves into Account.
+- **Today · Your subjects:** 3 → tiles 88, 4 → tiles 68 (space-around), 5+ → 4 most recent, 1–2 → Learn rows.
+- **Compete root:** A with B's podium preview: top-3 card with School / District / Island and a "You" row, then this
+  week's points bars, streak week, achievements shelf, Tasks & Quests.
+- **Trial length:** 14 days (overrides the board's 21).
