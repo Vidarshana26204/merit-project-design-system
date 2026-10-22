@@ -130,10 +130,12 @@ moved here from the retired `merit-project-admin`. Branch per MIGRATION §2: `fe
 - **DS docs 3.6** (`d52f36d`): D21–D27 (one Merit coin, `+94 7` field, Me absorbs Settings, 14-day trial,
   username-only share card, Merit default web preset, Quilt Map landing). Tokens unchanged at 3.5.0. MIGRATION §2
   rewritten for this track.
-- **Board** (`7631caf`, `c6e280b`): round 10 merged into `wireframes.html` (`wireframes-r10.html` removed, picks
-  copied); new **Web** flow (round 11) with Quilt Map hero A/B/C, Quilt Map states + phone path, landing sections
-  A/B, student shell A/B, hub A/B, and approve-only quiz, Compete, Me and Achiever pages. Generator:
-  `wireframes/gen_web_r11.py`. **Waiting on picks.**
+- **Mobile board** (`wireframes.html`, artifact FqXHCEqumFTA2WNjKecHe2): round 10 merged, mobile only.
+- **Web board** (`wireframes-web.html`, artifact https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn): tabs mirror the
+  mobile board plus Landing. Landing opens with **live Quilt Map prototypes** (fractal tree `qm-tree.js`, circuit
+  network and orbit in `qm.js`, data `qm-data.js` = trimmed `/public/explore` snapshot), then hero composition,
+  phone statics and sections. Built by `python3 wireframes/gen_web_board.py > wireframes-web.html` (frames in
+  `gen_web.py`, CSS in `wf-web.css`). **Waiting on picks.**
 - **Backend** `GET /public/explore` merged into `feat/patchworks` (`c9725df`, `e46ba35`): streams → subjects →
   topics (counts, `exam_share_pct`, patchwork) → subtopic titles; in-process 1h cache. `/public/subjects` gains
   `patchwork`.

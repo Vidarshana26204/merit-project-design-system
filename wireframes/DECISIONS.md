@@ -70,3 +70,8 @@ Board: merged into `wireframes.html` (round 10 blocks in the Quiz, Shell, Auth, 
 - **Compete root:** A with B's podium preview: top-3 card with School / District / Island and a "You" row, then this
   week's points bars, streak week, achievements shelf, Tasks & Quests.
 - **Trial length:** 14 days. The board copy now says 14.
+
+## Web board (round 11, 2026-10-22)
+
+Separate board: `wireframes-web.html` (artifact "Merit Web Wireframes"). Picks pending. Landing Quilt Map concepts are
+live prototypes: A fractal tree, B circuit network, C orbit.

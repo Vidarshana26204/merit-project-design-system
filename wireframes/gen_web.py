@@ -128,15 +128,15 @@ hero_a = dk("meritproject.lk", lnav() + f'''
 <div class="w-hero a"><div class="st" style="gap:18px;max-width:440px">{HERO_COPY}
 <div class="rw"><button class="btn l" type="button">Start free</button><button class="btn gh l" type="button">{I("play-circle")}How it works</button></div>
 <div class="rw xs t3" style="gap:14px"><span>62 subjects</span><span>·</span><span>Official past papers since 2012</span><span>·</span><span>Free forever</span></div></div>
-<div class="st" style="align-items:center;gap:10px">{qmap(560, 470)}{STREAMS}</div></div>''')
+<div class="st" style="align-items:center;gap:10px"><div class="qm qm-slot" data-qm="tree" data-static style="max-width:560px"></div>{STREAMS}</div></div>''')
 
 hero_b = dk("meritproject.lk", lnav() + f'''
 <div class="w-hero b"><div class="st" style="align-items:center;text-align:center;gap:14px;max-width:640px;margin:0 auto">{HERO_COPY}{STREAMS}</div>
-<div style="display:grid;place-items:center">{qmap(900, 430)}</div>
+<div style="display:grid;place-items:center"><div class="qm qm-slot" data-qm="tree" data-static style="max-width:820px"></div></div>
 <div class="rw" style="justify-content:center"><button class="btn l" type="button">Start free</button><a class="lnk">Skip the map</a></div></div>''')
 
 hero_c = dk("meritproject.lk", lnav() + f'''
-<div class="w-hero c"><div class="w-cstage">{qmap(1100, 560)}</div>
+<div class="w-hero c"><div class="w-cstage"><div class="qm qm-slot" data-qm="tree" data-static style="max-width:1100px"></div></div>
 <div class="w-ccard">{HERO_COPY}<div class="rw"><button class="btn" type="button">Start free</button><a class="lnk">Skip the map</a></div></div>
 <div class="w-cchips">{STREAMS}</div></div>''')
 
@@ -337,13 +337,3 @@ s_prem = screen("web-premium", "Student portal · Achiever (buy in the app)", [(
     "GET /students/me/subscription · /quiz/daily-limits · /points/summary",
     [f'<div class="wf-cand"><div class="wf-cand-h"><b>1</b><span>Achiever page</span><em>Approve</em></div>{prem}<div class="wf-note"><p>Locked features (Adaptive, Stats cards) and limit dialogs link here.</p></div></div>'])
 
-intro = '''<div class="wf-intro"><h2><span class="tag gap">Round 11</span> Web: landing + student portal</h2>
-<p>Desktop frames (~1180px) for <code>merit-project-frontend</code>. The landing hero is the Quilt Map (D27): pick its composition and the sections under it. The student portal mirrors the app's decisions, so most screens are a single proposal to approve; the shell and the hub have a real layout choice. Admin and contributor are not in this round.</p>
-<div class="wf-legend"><span class="tag energy">Energy mode</span><span class="tag calm">Calm mode</span><span class="tag gap">New / approve</span></div></div>'''
-
-print('<!-- ======================================================= 10 WEB (round 11) -->')
-print('<section class="wf-flow web" data-flow="web" hidden>')
-print(intro)
-for s in (s_hero, s_quilt, s_secs, s_shell, s_hub, s_quiz, s_comp, s_me, s_prem):
-    print(s)
-print('</section>')
