@@ -798,3 +798,147 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   /* Me merged (fix 4) */
   .r10 .set-h { font: 700 11px var(--fb); text-transform: uppercase; letter-spacing: .08em; color: var(--merit-text-tertiary); padding: 0 4px; }
 
+
+/* ===== Round 11: web frames (landing + student portal), scoped to .web ===== */
+.web .wf-vars.desk { grid-template-columns: 1fr; }
+.web .wf-vars.desk .wf-cand-h { max-width: 1180px; }
+.web .wf-vars.desk .wf-note { max-width: 1180px; width: 100%; }
+.web .wdk { width: 100%; max-width: 1180px; border-radius: 14px; background: var(--merit-bg-app); color: var(--merit-text-primary); box-shadow: 0 0 0 1px var(--merit-border-subtle), var(--merit-elevation-e3); overflow: hidden; font: 500 14px/1.45 var(--fb); }
+.web .wdk-bar { display: flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; background: var(--merit-surface-sunken); }
+.web .wdk-bar > i { width: 10px; height: 10px; border-radius: 50%; background: var(--merit-border-default); }
+.web .wdk-bar span { margin-left: 12px; flex: 0 1 420px; height: 22px; border-radius: 999px; background: var(--merit-surface-default); font: 600 11px/22px var(--fb); color: var(--merit-text-tertiary); padding: 0 12px; overflow: hidden; white-space: nowrap; }
+.web .wdk-body { position: relative; overflow: hidden; }
+.web .wmk { font: italic 700 22px/1 var(--fd); letter-spacing: -0.01em; color: var(--merit-text-primary); }
+.web .wmk b { color: var(--merit-action-primary); }
+.web .wmk.sm2 { font-size: 18px; }
+.web .coin { display: inline-block; width: var(--coin, 18px); height: var(--coin, 18px); flex: none; background: url("../assets/v3/brand/merit-coin-small.svg") center / contain no-repeat; }
+.web .coin.lg { background-image: url("../assets/v3/brand/merit-coin.svg"); }
+.web .hchip.cn { gap: 6px; }
+.web .ul { white-space: nowrap; }
+
+/* landing */
+.web .w-lnav { display: flex; align-items: center; gap: 22px; padding: 18px 40px; font: 600 14px var(--fb); }
+.web .w-lnav a { color: var(--merit-text-secondary); text-decoration: none; }
+.web .w-lang { font: 700 12px var(--fb); color: var(--merit-text-tertiary); padding: 6px 10px; border-radius: 999px; background: var(--merit-surface-sunken); }
+.web .w-h1 { margin: 0; font: 600 52px/1.05 var(--fd); letter-spacing: -0.03em; text-wrap: balance; }
+.web .w-lede { margin: 0; font-size: 17px; line-height: 1.55; color: var(--merit-text-secondary); max-width: 52ch; }
+.web .w-h2 { margin: 0; font: 600 34px/1.1 var(--fd); letter-spacing: -0.02em; text-wrap: balance; }
+.web .w-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.web .w-hero { padding: 24px 40px 40px; }
+.web .w-hero.a { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; align-items: center; }
+.web .w-hero.b { display: grid; gap: 16px; }
+.web .w-hero.b .w-h1 { font-size: 46px; }
+.web .w-hero.c { position: relative; padding: 0; height: 600px; }
+.web .w-cstage { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle at 60% 50%, var(--merit-surface-default), var(--merit-bg-app) 70%); }
+.web .w-ccard { position: absolute; left: 40px; bottom: 40px; width: 430px; display: flex; flex-direction: column; gap: 14px; padding: 24px; border-radius: 28px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e2); }
+.web .w-ccard .w-h1 { font-size: 38px; }
+.web .w-cchips { position: absolute; top: 20px; right: 40px; }
+
+/* quilt map */
+.web .qmap { position: relative; max-width: 100%; flex: none; }
+.web .qlines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.web .qc { stroke: var(--merit-decor-connector, var(--merit-border-default)); stroke-width: 2; stroke-dasharray: .6 6; stroke-linecap: round; transition: opacity .2s; }
+.web .qc.on { stroke: var(--merit-action-primary); stroke-width: 2.5; }
+.web .qc.t { stroke-dasharray: .6 5; }
+.web .qc.b { stroke-width: 1.5; stroke-dasharray: .5 4; }
+.web .qc.dim { opacity: .25; }
+.web .qmark { position: absolute; translate: -50% -50%; width: calc(var(--m) + 28px); aspect-ratio: 1; border-radius: 50%; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e2); display: grid; place-items: center; }
+.web .qmark img { width: var(--m); }
+.web .qn { position: absolute; translate: -50% -32px; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 0; padding: 0; background: none; color: var(--merit-text-primary); font: 700 12px/1.2 var(--fb); cursor: pointer; transition: opacity .2s; }
+.web .qn .tile { box-shadow: var(--merit-elevation-e1); }
+.web .qn span { max-width: 96px; text-align: center; padding: 2px 6px; border-radius: 999px; background: color-mix(in srgb, var(--merit-bg-app) 80%, transparent); }
+.web .qn.t { translate: -50% -25px; font-size: 11px; }
+.web .qn.sel .tile { box-shadow: 0 0 0 3px var(--merit-bg-app), 0 0 0 5px var(--merit-action-primary), var(--merit-elevation-e2); }
+.web .qn.dim { opacity: .3; }
+.web .qb { position: absolute; translate: -50% -50%; display: flex; align-items: center; gap: 5px; font: 600 10.5px var(--fb); white-space: nowrap; }
+.web .qb i { width: 14px; height: 14px; border-radius: 50%; background: var(--merit-sage-300); box-shadow: 0 0 0 2px var(--merit-bg-app); flex: none; }
+.web .qtip, .web .qpanel { position: absolute; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 16px; background: var(--merit-surface-inverse); color: var(--merit-text-on-inverse); font-size: 12px; box-shadow: var(--merit-elevation-e2); white-space: nowrap; }
+.web .qtip b { font: 600 14px var(--fd); }
+.web .qtip .ok { color: var(--merit-butter-300); font-weight: 700; }
+.web .qpanel { position: relative; width: 340px; white-space: normal; gap: 6px; padding: 14px; background: var(--merit-surface-default); color: var(--merit-text-primary); }
+.web .qcoin { position: absolute; translate: -50% -50%; display: flex; align-items: center; gap: 4px; --coin: 26px; }
+.web .qcoin b { font: 700 13px var(--fd); color: var(--merit-orange-700); background: var(--merit-butter-100); padding: 2px 7px; border-radius: 999px; translate: 0 -14px; }
+.web .qpath { display: flex; flex-direction: column; gap: 10px; position: relative; }
+.web .qpath::before { content: ""; position: absolute; left: 26px; top: 20px; bottom: 20px; border-left: 2px dotted var(--merit-border-default); }
+.web .qp { position: relative; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 0; }
+.web .qp.on { font-weight: 700; }
+.web .qsub { margin-left: 40px; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 18px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.web .qsub .rw.on { background: var(--merit-surface-selected); border-radius: 12px; margin: 0 -6px; padding: 4px 6px; }
+
+/* landing sections */
+.web .w-scroll { display: flex; flex-direction: column; }
+.web .w-sec { padding: 40px; }
+.web .w-sec + .w-sec { padding-top: 8px; }
+.web .w-prog { display: grid; grid-template-columns: 1fr 3fr; gap: 32px; align-items: start; }
+.web .w-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.web .w-it { display: flex; flex-direction: column; gap: 8px; }
+.web .w-plans { display: grid; grid-template-columns: repeat(2, minmax(0, 340px)); gap: 20px; justify-content: center; margin-top: 24px; }
+.web .w-plan { gap: 10px; padding: 24px; }
+.web .w-plan.pro { background: var(--merit-surface-feature); color: var(--merit-text-on-feature); }
+.web .w-plan.pro .badge.pro { background: var(--merit-butter-300); color: var(--merit-ink-900); }
+.web .w-price { font: 700 36px/1.1 var(--fd); font-variant-numeric: tabular-nums; }
+.web .w-price small { font-size: 15px; font-weight: 600; opacity: .7; }
+.web .w-ul { margin: 6px 0 10px; padding-left: 18px; display: grid; gap: 6px; font-size: 13.5px; }
+.web .w-band { border-radius: 999px; padding: 28px 40px; }
+.web .w-faq { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; }
+.web .w-foot { display: flex; align-items: center; gap: 20px; padding: 24px 40px; border-top: 1px solid var(--merit-border-subtle); font-size: 13px; }
+.web .w-foot a { color: var(--merit-text-secondary); }
+.web .w-store { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 10px; background: var(--merit-surface-inverse); color: var(--merit-text-on-inverse); font: 700 12px var(--fb); }
+.web .w-story { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: center; }
+.web .w-recipe { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; position: relative; }
+.web .w-step { display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: 24px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.web .w-numbers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.web .w-numbers div { display: flex; flex-direction: column; padding: 18px; border-radius: 24px; background: var(--merit-surface-sunken); }
+.web .w-numbers b { font: 700 40px/1 var(--fd); font-variant-numeric: tabular-nums; }
+.web .w-numbers span { color: var(--merit-text-secondary); font-size: 13px; }
+
+/* student shell */
+.web .w-app { display: grid; grid-template-columns: 220px 1fr; min-height: 640px; background: var(--merit-bg-app); }
+.web .w-app.top, .web .w-app.focus { grid-template-columns: 1fr; }
+.web .w-side { margin: 12px; padding: 18px 12px; border-radius: 24px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); display: flex; flex-direction: column; gap: 22px; }
+.web .w-side .wmk { padding-left: 10px; }
+.web .w-side nav { display: flex; flex-direction: column; gap: 4px; }
+.web .w-side nav a, .web .w-top nav a { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; border-radius: 999px; font: 700 14px var(--fb); color: var(--merit-text-secondary); }
+.web .w-side nav a .i, .web .w-top nav a .i { font-size: 20px; }
+.web .w-side nav a.on, .web .w-top nav a.on { background: var(--merit-surface-selected); color: var(--merit-text-primary); }
+.web .w-side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; padding: 0 10px; }
+.web .w-col { display: flex; flex-direction: column; min-width: 0; }
+.web .w-head { display: flex; align-items: center; gap: 10px; padding: 20px 24px 8px; }
+.web .w-search { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border-radius: 999px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); color: var(--merit-text-tertiary); font-size: 13px; width: 240px; }
+.web .w-search kbd { margin-left: auto; font: 700 10px var(--fb); padding: 2px 6px; border-radius: 6px; background: var(--merit-surface-sunken); }
+.web .w-main { padding: 12px 24px 28px; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.web .w-main.narrow { max-width: 900px; margin: 0 auto; width: 100%; }
+.web .w-top { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.web .w-top nav { display: flex; gap: 4px; margin-left: 24px; }
+.web .w-2col { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.web .w-2col.wide { grid-template-columns: minmax(0, 1fr) 320px; }
+.web .w-2col.tree { grid-template-columns: 240px minmax(0, 1fr); }
+.web .w-2col.even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.web .w-2col.me { grid-template-columns: 320px minmax(0, 1fr); }
+.web .w-rail { display: flex; flex-direction: column; gap: 14px; }
+.web .w-3up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.web .w-subj3 { display: flex; justify-content: space-around; }
+.web .w-subj3 .tile { --s: 64px !important; }
+.web .w-hubhero { --hdr: color-mix(in srgb, var(--subj) var(--subj-mix), var(--subj-base)); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; padding: 22px 24px 40px; border-radius: 28px; background: var(--hdr); position: relative; margin-bottom: 8px; }
+.web .w-hubhero .ftabs { position: absolute; left: 24px; right: auto; bottom: -24px; width: 520px; margin: 0; }
+.web .w-quilt { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; padding-top: 16px; }
+.web .w-panel { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 28px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e2); }
+.web .w-hubbar { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 20px; background: color-mix(in srgb, var(--subj) var(--subj-mix), var(--subj-base)); }
+.web .w-tree { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 20px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.web .w-tn { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 12px; font: 600 13px var(--fb); }
+.web .w-tn.on { background: var(--merit-surface-selected); }
+.web .w-subgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.web .w-focus { width: 100%; max-width: 720px; margin: 0 auto; padding: 28px 24px; display: flex; flex-direction: column; gap: 18px; }
+.web .w-ftop { display: flex; align-items: center; gap: 8px; }
+.web .w-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; height: 110px; align-items: end; }
+.web .w-bars div { display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.web .w-bars i { display: block; width: 100%; height: max(4px, var(--h)); border-radius: 8px 8px 4px 4px; background: var(--merit-butter-300); }
+.web .w-bars i.t { background: var(--merit-action-primary); }
+.web .w-bars span { font: 700 11px var(--fb); color: var(--merit-text-tertiary); }
+.web .w-qr { width: 150px; aspect-ratio: 1; display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; padding: 10px; border-radius: 16px; background: var(--merit-white); box-shadow: inset 0 0 0 1.5px var(--merit-border-subtle); }
+.web .w-qr i { background: transparent; border-radius: 2px; }
+.web .w-qr i.b { background: var(--merit-ink-900); }
+.web .w-search { white-space: nowrap; overflow: hidden; }
+.web .w-plan .badge { align-self: flex-start; }
+.web .qn.t.dim span { display: none; }
+.web .pbar .ghost { background: repeating-linear-gradient(-45deg, var(--merit-violet-300) 0 4px, transparent 4px 8px); box-shadow: inset 0 0 0 1.5px var(--merit-violet-300); }
