@@ -1,8 +1,12 @@
-# Handoff — 2026-10-22
+# Handoff — 2026-10-23
 
 Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
 and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
 **Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
+**Resume point (2026-10-23):** waiting on the user's picks on the web board
+(https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn): Quilt Map concept (A tree / B network / C orbit), hero
+composition, landing sections, student shell, subject hub; approve the rest. Read them with ArtifactData
+`list picks` on that URL, then dispatch Agent L (landing + Quilt Map) and Agent S (student portal).
 
 ## Where things stand
 
@@ -144,8 +148,35 @@ moved here from the retired `merit-project-admin`. Branch per MIGRATION §2: `fe
   `components/ui`, regular icons, `components/merit/*`, React Query, template cleanup, guard + drift + vitest.
   The landing itself is still v2 (remapped colours) until its rebuild; brand marks in `public/brand` are still v2.
 
-**Next:** after picks, Agent L (landing + Quilt Map) and Agent S (student portal) in parallel worktrees from
-`feat/design-system-v3`, then the admin look-over. Plan: `~/.claude/plans/takeover-form-handoff-md-plan-compiled-deer.md`.
+**Next:** after picks, in fresh worktrees from frontend `feat/design-system-v3` (`bda6f65`):
+1. **Agent L:** landing rebuild + the picked Quilt Map in `features/landing/quilt-map/`. Port the layout maths from
+   `wireframes/qm.js` / `qm-tree.js` as pure tested functions; React + SVG + `motion`; data from
+   `/public/explore` (server fetch, revalidate 1h); static SVG under 640px; reduced motion = instant.
+2. **Agent S:** student portal per the board (routes and APIs in `MIGRATION-v3.md` §2.6a).
+3. Then the admin look-over (palette classes → tokens, compact density, light/dark pass in Chrome).
+
+**State to know:**
+- Branches (all local, unpushed):
+  - DS `feat/design-system-v3` `eb7caa6`;
+  - backend `feat/patchworks` `e46ba35` (explore merged; `feat/web-explore` can be deleted);
+  - frontend `feat/design-system-v3` `bda6f65` (`dev` stays `609a30b`);
+  - Flutter `feat/design-system-v3` `be0a11b`.
+  - Temporary worktrees are removed.
+- Local stack:
+  - API: `cd merit-project-backend && go run ./cmd/api` (:8085, DB `meritproject` at migration 57);
+  - frontend: `pnpm dev` (:3001);
+  - boards: `python3 -m http.server` in the DS dir, then `/wireframes.html` and `/wireframes-web.html`.
+- Board sources:
+  - mobile `wireframes.html` (+ `wf.css`);
+  - web `python3 wireframes/gen_web_board.py > wireframes-web.html` (+ `wf-web.css`, `qm*.js`). Refresh
+    `qm-data.js` from `/public/explore` if the syllabus changes.
+- Republish:
+  - web board with the same file path and the files map (assets, `wireframes/*`, `build/css/merit-tokens.css`);
+  - mobile board to FqXHCEqumFTA2WNjKecHe2.
+- **Frontend foundations still to do:**
+  - `public/brand` marks are still v2;
+  - a non-Merit preset flashes on load;
+  - landing is still v2 markup until the rebuild.
 
 **Open decisions for this track:**
 - Resolved: `components/ui` may be edited (tweakcn picker kept, Merit default); web gets a wireframe round;
