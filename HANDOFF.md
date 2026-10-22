@@ -1,19 +1,18 @@
-# Handoff — 2026-10-21
+# Handoff — 2026-10-22
 
-Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks are done, the mobile wireframes are decided,
-the wireframe rulings shipped as 3.5.0 (D18–D20), and the backend now serves everything the picked screens need.
-**Next: the remaining Flutter screens** (batches 2-3, after the exam-intelligence detour below). The landing page
-comes after.
+Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
+and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
+**Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
 
 ## Where things stand
 
 | Repo | Branch | State |
 |---|---|---|
 | `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
-| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`); detour merged in (ff to `05a3cc5`); batches 2-3 merged (head `a2a6c1d`) | Setup `920b5bb`, then Phases 0-2 (data layer, shared and new widgets) and Phase 3 batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root) done, `ab1a91b..6525ec2`. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** All v3 batches done; device QA next |
-| `merit-project-frontend` (admin) | `dev` (local, ff from `feat/exam-intelligence` at `609a30b`; ahead of `origin/dev`) | Admin lives here now (`app/admin/*`, `features/admin/*`): exam-intelligence settings form and per-subject Exam weights page. `merit-project-admin` is retired; its branch is abandoned. Not pushed |
+| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`); detour merged in (ff to `05a3cc5`); batches 2-3 merged; round 10 merged (head `be0a11b`) | All v3 screens done and device-tested on Android (round 10 fixes merged). Analyze clean, 219 tests, token guard 118/10/3. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** |
+| `merit-project-frontend` (admin) | `dev` (local `609a30b`, 2 commits ahead of `origin/dev`) | Landing (`app/(landing)`), admin (`app/admin`), student (`app/student`) and contributor (`app/contributor`) on one origin. Admin has the exam-intelligence settings and Exam weights page. **Still on DS v2.1.0 tokens.** `merit-project-admin` is retired. Not pushed |
 | `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
-| `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed; local now ff to `62e8e67` with the detour, ahead of origin) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
+| `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed; local now `9e16053` with the detour + batch 2 API additions, ahead of origin) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
 
 None of the branches is merged. The backend changes only deploy once `feat/patchworks` lands on `main`.
 
@@ -106,32 +105,53 @@ patchwork numbers need `migrate force 46` before migrating up.
   decide on history before v3 ships (`assets/fonts/README.md`).
 - **Quests and structured questions** have no backend yet. Quests ships as a coming-soon tab.
 
-## Next: Flutter screens
+## Flutter v3 (done)
 
-Status and commit ranges: `merit-project-flutter/docs/V3-PROGRESS.md`.
+Status, commit ranges and known gaps: `merit-project-flutter/docs/V3-PROGRESS.md`.
 
-**Done (Flutter, branch `feat/design-system-v3`):** Phases 0-2 (data layer, shared widgets, new widgets) and Phase 3
-batch 1 (shell, Compete, Tasks & Quests, Achievements, Today, subject hub, Learn root + Add a subject). The client
-bugs listed in `BACKEND-GAPS.md` were fixed on dev before v3.
+- **Batches 1–3** (merge heads `6525ec2`, `518a98a`, `7fbe293`): shell, Compete, Today, hub, Learn, quiz + results +
+  review, study + notes, Points, Leaderboard, paywall + limit sheet, Me, avatar picker, auth, onboarding (5 steps).
+  Trial is 14 days (user ruling, overrides the wireframes' 21).
+- **Round 10** (device test 2026-10-22; board `wireframes-r10.html`, picks in `wireframes/DECISIONS.md`; merges `355af91`,
+  `6439bf3`): Learn int→double crash (`c7f94c5`), calm points card + inline "Review N mistakes", one `MeritCoin` asset,
+  `+94 7…` mobile field, Settings folded into Me, Today subjects 1–2 rows / 3–4 tiles, Compete with podium preview,
+  week bars, streak dots and achievements shelf.
+- **Backend gaps found** (not built): change-password endpoint, `avatar_id` in the user payload, @handle, per-day
+  activity (streak dots are inferred), weekly points total (sums newest 300 rows), rank gap beyond the top 50, rank
+  movement, earned-points context on `DAILY_LIMIT_REACHED`, O/L in onboarding, District/School as lookups.
+- **Left:** iOS simulator pass; push `feat/design-system-v3` when the release is ready.
 
-**Remaining:**
-1. Batch 2 done (merged `518a98a`): quiz taking (countdown + auto-submit, pause dialog), results + share sheet (username +
-   score), review route, study session with `MeritRatingButtons` + wash, notes reader. Backend gaps found (session
-   detail omits `selected_option`; no note bookmark API; bonus/multiplier constants not in the quiz response) are listed
-   in `V3-PROGRESS.md` known simplifications.
-2. Batch 3 done (merge `7fbe293`): Points, Leaderboard, paywall + limit sheet + Welcome Achiever, Me, Settings, Subject
-   languages, avatar picker, auth (register, OTP, forgot stepper, splash), onboarding (5 steps kept). Trial is 14 days
-   (user ruling, overrides the wireframes' 21).
-3. Optionally push `feat/design-system-v3` in the Flutter repo; lower the guard baselines in
-   `tool/check_design_tokens.dart` as old uses fall.
+## Next: web frontend (`merit-project-frontend`)
 
-## Then: landing page
+One Next.js 16 app, one origin: landing `/`, `/admin`, `/student`, `/contributor` (`lib/mode.ts`, `proxy.ts`). Admin
+moved here from the retired `merit-project-admin`. Branch per MIGRATION §2: `feat/design-system-v3` from local `dev`.
 
-- **Spec:** reference site §29 (landing specimen): eyebrow, headline with one underlined word, one line of body, pill CTA,
-  programme grid, CTA band. Same tokens as the product, General Sans (self-hosted), patchwork tiles as hero art.
-- **Code:** `merit-project-frontend/app/(landing)` + `features/landing` (`MIGRATION-v3.md` §2.6). The frontend is the
-  canonical landing; the backend templ landing is gone (§3).
-- **Inputs to gather:** final copy (EN, and SI/TA if it ships trilingual), pricing (Wanderer vs Achiever), app store links.
+**Current state (2026-10-22):**
+- Tokens are DS **v2.1.0** (`app/merit-tokens.css`, `.design-tokens-ref` `fdf5b66`). 49 files use `shadow-brutal-*`.
+  Fonts are Clash Display + School Times + Plus Jakarta; `lib/icons.tsx` defaults Phosphor to `bold`.
+- Leftover template routes from shadcn-admin in `app/(dashboard)` (mail, kanban, chats, pricing…) and `app/(auth)`
+  (`sign-in-1/2`, `sign-up-1/2`, `reset-password-1/2`). Decide what to delete.
+- Student portal pages: home, subjects, subject detail, notes reader, flashcards, quiz, analytics, points, premium,
+  profile, sign-in/up. They predate the mobile v3 decisions and the detour APIs.
+
+**Order of work:**
+1. **Foundations (MIGRATION §2.1–2.5a):** v3 tokens, General Sans via `next/font/local`, shadcn variable re-map
+   (SKILL.md §9a), `shadow-elev-*` codemod, guard update, icon weight `regular`, `components/merit/patchwork.tsx`.
+2. **Landing (§2.6):** reference site §29 specimen: hero with patchwork art, programme grid, CTA band; privacy and terms
+   pages restyled. Inputs still needed: final copy (EN; SI/TA?), pricing, app store links.
+3. **Admin:** visual pass in compact density, light and dark; patchwork `mono` in tables; keep the exam-intelligence
+   pages.
+4. **Student portal:** align with the mobile v3 decisions (Today plan, subject hub + Stats with the detour cards,
+   Learn quilt, quiz results with points card, Compete, Me) using the same APIs. Wireframe first if the web layout
+   differs from mobile.
+
+**Open decisions for this track:**
+- **`components/ui` rule vs MIGRATION §2.3.** The repo rule says shadcn `components/ui` is not modified, but §2.3 restyles
+  `button.tsx` and `card.tsx`. Either allow those edits, or do it through the CSS variable re-map and wrapper components
+  in `components/merit/`.
+- Web wireframes for landing and student portal: reuse the mobile board decisions, or a new board round.
+- Whether the contributor portal is in scope for this pass.
+- Prices (Rs 4,990/yr and Rs 599/mo?) for the landing and the student premium page.
 
 ## How to work here
 
