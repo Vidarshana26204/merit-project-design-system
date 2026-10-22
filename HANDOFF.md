@@ -126,31 +126,28 @@ Status, commit ranges and known gaps: `merit-project-flutter/docs/V3-PROGRESS.md
 One Next.js 16 app, one origin: landing `/`, `/admin`, `/student`, `/contributor` (`lib/mode.ts`, `proxy.ts`). Admin
 moved here from the retired `merit-project-admin`. Branch per MIGRATION §2: `feat/design-system-v3` from local `dev`.
 
-**Current state (2026-10-22):**
-- Tokens are DS **v2.1.0** (`app/merit-tokens.css`, `.design-tokens-ref` `fdf5b66`). 49 files use `shadow-brutal-*`.
-  Fonts are Clash Display + School Times + Plus Jakarta; `lib/icons.tsx` defaults Phosphor to `bold`.
-- Leftover template routes from shadcn-admin in `app/(dashboard)` (mail, kanban, chats, pricing…) and `app/(auth)`
-  (`sign-in-1/2`, `sign-up-1/2`, `reset-password-1/2`). Decide what to delete.
-- Student portal pages: home, subjects, subject detail, notes reader, flashcards, quiz, analytics, points, premium,
-  profile, sign-in/up. They predate the mobile v3 decisions and the detour APIs.
+**Progress (2026-10-22, plan approved):**
+- **DS docs 3.6** (`d52f36d`): D21–D27 (one Merit coin, `+94 7` field, Me absorbs Settings, 14-day trial,
+  username-only share card, Merit default web preset, Quilt Map landing). Tokens unchanged at 3.5.0. MIGRATION §2
+  rewritten for this track.
+- **Board** (`7631caf`, `c6e280b`): round 10 merged into `wireframes.html` (`wireframes-r10.html` removed, picks
+  copied); new **Web** flow (round 11) with Quilt Map hero A/B/C, Quilt Map states + phone path, landing sections
+  A/B, student shell A/B, hub A/B, and approve-only quiz, Compete, Me and Achiever pages. Generator:
+  `wireframes/gen_web_r11.py`. **Waiting on picks.**
+- **Backend** `GET /public/explore` merged into `feat/patchworks` (`c9725df`, `e46ba35`): streams → subjects →
+  topics (counts, `exam_share_pct`, patchwork) → subtopic titles; in-process 1h cache. `/public/subjects` gains
+  `patchwork`.
+- **Frontend foundations** on `feat/design-system-v3` (`0e50b09..bda6f65`): v3 tokens + shadcn remap, Merit
+  preset (default, `merit-color-theme`), next-themes on landing, General Sans, `shadow-elev` codemod, borderless
+  `components/ui`, regular icons, `components/merit/*`, React Query, template cleanup, guard + drift + vitest.
+  The landing itself is still v2 (remapped colours) until its rebuild; brand marks in `public/brand` are still v2.
 
-**Order of work:**
-1. **Foundations (MIGRATION §2.1–2.5a):** v3 tokens, General Sans via `next/font/local`, shadcn variable re-map
-   (SKILL.md §9a), `shadow-elev-*` codemod, guard update, icon weight `regular`, `components/merit/patchwork.tsx`.
-2. **Landing (§2.6):** reference site §29 specimen: hero with patchwork art, programme grid, CTA band; privacy and terms
-   pages restyled. Inputs still needed: final copy (EN; SI/TA?), pricing, app store links.
-3. **Admin:** visual pass in compact density, light and dark; patchwork `mono` in tables; keep the exam-intelligence
-   pages.
-4. **Student portal:** align with the mobile v3 decisions (Today plan, subject hub + Stats with the detour cards,
-   Learn quilt, quiz results with points card, Compete, Me) using the same APIs. Wireframe first if the web layout
-   differs from mobile.
+**Next:** after picks, Agent L (landing + Quilt Map) and Agent S (student portal) in parallel worktrees from
+`feat/design-system-v3`, then the admin look-over. Plan: `~/.claude/plans/takeover-form-handoff-md-plan-compiled-deer.md`.
 
 **Open decisions for this track:**
-- **`components/ui` rule vs MIGRATION §2.3.** The repo rule says shadcn `components/ui` is not modified, but §2.3 restyles
-  `button.tsx` and `card.tsx`. Either allow those edits, or do it through the CSS variable re-map and wrapper components
-  in `components/merit/`.
-- Web wireframes for landing and student portal: reuse the mobile board decisions, or a new board round.
-- Whether the contributor portal is in scope for this pass.
+- Resolved: `components/ui` may be edited (tweakcn picker kept, Merit default); web gets a wireframe round;
+  contributor portal is out of this pass; web premium sells but purchase happens in the app; landing stays EN/SI/TA.
 - Prices (Rs 4,990/yr and Rs 599/mo?) for the landing and the student premium page.
 
 ## How to work here
