@@ -200,57 +200,80 @@ fallbacks shown on the board until the endpoints land.
 
 ## 2. Web frontend (`merit-project-frontend`)
 
-**Branch:** `feat/design-system-v3` from `dev`.
+**Branch:** `feat/design-system-v3` from `dev`. One Next.js app on one origin: landing `/`, `/admin`, `/student`,
+`/contributor` (`lib/mode.ts`). This pass covers the foundations, the landing, the student portal and an admin
+look-over; the contributor portal only gets what the shared components bring. Web layouts are picked on the
+wireframe board's **Web** flow before screens are built.
 
-### 2.1 Tokens
-1. Copy `build/css/merit-tokens.css` to `app/merit-tokens.css` exactly as generated.
-2. Bump `.design-tokens-ref` to the v3 DS commit.
-3. Self-host General Sans in `app/fonts/` with `next/font/local`, as `--font-merit-display`. Drop
-   Clash Display and drop School Times from `(landing)/layout.tsx`.
+### 2.1 Tokens and fonts
+1. Copy `build/css/merit-tokens.css` to `app/merit-tokens.css` exactly as generated; bump `.design-tokens-ref`.
+   `pnpm check:drift` compares it with a sibling DS checkout.
+2. General Sans (500/600/700 + italics) via `next/font/local` as `--font-merit-display`. Drop Clash Display,
+   School Times and the template's Geist fonts. The repo is private, so the font files may be committed.
 
-### 2.2 `app/globals.css`
-- Re-map the shadcn variables per SKILL.md §9a. Note that `--primary-foreground` becomes **ink**.
-- Replace `--shadow-brutal-1…5` with `--shadow-elev-1…3` mapped to `--merit-elevation-e1…e3`.
-  Codemod the 49 files: `shadow-brutal-1/2/3` becomes `shadow-elev-1`, `shadow-brutal-4` becomes
-  `shadow-elev-2`, and `shadow-brutal-5` becomes `shadow-elev-3`.
-- Remove the `--merit-shadow-color`-based utilities.
+### 2.2 Theme (D26)
+- Re-map the shadcn variables in `app/globals.css` per SKILL §9a (`--primary-foreground` is **ink**,
+  `--secondary` is `surface.sunken`).
+- Replace `shadow-brutal-1…5` with `shadow-elev-1…3` (`--merit-elevation-e1…e3`). Codemod: brutal-1/2/3 → elev-1,
+  `hover:shadow-brutal-2` → `hover:shadow-elev-2`.
+- Keep the tweakcn theme picker. **Merit** is the first preset and the default; applying it clears inline
+  overrides. The choice persists in `merit-color-theme`.
+- Light/dark is `next-themes` (`.dark`) everywhere, the landing included.
 
 ### 2.3 Components
-- `components/ui/button.tsx`:
-  - Remove `border-2` and the `shadow-brutal-2` / `active:shadow-none` press.
-  - Use `shadow-elev-1` with `active:translate-y-px active:shadow-none`.
-  - The `outline` variant becomes an inset 1.5 `border-default`.
-  - Add a `strong` variant.
-- `components/ui/card.tsx`: remove `border-2` and use `rounded-[var(--merit-radius-xl)] shadow-elev-1`.
-- Inputs, badges, tabs and sidebar follow SKILL.md §5 and §9b.
+- `components/ui/*` may be edited. Button: no `border-2`, `shadow-elev-1`, press `active:translate-y-px
+  active:shadow-none`, `outline` = inset 1.5 `border-default`, new `strong` variant. Card: no `border-2`,
+  `rounded-[var(--merit-radius-xl)] shadow-elev-1`. Inputs, badges, tabs and sidebar per SKILL §5 / §9b.
+- New `components/merit/`: `patchwork.tsx` (`<Patchwork variant="tile|mono">`, `<PatchworkWash>`, category
+  fallback), `merit-coin.tsx` (D21), `mastery-ring.tsx`, `stat-chip.tsx`.
+- Data: `@tanstack/react-query` in the student and admin layouts; new screens use query hooks.
+- Remove the shadcn-admin template leftovers (`app/(dashboard)`, the numbered auth pages, template `features/*`)
+  and build Cmd+K search from the current mode's sidebar.
 
-### 2.4 Guard (`scripts/check-design-tokens.mjs`)
-- **Forbid** `shadow-brutal-*` (a v2 regression).
-- **Allow** `shadow-elev-*`, and keep forbidding Tailwind's `shadow-sm…2xl`.
-- **Forbid** `border-2` on `Card`.
+### 2.4 Guard (`scripts/check-design-tokens.mjs`, `pnpm check:tokens`, pre-push)
+- **Forbid** `shadow-brutal-*` and `border-2` on `Card`; keep forbidding Tailwind's `shadow-sm…2xl`.
+- Raw palette classes are banned in `features/student` and `features/landing` as well as the existing paths.
 - Keep the raw-hex, icon-import, `/admin` link and `backdrop-blur` guards.
 
 ### 2.5 Icons
-In `lib/icons.tsx`, change the default weight from `bold` to `regular`. Audit the 4 explicit `fill`
-uses, which stay as they are.
+`lib/icons.tsx` default weight `bold` → `regular`; Fill for active states. Points use the Merit coin, never an icon.
 
 ### 2.5a Patchworks
-Add `components/merit/patchwork.tsx` (`<Patchwork patchwork={…} variant="tile|mono" />`) and `<PatchworkWash>`:
-- `tile` renders as `<img>` with `alt` = the node title (the 4:1 `row` is retired in DS 3.3).
-- `wash` renders as an absolutely positioned `<span>` (top-right, `aria-hidden`) using the SVG as a CSS `mask` over `background: washInk.light|dark`, opacity 0.26 / 0.16 (see `.pwwash` in `merit-ds.css`).
-- `mono` renders as a CSS mask over `currentColor`.
-
-The fallback and the placement rules match Flutter §1.4a: subject, topic and subtopic cards and
-lists, note and flashcard tiles (wash), and breadcrumbs (mono). Admin tables use `mono` only.
+- `tile` renders as `<img>` with `alt` = the node title.
+- `wash` is an absolutely positioned `<span>` (top-right, `aria-hidden`) with the SVG as a CSS `mask` over
+  `washInk.light|dark` at opacity 0.26 / 0.16 (see `.pwwash` in `merit-ds.css`).
+- `mono` is a CSS mask over `currentColor`.
+- Placement follows Flutter §1.4a. Admin tables use `mono` only, 20px, in name cells (SKILL §9b).
 
 ### 2.6 Landing (`app/(landing)`, `features/landing`)
-Rebuild the hero, programme grid and CTA band from the landing specimen (reference site §29).
+- Sections: nav, **Quilt Map hero** (D27), programme grid (Paper / Mastery / Adaptive), pricing (Wanderer vs
+  Achiever, 14-day trial, buy in the app), FAQ, CTA band, footer. Port `landing.css` to Tailwind + tokens.
+- Stays trilingual (`?lang=en|si|ta`); SI/TA typography rules from SKILL §3 apply.
+- **Quilt Map** (`features/landing/quilt-map/`): data from backend `GET /public/explore` (streams → subjects →
+  topics with counts, exam share and patchworks), fetched on the server and revalidated hourly. A pure polar
+  layout (`layout.ts`, unit tested) places subjects on ring 1, the selected subject's topics on an arc at ring 2
+  and subtopic beads at ring 3. Connectors are an SVG layer of dotted paths (`decor.connector`); nodes are HTML
+  buttons with patchwork images. The camera is a CSS transform animated with `motion`. An idle coin tour runs
+  until the first interaction and pauses offscreen. Keyboard: arrows move, Enter expands, Esc goes back; a
+  "Skip map" link; reduced motion renders the static end state; phones get a vertical learning path. A topic
+  leads to `/student/sign-up?subject=<id>`.
+
+### 2.6a Student portal (`app/student`, `features/student`)
+Mirrors the app's v3 decisions using the same APIs:
+- **Shell:** sidebar Today · Learn · Compete · Me; bottom tab bar below 768px; coin and streak header chips.
+- **Today** (`/today/plan`, exam countdown, your subjects rule, cards due) · **Learn** (enrolled subjects quilt,
+  add subject) · **Subject hub** (`?tab=learn|practise|stats`; Stats with prediction, insights, exam insights and
+  peers, Achiever-locked) · subtopic panel (Read → Remember → Prove) · notes reader · cards (FSRS, retention from
+  the study plan) · quiz focus layout, results (points card + inline review) and review · **Compete** (podium
+  preview, week bars, streak dots, achievements, tasks; leaderboard, points, achievements, tasks pages) ·
+  **Me** (D23 sections, avatar picker) · **Premium** (plans and trial; buying happens in the app) · web onboarding
+  (5 steps, `?subject=` preselect, D22 mobile field).
+- Error codes: `PREMIUM_REQUIRED` → paywall, `DAILY_LIMIT_REACHED` → limit sheet.
 
 ### 2.7 Verify
-- `pnpm lint && pnpm build`.
-- The guard script passes.
-- The drift check passes.
-- Visual pass of the admin pages in compact density, light and dark.
+- `pnpm lint && pnpm build && pnpm check:tokens && pnpm test`, plus `pnpm check:drift`.
+- Browser pass: landing (mouse, keyboard only, reduced motion, 390px, EN/SI/TA, light/dark), the student
+  flows end to end, and every admin page in compact density, light and dark.
 
 ---
 

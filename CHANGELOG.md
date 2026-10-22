@@ -5,6 +5,25 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## Docs 3.6 — 2026-10-22 (tokens unchanged at 3.5.0)
+
+Rulings from the Flutter build and the round 10 device test, plus the web track (D21–D27). No token changes,
+so the token version stays 3.5.0; the reference site shows doc v3.6.
+
+### Changed
+- **D21** one Merit coin asset family for every points mark (SKILL §5, §8, §11; reference site chips,
+  leaderboard and reward cards now use `merit-coin*.svg`). Phosphor `coins` is no longer used for points.
+- **D22** Sri Lankan mobile field: fixed `+94`, first digit 7 (SKILL §5).
+- **D23** Me absorbs Settings; **D24** 14-day Achiever trial; **D25** share card shows username + score.
+- **D26** web theming: Merit is the default tweakcn preset (SKILL §9a); student web shell and admin patchwork
+  rule (SKILL §9b).
+- **D27** landing hero becomes the Quilt Map (composition picked on the web wireframe round).
+- SKILL §5: results points card + inline review, Today subjects layout, Compete root, Me sections.
+- Wireframe board: round 10 merged into `wireframes.html` (`wireframes-r10.html` removed); trial copy 14 days;
+  new Web round.
+- `MIGRATION-v3.md` §2 rewritten for the web track.
+- Reference site footer version fixed (it still said v3.4.0).
+
 ## 3.5.0 — 2026-10-21
 
 Rulings from the mobile wireframe review (D18–D20). Adds tokens; no renames or removals.

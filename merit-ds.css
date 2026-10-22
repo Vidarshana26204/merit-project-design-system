@@ -486,3 +486,9 @@ html:root .tone .pwwash { background: var(--tone-wash); opacity: .30; }
 .pwpatterns figure { margin: 0; text-align: center; font-size: 12px; color: var(--merit-text-secondary); }
 .pwpatterns img { width: 100%; max-width: 72px; display: block; margin: 0 auto 4px; }
 .pwmono { display: inline-block; width: 28px; height: 28px; background: currentColor; color: var(--merit-text-primary); -webkit-mask: var(--pw) center / contain no-repeat; mask: var(--pw) center / contain no-repeat; }
+
+/* Merit coin (D21): one asset family; small cut ≤24px, full above, dark cut on dark surfaces */
+.coin { display: inline-block; width: var(--coin, 18px); height: var(--coin, 18px); flex: none; vertical-align: -3px; background: url("assets/v3/brand/merit-coin-small.svg") center / contain no-repeat; }
+.coin.lg { background-image: url("assets/v3/brand/merit-coin.svg"); }
+.dark .coin, [data-theme="dark"] .coin { background-image: url("assets/v3/brand/merit-coin-dark.svg"); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .coin { background-image: url("assets/v3/brand/merit-coin-dark.svg"); } }

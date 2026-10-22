@@ -188,7 +188,9 @@ BoxDecoration(
 - md radius, 1.5 `border.default` (≥3:1).
 - **Focus:** violet border plus a soft violet ring.
 - **Label** always visible above the field. **Help and error text** go below, and errors carry an icon.
-- **Phone fields** use a `+94` prefix. **OTP** is 6 boxes.
+- **Phone fields (D22):** a fixed, non-editable `+94` prefix, then 9 digits starting with **7**
+  (`^7[0-9]{8}$`). Refuse other first digits with "Sri Lankan mobile numbers start with 7". Normalise
+  pasted `+94…` / `0…` numbers and strip spaces and dashes. **OTP** is 6 boxes.
 
 **Search pill:** a white pill on e2 with a round orange action button.
 
@@ -231,11 +233,31 @@ and the bar respects the safe area.
 - On mobile the path scrolls horizontally.
 
 **Gamification**
-- **Header chips:** the streak is an orange Fill `flame`, and points are a butter Fill `coins`. Numbers are tabular.
+- **Header chips:** the streak is an orange Fill `flame`, and points are the **Merit coin** (§11, D21). Numbers are tabular.
 - **Streak ribbon:** done days are orange, today is butter with an ink ring, future days are a hairline outline.
 - **Leaderboard:** a podium, then rows. The "You" row is violet-selected and sticks when scrolled off-screen.
 - **Grades A–F:** sage, sage-subtle, butter, orange-300, coral, red. The letter is always shown.
-- **Points breakdown:** +10 per correct answer, +20 when accuracy is ≥80%, ×1.5 for Achiever.
+- **Points breakdown:** +10 per correct answer, +20 when accuracy is ≥80%, ×1.5 for Achiever. Read the
+  threshold, bonus and multiplier from the API (`points_breakdown`), never constants.
+- **Results points card (round 10):** a plain `surface.default` card, not a butter one. Coin + total, then a
+  stacked bar (base orange · bonus butter · Achiever violet) with a legend line. Butter only in the coin and the
+  bar. "Review N mistakes" sits directly under the card as a secondary button and expands the review **in place**
+  (Wrong filter first). Done is the only bottom action.
+- **Share card (D25):** username and score only.
+- **Compete root (round 10):** a rank hero with the podium preview (School / District / Island segments and
+  your own row with "N behind #R"), this week's points as day bars, the streak week as 7 dots, an achievements
+  shelf, then Tasks. No empty half-screen.
+
+**Today: your subjects (round 10)**
+- 1–2 subjects: Learn-style rows.
+- 3 subjects: tiles spread `space-around` at the large size; 4: the same at a smaller size.
+- 5 or more: the 4 most recently practised.
+
+**Me (D23)**
+- Header (avatar with picker, name, tier badge), 3 stats, the Achiever band for Wanderer.
+- Inline sections: **Study** (subject languages, study reminder) · **App** (appearance, app language) ·
+  **Account** (account details, subscription, change password, log out, delete). No separate Settings screen.
+- **Trial (D24):** 14 days in all copy.
 
 **Tiers (C6)**
 - **Wanderer:** neutral.
@@ -298,7 +320,7 @@ and the bar respects the safe area.
   - **Fill** for active and selected states.
   - **Duotone** on category and feature chips.
 - **Size:** 20–24px in UI, 1.15em inside buttons.
-- **Colour:** icons inherit the text colour. Only reward glyphs carry their own colour: the orange `flame` and the butter `coins`.
+- **Colour:** icons inherit the text colour. Only reward glyphs carry their own colour: the orange `flame` and the Merit coin asset (D21).
 - No Material `Icons.*`, no lucide, no tabler, and no emoji as icons.
 
 ---
@@ -347,6 +369,11 @@ restyles automatically.
 | `--chart-1..5` | `--merit-chart-1..5` |
 | `shadow-brutal-1…5` | **replaced by** `shadow-elev-1…3` (`--merit-elevation-e1…e3`) |
 
+**Theme presets (D26).** The frontend keeps the tweakcn theme picker. **Merit** is the first preset and the
+default: selecting it removes every inline `--var` override, so this mapping rules. Other presets are opt-in and
+remembered per browser (`merit-color-theme`). The landing always renders Merit. Light/dark is `next-themes` with
+the `.dark` class everywhere, the landing included.
+
 The frontend guard `scripts/check-design-tokens.mjs` must change in two ways. It must
 **forbid** `shadow-brutal-*`, and it must **allow** `shadow-elev-*` while still forbidding
 Tailwind's `shadow-sm…2xl`. Keep the raw-hex and icon-import guards. See `MIGRATION-v3.md`.
@@ -364,7 +391,12 @@ Added 2026-10-01 after an audit found per-page drift. Enforced where noted by `m
 - **Header chrome controls** (sidebar trigger, search, theme, settings, avatar): all `h-9` and `rounded-full`, i.e. `Button variant="outline" size="icon"`; the search trigger is the same pill, wider. v2: `border-2 shadow-brutal-2`. **v3:** no border, `shadow-elev-1` on a `surface.default` fill.
 - **Sidebar:** same chrome as the content pane; menu items are pills. v2: `border-2 rounded-xl shadow-brutal-2`, with the active item `bg-sidebar-primary border-2 shadow-brutal-1`. **v3:** `rounded-2xl shadow-elev-1`, no border, and the active item is a `surface.selected` pill with a Fill icon. No translucency / `backdrop-blur` on layout chrome (guarded).
 - **Links** to mode routes carry the mode prefix (`/admin/...`); build admin URLs with `lib/admin-routes.ts` (guarded).
-- **Density (D7):** admin and contributor screens are compact: 8–12 padding, hairline table rows, e0–e1, no patchwork in tables.
+- **Density (D7):** admin and contributor screens are compact: 8–12 padding, hairline table rows, e0–e1. Patchworks
+  in tables are `mono` only, 20px, in subject/topic name cells; never `tile` or `wash` in admin tables.
+- **Student shell (web):** sidebar items **Today · Learn · Compete · Me** (navigation B, same as the app), header
+  chips for points (coin) and streak. Below 768px a floating bottom tab bar with the same four items replaces the
+  off-canvas sidebar. Quiz taking uses a focus layout with no sidebar. Student screens use comfortable density and
+  may use patchwork tiles and washes like the app.
 
 ## 10. Token reference (generated)
 
@@ -479,8 +511,16 @@ The filenames and uses are unchanged from v2:
 is 32px, the small cut 24px, the cube 16px.
 
 **`merit-coin` (Merit Points):** the pyramid cut in **butter** facets (`#FFD66B` / `#F5B700`) with
-ink outlines. Use `merit-coin-glyph-fill` (`currentColor`) inside chips. In UI, the Phosphor
-`coins` Fill icon in `reward.points` is the default glyph.
+ink outlines. **One asset family for every points mark (D21):**
+
+| Size / surface | File |
+|---|---|
+| ≤ 24px (chips, ledger rows, inline amounts) | `merit-coin-small.svg` |
+| > 24px | `merit-coin.svg` |
+| dark surfaces | `merit-coin-dark.svg` |
+
+The coin keeps its own colours and is never tinted. The Phosphor `coins` icon is no longer used for points.
+`merit-coin-glyph-*` (`currentColor`) remain only for single-colour contexts such as print.
 
 **Don't:**
 - recolour facets outside the generator;
