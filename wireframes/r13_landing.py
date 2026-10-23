@@ -40,7 +40,7 @@ SEC_CARDS = f'''<section class="w-sec r13-sec" id="cards" data-lf><div class="r1
 <div class="fsrs r13-rate" data-lf-rate role="group" aria-label="Flashcard actions"></div></div>
 <div class="st r13-lead"><span class="ey">Flashcards</span><h3 class="w-h2">Cards come back right <span class="ul">before</span> you forget.</h3>
 <p class="t2">Flip a card, say how well you knew it, and Merit schedules the next review. Easy ones wait longer; hard ones return sooner.</p>
-<div class="r13-chips" data-lf-chips></div><span class="sm t3" data-lf-count></span><span class="xs t3">Space flips · keys 1 to 4 rate · review intervals here are examples</span></div></div></section>'''
+<div class="r13-chips" data-lf-chips></div><span class="sm t3" data-lf-count></span><span class="xs t3">Space flips · keys 1 to 4 rate · real intervals for a new card</span></div></div></section>'''
 
 SEC_INSIGHTS = f'''<section class="w-sec r13-sec" id="insights" data-li><div class="r13-2col">
 <div class="st r13-lead"><span class="ey">Exam insights</span><h3 class="w-h2">See what each paper <span class="ul">really</span> asks.</h3>

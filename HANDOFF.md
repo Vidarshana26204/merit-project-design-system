@@ -3,6 +3,12 @@
 Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
 and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
 **Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
+**Resume point (2026-10-24, pre-release plan `~/.claude/plans/as-per-the-handoff-md-zippy-seal.md`):** Gate 0 decided
+(`wireframes/DECISIONS.md`), DS 3.7.0 done, Step 2 drawn: round 14 Phase A (Mastery + Points, real rules/plans/FSRS)
+and round 15 (§30 flows) on both boards. Waiting on: the user's 19 web picks + Quilt concept, then Phase B / Step 3.
+Boards are rebuilt by `python3 wireframes/gen_web_board.py > wireframes-web.html` and
+`python3 wireframes/r15_mobile.py --splice`.
+
 **Resume point (2026-10-23, round 14 planned, not started):** the approved plan is at `docs/plans/round-14-backend-driven-landing.md` (copy of `~/.claude/plans/round-14-backend-driven-landing.md`). Read it first.
 
 Board: https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn. DS head is `296cf4a`.

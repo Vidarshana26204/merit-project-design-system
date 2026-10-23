@@ -120,7 +120,10 @@
 
   /* ---------------------------------------------------------------- Flashcard deck */
   const TONES = ["", "sky", "butter", "violet", "coral"];
-  const RATE = [["ag", "Again", "<1 min"], ["hd2", "Hard", "6 min"], ["gd", "Good", "1 day"], ["ez", "Easy", "4 days"]];
+  // Real intervals for a new card from the backend's FSRS engine (QM_SAMPLES.fsrs, round 14); production: per card from the API.
+  const fmt = (sec) => sec < 3600 ? Math.round(sec / 60) + " min" : Math.round(sec / 86400) + (sec < 2 * 86400 ? " day" : " days");
+  const NI = (S.fsrs && S.fsrs.new) || { again: 60, hard: 360, good: 600, easy: 16 * 86400 };
+  const RATE = [["ag", "Again", fmt(NI.again)], ["hd2", "Hard", fmt(NI.hard)], ["gd", "Good", fmt(NI.good)], ["ez", "Easy", fmt(NI.easy)]];
   function Deck(root) {
     const left = root.querySelector("[data-lf-chips]"), stage = root.querySelector("[data-lf-stage]"), rate = root.querySelector("[data-lf-rate]"), count = root.querySelector("[data-lf-count]");
     const subjects = S.subjects.filter((s) => s.f > 0);

@@ -95,3 +95,22 @@ From the pre-release audit (`~/.claude/plans/as-per-the-handoff-md-zippy-seal.md
   fallback.
 - **Web content-language switch (EN/SI/TA):** on the subject page only (inline switch in the subject header). Not in
   Me › Preferences on web.
+
+## Round 14 (landing) + round 15 (pre-release flows), 2026-10-24
+
+- **Round 14 Phase A** is on the web board (Landing tab, "sections below the hero"): Mastery Engine (`#mastery`)
+  and Merit Points (`#points`), live on the snapshot. Pricing and FAQ read `rules` / `plans` from
+  `qm-samples.js` (`build_samples.py`, rehearsal `system_settings` + `tiers` + Gate 0 prices).
+- **FSRS intervals are real** (backend `service.newFsrsEngine`, Flutter-parity weights, retention 0.9): new card
+  Again 1 min · Hard 6 min · Good 10 min · Easy 16 days; Good when due: 10 min → 4 d → 14 d → 45 d → 135 d.
+  The round 13 flashcard deck now shows these too (it showed example intervals).
+- **Data to confirm:** rehearsal `pro_enrollment_limit_al` is **5**, the same as the free A/L cap (the round 14 plan
+  assumed 6), and O/L is free 6 / Pro 10. The board shows the data as stored.
+- **Round 15, mobile** (`wireframes.html`, tab 10): email verification, maintenance + update, subscription
+  (active / cancelled / billing issue / restore), change password, sign-out confirm, two-step delete, session
+  expired as a sheet (supersedes the dialog in tab 09), legal, help, onboarding back/skip with A/L 5 and O/L 4 steps
+  (supersedes "3 steps"), prediction gate, Me without reminders, notification pre-prompt (v1.1).
+- **Round 15, web** (`wireframes-web.html`): Me gets subscription status (read-only, store-managed), change
+  password, sign-out, delete, legal, help; Auth gets email verification; Subjects gets the header language switch
+  and the prediction gate; System states gets maintenance, 404 and error pages. Me's "Subject languages" screen and
+  row are removed (Gate 0).

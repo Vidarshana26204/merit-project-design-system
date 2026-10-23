@@ -1,0 +1,74 @@
+/* Round 14 landing: Mastery Engine (#mastery) and Merit Points (#points), widgets in r14-live.js. Tokens only. */
+
+/* ---- lead: the three steps */
+.r14-steps { list-style: none; margin: 4px 0 0; padding: 0; display: flex; gap: 10px; flex-wrap: wrap; }
+.r14-steps li { display: flex; align-items: baseline; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--merit-surface-sunken); font-size: 13px; }
+.r14-steps li span { color: var(--merit-text-secondary); font-variant-numeric: tabular-nums; }
+.r14-steps li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; align-self: center; background: var(--seg); }
+.r14-steps li[data-s="read"], .r14-tabs [data-t="read"] { --seg: var(--merit-dataviz-cat1, var(--merit-violet-500)); }
+.r14-steps li[data-s="remember"], .r14-tabs [data-t="remember"] { --seg: var(--merit-dataviz-cat5, var(--merit-sky-500)); }
+.r14-steps li[data-s="prove"], .r14-tabs [data-t="prove"] { --seg: var(--merit-dataviz-cat2, var(--merit-orange-500)); }
+.r14-steps li.done { background: var(--merit-surface-selected); }
+
+/* ---- mastery card */
+.r14-mcard { gap: 16px; padding: 22px; min-height: 470px; }
+.r14-mhead { display: flex; align-items: center; gap: 16px; }
+.r14-ring { --a: 0%; --ab: 0%; --abc: 0%; width: 96px; height: 96px; flex: none; border-radius: 50%; display: grid; place-items: center;
+  background: conic-gradient(var(--merit-dataviz-cat1, var(--merit-violet-500)) 0% var(--a),
+    var(--merit-dataviz-cat5, var(--merit-sky-500)) var(--a) var(--ab),
+    var(--merit-dataviz-cat2, var(--merit-orange-500)) var(--ab) var(--abc),
+    var(--merit-surface-sunken) var(--abc) 100%); }
+.r14-ring .tile { border-radius: 16px; box-shadow: 0 0 0 4px var(--merit-surface-default); }
+.r14-ph .r14-ring { width: 72px; height: 72px; }
+.r14-tabs { padding: 4px; }
+.r14-tabs button { flex: 1; border: 0; background: none; min-height: 36px; border-radius: 999px; font: 700 12.5px var(--fb); color: var(--merit-text-secondary); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; justify-content: center; }
+.r14-tabs button::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--seg); opacity: .35; }
+.r14-tabs button.done::before { opacity: 1; }
+.r14-tabs button.on { background: var(--merit-surface-default); color: var(--merit-text-primary); box-shadow: var(--merit-elevation-e1); }
+.r14-tabs button:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: 2px; }
+.r14-pane { min-height: 250px; }
+.r14-pane > .st { gap: 12px; }
+.r14-read .t2 { margin: 0; line-height: 1.6; }
+.r14-fc { border: 0; width: 100%; min-height: 150px; text-align: left; cursor: pointer; font: inherit; color: var(--merit-flashcard-fg); }
+.r14-fc .q { font: 600 17px/1.4 var(--fd); }
+.r14-fc:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: 2px; }
+.r14-rem .fsrs button { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; border: 0; border-radius: 16px; font: 700 13px var(--fb); color: var(--merit-ink-900); cursor: pointer; }
+.r14-rem .fsrs button small { font: 600 11px var(--fb); opacity: .75; }
+.r14-rem .fsrs .ag { background: var(--merit-coral-300); } .r14-rem .fsrs .hd2 { background: var(--merit-sand-300); } .r14-rem .fsrs .gd { background: var(--merit-sage-300); } .r14-rem .fsrs .ez { background: var(--merit-violet-100); }
+.r14-rem .fsrs button.on { box-shadow: inset 0 0 0 2px var(--merit-ink-900); }
+.r14-rem .fsrs button:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: 2px; }
+.r14-sched { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 16px; background: var(--merit-surface-sunken); }
+.r14-curve { width: 100%; height: auto; overflow: visible; }
+.r14-curve path { fill: none; stroke: var(--merit-dataviz-cat5, var(--merit-sky-500)); stroke-width: 2.5; stroke-linejoin: round; }
+.r14-curve .ret { stroke: var(--merit-border-default); stroke-dasharray: 3 4; }
+.r14-curve .dots circle { fill: var(--merit-dataviz-cat5, var(--merit-sky-500)); stroke: var(--merit-surface-sunken); stroke-width: 2; }
+.r14-curve text { font: 600 10px var(--fb); fill: var(--merit-text-tertiary); }
+.r14-prove .lq-q { margin: 0; font-weight: 600; }
+.r14-prove .opts { display: flex; flex-direction: column; gap: 8px; }
+.r14-prove .opt { border: 0; width: 100%; text-align: left; font: 600 14px var(--fb); color: var(--merit-text-primary); cursor: pointer; min-height: 48px; }
+.r14-prove .opt[aria-disabled="true"] { cursor: default; }
+.r14-res { display: flex; align-items: center; gap: 8px; min-height: 36px; }
+.r14-unlock { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: var(--merit-feedback-success-subtle); }
+.r14-unlock.compact { padding: 10px 12px; }
+
+/* ---- points */
+.r14-earn { gap: 12px; padding: 18px; }
+.r14-earn .list { box-shadow: none; background: var(--merit-surface-sunken); }
+.r14-erow .mode-ic { width: 36px; height: 36px; font-size: 18px; border-radius: 12px; background: var(--merit-surface-default); }
+.r14-erow .num { min-width: 44px; text-align: right; font-size: 17px; }
+.r14-add { position: relative; width: 40px; min-width: 40px; padding: 0; }
+.r14-add:disabled { opacity: 1; color: var(--merit-text-disabled, var(--merit-text-tertiary)); box-shadow: inset 0 0 0 1.5px var(--merit-border-disabled, var(--merit-border-subtle)); cursor: not-allowed; }
+.r14-pop { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); font-size: 13px; color: var(--merit-feedback-success-text); pointer-events: none; }
+.r14-pro { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.r14-pro .tgl { border: 0; cursor: pointer; }
+.r14-pro .tgl:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: 2px; }
+.r14-spend { gap: 12px; padding: 10px 4px 0; border-top: 1px solid var(--merit-border-subtle); }
+.r14-spend .mode-ic { width: 36px; height: 36px; font-size: 18px; border-radius: 12px; }
+.r14-board { padding: 8px 0; gap: 0; }
+.r14-board > .rw { padding: 6px 14px 8px; }
+.r14-board .lrow { min-height: 44px; padding: 6px 14px; }
+.r14-total { gap: 10px; align-items: center; }
+.r14-total .num { font-size: 28px; }
+.r14-total .lnk { border: 0; background: none; cursor: pointer; font: 600 13px var(--fb); }
+
+@media (max-width: 900px) { .r14-mcard { min-height: 0; } }

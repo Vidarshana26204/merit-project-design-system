@@ -313,8 +313,7 @@ ME_LEFT = f'''<div class="card" style="align-items:center;text-align:center;gap:
 <div class="band achiever"><div><span class="ey">Achiever</span><h4>Practise without limits</h4><p>14 days free in the app</p></div></div>'''
 def sec(h, rows):
     return f'<span class="set-h">{h}</span><div class="list">' + "".join(rows) + '</div>'
-ME_RIGHT = (sec("Study", [f'<div class="li">{I("translate")}<div class="sp st" style="gap:0"><span class="ttl">Subject languages</span><span class="meta">Biology: Sinhala · Chemistry: Sinhala · Physics: English</span></div>{I("caret-right")}</div>',
-                          f'<div class="li">{I("bell")}<div class="sp st" style="gap:0"><span class="ttl">Study reminder</span><span class="meta">7:00 pm · sent to your phone</span></div><span class="tgl on"></span></div>'])
+ME_RIGHT = (sec("Study", [f'<div class="li">{I("translate")}<div class="sp st" style="gap:0"><span class="ttl">Content language</span><span class="meta">Switch it on each subject&rsquo;s page (Gate 0). The study reminder is hidden for v1.</span></div></div>'])
             + sec("App", [f'<div class="li">{I("moon")}<span class="sp ttl">Appearance</span><div class="segc" style="width:200px;padding:3px"><span>Light</span><span>Dark</span><span class="on">Auto</span></div></div>',
                           f'<div class="li">{I("sliders")}<div class="sp st" style="gap:0"><span class="ttl">Theme</span><span class="meta">Merit (default) · other colour themes</span></div>{I("caret-right")}</div>'])
             + sec("Account", [f'<div class="li">{I("user")}<span class="sp ttl">Account details</span>{I("caret-right")}</div>', f'<div class="li">{I("crown")}<div class="sp st" style="gap:0"><span class="ttl">Subscription</span><span class="meta">Wanderer · manage in the app</span></div>{I("caret-right")}</div>',

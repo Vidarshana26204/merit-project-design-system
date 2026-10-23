@@ -116,10 +116,10 @@ s_lim = kit_screen("web-limit", "Premium · limit dialog", [("energy", "Energy")
 # ------------------------------------------------------------------ 08 Me extras
 AV = f'''<div class="w-app focus" style="place-items:center;min-height:540px;background:color-mix(in srgb, var(--merit-ink-900) 45%, var(--merit-bg-app))"><div class="dlg" style="width:560px;gap:14px"><div class="rw"><b class="h-md sp">Pick your avatar</b><span class="ibtn flat">{I("x")}</span></div><div class="avgrid" style="grid-template-columns:repeat(10,1fr)">''' + "".join(f'<span class="av{" on" if k == 7 else ""}"></span>' for k in range(30)) + f'''</div><div class="rw"><button class="btn gh" type="button">{I("camera")}Upload a photo</button><span class="sp"></span><button class="btn" type="button">Use this one</button></div></div></div>'''
 LANGS = '<div class="list" style="max-width:640px">' + "".join(f'<div class="li">{tile(t, 40)}<span class="sp ttl">{n}</span><div class="segc" style="padding:3px;width:180px">' + "".join(f'<span class="{"on" if l == on else ""}{" off" if l in off else ""}" style="padding:5px 6px;min-height:28px">{l}</span>' for l in ("EN", "සිං", "த")) + '</div></div>' for n, t, on, off in [("Biology", "biology", "සිං", ()), ("Chemistry", "chemistry", "සිං", ()), ("Physics", "physics", "EN", ()), ("General English", "languages", "EN", ("සිං", "த"))]) + '</div><span class="sm t3">The only place content language changes. Greyed options have no content yet (<code>available_languages</code>).</span>'
-s_me2 = kit_screen("web-me-more", "Me · avatar picker + subject languages", [("energy", "Energy"), ("gap", "Approve")],
-    "Batch 3 decisions on the web: catalogue picker with photo upload kept as the secondary option; one row per enrolment with EN / සිං / த.",
-    "GET /avatars · PUT /user {avatar_id} · PUT /enrollments/:id/language",
-    [("Avatar picker", dk("meritproject.lk/student/me", AV), "30 catalogue avatars from merit-content."), ("Subject languages", app("Me", "Subject languages", LANGS, "Me · Study", url="meritproject.lk/student/me/subject-languages"), "Changing a language refreshes that subject's hierarchy.")])
+s_me2 = kit_screen("web-me-more", "Me · avatar picker", [("energy", "Energy"), ("gap", "Approve")],
+    "Catalogue picker with photo upload kept as the secondary option. Subject languages are no longer on Me on the web (Gate 0, 2026-10-23): they switch in each subject's header (tab 05, round 15).",
+    "GET /avatars · PUT /user {avatar_id}",
+    [("Avatar picker", dk("meritproject.lk/student/me", AV), "30 catalogue avatars from merit-content.")])
 
 # ------------------------------------------------------------------ 09 Auth & onboarding
 def split(form):
@@ -147,7 +147,8 @@ s_states = kit_screen("web-states", "States · empty, error, offline, loading, s
 from r12_landing import concept, s_hero  # noqa: E402,F811  low-poly tree + hero A + phone hero
 from r12_hub import s_hub, s_subj  # noqa: E402,F811  hub A with mobile section tabs
 from r12_auth import s_auth  # noqa: E402,F811  step-aware split screen
-from r13_landing import s_secs  # noqa: E402,F811  live sections on real data + FAQ (round 13)
+from r15_web import s_acct, s_verify, s_lang, s_sys  # noqa: E402  round 15: §30 flows + Gate 0
+from r14_landing import s_secs  # noqa: E402,F811  live sections + Mastery Engine + Merit Points, pricing/FAQ from rules (rounds 13-14)
 
 # ------------------------------------------------------------------ page
 NAVS = [("landing", "00", "Landing"), ("shell", "01", "Shell &amp; nav"), ("today", "02", "Today"), ("quiz", "03", "Quiz"), ("study", "04", "Study &amp; notes"),
@@ -159,12 +160,12 @@ flows = [
     flow("today", "Today", "The app's Today plan on a wide screen. The main frame is in tab 01; these are the other two moments.", LG, [s_today]),
     flow("quiz", "Quiz", "Taking a quiz drops the sidebar (focus layout). Results follow round 10 pick A.", LG, [s_quiz, s_quizd]),
     flow("study", "Study &amp; notes", "Calm mode. Keyboard-first on the web.", LG, [s_study]),
-    flow("subjects", "Subjects", "Learn root, the subject hub and its Stats tab.", LG, [s_hub, s_subj]),
+    flow("subjects", "Subjects", "Learn root, the subject hub and its Stats tab.", LG, [s_hub, s_subj, s_lang]),
     flow("compete", "Compete", "Round 10 Compete at desktop width, plus the leaderboard page.", LG, [s_comp, s_lb]),
     flow("premium", "Premium", "No web checkout: the web sells, the app sells the subscription (store billing).", LG, [s_prem, s_lim]),
-    flow("me", "Me", "D23: settings live on Me. Web adds the Theme row (D26).", LG, [s_me, s_me2]),
-    flow("auth", "Auth &amp; onboarding", "Same fields and steps as the app (round 8 decisions), laid out for a wide screen.", LG, [s_auth]),
-    flow("states", "System states", "One design each; no picks needed.", [("gap", "Approve")], [s_states]),
+    flow("me", "Me", "D23: settings live on Me. Web adds the Theme row (D26).", LG, [s_me, s_me2, s_acct]),
+    flow("auth", "Auth &amp; onboarding", "Same fields and steps as the app (round 8 decisions), laid out for a wide screen.", LG, [s_auth, s_verify]),
+    flow("states", "System states", "One design each; no picks needed.", [("gap", "Approve")], [s_states, s_sys]),
 ]
 
 HEAD = '''<meta charset="utf-8">
@@ -179,10 +180,11 @@ HEAD = '''<meta charset="utf-8">
 <link rel="stylesheet" href="wireframes/wf-r12-hub.css">
 <link rel="stylesheet" href="wireframes/wf-r12-auth.css">
 <link rel="stylesheet" href="wireframes/wf-r13-landing.css">
+<link rel="stylesheet" href="wireframes/wf-r14-landing.css">
 
 <header class="wf-top">
   <div class="wf-top-row">
-    <div class="wf-brand"><h1>Merit web wireframes</h1><span>v3 web · landing + student portal · round 12</span></div>
+    <div class="wf-brand"><h1>Merit web wireframes</h1><span>v3 web · landing + student portal · round 15</span></div>
     <div class="wf-ctrls">
       <span class="wf-tally" aria-live="polite"></span>
       <div class="wf-seg" data-seg="width" role="group" aria-label="Frame width">
@@ -216,6 +218,7 @@ TAIL = '''</main>
 <script src="wireframes/qm-ico.js"></script>
 <script src="wireframes/qm-samples.js"></script>
 <script src="wireframes/landing-live.js"></script>
+<script src="wireframes/r14-live.js"></script>
 '''
 
 if __name__ == "__main__":
