@@ -1,83 +1,205 @@
-# Handoff — 2026-10-23
+# Handoff — 2026-10-24
 
-Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
-and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
-**Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
-**Resume point (2026-10-24, pre-release plan `~/.claude/plans/as-per-the-handoff-md-zippy-seal.md`):** Gate 0 decided
-(`wireframes/DECISIONS.md`), DS 3.7.0 done, Step 2 drawn: round 14 Phase A (Mastery + Points, real rules/plans/FSRS)
-and round 15 (§30 flows) on both boards. Waiting on: the user's 19 web picks + Quilt concept, then Phase B / Step 3.
-Boards are rebuilt by `python3 wireframes/gen_web_board.py > wireframes-web.html` and
-`python3 wireframes/r15_mobile.py --splice`.
-**Boards (republished 2026-10-24 on the subsuser3 account, fresh `picks` db; the older artifacts live on another account):**
-web https://claude.ai/artifact/BSrqtke1qqxxvU1WzzpqSh · mobile https://claude.ai/artifact/Q6jsry2mnuUfD9csb1LB4X.
-Republish with the same file path from this repo (files map = every referenced asset, `wireframes/*`, `build/css/merit-tokens.css`).
+Design system **v3.7.0** (branch `feat/design-system-v3`). The pre-release plan is
+`~/.claude/plans/as-per-the-handoff-md-zippy-seal.md`; it has a status table at the top. Read it first.
 
-**Resume point (2026-10-23, round 14 planned, not started):** the approved plan is at `docs/plans/round-14-backend-driven-landing.md` (copy of `~/.claude/plans/round-14-backend-driven-landing.md`). Read it first.
+## Resume point
 
-Board: https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn. DS head is `296cf4a`.
+**Done in this session (2026-10-23 → 24):**
+- Gate 0 owner decisions, the security and licence cleanup, and DS 3.7.0 (Step 1).
+- Step 2 boards: round 14 Phase A and round 15.
+- The round 15 board notes, the a11y audit, Flutter on 3.7 and the new Merit Points coin (D1).
 
-What is done:
-- Landing rounds 12b–13: icosphere tree hero (`wireframes/qm-ico.js`), live sections (`r13_landing.py`, `landing-live.js`), FAQ, store badges.
-- The flashcard rating fix.
-- Picks: hero A, shell A, hub A, tree A.
+**Waiting on the owner:**
+- The web picks: the board has 4 screens with alternatives (Quilt concept, hero, landing sections, `web-results`).
+  Every other screen is approve-or-note.
+- Then Step 3, the production build, with parallel Sonnet agents per repo; the main session orchestrates.
 
-User decisions for round 14:
-1. Tiers, limits, benefits and prices come from the backend: new `GET /public/plans`; prices in new `tiers` columns, edited in admin.
-2. New `GET /public/samples`: each IP gets the same random batch per 6 h window, plus a hard cap of 30 requests per IP per 6 h → 429 with `Retry-After`.
-3. Questions and flashcards use shared components (`components/merit/study/`) in both the landing and the student portal. The board's flashcard stack and animation also become the student `/flashcards` session.
-4. New landing sections: Mastery Engine (Read → Remember → Prove, FSRS) and Merit Points.
-5. Flow: Phase A is board round 14 (main session). Phase B is the production build with parallel Sonnet agents (backend + frontend worktrees); the main session orchestrates and reviews in Chrome.
+**Nothing is pushed** (unpushed commits: DS 41, Flutter 82, backend 14, merit-content 1, frontend 2).
+Flutter CI's token-drift check fetches DS `c7ef050` (`.design-tokens-ref`), so push DS before or with Flutter.
 
-Facts (from `merit_rehearsal`, which holds the most recent data; read it with SELECTs only):
-- `system_settings` holds every rule:
-  - free limits: mastery 50 a day, papers 2 a day;
-  - enrolment caps: A/L free 5, Pro 6;
-  - points: correct answer 10, accuracy bonus +20 at 80%, Pro ×1.5; flashcard session +15 (cap 100 a day); note +25; unlock reward 50; force-unlock 100 + 25 each, 20% burned;
-  - mastery weights: quiz .75 / notes .15 / cards .10;
-  - FSRS retention 0.9.
-- The free subject cap is **5**; the root CLAUDE.md's "2" is stale.
-- `tiers` has no prices.
-- `RateLimitByIP` (`internal/api/middleware.go`) is a token bucket per IP that never evicts entries.
-- The backend schedules with go-fsrs v4.
+## Boards (shared, picks in the artifact DB)
 
-Frontend `feat/design-system-v3` (`bda6f65`):
-- Reuse `components/question-block-renderer`, `components/content-blocks/math-text.tsx` (KaTeX) and the notes runners.
-- `app/student/{flashcards,quiz}` are placeholders.
+| Board | Artifact | Build |
+|---|---|---|
+| Mobile | https://claude.ai/artifact/Q6jsry2mnuUfD9csb1LB4X | `python3 wireframes/r15_mobile.py --splice` (round 15 + coin screens) |
+| Web | https://claude.ai/artifact/BSrqtke1qqxxvU1WzzpqSh | `python3 wireframes/gen_web_board.py > wireframes-web.html` |
 
-Still open:
-- the actual price values;
-- the store badge artwork (official assets in production).
+- Sources, file maps and republish notes are in `wireframes/BOARDS.md`. Both boards are linked from the reference-site sidebar.
+- Picks and notes live in each artifact's `picks` collection: read them with `ArtifactData list`. Decisions copied out of
+  them go into `wireframes/DECISIONS.md`.
+- Republish with the same file path from this repo, passing only changed files. The artifacts are private.
+- The older artifacts (web `6SeHPm…` at round 13, mobile `FqXHCE…` at round 10) belong to another claude.ai account.
 
-Next: Phase A, board round 14 (Mastery Engine + Merit Points, with `rules`/`plans` added to `build_samples.py`). After the user reviews it, Phase B.
+## What changed (2026-10-23 → 24)
 
-Open:
-- Prices.
-- Free-tier subject cap: CLAUDE.md says 2, the board says 5.
-- Production needs a new `GET /public/samples` endpoint and KaTeX for maths.
+**Gate 0 decisions** (`wireframes/DECISIONS.md`):
+- Achiever costs Rs 599/mo or Rs 4,990/yr (save 31%), with a 14-day trial.
+- The day boundary is Sri Lanka midnight for caps, streaks and the plan.
+- The daily-plan "done" threshold lives in `system_settings`, is edited in admin, and applies from the next day.
+- The grade prediction is hidden below 30% topic coverage.
+- Badges are awarded retroactively; their points are not.
+- Push reminders are hidden for v1.
+- v1 patchworks cover Phy/Chem/Bio plus Agri and ICT. After generation, mark nodes with no suitable icon in the audit
+  UI, then generate icons for them.
+- The web content-language switch sits on the subject page only.
 
-Next:
-1. The user reviews round 13.
-2. Agent L builds the landing (gsap, delaunator not needed for ico, lenis, KaTeX).
-3. Agent S builds the student portal.
+**Owner answers (2026-10-24):**
+- The Pro A/L subject cap stays **5**, the same as free; Achiever copy shows no subject count.
+- The 6 colour-blind subject collisions are left as is.
+- The DS artifact is links only: there is no published reference site.
+- New points coin: picked **D1**.
 
-The phone web hero has no tree.
+**Release scope:**
+- Email verification is not in this release (no backend); mobile verification comes first.
+- O/L is blocked (no subject coverage).
+- One update sheet, with "Later" shown only when the update can be skipped.
 
-Next:
-1. The user reviews round 12.
-2. Dispatch Agent L, the landing build. It uses `gsap`, `@gsap/react`, `delaunator` and `lenis` (decided round 12, replacing `motion`). The spec is in the concept screen description.
-3. Dispatch Agent S, the student portal.
+**Security / licences:**
+- Untracked: Flutter `.env` and the old keystore (`da264b4`); backend `env/dev.env` and `env/test.env` (`c3211e5`; the
+  `.example` files list the keys).
+- Untracked here: Clash Display and School Times; Plus Jakarta now ships `OFL.txt` (`e47e66b`).
+- **Not done (owner):** history scrub, rotating the dev `API_SECRET` and the old keystore if they were ever live, and
+  moving the root DB dumps.
+
+**DS 3.7.0** (`516f786..83d6ef0`):
+- **Contrast gate:**
+  - tiers text / large / ui; alpha compositing;
+  - 222 checks, including focus on every surface;
+  - `$exempt` documents the fills that always carry ink labels.
+- **Fixes:**
+  - `ink.500` #625F79;
+  - `border.control` for the quiz idle edge;
+  - `feedback.errorText`;
+  - `focus.ringOnFeature` / `ringOnInverse`;
+  - theme-following `chart.*` via `dataviz.cat*`.
+- **New families:**
+  - feedback and states: info, `warningSubtle`, `state.hover`/`pressed`, disabled colours;
+  - surfaces: scrim, skeleton;
+  - geometry and motion: focus-ring width and offset, `easing.enter`/`emphasized`, `duration.reduced`;
+  - layout and charts: D7 density, data-viz seq/div ramps.
+- **SI/TA:** `tokens/scripts.json` drives `:lang(si|ta)` in CSS and `MeritTypeScaleSet.of(lang)` in Dart. Noto woff2
+  subsets are on the reference site; the KaTeX policy is in SKILL §3.
+- **Reference site:**
+  - §15 is the full state matrix;
+  - §30 lists the flow specs.
+- **`check:subjects`:** adds the dark rim and a CVD (deutan/protan) report. CI runs it on a fixture, plus the patchwork
+  tests.
+- **Housekeeping:** the deprecated timer-pill and `reward.points` tokens are removed by 2026-12-31; wash inks moved to
+  primitives.
+
+**Boards** (`9dc0b1f`, `e587303`, `c33cecc`):
+- **Round 14 Phase A (web landing):**
+  - Mastery Engine (`#mastery`) and Merit Points (`#points`) sections, live on the real `system_settings`/`tiers`
+    snapshot (`build_samples.py` → `qm-samples.js`: `rules`, `plans`, `fsrs`).
+  - Real FSRS intervals from the backend engine: a new card is 1 min / 6 min / 10 min / 16 days; the "Good" ladder is
+    10 min → 4 d → 14 d → 45 d → 135 d.
+- **Round 15 (§30 flows):**
+  - mobile tab 10 (`r15_mobile.py`);
+  - web Me account pages, email verification, the subject-header language switch, the prediction gate, and
+    maintenance/404/error pages (`r15_web.py`).
+- **Board notes applied:**
+  - mobile: the update sheet, O/L, email;
+  - web: the hub tab double underline, the Compete podium height, and a new `web-results` pick
+    (A Scoreboard / B Quilt progress / C Recap).
+- **a11y:** the `ux-ui-agent-skills:a11y-audit` real-render gates were run over every flow, light and dark.
+  - Fixed failures in the store badges, toast actions, the API tag, error text on errorSubtle and fixed-tone badges.
+  - Every interactive element passes in default/hover/focus.
+  - Known gate limit: light-mode `color-mix()` tints can't be resolved (dark passes, and `check:subjects` covers
+    them).
+
+**Points coin** (`29a2f3a..b012184`):
+- `scripts/brand/coin_concepts.py` builds concepts A–D, D1 and D2 from tokens (`assets/v3/brand/coin-concepts/`).
+- `--final` writes the shipped family: `merit-coin{,-small,-dark,-small-dark}.svg` and the glyphs.
+  - D1 is a flat gold disc with a deeper-gold rim, plus the Merit mark seen from above: four facets in the mark's
+    colours with white gaps.
+  - New **small-dark** cut.
+- `build_v3_brand.py` no longer rebuilds the coin. D21 rev 1 is in `DECISIONS-v3.md`.
+
+**Flutter** (`feat/design-system-v3`):
+- `633bbdf`: vendored 3.7 tokens.
+  - `MeritButton` disabled uses the disabled colours.
+  - Error text uses `feedbackErrorText`.
+  - Goldens regenerated.
+- `432d93b`: the card session is a visible stack (the board note).
+- `89b53c7`: the D1 coin with a small-dark cut in `MeritCoin`.
+- Analyze is clean, all 219 tests pass, and `check_design_tokens` reports no violations.
+
+## Step 3 scope (revised; details in the plan file)
+
+**Backend:**
+- `/public/plans` with `tiers.display_price_lkr` / `is_public` / order;
+- `/public/samples`;
+- `RateLimitByIPWindow` with a janitor, plus eviction on the old limiter; `/public/subjects` and `/public/explore` rate
+  limits;
+- the Sri Lanka day boundary;
+- the plan threshold setting;
+- `coverage_pct` and the 30% gate;
+- retro badges without points;
+- quick API gaps:
+  - `avatar_id`, change-password, reset returns tokens;
+  - per-day streak, weekly points, subtopic name in the session;
+  - rank movement;
+- B1 (content mirror) and B2 (`contentbackfill` in the Dockerfile).
+
+**Frontend:**
+- rebase onto v3 foundations (`feat/design-system-v3` `bda6f65`); v3 nav;
+- the portal from the web picks;
+- the landing with the round 14 sections on shared `components/merit/study/`;
+- the subject-header language switch;
+- account pages; maintenance/404/error pages; SEO and error files; dynamic `lang`;
+- remove template routes and unused fonts;
+- a React patchwork;
+- F1 (deploy workflow) and F2 (HEALTHCHECK).
+
+**Flutter:**
+- v3 sheet styling for `update_dialog.dart`;
+- hide the reminder row; the prediction gate;
+- a11y: IconButton tooltips, text scale 2.0, reduced motion in transitions, required patchwork labels;
+- the 4 swallowed errors;
+- toggle/rating disabled colours;
+- `MeritTypeScaleSet` for SI/TA content;
+- token baselines to 0.
+
+**Content:** Agri and ICT icon maps, then the audit UI pass and icons for the marked nodes.
+
+**Not this release:** email verification, push, O/L.
+
+## Facts worth keeping
+
+`merit_rehearsal` holds the most recent data; read it with SELECTs only.
+
+`system_settings`:
+- free limits: mastery 50 and papers 2 a day;
+- enrolment caps: A/L free 5 and Pro 5; O/L free 6 and Pro 10;
+- points:
+  - correct answer 10; accuracy bonus +20 at 80%; Pro ×1.5;
+  - flashcard session +15 (cap 100 a day); note +25; unlock reward 50;
+  - force-unlock 100 + 25 each, 20% burned;
+- mastery weights: quiz .75 / notes .15 / cards .10; completion at 50;
+- FSRS retention 0.9.
+
+Other facts:
+- `tiers` has no prices yet.
+- Prices are decided (Gate 0) and live in `qm-samples.js` `plans` until Phase B.
+- FSRS uses Flutter-parity weights in `service.newFsrsEngine`.
 
 ## Where things stand
 
 | Repo | Branch | State |
 |---|---|---|
-| `merit-project-design-system` (public) | `feat/design-system-v3` | v3.5.0: tokens, reference site, SKILL.md, patchwork engine v5, wireframe board, MIGRATION §1 rewritten to match the decisions |
-| `merit-project-flutter` | `feat/design-system-v3` (from `origin/dev`); detour merged in (ff to `05a3cc5`); batches 2-3 merged; round 10 merged (head `be0a11b`) | All v3 screens done and device-tested on Android (round 10 fixes merged). Analyze clean, 219 tests, token guard 118/10/3. Details: `merit-project-flutter/docs/V3-PROGRESS.md`. **Committed, not pushed.** |
-| `merit-project-frontend` (admin) | `dev` (local `609a30b`, 2 commits ahead of `origin/dev`) | Landing (`app/(landing)`), admin (`app/admin`), student (`app/student`) and contributor (`app/contributor`) on one origin. Admin has the exam-intelligence settings and Exam weights page. **Still on DS v2.1.0 tokens.** `merit-project-admin` is retired. Not pushed |
-| `merit-content` (private) | `feat/patchworks` | Physics, Chemistry, Biology patchworks (296 nodes), icon maps, 62 subject colours, 30 avatars, release tooling (now imports avatars too) |
-| `merit-project-backend` | `feat/patchworks` (rebased onto `feat/revenuecat-sandbox`, pushed; local now `9e16053` with the detour + batch 2 API additions, ahead of origin) | Patchworks API, templ landing removed, dead code cleared, all wireframe gaps built (below) |
+| `merit-project-design-system` (public) | `feat/design-system-v3` @ `b012184` | v3.7.0 tokens + gate, reference site §15/§30, boards rounds 14–15 + coin, D1 coin family. 41 ahead, not pushed |
+| `merit-project-flutter` | `feat/design-system-v3` @ `89b53c7` | All v3 screens; tokens 3.7; card stack; D1 coin. 219 tests. 82 ahead, not pushed |
+| `merit-project-frontend` | `dev` @ `609a30b` (v3 foundations on `feat/design-system-v3` `bda6f65`) | Still v2 on `dev`; Step 3 rebuilds portal + landing. Not pushed |
+| `merit-project-backend` | `feat/patchworks` @ `c3211e5` | Patchworks + explore + all earlier wireframe gaps; env files untracked. 14 ahead, not pushed |
+| `merit-content` (private) | `feat/patchworks` @ `ed429a8d` | Phy/Chem/Bio patchworks; Agri/ICT icon maps still to do |
 
-None of the branches is merged. The backend changes only deploy once `feat/patchworks` lands on `main`.
+None of the branches is merged. Backend changes deploy only once `feat/patchworks` lands on `main` (24 one-way
+migrations 000034–000057; snapshot first).
+
+---
+
+## History (older handoffs, kept for context)
 
 **Patchworks in one paragraph.** Every Subject, Topic and Subtopic has a generated tile: a
 square-in-a-square quilt block. A subject's 4 patches gain a nested diamond at topic level (5)
@@ -139,33 +261,33 @@ patchwork numbers need `migrate force 46` before migrating up.
 - **Root domain cutover:** deploy `merit-project-frontend` (port 3001) and point `meritproject.lk` and `www` at it in the
   same release (nginx block in the monorepo `Deployment.md`). Otherwise the root domain, `/privacy-policy` and
   `/terms-and-conditions` return 404. The frontend has no deploy workflow yet.
-- **Push:** create a Firebase project, mount a service-account JSON, and set `FCM_PROJECT_ID` and `FCM_CREDENTIALS_FILE`.
-  Then add the cron line (`docs/cron-setup-guide.md`). Until then reminders are a no-op.
+- **Push:** hidden for v1 (Gate 0), so skip this for now. For v1.1: create a Firebase project, mount a service-account
+  JSON, set `FCM_PROJECT_ID` and `FCM_CREDENTIALS_FILE`, and add the cron line (`docs/cron-setup-guide.md`).
 - **Patchworks go-live (manual):** merit-content `docs/PATCHWORKS-RELEASE.md`. One-time setup: public read on
   `content-assets/patchworks/*`, an upload key, and the GitHub variable `CONTENT_CDN_BASE`. Then push and run the importer
   with `--avatars`.
 
 ## Open decisions
 
-- **Daily plan "done":** built as "every item done", which pays 30 points. Confirm it.
-- **Prices:** Rs 4,990/yr and Rs 599/mo, or the "$4.99/mo" on the current Profile screen.
-- ~~**Share card privacy**~~: settled by D25 (username and score only).
-- **Day boundary:** streaks and the daily plan use the UTC day, so it rolls over at 05:30 Sri Lanka time. Decide whether to
-  switch both to Sri Lanka midnight.
-- **Grade prediction with little data:** it shows a low-confidence grade (often F) for new students. Consider hiding the
-  grade below some coverage level.
-- **Achievement points for existing students:** they get retroactive unlocks and points on their first evaluation.
+All settled by Gate 0 (2026-10-23, `wireframes/DECISIONS.md`):
+- plan "done" is an admin threshold that applies from the next day;
+- prices are Rs 599 / Rs 4,990;
+- the day boundary is Sri Lanka midnight;
+- the prediction is hidden below 30% coverage;
+- badges are retroactive, their points are not.
+
+The share card was settled by D25.
 
 ## Open items carried over
 
-- **Agricultural Science and ICT** have colours but no icon maps, so they have no patchworks yet. They use the
-  §1.4a fallback.
+- **Agricultural Science and ICT** have colours but no icon maps yet. Gate 0 puts them in v1: build the maps, mark
+  nodes with no fitting icon in the audit UI, then generate icons for them.
 - **Feature icons** (flashcards, notes, quiz modes…) are deferred; the app uses Phosphor.
   The groundwork is `patchwork_jev.py --features`.
 - **Jev icon audit:** 45 flagged and 61 weak remain (optional polish). Picker:
   `tools/run.sh tools/patchwork_review.py serve` in merit-content.
-- **Clash Display licence:** the v2 Clash Display (FFL) files are still committed here (public repo). Remove them and
-  decide on history before v3 ships (`assets/fonts/README.md`).
+- **Clash Display licence:** untracked on 2026-10-23 (`e47e66b`). The files remain in history; the owner chose not to
+  scrub it for now.
 - **Quests and structured questions** have no backend yet. Quests ships as a coming-soon tab.
 
 ## Flutter v3 (done)
