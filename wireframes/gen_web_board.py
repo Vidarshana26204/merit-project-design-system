@@ -14,30 +14,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_web import *  # noqa: F401,F403  (frames, helpers, round 11 screens)
 
 
-def kit_screen(sid, title, tags, desc, data, frames):
-    tg = "".join(f'<span class="tag {c}">{t}</span>' for c, t in tags)
-    d = f'<span class="wf-data">{data}</span>' if data else ""
-    body = "".join(f'<div class="wf-cand"><div class="wf-cand-h"><b>{i + 1}</b><span>{n}</span><em>Approve</em></div>{f}<div class="wf-note"><p>{note}</p></div></div>' for i, (n, f, note) in enumerate(frames))
-    return (f'<article class="wf-screen" data-screen="{sid}"><div class="wf-screen-h"><h3>{title}</h3>{tg}<p>{desc}</p>{d}</div>'
-            f'<div class="wf-vars desk">{body}</div><div class="wf-feedback"><label for="fb-{sid}">Notes on {title.split(" ·")[0]}</label>'
-            f'<textarea id="fb-{sid}" rows="2"></textarea><span class="wf-saved"></span></div></article>')
-
-
-def flow(fid, title, intro, legend, screens, first=False):
-    lg = "".join(f'<span class="tag {c}">{t}</span>' for c, t in legend)
-    return (f'<!-- ======================================================= {fid.upper()} -->\n'
-            f'<section class="wf-flow web" data-flow="{fid}"{"" if first else " hidden"}>\n'
-            f'<div class="wf-intro"><h2>{title}</h2><p>{intro}</p><div class="wf-legend">{lg}</div></div>\n'
-            + "\n".join(screens) + "\n</section>\n")
-
-
-def phone(body, h=720, tab=None):
-    nav = ""
-    if tab:
-        nav = '<nav class="tabbar">' + "".join(f'<a class="{"on" if l == tab else ""}">{I(i + ("-fill" if l == tab else ""))}{l}</a>' for i, l in NAV) + '</nav>'
-    return f'<div class="ph" style="height:{h}px"><div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div><div class="scr">{body}</div>{nav}<div class="ph-gest"></div></div>'
-
-
 # ------------------------------------------------------------------ 00 Landing: Quilt Map concepts (live)
 def live(kind):
     return f'<div class="qm-wrap"><div data-qm="{kind}" data-stream="al-science"></div><p class="qm-cap">Live prototype: click a subject, then a topic. Esc or the breadcrumb goes back. Stream chips switch the tree.</p></div>'
@@ -167,6 +143,11 @@ STATES = f'''<div class="w-states">{st_card("empty", "No attempts yet", "Your qu
 s_states = kit_screen("web-states", "States · empty, error, offline, loading, session", [("gap", "Approve")],
     "One spot, one line, one CTA; never a patchwork (DS §5). Same set as the app.", "", [("States", app("Learn", "Biology", STATES, "Learn"), "Skeletons match the real layout and stay static under reduced motion.")])
 
+# ------------------------------------------------------------------ round 12 (one module per agent)
+from r12_landing import concept, s_hero  # noqa: E402,F811  low-poly tree + hero A + phone hero
+from r12_hub import s_hub, s_subj  # noqa: E402,F811  hub A with mobile section tabs
+from r12_auth import s_auth  # noqa: E402,F811  step-aware split screen
+
 # ------------------------------------------------------------------ page
 NAVS = [("landing", "00", "Landing"), ("shell", "01", "Shell &amp; nav"), ("today", "02", "Today"), ("quiz", "03", "Quiz"), ("study", "04", "Study &amp; notes"),
         ("subjects", "05", "Subjects"), ("compete", "06", "Compete"), ("premium", "07", "Premium"), ("me", "08", "Me"), ("auth", "09", "Auth &amp; onboarding"), ("states", "10", "System states")]
@@ -192,10 +173,13 @@ HEAD = '''<title>Merit Web Wireframes</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="wireframes/wf.css">
 <link rel="stylesheet" href="wireframes/wf-web.css">
+<link rel="stylesheet" href="wireframes/wf-r12-landing.css">
+<link rel="stylesheet" href="wireframes/wf-r12-hub.css">
+<link rel="stylesheet" href="wireframes/wf-r12-auth.css">
 
 <header class="wf-top">
   <div class="wf-top-row">
-    <div class="wf-brand"><h1>Merit web wireframes</h1><span>v3 web · landing + student portal · round 11</span></div>
+    <div class="wf-brand"><h1>Merit web wireframes</h1><span>v3 web · landing + student portal · round 12</span></div>
     <div class="wf-ctrls">
       <span class="wf-tally" aria-live="polite"></span>
       <div class="wf-seg" data-seg="width" role="group" aria-label="Frame width">
@@ -223,6 +207,9 @@ TAIL = '''</main>
 <script src="wireframes/qm-data.js"></script>
 <script src="wireframes/qm.js"></script>
 <script src="wireframes/qm-tree.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/delaunator@5.0.1/delaunator.min.js"></script>
+<script src="wireframes/qm-lowpoly.js"></script>
 '''
 
 if __name__ == "__main__":

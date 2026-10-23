@@ -337,3 +337,27 @@ s_prem = screen("web-premium", "Student portal · Achiever (buy in the app)", [(
     "GET /students/me/subscription · /quiz/daily-limits · /points/summary",
     [f'<div class="wf-cand"><div class="wf-cand-h"><b>1</b><span>Achiever page</span><em>Approve</em></div>{prem}<div class="wf-note"><p>Locked features (Adaptive, Stats cards) and limit dialogs link here.</p></div></div>'])
 
+
+# ---------------------------------------------------------------- board helpers (shared by gen_web_board.py and r12_*.py)
+def kit_screen(sid, title, tags, desc, data, frames):
+    tg = "".join(f'<span class="tag {c}">{t}</span>' for c, t in tags)
+    d = f'<span class="wf-data">{data}</span>' if data else ""
+    body = "".join(f'<div class="wf-cand"><div class="wf-cand-h"><b>{i + 1}</b><span>{n}</span><em>Approve</em></div>{f}<div class="wf-note"><p>{note}</p></div></div>' for i, (n, f, note) in enumerate(frames))
+    return (f'<article class="wf-screen" data-screen="{sid}"><div class="wf-screen-h"><h3>{title}</h3>{tg}<p>{desc}</p>{d}</div>'
+            f'<div class="wf-vars desk">{body}</div><div class="wf-feedback"><label for="fb-{sid}">Notes on {title.split(" ·")[0]}</label>'
+            f'<textarea id="fb-{sid}" rows="2"></textarea><span class="wf-saved"></span></div></article>')
+
+
+def flow(fid, title, intro, legend, screens, first=False):
+    lg = "".join(f'<span class="tag {c}">{t}</span>' for c, t in legend)
+    return (f'<!-- ======================================================= {fid.upper()} -->\n'
+            f'<section class="wf-flow web" data-flow="{fid}"{"" if first else " hidden"}>\n'
+            f'<div class="wf-intro"><h2>{title}</h2><p>{intro}</p><div class="wf-legend">{lg}</div></div>\n'
+            + "\n".join(screens) + "\n</section>\n")
+
+
+def phone(body, h=720, tab=None):
+    nav = ""
+    if tab:
+        nav = '<nav class="tabbar">' + "".join(f'<a class="{"on" if l == tab else ""}">{I(i + ("-fill" if l == tab else ""))}{l}</a>' for i, l in NAV) + '</nav>'
+    return f'<div class="ph" style="height:{h}px"><div class="ph-sb"><span>9:41</span><span class="dots"><i></i><i></i></span></div><div class="scr">{body}</div>{nav}<div class="ph-gest"></div></div>'
