@@ -1,0 +1,18 @@
+{
+  "$description": "Script overrides for Sinhala (si) and Tamil (ta) — edu-theming-criteria C4. The build applies them to every type token: CSS :lang(si|ta) blocks re-declare the --merit-type-* parts; Dart gets MeritTypeScaleSi / MeritTypeScaleTa. Numeric styles are skipped (digits stay Latin). Display family = styles set in fontFamily.display.",
+  "si": {
+    "letterSpacing": "0em",
+    "textTransform": "none",
+    "bodyLineHeightMin": 1.6,
+    "displayLineHeightMin": 1.3,
+    "displayStepDown": false
+  },
+  "ta": {
+    "letterSpacing": "0em",
+    "textTransform": "none",
+    "bodyLineHeightMin": 1.6,
+    "displayLineHeightMin": 1.3,
+    "displayStepDown": true
+  },
+  "displaySteps": ["type.display.xl", "type.display.lg", "type.display.md", "type.title.lg", "type.title.md", "type.emphasis.md"]
+}

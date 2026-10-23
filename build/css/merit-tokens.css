@@ -485,3 +485,66 @@
   --merit-chart-4: var(--merit-dataviz-cat4);
   --merit-chart-5: var(--merit-dataviz-cat5);
 }
+
+/* SI script overrides (tokens/scripts.json): tracking 0, taller lines, no uppercase */
+:lang(si) {
+  --merit-type-display-xl-line-height: 1.3;
+  --merit-type-display-xl-tracking: 0em;
+  --merit-type-display-lg-line-height: 1.3;
+  --merit-type-display-lg-tracking: 0em;
+  --merit-type-display-md-line-height: 1.3;
+  --merit-type-display-md-tracking: 0em;
+  --merit-type-title-lg-line-height: 1.3;
+  --merit-type-title-lg-tracking: 0em;
+  --merit-type-title-md-tracking: 0em;
+  --merit-type-title-sm-line-height: 1.6;
+  --merit-type-emphasis-lg-line-height: 1.3;
+  --merit-type-emphasis-lg-tracking: 0em;
+  --merit-type-emphasis-md-tracking: 0em;
+  --merit-type-body-lg-line-height: 1.6;
+  --merit-type-body-md-line-height: 1.6;
+  --merit-type-body-sm-line-height: 1.6;
+  --merit-type-label-md-line-height: 1.6;
+  --merit-type-label-md-tracking: 0em;
+  --merit-type-label-md-transform: none;
+  --merit-type-label-sm-line-height: 1.6;
+  --merit-type-label-sm-tracking: 0em;
+  --merit-type-label-sm-transform: none;
+  --merit-type-eyebrow-line-height: 1.6;
+  --merit-type-eyebrow-tracking: 0em;
+  --merit-type-eyebrow-transform: none;
+}
+
+/* TA script overrides (tokens/scripts.json): tracking 0, taller lines, no uppercase, display one step down */
+:lang(ta) {
+  --merit-type-display-xl-size: 40px;
+  --merit-type-display-xl-line-height: 1.3;
+  --merit-type-display-xl-tracking: 0em;
+  --merit-type-display-lg-size: 32px;
+  --merit-type-display-lg-line-height: 1.3;
+  --merit-type-display-lg-tracking: 0em;
+  --merit-type-display-md-size: 24px;
+  --merit-type-display-md-line-height: 1.3;
+  --merit-type-display-md-tracking: 0em;
+  --merit-type-title-lg-size: 20px;
+  --merit-type-title-lg-line-height: 1.3;
+  --merit-type-title-lg-tracking: 0em;
+  --merit-type-title-md-size: 18px;
+  --merit-type-title-md-tracking: 0em;
+  --merit-type-title-sm-line-height: 1.6;
+  --merit-type-emphasis-lg-line-height: 1.3;
+  --merit-type-emphasis-lg-tracking: 0em;
+  --merit-type-emphasis-md-tracking: 0em;
+  --merit-type-body-lg-line-height: 1.6;
+  --merit-type-body-md-line-height: 1.6;
+  --merit-type-body-sm-line-height: 1.6;
+  --merit-type-label-md-line-height: 1.6;
+  --merit-type-label-md-tracking: 0em;
+  --merit-type-label-md-transform: none;
+  --merit-type-label-sm-line-height: 1.6;
+  --merit-type-label-sm-tracking: 0em;
+  --merit-type-label-sm-transform: none;
+  --merit-type-eyebrow-line-height: 1.6;
+  --merit-type-eyebrow-tracking: 0em;
+  --merit-type-eyebrow-transform: none;
+}

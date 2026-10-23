@@ -27,6 +27,25 @@ const isThemed = (t) => t.layer === 'semantic' || (t.layer === 'component' && t.
 const themedName = (t) => dartName(t, t.path[0] === 'color' ? 1 : 0);
 const shadowLayers = (v) => (Array.isArray(v) ? v : [v]);
 
+
+// ---- SI/TA script overrides (tokens/scripts.json) ---------------------------
+/** Per script: [{t, size, lineHeight, letterSpacing, upper}] for every non-numeric type token. */
+export function scriptStyles(themes, scripts, lang) {
+  const rule = scripts[lang];
+  const all = [...themes.light.values()].filter((t) => t.type === 'typography' && t.path[1] !== 'numeric');
+  const display = themes.light.get('fontFamily.display').value;
+  const steps = scripts.displaySteps;
+  return all.map((t) => {
+    const v = t.value;
+    const isDisplay = v.fontFamily === display;
+    const i = steps.indexOf(t.id);
+    const size = rule.displayStepDown && isDisplay && i >= 0 && i < steps.length - 1
+      ? themes.light.get(steps[i + 1]).value.fontSize : v.fontSize;
+    const lineHeight = Math.max(v.lineHeight, isDisplay ? rule.displayLineHeightMin : rule.bodyLineHeightMin);
+    return { t, size, lineHeight, letterSpacing: rule.letterSpacing, isDisplay };
+  });
+}
+
 // ---- CSS -------------------------------------------------------------------
 function cssFontFamily(list) {
   const generic = new Set(['system-ui', 'sans-serif', 'serif', 'monospace', 'ui-monospace']);
@@ -69,7 +88,7 @@ function cssDecls(t, all) {
 
 const block = (selector, lines) => `${selector} {\n${lines.map((l) => `  ${l}`).join('\n')}\n}\n`;
 
-export function formatCss(themes, version) {
+export function formatCss(themes, version, scripts) {
   const light = themes.light;
   const all = [...light.values()].filter((t) => onlyFor(t, 'css'));
   const fixed = all.filter((t) => !isThemed(t));
@@ -93,6 +112,18 @@ export function formatCss(themes, version) {
       '/* component colours */',
       ...componentColors.flatMap((t) => cssDecls(t, light)),
     ]),
+    ...['si', 'ta'].flatMap((lang) => [
+      `/* ${lang.toUpperCase()} script overrides (tokens/scripts.json): tracking 0, taller lines, no uppercase${scripts[lang].displayStepDown ? ', display one step down' : ''} */`,
+      block(`:lang(${lang})`, scriptStyles(themes, scripts, lang).flatMap(({ t, size, lineHeight, letterSpacing }) => {
+        const n = cssVar(t);
+        const d = [];
+        if (size !== t.value.fontSize) d.push(`${n}-size: ${size};`);
+        if (lineHeight !== t.value.lineHeight) d.push(`${n}-line-height: ${lineHeight};`);
+        if (letterSpacing !== t.value.letterSpacing) d.push(`${n}-tracking: ${letterSpacing};`);
+        if (t.extensions['merit.textTransform']) d.push(`${n}-transform: ${scripts[lang].textTransform};`);
+        return d;
+      })),
+    ]),
   ].join('\n');
 }
 
@@ -107,7 +138,7 @@ const cls = (doc, name, members) => [
 
 const FONT_WEIGHT = { 400: 'w400', 500: 'w500', 600: 'w600', 700: 'w700' };
 
-export function formatDart(themes, version) {
+export function formatDart(themes, version, scripts) {
   const light = themes.light;
   const all = [...light.values()].filter((t) => onlyFor(t, 'dart'));
   const group = (g) => all.filter((t) => t.path[0] === g);
@@ -132,23 +163,32 @@ export function formatDart(themes, version) {
     ? `BoxShadow.lerpList(${f}, other.${f}, t)!`
     : `Color.lerp(${f}, other.${f}, t)!`);
 
-  const typeStyles = group('type').map((t) => {
+  const typeStyle = (t, o = {}) => {
     const v = t.value;
-    const size = px(v.fontSize);
-    const tracking = Math.round(size * parseFloat(v.letterSpacing) * 100) / 100;
+    const size = px(o.size ?? v.fontSize);
+    const tracking = Math.round(size * parseFloat(o.letterSpacing ?? v.letterSpacing) * 100) / 100;
     const props = [
       `fontFamily: '${flutterFont(v.fontFamily)}'`,
       'fontFamilyFallback: MeritFonts.fallback',
       `fontSize: ${num(size)}`,
-      `height: ${num(v.lineHeight)}`,
+      `height: ${num(o.lineHeight ?? v.lineHeight)}`,
       `fontWeight: FontWeight.${FONT_WEIGHT[v.fontWeight]}`,
       `letterSpacing: ${num(tracking)}`,
     ];
     if (t.extensions['merit.fontStyle'] === 'italic') props.push('fontStyle: FontStyle.italic');
     if (t.extensions['merit.tabularNums']) props.push('fontFeatures: [FontFeature.tabularFigures()]');
-    const note = t.extensions['merit.textTransform'] === 'uppercase' ? ' // render UPPERCASE (Latin only)' : '';
+    const note = t.extensions['merit.textTransform'] === 'uppercase'
+      ? (o.size ? ' // normal case: never uppercase SI/TA' : ' // render UPPERCASE (Latin only)') : '';
     return `static const TextStyle ${dartName(t)} = TextStyle(${props.join(', ')});${note}`;
-  });
+  };
+  const typeStyles = group('type').map((t) => typeStyle(t));
+  const scriptClass = (lang, name) => {
+    const byId = new Map(scriptStyles(themes, scripts, lang).map((x) => [x.t.id, x]));
+    return group('type').map((t) => {
+      const x = byId.get(t.id);
+      return x ? typeStyle(t, x) : `static const TextStyle ${dartName(t)} = MeritTypeScale.${dartName(t)}; // digits stay Latin`;
+    });
+  };
 
   const fields = themed.map(themedName);
 
@@ -192,7 +232,19 @@ export function formatDart(themes, version) {
       ...group('fontFamily').map((t) => `static const String ${dartName(t)} = '${t.extensions['merit.flutter']}';${doc(t)}`),
       `static const List<String> fallback = [${(group('fontFamily')[0]?.extensions['merit.flutterFallback'] ?? []).map((f) => `'${f}'`).join(', ')}];`,
     ]),
-    ...cls('Unified type scale (Latin). SI/TA: letterSpacing 0, height ≥ 1.6 body / 1.3 display.', 'MeritTypeScale', typeStyles),
+    ...cls('Unified type scale (Latin). For SI/TA content use MeritTypeScaleSi / MeritTypeScaleTa (or MeritTypeScales.of).', 'MeritTypeScale', typeStyles),
+    ...cls('Sinhala overrides (tokens/scripts.json): tracking 0, height ≥ 1.6 body / 1.3 display, no uppercase.', 'MeritTypeScaleSi', scriptClass('si')),
+    ...cls('Tamil overrides (tokens/scripts.json): as Sinhala, and display sizes one step down.', 'MeritTypeScaleTa', scriptClass('ta')),
+    '/// The type scale for a content language: `MeritTypeScaleSet.of(lang).bodyLg`.',
+    '/// Use it wherever subject content (SI/TA) is rendered; UI chrome stays English.',
+    'final class MeritTypeScaleSet {',
+    `  const MeritTypeScaleSet._({${group('type').map((t) => `required this.${dartName(t)}`).join(', ')}});`,
+    ...group('type').map((t) => `  final TextStyle ${dartName(t)};`),
+    ...[['en', 'MeritTypeScale'], ['si', 'MeritTypeScaleSi'], ['ta', 'MeritTypeScaleTa']].map(([l, c]) =>
+      `  static const ${l} = MeritTypeScaleSet._(${group('type').map((t) => `${dartName(t)}: ${c}.${dartName(t)}`).join(', ')});`),
+    "  static MeritTypeScaleSet of(String lang) => switch (lang) { 'si' => si, 'ta' => ta, _ => en };",
+    '}',
+    '',
     '/// Theme-aware semantic + component colours and elevation. Register both instances in',
     '/// ThemeData.extensions; read with `context.meritColors`.',
     '@immutable',

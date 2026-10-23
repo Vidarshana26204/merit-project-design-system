@@ -166,7 +166,7 @@ abstract final class MeritFonts {
   static const List<String> fallback = ['NotoSansSinhala', 'NotoSansTamil'];
 }
 
-/// Unified type scale (Latin). SI/TA: letterSpacing 0, height ≥ 1.6 body / 1.3 display.
+/// Unified type scale (Latin). For SI/TA content use MeritTypeScaleSi / MeritTypeScaleTa (or MeritTypeScales.of).
 abstract final class MeritTypeScale {
   static const TextStyle displayXl = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 56.0, height: 1.04, fontWeight: FontWeight.w600, letterSpacing: -1.68);
   static const TextStyle displayLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 40.0, height: 1.1, fontWeight: FontWeight.w600, letterSpacing: -1.0);
@@ -185,6 +185,75 @@ abstract final class MeritTypeScale {
   static const TextStyle numericXl = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 48.0, height: 1.0, fontWeight: FontWeight.w700, letterSpacing: -0.96, fontFeatures: [FontFeature.tabularFigures()]);
   static const TextStyle numericLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 32.0, height: 1.0, fontWeight: FontWeight.w700, letterSpacing: -0.64, fontFeatures: [FontFeature.tabularFigures()]);
   static const TextStyle numericMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 20.0, height: 1.0, fontWeight: FontWeight.w700, letterSpacing: -0.2, fontFeatures: [FontFeature.tabularFigures()]);
+}
+
+/// Sinhala overrides (tokens/scripts.json): tracking 0, height ≥ 1.6 body / 1.3 display, no uppercase.
+abstract final class MeritTypeScaleSi {
+  static const TextStyle displayXl = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 56.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle displayLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 40.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle displayMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 32.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle titleLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 24.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle titleMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 20.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle titleSm = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 16.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0);
+  static const TextStyle emphasisLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 24.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0, fontStyle: FontStyle.italic);
+  static const TextStyle emphasisMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 18.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0, fontStyle: FontStyle.italic);
+  static const TextStyle bodyLg = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 16.0, height: 1.6, fontWeight: FontWeight.w500, letterSpacing: 0.0);
+  static const TextStyle bodyMd = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 14.0, height: 1.6, fontWeight: FontWeight.w500, letterSpacing: 0.0);
+  static const TextStyle bodySm = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 12.0, height: 1.6, fontWeight: FontWeight.w500, letterSpacing: 0.0);
+  static const TextStyle labelMd = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 12.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0); // normal case: never uppercase SI/TA
+  static const TextStyle labelSm = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 11.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0); // normal case: never uppercase SI/TA
+  static const TextStyle eyebrow = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 11.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0); // normal case: never uppercase SI/TA
+  static const TextStyle numericXl = MeritTypeScale.numericXl; // digits stay Latin
+  static const TextStyle numericLg = MeritTypeScale.numericLg; // digits stay Latin
+  static const TextStyle numericMd = MeritTypeScale.numericMd; // digits stay Latin
+}
+
+/// Tamil overrides (tokens/scripts.json): as Sinhala, and display sizes one step down.
+abstract final class MeritTypeScaleTa {
+  static const TextStyle displayXl = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 40.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle displayLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 32.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle displayMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 24.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle titleLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 20.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle titleMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 18.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0);
+  static const TextStyle titleSm = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 16.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0);
+  static const TextStyle emphasisLg = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 24.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0, fontStyle: FontStyle.italic);
+  static const TextStyle emphasisMd = TextStyle(fontFamily: 'GeneralSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 18.0, height: 1.3, fontWeight: FontWeight.w600, letterSpacing: 0.0, fontStyle: FontStyle.italic);
+  static const TextStyle bodyLg = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 16.0, height: 1.6, fontWeight: FontWeight.w500, letterSpacing: 0.0);
+  static const TextStyle bodyMd = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 14.0, height: 1.6, fontWeight: FontWeight.w500, letterSpacing: 0.0);
+  static const TextStyle bodySm = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 12.0, height: 1.6, fontWeight: FontWeight.w500, letterSpacing: 0.0);
+  static const TextStyle labelMd = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 12.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0); // normal case: never uppercase SI/TA
+  static const TextStyle labelSm = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 11.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0); // normal case: never uppercase SI/TA
+  static const TextStyle eyebrow = TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: MeritFonts.fallback, fontSize: 11.0, height: 1.6, fontWeight: FontWeight.w700, letterSpacing: 0.0); // normal case: never uppercase SI/TA
+  static const TextStyle numericXl = MeritTypeScale.numericXl; // digits stay Latin
+  static const TextStyle numericLg = MeritTypeScale.numericLg; // digits stay Latin
+  static const TextStyle numericMd = MeritTypeScale.numericMd; // digits stay Latin
+}
+
+/// The type scale for a content language: `MeritTypeScaleSet.of(lang).bodyLg`.
+/// Use it wherever subject content (SI/TA) is rendered; UI chrome stays English.
+final class MeritTypeScaleSet {
+  const MeritTypeScaleSet._({required this.displayXl, required this.displayLg, required this.displayMd, required this.titleLg, required this.titleMd, required this.titleSm, required this.emphasisLg, required this.emphasisMd, required this.bodyLg, required this.bodyMd, required this.bodySm, required this.labelMd, required this.labelSm, required this.eyebrow, required this.numericXl, required this.numericLg, required this.numericMd});
+  final TextStyle displayXl;
+  final TextStyle displayLg;
+  final TextStyle displayMd;
+  final TextStyle titleLg;
+  final TextStyle titleMd;
+  final TextStyle titleSm;
+  final TextStyle emphasisLg;
+  final TextStyle emphasisMd;
+  final TextStyle bodyLg;
+  final TextStyle bodyMd;
+  final TextStyle bodySm;
+  final TextStyle labelMd;
+  final TextStyle labelSm;
+  final TextStyle eyebrow;
+  final TextStyle numericXl;
+  final TextStyle numericLg;
+  final TextStyle numericMd;
+  static const en = MeritTypeScaleSet._(displayXl: MeritTypeScale.displayXl, displayLg: MeritTypeScale.displayLg, displayMd: MeritTypeScale.displayMd, titleLg: MeritTypeScale.titleLg, titleMd: MeritTypeScale.titleMd, titleSm: MeritTypeScale.titleSm, emphasisLg: MeritTypeScale.emphasisLg, emphasisMd: MeritTypeScale.emphasisMd, bodyLg: MeritTypeScale.bodyLg, bodyMd: MeritTypeScale.bodyMd, bodySm: MeritTypeScale.bodySm, labelMd: MeritTypeScale.labelMd, labelSm: MeritTypeScale.labelSm, eyebrow: MeritTypeScale.eyebrow, numericXl: MeritTypeScale.numericXl, numericLg: MeritTypeScale.numericLg, numericMd: MeritTypeScale.numericMd);
+  static const si = MeritTypeScaleSet._(displayXl: MeritTypeScaleSi.displayXl, displayLg: MeritTypeScaleSi.displayLg, displayMd: MeritTypeScaleSi.displayMd, titleLg: MeritTypeScaleSi.titleLg, titleMd: MeritTypeScaleSi.titleMd, titleSm: MeritTypeScaleSi.titleSm, emphasisLg: MeritTypeScaleSi.emphasisLg, emphasisMd: MeritTypeScaleSi.emphasisMd, bodyLg: MeritTypeScaleSi.bodyLg, bodyMd: MeritTypeScaleSi.bodyMd, bodySm: MeritTypeScaleSi.bodySm, labelMd: MeritTypeScaleSi.labelMd, labelSm: MeritTypeScaleSi.labelSm, eyebrow: MeritTypeScaleSi.eyebrow, numericXl: MeritTypeScaleSi.numericXl, numericLg: MeritTypeScaleSi.numericLg, numericMd: MeritTypeScaleSi.numericMd);
+  static const ta = MeritTypeScaleSet._(displayXl: MeritTypeScaleTa.displayXl, displayLg: MeritTypeScaleTa.displayLg, displayMd: MeritTypeScaleTa.displayMd, titleLg: MeritTypeScaleTa.titleLg, titleMd: MeritTypeScaleTa.titleMd, titleSm: MeritTypeScaleTa.titleSm, emphasisLg: MeritTypeScaleTa.emphasisLg, emphasisMd: MeritTypeScaleTa.emphasisMd, bodyLg: MeritTypeScaleTa.bodyLg, bodyMd: MeritTypeScaleTa.bodyMd, bodySm: MeritTypeScaleTa.bodySm, labelMd: MeritTypeScaleTa.labelMd, labelSm: MeritTypeScaleTa.labelSm, eyebrow: MeritTypeScaleTa.eyebrow, numericXl: MeritTypeScaleTa.numericXl, numericLg: MeritTypeScaleTa.numericLg, numericMd: MeritTypeScaleTa.numericMd);
+  static MeritTypeScaleSet of(String lang) => switch (lang) { 'si' => si, 'ta' => ta, _ => en };
 }
 
 /// Theme-aware semantic + component colours and elevation. Register both instances in

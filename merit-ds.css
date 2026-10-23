@@ -17,6 +17,15 @@
 @font-face { font-family: "Plus Jakarta Sans"; font-weight: 500; src: url("assets/fonts/PlusJakartaSans-Medium.ttf") format("truetype"); font-display: swap; }
 @font-face { font-family: "Plus Jakarta Sans"; font-weight: 600; src: url("assets/fonts/PlusJakartaSans-SemiBold.ttf") format("truetype"); font-display: swap; }
 @font-face { font-family: "Plus Jakarta Sans"; font-weight: 700; src: url("assets/fonts/PlusJakartaSans-Bold.ttf") format("truetype"); font-display: swap; }
+/* Noto Sans Sinhala / Tamil (OFL, OFL-NotoSans.txt): script-only woff2 subsets, so the SI/TA specimens never rely on OS fonts */
+@font-face { font-family: "Noto Sans Sinhala"; font-weight: 400; font-display: swap; unicode-range: U+0D80-0DFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansSinhala-Regular.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Sinhala"; font-weight: 500; font-display: swap; unicode-range: U+0D80-0DFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansSinhala-Medium.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Sinhala"; font-weight: 600; font-display: swap; unicode-range: U+0D80-0DFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansSinhala-SemiBold.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Sinhala"; font-weight: 700; font-display: swap; unicode-range: U+0D80-0DFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansSinhala-Bold.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Tamil"; font-weight: 400; font-display: swap; unicode-range: U+0B80-0BFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansTamil-Regular.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Tamil"; font-weight: 500; font-display: swap; unicode-range: U+0B80-0BFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansTamil-Medium.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Tamil"; font-weight: 600; font-display: swap; unicode-range: U+0B80-0BFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansTamil-SemiBold.woff2") format("woff2"); }
+@font-face { font-family: "Noto Sans Tamil"; font-weight: 700; font-display: swap; unicode-range: U+0B80-0BFF, U+200C-200D, U+25CC; src: url("assets/fonts/NotoSansTamil-Bold.woff2") format("woff2"); }
 
 /* ---------- short aliases (site only) ---------- */
 :root {

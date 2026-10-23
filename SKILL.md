@@ -118,11 +118,27 @@ box, so it works with Sinhala and Tamil.
 **Eyebrow pattern:** a small uppercase `text.eyebrow` (orange 700) label above section
 headings. **SI/TA eyebrows are never uppercased and have tracking 0.**
 
-**SI/TA rules (C4):**
-- letter-spacing 0
-- body line-height ≥ 1.6, display ≥ 1.3
+**SI/TA rules (C4)** are tokens since v3.7 (`tokens/scripts.json`), not just prose:
+- letter-spacing 0; body line-height ≥ 1.6, display ≥ 1.3; never uppercase
+- Tamil display styles drop one step (display xl → 40, lg → 32, md → 24, title lg → 20, title md → 18)
+- **Web:** automatic. `build/css/merit-tokens.css` re-declares the `--merit-type-*` parts under
+  `:lang(si)` / `:lang(ta)`, so set `lang` on the subject-content container (never on UI chrome).
+- **Flutter:** `MeritTypeScaleSet.of(contentLang).bodyLg` (or `MeritTypeScaleSi` / `MeritTypeScaleTa`)
+  for subject content; UI chrome stays on `MeritTypeScale` (English).
 - buttons, chips and tabs wrap and never truncate (Tamil runs +30–40%)
 - language names appear in their own script: English / සිංහල / தமிழ்
+- The reference site ships script-only woff2 subsets of Noto Sans Sinhala / Tamil
+  (`assets/fonts/NotoSans*-*.woff2`, OFL), so SI/TA specimens never depend on OS fonts.
+
+**Maths (KaTeX policy):**
+- Web renders with `katex` (frontend `components/content-blocks/math-text.tsx`); Flutter with
+  `flutter_math_fork`. Both use the KaTeX fonts they bundle (OFL); never substitute a brand face.
+- Inline maths size: `1.05em` of the surrounding text (KaTeX's default 1.21em is too large next to
+  Jakarta); display maths: `1.15em`, centred, horizontally scrollable, never scaled down to fit.
+- Colour: `currentColor` (inherits `text.primary` / the option or card fg). No coloured maths.
+- `\text{…}` inside an SI/TA formula falls back to Noto Sans Sinhala / Tamil via the body stack.
+- Line-height: a block containing inline maths keeps the body line-height; KaTeX's own struts
+  handle fractions. Do not clip `overflow-y` on maths containers.
 
 **Fonts and licensing:**
 - General Sans is under the ITF Free Font License, which **forbids redistribution from a public

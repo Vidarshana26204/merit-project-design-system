@@ -26,6 +26,7 @@ function main() {
   const { version } = JSON.parse(read('package.json'));
   const tokensDir = join(ROOT, 'tokens');
   const themes = loadTokens(tokensDir);
+  const scripts = JSON.parse(read('tokens/scripts.json'));
 
   // ---- contrast gate ----
   const results = checkContrast(themes, loadContrastPairs(tokensDir));
@@ -41,8 +42,8 @@ function main() {
 
   // ---- render ----
   const files = {
-    [OUTPUTS.css]: formatCss(themes, version),
-    [OUTPUTS.dart]: formatDart(themes, version),
+    [OUTPUTS.css]: formatCss(themes, version, scripts),
+    [OUTPUTS.dart]: formatDart(themes, version, scripts),
     [OUTPUTS.json]: formatJson(themes, version),
   };
   const skill = read('SKILL.md');
