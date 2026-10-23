@@ -15,7 +15,7 @@
   --wf-ink: var(--merit-ink-900);
   --wf-muted: var(--merit-ink-500);
   --wf-rule: var(--merit-canvas-200);
-  --wf-api: var(--merit-sky-500);
+  --wf-api: var(--merit-sky-700);  /* a11y audit: sky-500 was 2.85:1 on its tint */
   --wf-api-bg: #E3EDF9;
   --wf-calm: var(--merit-violet-500);
   --wf-energy: var(--merit-orange-700);
@@ -556,7 +556,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .youbar .lrow .rk, .youbar .lrow .nm small { color: inherit; opacity: .75; }
 .zone { display: flex; align-items: center; gap: 8px; padding: 6px 14px; font: 700 11px var(--fb); letter-spacing: .06em; text-transform: uppercase; }
 .zone.up { background: var(--merit-feedback-success-subtle); color: var(--merit-feedback-success-text); }
-.zone.dn { background: var(--merit-feedback-error-subtle); color: var(--merit-feedback-error); }
+.zone.dn { background: var(--merit-feedback-error-subtle); color: var(--merit-feedback-error-text); }
 .league { display: flex; gap: 8px; align-items: flex-end; }
 .league span { width: 40px; height: 46px; display: grid; place-items: center; font-size: 20px; clip-path: polygon(50% 0, 100% 22%, 100% 78%, 50% 100%, 0 78%, 0 22%); background: var(--merit-surface-sunken); color: var(--merit-text-tertiary); }
 .league span.on { width: 56px; height: 64px; font-size: 28px; background: var(--merit-butter-300); color: var(--merit-ink-900); }

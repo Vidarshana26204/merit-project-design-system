@@ -1,0 +1,45 @@
+/* Round 15 web: quiz results rework (web-results). Tokens only. */
+.r15-res { width: 100%; max-width: 980px; margin: 0 auto; padding: 32px 40px; display: flex; flex-direction: column; gap: 20px; }
+.r15-hero { display: flex; gap: 28px; align-items: center; }
+.r15-medal { position: relative; flex: none; }
+.r15-medal .grade { width: 120px; height: 120px; font-size: 60px; border-radius: 36px; box-shadow: var(--merit-elevation-e2); }
+.r15-spark { position: absolute; color: var(--merit-decor-sparkle); font-size: 22px; }
+.r15-spark .i { width: 1em; height: 1em; }
+.r15-spark.s1 { top: -10px; right: -12px; } .r15-spark.s2 { bottom: 6px; left: -16px; font-size: 16px; color: var(--merit-decor-sparkle-warm); }
+.r15-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.r15-stats > div { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 16px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.r15-stats .num { font-size: 22px; display: inline-flex; gap: 4px; align-items: center; }
+.r15-stats .num .i { color: var(--merit-reward-streak); width: 18px; height: 18px; }
+.r15-stats span { font: 600 12px var(--fb); color: var(--merit-text-secondary); }
+.r15-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.r15-qds { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px; }
+.r15-qd { height: 36px; border-radius: 10px; display: grid; place-items: center; font: 700 13px var(--fd); text-decoration: none; color: var(--merit-ink-900); }
+.r15-qd.ok { background: var(--merit-feedback-success); }
+.r15-qd.x { background: var(--merit-feedback-error-subtle); color: var(--merit-feedback-error-text); box-shadow: inset 0 0 0 2px var(--merit-feedback-error); }
+.r15-qd:focus-visible { outline: var(--merit-focus-ring-width) solid var(--merit-focus-ring); outline-offset: 2px; }
+.r15-qds.sm .r15-qd { height: 28px; font-size: 12px; }
+.r15-rcpt { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; border-top: 1px solid var(--merit-border-subtle); }
+.r15-dim { color: var(--merit-text-tertiary); } .r15-dim .i { width: 14px; height: 14px; vertical-align: -2px; }
+.r15-total { align-items: center; gap: 10px; padding-top: 8px; border-top: 1px dashed var(--merit-border-default); }
+.r15-next { box-shadow: none; background: var(--merit-surface-sunken); }
+.r15-quiltwrap { display: flex; gap: 40px; align-items: center; justify-content: center; padding: 8px 0; }
+.r15-big { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.r15-big .tile { border-radius: 36px; }
+.r15-delta { font: 600 15px var(--fd); color: var(--merit-text-secondary); }
+.r15-delta b { color: var(--merit-text-primary); font-size: 20px; }
+.r15-mini { display: flex; gap: 6px; align-items: center; }
+.r15-mini .tile:nth-child(3) { box-shadow: 0 0 0 3px var(--merit-surface-default), 0 0 0 5px var(--merit-dataviz-cat2); border-radius: 12px; }
+.r15-lock { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--merit-surface-sunken); color: var(--merit-text-tertiary); }
+.r15-strip { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 16px 20px; border-radius: 24px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.r15-pill { display: inline-flex; gap: 8px; align-items: center; height: 44px; padding: 0 16px; border-radius: 999px; background: var(--merit-butter-100); color: var(--merit-ink-900); }
+.r15-pill .num { font-size: 20px; }
+.r15-time { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px; height: 150px; align-items: end; }
+.r15-tb { display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.r15-tb i { display: block; width: 100%; height: var(--h); border-radius: 8px 8px 4px 4px; background: var(--merit-feedback-success); }
+.r15-tb.x i { background: var(--merit-feedback-error); }
+.r15-tb span { font: 600 11px var(--fd); color: var(--merit-text-tertiary); }
+.r15-legend { display: flex; gap: 14px; font: 600 12px var(--fb); color: var(--merit-text-secondary); }
+.r15-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--merit-feedback-success); }
+.r15-legend i.x { background: var(--merit-feedback-error); }
+.r15-insight { box-shadow: var(--merit-elevation-e1); }
+@media (prefers-reduced-motion: reduce) { .r15-res * { transition: none !important; animation: none !important; } }

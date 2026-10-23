@@ -82,7 +82,7 @@
 .web .w-band { border-radius: 999px; padding: 28px 40px; }
 .web .w-faq { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; }
 .web .w-foot { display: flex; align-items: center; gap: 20px; padding: 24px 40px; border-top: 1px solid var(--merit-border-subtle); font-size: 13px; }
-.web .w-foot a { color: var(--merit-text-secondary); }
+.web .w-foot a:not(.r13-badge) { color: var(--merit-text-secondary); }
 .web .w-store { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 10px; background: var(--merit-surface-inverse); color: var(--merit-text-on-inverse); font: 700 12px var(--fb); }
 .web .w-story { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: center; }
 .web .w-recipe { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; position: relative; }
@@ -205,3 +205,12 @@
 .web .w-onb { display: flex; flex-direction: column; gap: 14px; max-width: 720px; }
 .web .w-states { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .web .segc span.off { opacity: .35; }
+
+/* Compete root (web-compete note): the podium card fills its column so its bottom edge meets the right-hand
+   stack, and the steps grow by one factor (1.43) so 1 : 2 : 3 keep the app's 84 : 60 : 44 ratio. */
+.web .w-2col.even > .st:has(> .w-comp) { align-self: stretch; }
+.web .w-comp { flex: 1; }
+.web .w-comp .podium { flex: 1; align-content: end; }
+.web .w-comp .podium .p1 .step { height: 120px; }
+.web .w-comp .podium .p2 .step { height: 86px; }
+.web .w-comp .podium .p3 .step { height: 63px; }

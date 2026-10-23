@@ -79,10 +79,10 @@ VERIFY_ERR = ph(f'''{tb("Verify your email")}<b class="h-lg">Check your inbox</b
 <span class="sm" style="color:var(--merit-feedback-error);display:flex;gap:6px;align-items:center">{I("warning-fill")}That code didn't match. 2 tries left.</span>
 <a class="lnk">Send a new code</a>''', abar=btn("Verify", "full"))
 VERIFY_BANNER = ph(f'''<div class="tb"><b class="h-lg sp">Today</b><span class="hchip fl">{I("flame-fill")}3</span></div>
-<div class="card" style="flex-direction:row;gap:12px;align-items:center;background:var(--merit-sky-100, var(--merit-surface-sunken))">{I("envelope")}<div class="sp st" style="gap:2px"><b class="sm">Verify your email</b><span class="xs t2">So you can reset your password later.</span></div><button class="btn s gh" type="button">Verify</button></div>
+<div class="card" style="flex-direction:row;gap:12px;align-items:center;background:var(--merit-feedback-info-subtle)">{I("envelope")}<div class="sp st" style="gap:2px"><b class="sm">Verify your email</b><span class="xs t2">So you can reset your password later.</span></div><button class="btn s gh" type="button">Verify</button></div>
 <div class="card" style="gap:8px"><span class="ey">Today's plan</span><b class="h-md">3 things, about 15 minutes</b></div>''', calm=False, tab="Today")
-s_verify = screen("r15-verify", "Email verification", GAP,
-    "Only for accounts that added an email. Phone accounts are already verified by OTP. Unverified email shows one dismissible banner on Today (info alert, DS §15); password reset by email is blocked until verified.",
+s_verify = screen("r15-verify", "Email verification · not in this release", [("gap", "Later")],
+    "<b>Not in this release</b> (your note): the backend has no email verification yet and mobile-number verification comes first. The screens are kept for a later release. Only for accounts that added an email. Phone accounts are already verified by OTP. Unverified email shows one dismissible banner on Today (info alert, DS §15); password reset by email is blocked until verified.",
     "POST /auth/email/verify/send · /auth/email/verify",
     [("Enter code", VERIFY, "OTP boxes as sign-up (DS §15 OTP states). Autofill from the mail app link deep-links straight to verified."),
      ("Wrong code", VERIFY_ERR, "Error edge + error text (feedback.errorText). After 3 misses: \"Send a new code\" only."),
@@ -91,16 +91,22 @@ s_verify = screen("r15-verify", "Email verification", GAP,
 # ---------------------------------------------------------------- maintenance + update
 MAINT = ph(f'''{spot("error", "Merit is getting an upgrade", "We're back by about 10:30 pm. Your progress and streak are safe.")}<span class="sm t3" style="text-align:center">Streaks don't break during maintenance.</span>''',
            abar=btn("Try again", "gh full"))
-UPD_REQ = ph(f'''<div class="tb"><b class="h-lg sp">Today</b></div><div class="card sk" style="height:120px"></div><div class="card sk" style="height:80px"></div>''', calm=False, tab="Today",
-             over=sheet(f'<img src="assets/v3/brand/merit-mark.svg" alt="" style="width:56px;align-self:center"><b class="h-md" style="text-align:center">Update Merit to continue</b><span class="sm t2" style="text-align:center">This version can no longer sync your answers. The update takes about a minute.</span>{btn("Update now", "full")}'))
-UPD_OPT = ph(f'''<div class="tb"><b class="h-lg sp">Today</b></div><div class="card sk" style="height:120px"></div><div class="card sk" style="height:80px"></div>''', calm=False, tab="Today",
-             over=sheet(f'<b class="h-md">A new version is ready</b><span class="sm t2">Faster flashcards and new past papers.</span><div class="rw">{btn("Later", "gh")}{btn("Update")}</div>'))
+def upd(skippable):
+    later = btn("Later", "gh") if skippable else ""
+    body = ("Faster flashcards and new past papers. It takes about a minute." if skippable
+            else "This version can no longer sync your answers. The update takes about a minute.")
+    title = "A new version is ready" if skippable else "Update Merit to continue"
+    return ph('''<div class="tb"><b class="h-lg sp">Today</b></div><div class="card sk" style="height:120px"></div><div class="card sk" style="height:80px"></div>''', calm=False, tab="Today",
+              over=sheet(f'<img src="assets/v3/brand/merit-mark.svg" alt="" style="width:56px;align-self:center"><b class="h-md" style="text-align:center">{title}</b><span class="sm t2" style="text-align:center">{body}</span><div class="rw">{later}{btn("Update now", "full" if not skippable else "")}</div>'))
+
+
+UPD_REQ, UPD_OPT = upd(False), upd(True)
 s_maint = screen("r15-maint", "Maintenance + update", GAP,
-    "Maintenance replaces the whole app (no tab bar) when the API answers 503 with a maintenance flag. Update uses <code>update_dialog.dart</code>: required is a blocking sheet with no dismiss; optional shows once per version.",
+    "Maintenance replaces the whole app (no tab bar) when the API answers 503 with a maintenance flag. Update is <b>one sheet</b> (your note: the separate \"update available\" design is dropped): it carries a <b>Later</b> button only when the version check says the update can be skipped. This is how <code>update_dialog.dart</code> already behaves; the build still needs the v3 sheet styling (it uses v2 colours).",
     "API 503 {maintenance, eta} · GET /app/version (min, latest)",
     [("Maintenance", MAINT, "Retry re-checks; auto-retries every 60 s while visible."),
-     ("Update required", UPD_REQ, "Back button and scrim tap do nothing. Store link only."),
-     ("Update available", UPD_OPT, "Shown once per version; Later remembers it.")])
+     ("Update · cannot skip", UPD_REQ, "No Later; back and scrim tap do nothing."),
+     ("Update · can skip", UPD_OPT, "Same sheet with Later; shown once per version.")])
 
 # ---------------------------------------------------------------- subscription
 def sub(state):
@@ -176,10 +182,10 @@ def onb(step, total, title, body, skip):
 ONB_AL = onb(4, 5, "Which school?", f'<div class="inp focus">{I("magnifying-glass")}Visakha<span class="sp"></span></div><div class="list">{li("graduation-cap", "Visakha Vidyalaya", "Colombo 05", "")}{li("graduation-cap", "Visakha Balika Vidyalaya", "Kandy", "")}</div><span class="xs t3">Used for school and district leaderboards. You can add it later.</span>', True)
 ONB_OL = onb(3, 4, "Your O/L subjects", f'<span class="sm t2">Up to 5 on Wanderer · the 6 core subjects are picked for you</span><div class="list">{li("check-circle-fill", "Mathematics", "Core", "")}{li("check-circle-fill", "Science", "Core", "")}{li("circle-dashed", "ICT", "Basket 3", "")}</div>', False)
 s_onb = screen("r15-onb", "Onboarding · back and skip, A/L 5 steps and O/L 4", GAP,
-    "Back on every step after the first; Skip only on optional steps (school, avatar). Step count is A/L 5 (level and year, stream, subjects, school, avatar) and O/L 4 (level and year, subjects, school, avatar). This replaces DECISIONS' \"3 steps\".",
+    "<b>O/L is blocked in this release</b> (no O/L subject coverage yet): the level step shows O/L disabled with \"O/L isn't available yet. Pick A/L to continue.\", as the app does today. The O/L frame is for when coverage lands. Back on every step after the first; Skip only on optional steps (school, avatar). Step count is A/L 5 (level and year, stream, subjects, school, avatar) and O/L 4 (level and year, subjects, school, avatar). This replaces DECISIONS' \"3 steps\".",
     "POST /students/me · /enrollments · GET /schools?q= (needs API: school lookup) · O/L onboarding (needs API)",
     [("A/L · step 4 (optional)", ONB_AL, "Skip keeps progress and goes to the avatar step."),
-     ("O/L · step 3 (required)", ONB_OL, "No Skip on required steps; Continue disabled until valid.")])
+     ("O/L · step 3 (later release)", ONB_OL, "No Skip on required steps; Continue disabled until valid.")])
 
 # ---------------------------------------------------------------- prediction gate + reminders (Gate 0)
 PRED = ph(f'''<div class="tb"><span class="ibtn flat">{I("arrow-left")}</span><b class="h-sm sp">Biology · Stats</b></div>

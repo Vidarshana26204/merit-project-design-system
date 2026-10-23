@@ -100,3 +100,54 @@ s_sys = kit_screen("web-r15-system", "System · maintenance, not found, error", 
     [("Maintenance", full("meritproject.lk/student", "error", "Merit is getting an upgrade", "We're back by about 10:30 pm. Your progress and streak are safe.", '<button class="btn gh" type="button">Try again</button>', '<span class="xs t3">Streaks don\'t break during maintenance.</span>'), "Auto-retries every 60 s while the tab is visible."),
      ("Not found (404)", full("meritproject.lk/student/papers/2009", "not-found", "We couldn't find that page", "It may have moved, or the link is old.", '<div class="rw"><button class="btn gh" type="button">Go back</button><button class="btn" type="button">Go to Today</button></div>'), "Public 404 swaps Today for Home."),
      ("Error", full("meritproject.lk/student/learn", "error", "Something went wrong", "It's on our side, and your progress is safe.", '<button class="btn" type="button">Reload</button>', '<span class="xs t3">Error ID 7f3c-21 · include it if you write to us</span>'), "global-error.tsx renders the same without the app shell.")])
+
+
+# ------------------------------------------------------------------ Quiz results rework (web-quiz note: "looks boring")
+QD = [1, 1, 0, 1, 1, 1, 1, 0, 1, 1]  # the session: 8 of 10
+SEC = [38, 51, 94, 22, 41, 30, 47, 118, 26, 35]  # seconds per question
+DOTS = "".join(f'<a class="r15-qd {"ok" if r else "x"}" href="#" aria-label="Question {k + 1}: {"correct" if r else "wrong"}">{k + 1}</a>' for k, r in enumerate(QD))
+RECEIPT = f'''<div class="r15-rcpt"><div class="rw"><span class="sm t2 sp">8 correct × 10</span><b class="num">+80</b></div><div class="rw"><span class="sm t2 sp">Accuracy 80% bonus</span><b class="num">+20</b></div>
+<div class="rw r15-dim"><span class="sm sp">{I("crown")} With Achiever ×1.5</span><b class="num">+150</b></div><div class="rw r15-total"><span class="coin lg" style="--coin:28px"></span><b class="sp">Points earned</b><b class="num" style="font-size:30px">+100</b></div></div>'''
+NEXT = f'''<div class="list r15-next"><div class="li">{tile("leaf", 40)}<div class="sp st" style="gap:0"><span class="ttl">Review 2 mistakes</span><span class="meta">Q3 and Q8 · both on stomata</span></div>{I("caret-right")}</div>
+<div class="li"><span class="mode-ic" style="background:var(--merit-sage-300)">{I("lock-open")}</span><div class="sp st" style="gap:0"><span class="ttl">Next: Transpiration unlocked</span><span class="meta">+50 when you reach 50% here · you're at 64%</span></div>{I("caret-right")}</div>
+<div class="li"><span class="mode-ic" style="background:var(--merit-sky-300)">{I("cards-three")}</span><div class="sp st" style="gap:0"><span class="ttl">6 cards due on Leaf structure</span><span class="meta">About 3 min</span></div>{I("caret-right")}</div></div>'''
+
+RES_A = f'''<div class="r15-res a"><div class="r15-hero"><div class="r15-medal"><span class="r15-spark s1">{I("sparkle-fill")}</span><span class="r15-spark s2">{I("sparkle-fill")}</span><div class="grade">A</div></div>
+<div class="st" style="gap:6px"><span class="ey">Mastery · Leaf structure</span><b class="h-xl">You proved <span class="ul">Leaf structure</span>.</b><span class="t2">8 of 10 right, faster than your last three sessions.</span>
+<div class="r15-stats"><div><b class="num">80%</b><span>accuracy</span></div><div><b class="num">6:12</b><span>time</span></div><div><b class="num">{I("flame-fill")}13</b><span>day streak</span></div><div><b class="num">#36</b><span>Gampaha · up 2</span></div></div></div></div>
+<div class="r15-grid"><div class="card" style="gap:12px"><span class="ey">Your answers</span><div class="r15-qds">{DOTS}</div><span class="xs t3">Click a number to review that question</span>{RECEIPT}</div>
+<div class="card" style="gap:12px"><span class="ey">What's next</span>{NEXT}<div class="rw"><button class="btn gh" type="button">{I("share-network")}Share</button><span class="sp"></span><button class="btn" type="button">Done</button></div></div></div></div>'''
+
+RES_B = f'''<div class="r15-res b"><div class="r15-quiltwrap"><div class="r15-big"><div class="ring" style="--v:64;--sz:200px;--th:12px;--c:var(--merit-dataviz-cat2)"><img class="tile" style="--s:148px" src="{PW}leaf-tile.svg" alt=""></div>
+<span class="r15-delta">52% → <b>64%</b></span></div><div class="st" style="gap:10px;max-width:420px"><span class="ey">Prove · Leaf structure</span><b class="h-xl">+12% mastery in one session.</b>
+<span class="t2">Proving is 75% of a subtopic. Two more good sessions and Leaf structure is complete.</span>
+<div class="r15-mini">{"".join(tile(t, 44) for t in ("cells", "plants", "leaf", "circulation"))}<span class="r15-lock">{I("lock")}</span></div><span class="xs t3">Plant form &amp; function · 3 of 5 subtopics past 50%</span></div></div>
+<div class="r15-strip"><div class="rw" style="gap:10px"><span class="coin lg" style="--coin:32px"></span><b class="num" style="font-size:28px">+100</b><span class="sm t2">80 for answers · 20 accuracy bonus</span></div><div class="r15-qds sm">{DOTS}</div>
+<div class="rw" style="gap:10px"><button class="btn gh" type="button">Review 2 mistakes</button><button class="btn" type="button">Done</button></div></div></div>'''
+
+mx = max(SEC)
+BARS = "".join(f'<div class="r15-tb {"ok" if r else "x"}"><i style="--h:{round(100 * s / mx)}%"></i><span>{k + 1}</span></div>' for k, (r, s) in enumerate(zip(QD, SEC)))
+RES_C = f'''<div class="r15-res c"><div class="rw" style="gap:16px;align-items:center"><div class="grade" style="width:72px;height:72px;font-size:36px;border-radius:22px">A</div><div class="st sp" style="gap:2px"><span class="ey">Mastery · Leaf structure</span><b class="h-lg">8 of 10 · 6 min 12 s</b></div>
+<div class="r15-pill"><span class="coin"></span><b class="num">+100</b></div></div>
+<div class="r15-grid"><div class="card" style="gap:10px"><div class="rw"><span class="ey sp">Time per question</span><span class="xs t3">avg 50 s</span></div><div class="r15-time">{BARS}</div>
+<div class="r15-legend"><span><i class="ok"></i>Right</span><span><i class="x"></i>Wrong</span></div></div>
+<div class="st" style="gap:12px"><div class="card r15-insight" style="gap:4px"><span class="ey">Pattern</span><b class="h-sm">Both misses were on stomata</b><span class="sm t2">And they took you twice as long. A 4-minute note section covers it.</span><button class="btn s ac" type="button" style="align-self:flex-start">Read: Stomata · 4 min</button></div>
+<div class="card r15-insight" style="gap:4px"><span class="ey">Speed</span><b class="h-sm">Fastest on epidermis (22 s)</b><span class="sm t2">You're ready for timed paper questions on this topic.</span></div></div></div>
+<div class="rw"><button class="btn gh" type="button">Review 2 mistakes</button><span class="sp"></span><button class="btn gh" type="button">{I("share-network")}Share</button><button class="btn" type="button">Done</button></div></div>'''
+
+res = lambda body: dk("meritproject.lk/student/quiz/8f2c…/results", f'<div class="w-app focus">{body}</div>', 600)
+s_results = screen("web-results", "Quiz · results, reworked (pick one)", [("energy", "Energy"), ("gap", "Pick one")],
+    "Your note: the round 10 results card \"looks boring\" on a wide screen. Three directions that use the width and make the session feel like progress, not a receipt. All three keep round 10's rules: points from <code>points_breakdown</code> (the Achiever row is a teaser for Wanderers), review opens in place, Done is the primary action, share shows username + score only (D25). Energy mode; reduced motion shows the final state.",
+    "GET /quiz/sessions/:id (answers, time_spent_seconds) · result.points_breakdown · GET /progress/subtopics/:id (mastery before/after) · /leaderboards/me/ranks",
+    [cand("A", "Scoreboard", "Bold", res(RES_A),
+          "The session as a win: grade medallion with two sparkles, a headline that names what you proved, four stat tiles (accuracy, time, streak, rank move), a question strip you can click into review, the points receipt, and three concrete next steps.",
+          "Most content of the three; needs the rank move (needs API: rank movement) or it shows streak only.",
+          "<code>grade</code><code>stat tiles</code><code>question strip</code><code>points receipt</code><code>next-step list</code>"),
+     cand("B", "Quilt progress", "Wild", res(RES_B),
+          "The subtopic's patchwork fills its Prove ring from the old to the new mastery (52% → 64%), and the topic's mini quilt shows where it sits and what is still locked. Points and answers sit in one quiet strip below. Ties every session to the hierarchy and the Mastery Engine story on the landing.",
+          "Least \"numbers first\": a student who wants the score sees it second. Paper mode (no subtopic) needs a fallback (paper tile, marks instead of mastery).",
+          "<code>ring 200</code><code>patchwork tile</code><code>mini quilt</code><code>points strip</code>"),
+     cand("C", "Recap and insight", "Safe", res(RES_C),
+          "A coach's recap: time per question as bars (wrong ones red), then two plain-language insights from this session with one action each. Points are a single pill; nothing celebrates loudly, so it suits Paper mode too.",
+          "Insights need rules on the backend (or simple client rules: same-subtopic misses, slowest vs average).",
+          "<code>time bars</code><code>insight cards</code><code>points pill</code>")])

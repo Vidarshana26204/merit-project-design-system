@@ -147,7 +147,7 @@ s_states = kit_screen("web-states", "States · empty, error, offline, loading, s
 from r12_landing import concept, s_hero  # noqa: E402,F811  low-poly tree + hero A + phone hero
 from r12_hub import s_hub, s_subj  # noqa: E402,F811  hub A with mobile section tabs
 from r12_auth import s_auth  # noqa: E402,F811  step-aware split screen
-from r15_web import s_acct, s_verify, s_lang, s_sys  # noqa: E402  round 15: §30 flows + Gate 0
+from r15_web import s_acct, s_verify, s_lang, s_sys, s_results  # noqa: E402  round 15: §30 flows + Gate 0
 from r14_landing import s_secs  # noqa: E402,F811  live sections + Mastery Engine + Merit Points, pricing/FAQ from rules (rounds 13-14)
 
 # ------------------------------------------------------------------ page
@@ -158,7 +158,7 @@ flows = [
     flow("landing", "Landing", "The public page at <code>meritproject.lk</code>. First pick the Quilt Map concept (live prototypes, try them), then the hero composition and the sections below. Copy is trilingual via <code>?lang=en|si|ta</code>.", LG, [concept, phones, s_hero, s_secs], first=True),
     flow("shell", "Shell &amp; navigation", "Navigation B from the app (Today · Learn · Compete · Me). Below 768px the portal becomes the app layout with a bottom tab bar.", LG, [s_shell]),
     flow("today", "Today", "The app's Today plan on a wide screen. The main frame is in tab 01; these are the other two moments.", LG, [s_today]),
-    flow("quiz", "Quiz", "Taking a quiz drops the sidebar (focus layout). Results follow round 10 pick A.", LG, [s_quiz, s_quizd]),
+    flow("quiz", "Quiz", "Taking a quiz drops the sidebar (focus layout). Results follow round 10 pick A.", LG, [s_quiz, s_results, s_quizd]),
     flow("study", "Study &amp; notes", "Calm mode. Keyboard-first on the web.", LG, [s_study]),
     flow("subjects", "Subjects", "Learn root, the subject hub and its Stats tab.", LG, [s_hub, s_subj, s_lang]),
     flow("compete", "Compete", "Round 10 Compete at desktop width, plus the leaderboard page.", LG, [s_comp, s_lb]),
@@ -181,6 +181,7 @@ HEAD = '''<meta charset="utf-8">
 <link rel="stylesheet" href="wireframes/wf-r12-auth.css">
 <link rel="stylesheet" href="wireframes/wf-r13-landing.css">
 <link rel="stylesheet" href="wireframes/wf-r14-landing.css">
+<link rel="stylesheet" href="wireframes/wf-r15-web.css">
 
 <header class="wf-top">
   <div class="wf-top-row">

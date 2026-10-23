@@ -114,3 +114,36 @@ From the pre-release audit (`~/.claude/plans/as-per-the-handoff-md-zippy-seal.md
   password, sign-out, delete, legal, help; Auth gets email verification; Subjects gets the header language switch
   and the prediction gate; System states gets maintenance, 404 and error pages. Me's "Subject languages" screen and
   row are removed (Gate 0).
+
+## Round 15 review (board notes, 2026-10-24)
+
+Read from the boards' `picks` database (no comment threads).
+
+**Mobile picks** (already built in Flutter): nav B, home B, quiz-mode A, quiz-take A, quiz-review A, learn A,
+subtopic A, subjects-list A, leaderboard A, achievements B, points A, stats B, cards-home A, cards-session A,
+paywall A (was C; already built), r10-results A, r10-mobile B, r10-compete A (with B's podium preview; built),
+r10-me approved.
+
+**Mobile notes, applied:**
+- *cards-session:* the card session is a visible stack like the landing deck (vertical, cards behind show).
+  Built in Flutter (`study_screen.dart`, `432d93b`).
+- *r15-maint:* one update sheet; **Later** shows only when the update can be skipped (the separate "update
+  available" frame is dropped). `update_dialog.dart` already behaves this way; it still needs v3 sheet styling.
+- *r15-onb:* **O/L is blocked in this release** (no O/L subject coverage). Flutter already disables it.
+- *r15-verify:* email verification is **not in this release** (no backend); mobile-number verification first.
+  Screens kept for later.
+
+**Mobile note, open:** *r10-coin:* "new points icon needs to be generated according to new design tokens". Asked the
+owner whether this means a redesign or rebuilding the current coin from tokens.
+
+**Web notes, applied:**
+- *web-hub:* duplicate underline on the active hub tab fixed (the mobile tab border leaked into the web board).
+- *web-compete:* the podium card now fills its column so it ends level with the right-hand stack; steps scale by
+  one factor so the 1 : 2 : 3 ratio holds.
+- *web-quiz:* results reworked as a new pick (`web-results`): A Scoreboard, B Quilt progress, C Recap and insight.
+- *web-shell:* A picked.
+
+**Accessibility audit** (`ux-ui-agent-skills:a11y-audit`, real-render gates over every flow, light + dark):
+fixed store-badge captions (1.89:1), toast actions on the inverse surface in dark (1.26:1), the "Needs API" tag
+(2.85:1), error text on errorSubtle (4.03:1, now `feedback.errorText`), a status bar on the feature phone, fixed-tone
+badges and card text in dark. Every interactive element passes in default, hover and focus.

@@ -16,6 +16,10 @@
 .web .htabs { display: flex; align-items: flex-end; gap: 24px; /* 18 */ height: 52px; /* 46 */ padding-bottom: 8px; /* 6 */ }
 .web .htabs a { display: inline-flex; align-items: flex-end; min-height: 39px; /* max(active*1.4, 30) */ font: 600 16px/1.2 var(--fd); /* 15 */ letter-spacing: -.01em; color: var(--merit-text-secondary); white-space: nowrap; cursor: pointer; }
 .web .htabs a > span { position: relative; display: inline-block; }
+/* Board fix (web-hub note): the mobile .htabs rules in wf.css also drew a 2px border under the active tab and a
+   hairline under the row, doubling the brush underline. The web tabs carry the brush only. */
+.web .htabs { border-bottom: 0; }
+.web .htabs a, .web .htabs a.on { border-bottom: 0; margin-bottom: 0; }
 .web .htabs a.on { font-size: 28px; /* 24 */ color: var(--merit-text-primary); }
 .web .htabs a.on > span::after { content: ""; position: absolute; left: -.04em; right: -.04em; bottom: -.1em; height: .3em; background: url("../assets/v3/motifs/brush-underline.svg") left 100% / 100% 100% no-repeat; pointer-events: none; }
 /* collapsed (scrolled >= 136px): hero gone, mini bar in, tabs shrink */
