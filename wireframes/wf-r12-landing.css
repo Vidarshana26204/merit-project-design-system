@@ -1,0 +1,77 @@
+/* Round 12 landing: low-poly Quilt Map (qm-lowpoly.js) + hero A + phone hero. Scoped to .lp / .lp-* / .r12-*. */
+.qm.lp { max-width: 760px; background: radial-gradient(90% 70% at 50% 100%, var(--merit-surface-default), var(--merit-bg-app) 72%); }
+.qm.lp .qm-svg { aspect-ratio: 800 / 700; }
+.qm.lp .qm-top { top: 10px; }
+.qm.lp .qm-panel { width: 236px; right: 12px; bottom: 12px; padding: 14px; }
+.web .qm-wrap .qm.lp { margin: 0 auto; }
+.web .qm.lp.qm-slot, .web .qm.lp.r12-hero-map { background: none; box-shadow: none; }
+
+/* Facet tones. --c is set per cluster (subject colour, a muted tint for "Coming soon").
+   Light theme: t0 darkest .. t5 lit by the top-left light. Dark theme: shadows lift so the tree stays legible. */
+.lp-f { transform-box: fill-box; transform-origin: center; fill: var(--f); stroke: var(--f); stroke-width: .8px; stroke-linejoin: round; }
+.lp-f.t0 { --f: color-mix(in srgb, var(--c) 76%, black); }
+.lp-f.t1 { --f: color-mix(in srgb, var(--c) 88%, black); }
+.lp-f.t2 { --f: var(--c); }
+.lp-f.t3 { --f: color-mix(in srgb, var(--c) 86%, white); }
+.lp-f.t4 { --f: color-mix(in srgb, var(--c) 70%, white); }
+.lp-f.t5 { --f: color-mix(in srgb, var(--c) 52%, white); }
+[data-theme="dark"] .lp-f.t0, .dark .lp-f.t0 { --f: color-mix(in srgb, var(--c) 90%, black); }
+[data-theme="dark"] .lp-f.t1, .dark .lp-f.t1 { --f: var(--c); }
+[data-theme="dark"] .lp-f.t2, .dark .lp-f.t2 { --f: color-mix(in srgb, var(--c) 90%, white); }
+[data-theme="dark"] .lp-f.t3, .dark .lp-f.t3 { --f: color-mix(in srgb, var(--c) 78%, white); }
+[data-theme="dark"] .lp-f.t4, .dark .lp-f.t4 { --f: color-mix(in srgb, var(--c) 62%, white); }
+[data-theme="dark"] .lp-f.t5, .dark .lp-f.t5 { --f: color-mix(in srgb, var(--c) 46%, white); }
+/* Bark: 4 tones from a warm brown (orange-700 + ink-700 + sand-300, set as --c by the script). */
+.lp-f.w0 { --f: color-mix(in srgb, var(--c) 78%, black); }
+.lp-f.w1 { --f: var(--c); }
+.lp-f.w2 { --f: color-mix(in srgb, var(--c) 82%, white); }
+.lp-f.w3 { --f: color-mix(in srgb, var(--c) 66%, white); }
+[data-theme="dark"] .lp-f.w0, .dark .lp-f.w0 { --f: color-mix(in srgb, var(--c) 92%, black); }
+[data-theme="dark"] .lp-f.w2, .dark .lp-f.w2 { --f: color-mix(in srgb, var(--c) 72%, white); }
+[data-theme="dark"] .lp-f.w3, .dark .lp-f.w3 { --f: color-mix(in srgb, var(--c) 56%, white); }
+/* Crown: one big foliage hull behind the clusters. Sage ramp, darker and lower contrast than the subject clusters. */
+.lp-crown { pointer-events: none; --c: color-mix(in srgb, var(--merit-sage-500) 62%, var(--merit-sage-700)); }
+.lp-crown .lp-f.t0 { --f: color-mix(in srgb, var(--c) 82%, black); }
+.lp-crown .lp-f.t1 { --f: color-mix(in srgb, var(--c) 92%, black); }
+.lp-crown .lp-f.t2 { --f: var(--c); }
+.lp-crown .lp-f.t3 { --f: color-mix(in srgb, var(--c) 92%, white); }
+.lp-crown .lp-f.t4 { --f: color-mix(in srgb, var(--c) 84%, white); }
+.lp-crown .lp-f.t5 { --f: color-mix(in srgb, var(--c) 75%, white); }
+[data-theme="dark"] .lp-crown, .dark .lp-crown { --c: color-mix(in srgb, var(--merit-sage-700) 70%, var(--merit-sage-900)); }
+[data-theme="dark"] .lp-crown .lp-f.t0, .dark .lp-crown .lp-f.t0 { --f: color-mix(in srgb, var(--c) 85%, black); }
+[data-theme="dark"] .lp-crown .lp-f.t1, .dark .lp-crown .lp-f.t1 { --f: color-mix(in srgb, var(--c) 94%, black); }
+[data-theme="dark"] .lp-crown .lp-f.t2, .dark .lp-crown .lp-f.t2 { --f: var(--c); }
+[data-theme="dark"] .lp-crown .lp-f.t3, .dark .lp-crown .lp-f.t3 { --f: color-mix(in srgb, var(--c) 88%, var(--merit-sage-500)); }
+[data-theme="dark"] .lp-crown .lp-f.t4, .dark .lp-crown .lp-f.t4 { --f: color-mix(in srgb, var(--c) 76%, var(--merit-sage-500)); }
+[data-theme="dark"] .lp-crown .lp-f.t5, .dark .lp-crown .lp-f.t5 { --f: color-mix(in srgb, var(--c) 62%, var(--merit-sage-500)); }
+.lp-node.soon { opacity: .82; }
+.lp-node.soon .lp-f { filter: saturate(.5); }
+
+.lp-node { cursor: pointer; outline: none; }
+.lp-node[tabindex="-1"], .lp-sub .lp-node:not([role]) { cursor: default; }
+.lp-ring { fill: none; stroke: transparent; stroke-width: 3; stroke-dasharray: 5 6; }
+.lp-node:hover .lp-ring { stroke: var(--merit-border-strong); }
+.lp-node:focus-visible .lp-ring, .lp-node.sel .lp-ring { stroke: var(--merit-focus-ring); stroke-dasharray: none; }
+.lp-node:hover .lp-cl { filter: brightness(1.07); }
+.lp-shadow { fill: var(--merit-text-primary); opacity: .13; }
+.lp-pill { fill: var(--merit-surface-default); stroke: var(--merit-border-default); stroke-width: 1.2; opacity: .96; }
+.lp-t { font: 700 17.5px var(--fb); fill: var(--merit-text-primary); }
+.lp-lab { pointer-events: none; }
+.lp-lab.hov { visibility: hidden; }
+.lp-lab.hov.show { visibility: visible; }
+.lp-coin circle { fill: var(--merit-butter-300); stroke: var(--merit-text-primary); stroke-width: 2; }
+.lp-coin circle.in { fill: none; stroke-width: 1.5; }
+.lp-plus { font: 800 22px var(--fb); fill: var(--merit-text-primary); paint-order: stroke; stroke: var(--merit-butter-300); stroke-width: 5px; stroke-linejoin: round; }
+
+/* Hero A (desktop): copy left, tree right (~45%). */
+.web .w-hero.lp-a { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 24px; align-items: center; }
+.web .r12-hero-map { width: 100%; max-width: 560px; }
+/* Hero on phone: no tree. Copy, CTA, chips, 3-up subject tiles; never scrolls sideways. */
+.r12-phone { display: flex; flex-direction: column; gap: 14px; min-width: 0; overflow-x: hidden; }
+.r12-phone .chips { flex-wrap: wrap; }
+.r12-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.r12-tiles .t { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; text-align: center; }
+.r12-tiles .t .tile { --s: 64px; }
+.r12-tiles .t span { font: 600 11.5px/1.2 var(--fb); color: var(--merit-text-primary); overflow-wrap: anywhere; }
+.r12-tiles .t em { font: 500 10.5px var(--fb); font-style: normal; color: var(--merit-text-tertiary); }
+
