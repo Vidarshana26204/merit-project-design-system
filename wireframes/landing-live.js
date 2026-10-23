@@ -132,7 +132,7 @@
       stage.innerHTML = "";
       const show = [0, 1, 2].map((d) => deck[(pos + d) % deck.length]);
       show.slice().reverse().forEach((c, ri) => { const d = 2 - ri, el = cardEl(c, pos + d); stage.appendChild(el); gsap.set(el, Object.assign({ zIndex: 3 - d }, animate && d < 2 ? POSE[d + 1] : POSE[d])); if (animate && d < 2 && !reduced()) gsap.to(el, Object.assign({ duration: 12 * FR, ease: E.softLand, delay: d * 2 * FR }, POSE[d])); });
-      flipped = false; rate.classList.remove("on"); rate.setAttribute("aria-hidden", "true");
+      flipped = false; paintRow();
       count.textContent = (pos % deck.length) + 1 + " / " + deck.length + " · " + short(subj(sid).t);
       stage.lastChild.addEventListener("click", flip);
     }
@@ -141,7 +141,16 @@
       flipped = !flipped;
       const inner = stage.lastChild.querySelector(".lf-in");
       if (reduced()) gsap.set(inner, { rotateY: flipped ? 180 : 0 }); else gsap.to(inner, { rotateY: flipped ? 180 : 0, duration: 14 * FR, ease: E.softLand });
-      rate.classList.toggle("on", flipped); rate.setAttribute("aria-hidden", String(!flipped));
+      paintRow();
+      if (flipped && !reduced()) gsap.fromTo(rate.children, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 10 * FR, ease: E.softLand, stagger: 2 * FR });
+    }
+    function paintRow() {
+      rate.classList.toggle("on", flipped);
+      rate.innerHTML = flipped
+        ? RATE.map(([c, l, t], k) => '<button type="button" class="' + c + '" data-g="' + k + '">' + l + "<small>" + (k + 1) + " · " + t + "</small></button>").join("")
+        : '<button type="button" class="lf-show">Show answer<small>Space</small></button>';
+      rate.querySelectorAll("[data-g]").forEach((b) => b.addEventListener("click", () => grade(+b.dataset.g)));
+      const show = rate.querySelector(".lf-show"); if (show) show.addEventListener("click", flip);
     }
     function grade(n) {
       if (!flipped || busy) return;
@@ -151,8 +160,6 @@
       gsap.to(top, { x: again ? -170 : 190, y: again ? 10 : -20, rotate: again ? -10 : 9, duration: 10 * FR, ease: E.accelExit, onComplete: done });
       gsap.to(top, { opacity: 0, duration: 4 * FR, delay: 6 * FR, ease: "none" });
     }
-    rate.innerHTML = RATE.map(([c, l, t], k) => '<button type="button" class="' + c + '" data-g="' + k + '">' + l + "<small>" + (k + 1) + " · " + t + "</small></button>").join("");
-    rate.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => grade(+b.dataset.g)));
     root.addEventListener("keydown", (e) => {
       if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); flip(); }
       else if (/^[1-4]$/.test(e.key)) { e.preventDefault(); grade(+e.key - 1); }

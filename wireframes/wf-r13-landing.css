@@ -62,7 +62,7 @@
 
 /* ---- flashcards */
 .r13-deck { display: flex; flex-direction: column; gap: 18px; }
-.r13-stage { position: relative; height: 300px; margin-right: 34px; perspective: 1200px; outline: none; }
+.r13-stage { position: relative; height: 300px; margin: 0 34px 30px 0; perspective: 1200px; outline: none; }  /* bottom margin clears the back cards' pose offset */
 .r13-stage:focus-visible { box-shadow: 0 0 0 2px var(--merit-focus-ring); border-radius: 24px; }
 .lf-card { position: absolute; inset: 0; cursor: pointer; }
 .lf-in { position: relative; height: 100%; transform-style: preserve-3d; }
@@ -70,8 +70,9 @@
 .lf-face .q { font-size: 20px; }
 .lf-back { transform: rotateY(180deg); color: var(--merit-ink-900); }
 .lf-hint { margin-top: auto; color: var(--merit-ink-700); opacity: .8; }
-.r13-rate { opacity: .35; pointer-events: none; transition: opacity .2s; margin-right: 34px; }
-.r13-rate.on { opacity: 1; pointer-events: auto; }
+.r13-rate { position: relative; z-index: 5; margin-right: 34px; }  /* above the stacked cards */
+.r13-rate .lf-show { grid-column: 1 / -1; background: var(--merit-surface-sunken); color: var(--merit-text-primary); }
+.r13-rate button:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: 2px; }
 .r13-rate button { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 56px; border: 0; border-radius: 16px; font: 700 13px var(--fb); color: var(--merit-ink-900); cursor: pointer; }
 .r13-rate button small { font: 600 11px var(--fb); opacity: .75; }
 .r13-rate .ag { background: var(--merit-coral-300); } .r13-rate .hd2 { background: var(--merit-sand-300); } .r13-rate .gd { background: var(--merit-sage-300); } .r13-rate .ez { background: var(--merit-violet-100); }
