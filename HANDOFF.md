@@ -3,18 +3,43 @@
 Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
 and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
 **Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
-**Resume point (2026-10-23, round 13):** the landing is settled on the web board (https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn):
-- Picks: hero A, shell A, hub A, and the icosphere tree (A).
-- Rounds 12b–12d (`wireframes/qm-ico.js`):
-  - projected-3D SVG + GSAP; measured eases in `QMIco.EASE`;
-  - a scene stack: subject → topics → subtopics, each blooming out of the crown you open;
-  - no sign; the tree sits behind the copy;
-  - labels use full names and scale to fit.
-- Round 13:
-  - hero CTA is Start free + App Store / Google Play badges; the breadcrumb sits under the stream chips;
-  - live sections on real data (`r13_landing.py`, `landing-live.js`): try a real question (EN/SI), flashcard deck, exam insights;
-  - pricing shows "Rs —"; a FAQ whose facts come from the data; closing CTA band.
-- Data: `python3 wireframes/build_samples.py` snapshots questions and cards **read-only from `merit_rehearsal`** into `qm-samples.js`.
+**Resume point (2026-10-23, round 14 planned, not started):** the approved plan is at `docs/plans/round-14-backend-driven-landing.md` (copy of `~/.claude/plans/round-14-backend-driven-landing.md`). Read it first.
+
+Board: https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn. DS head is `296cf4a`.
+
+What is done:
+- Landing rounds 12b–13: icosphere tree hero (`wireframes/qm-ico.js`), live sections (`r13_landing.py`, `landing-live.js`), FAQ, store badges.
+- The flashcard rating fix.
+- Picks: hero A, shell A, hub A, tree A.
+
+User decisions for round 14:
+1. Tiers, limits, benefits and prices come from the backend: new `GET /public/plans`; prices in new `tiers` columns, edited in admin.
+2. New `GET /public/samples`: each IP gets the same random batch per 6 h window, plus a hard cap of 30 requests per IP per 6 h → 429 with `Retry-After`.
+3. Questions and flashcards use shared components (`components/merit/study/`) in both the landing and the student portal. The board's flashcard stack and animation also become the student `/flashcards` session.
+4. New landing sections: Mastery Engine (Read → Remember → Prove, FSRS) and Merit Points.
+5. Flow: Phase A is board round 14 (main session). Phase B is the production build with parallel Sonnet agents (backend + frontend worktrees); the main session orchestrates and reviews in Chrome.
+
+Facts (from `merit_rehearsal`, which holds the most recent data; read it with SELECTs only):
+- `system_settings` holds every rule:
+  - free limits: mastery 50 a day, papers 2 a day;
+  - enrolment caps: A/L free 5, Pro 6;
+  - points: correct answer 10, accuracy bonus +20 at 80%, Pro ×1.5; flashcard session +15 (cap 100 a day); note +25; unlock reward 50; force-unlock 100 + 25 each, 20% burned;
+  - mastery weights: quiz .75 / notes .15 / cards .10;
+  - FSRS retention 0.9.
+- The free subject cap is **5**; the root CLAUDE.md's "2" is stale.
+- `tiers` has no prices.
+- `RateLimitByIP` (`internal/api/middleware.go`) is a token bucket per IP that never evicts entries.
+- The backend schedules with go-fsrs v4.
+
+Frontend `feat/design-system-v3` (`bda6f65`):
+- Reuse `components/question-block-renderer`, `components/content-blocks/math-text.tsx` (KaTeX) and the notes runners.
+- `app/student/{flashcards,quiz}` are placeholders.
+
+Still open:
+- the actual price values;
+- the store badge artwork (official assets in production).
+
+Next: Phase A, board round 14 (Mastery Engine + Merit Points, with `rules`/`plans` added to `build_samples.py`). After the user reviews it, Phase B.
 
 Open:
 - Prices.
