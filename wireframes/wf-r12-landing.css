@@ -91,14 +91,18 @@
 .qm.ico .qm-panel { top: 12px; right: 12px; bottom: auto; width: 236px; padding: 14px; }
 .qm.ico.ico-stage .qm-panel { right: auto; left: 14px; top: 52px; }
 .web .w-hero.ico-a { position: relative; display: flex; align-items: center; min-height: 660px; padding: 24px 40px 0; }
-.web .w-hero.ico-a .ico-copy { position: relative; z-index: 2; width: 44%; padding-bottom: 70px; }
-.web .r12-hero-ico { position: absolute; right: 0; bottom: 0; width: 54%; }
+.web .w-hero.ico-a .ico-copy { position: relative; z-index: 2; width: 44%; padding-bottom: 70px; pointer-events: none; }
+.web .w-hero.ico-a .ico-copy > * { pointer-events: auto; }
+/* 12d: the tree is a full-width layer behind the copy; a soft wash of the page colour keeps the copy legible where crowns pass under it */
+.web .w-hero.ico-a .ico-copy::before { content: ""; position: absolute; inset: -60px -90px -40px -70px; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--merit-bg-app) 78%, transparent) 50%, transparent); }
+.web .r12-hero-ico { position: absolute; inset: auto 0 0 0; width: 100%; }
 
 /* Vivid leaf greens, grass and bark as dedicated vars (not the grey sage tokens). Dark theme: slightly deeper, less luminous. */
 .qm.ico { --qm-leaf-1: #1F7A4D; --qm-leaf-2: #2FA35C; --qm-leaf-3: #49C26B; --qm-leaf-4: #8FD86A; --qm-leaf-5: #C9E36B;
-  --qm-bark: #7A4A2A; --qm-bark-dark: #4E2E1A; --qm-plank: #B8823F; --qm-grass-a: #8FD86A; --qm-grass-b: #2FA35C; --qm-grass-c: #49C26B; }
+  --qm-bark: #7A4A2A; --qm-bark-dark: #4E2E1A; --qm-grass-a: #8FD86A; --qm-grass-b: #2FA35C; --qm-grass-c: #49C26B; }
 [data-theme="dark"] .qm.ico, .dark .qm.ico { --qm-leaf-1: #176339; --qm-leaf-2: #228247; --qm-leaf-3: #37A056; --qm-leaf-4: #6EB454; --qm-leaf-5: #A5BC55;
-  --qm-bark: #6A4025; --qm-bark-dark: #3F2415; --qm-plank: #9C6C34; --qm-grass-a: #5FA83D; --qm-grass-b: #1D7A47; --qm-grass-c: #2E9657; }
+  --qm-bark: #6A4025; --qm-bark-dark: #3F2415; --qm-grass-a: #5FA83D; --qm-grass-b: #1D7A47; --qm-grass-c: #2E9657; }
 /* 5 tones from the Lambert term (t0 shadow .. t4 lit), mixed from the ball's base colour --c. */
 .ico-f { fill: var(--f); stroke: var(--f); stroke-width: .7px; stroke-linejoin: round; }
 .ico-ball { cursor: pointer; outline: none; --c: var(--qm-leaf-2); transition: --c .35s ease; }
@@ -133,11 +137,6 @@
 .ico-limb .ico-f.t2 { --f: var(--qm-bark); }
 .ico-limb .ico-f.t3 { --f: color-mix(in srgb, var(--qm-bark) 86%, white); }
 .ico-limb .ico-f.t4 { --f: color-mix(in srgb, var(--qm-bark) 72%, white); }
-.ico-sign { --c: var(--qm-plank); cursor: pointer; outline: none; }
-.ico-sign:hover .ico-f { filter: brightness(1.07); }
-.ico-sign:focus-visible .ico-f { stroke: var(--merit-focus-ring); stroke-width: 2.5px; }
-.ico-sign-t { font: 800 14px var(--fb); fill: #3A2210; pointer-events: none; }
-.ico-rope { stroke: color-mix(in srgb, var(--qm-bark) 50%, #E8C58A); stroke-width: 2.4; stroke-linecap: round; }
 .ico-hill2 { fill: var(--qm-grass-c); opacity: .85; }
 .ico-tuft .t0 { fill: var(--qm-leaf-1); }
 .ico-tuft .t1 { fill: var(--qm-leaf-3); }

@@ -2,7 +2,7 @@
    Trunk and branches are tapered hexagonal prisms, the crown is flat-shaded icospheres (20 faces, about 10 visible).
    A tiny projector (yaw, pitch, perspective, back-face cull, painter's sort, Lambert vs a top-left key light, 5 tones)
    re-projects only when something changed. At most 6 interactive balls per level (+ a "+N more" ball) and 3-5 decorative ones.
-   Recursion: a subject ball shatters and a smaller tree of its topics grows from that spot; a topic is the last level.
+   Recursion: an opened crown blooms into a smaller tree (subject -> topics -> subtopics); a subtopic is the last level.
    Reuses qm.js (Explorer: data, chips, breadcrumb, topic panel, Esc). Mount: [data-qm="ico"] (data-stream, data-wide for 16:9,
    data-static for a still frame). Needs gsap and qm.js first. The pure geometry is exported for node tests. */
 (function (root) {
@@ -42,13 +42,6 @@
       const e = path.length - 1; faces.push(face(pts, [e * 6, e * 6 + 1, e * 6 + 2, e * 6 + 3, e * 6 + 4, e * 6 + 5], path[e - 1]));
       return { kind: "limb", pts, faces, c: [0, 0, 0], spin: 0, mid: mean(pts) };
     }
-    // Hanging plank, local to its rope anchor A (so it can swing about A).
-    function plank(A, w, h, d, drop) {
-      const x = w / 2, y0 = drop, y1 = drop + h, z = d / 2;
-      const pts = [[-x, y0, -z], [x, y0, -z], [x, y1, -z], [-x, y1, -z], [-x, y0, z], [x, y0, z], [x, y1, z], [-x, y1, z]];
-      const fs = [[4, 5, 6, 7], [1, 0, 3, 2], [0, 4, 7, 3], [5, 1, 2, 6], [0, 1, 5, 4], [7, 6, 2, 3]];
-      return { kind: "plank", pts, faces: fs.map((f) => face(pts, f, [0, (y0 + y1) / 2, 0])), c: A.slice(), spin: 0, rz: 0, mid: [0, 80, 0], w, h, dz: z, drop };
-    }
     const camera = (yaw, pitch) => {
       const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
       const rot = (v) => { const x = v[0] * cy + v[2] * sy, z0 = -v[0] * sy + v[2] * cy; return [x, v[1] * cp - z0 * sp, v[1] * sp + z0 * cp]; };
@@ -84,28 +77,27 @@
     // Three boughs leave the fork; a node's twig starts on the bough nearest it, so the structure reads at a glance.
     const BOUGH = [[226, 300, 12], [346, 236, 18], [470, 286, 12]];
     const boughOf = (x) => (x < 250 ? 0 : x > 420 ? 2 : 1);
-    // Deterministic tree: a leaning trunk, three boughs fanning wide, one twig per node crown, neutral crowns behind,
-    // and a long lower-left branch that carries the sign into open sky.
-    function layout(vis, id) {
+    // Deterministic tree: a leaning trunk, three boughs fanning wide, one twig per node crown, neutral crowns behind.
+    // reach: the hero's root tree also sends a leafy bough and neutral crowns out to the left, behind the copy (never node crowns).
+    const REACH = [[60, 196, -110, 92], [-40, 236, -125, 84], [-120, 280, -120, 70], [0, 140, -125, 76], [-80, 190, -130, 66]];
+    function layout(vis, id, reach) {
       const j = (k, a) => (hash(id + k) - 0.5) * a, balls = [];
       vis.forEach((it, i) => {
         const sl = it.more ? MORE : SLOT[i];
         balls.push({ item: it, c: [sl[0] + j("bx" + i, 8), sl[1] + j("by" + i, 8), sl[2]], r: sl[3] + (it.more ? 0 : hash(id + "r" + i) * 4), hue: Math.floor(hash(id + "h" + i) * 5) });
       });
       const nd = vis.length >= 5 ? 12 : vis.length >= 3 ? 10 : 8;
-      const deco = BG.slice(0, nd).map((d, k) => ({ item: null, c: [d[0] + j("dx" + k, 12), d[1] + j("dy" + k, 12), d[2]], r: d[3] + hash(id + "dr" + k) * 8, hue: k % 3 }));
+      const deco = BG.slice(0, nd).concat(reach ? REACH : []).map((d, k) => ({ item: null, c: [d[0] + j("dx" + k, 12), d[1] + j("dy" + k, 12), d[2]], r: d[3] + hash(id + "dr" + k) * 8, hue: k % 3 }));
       const limbs = [{ role: "trunk", path: [B, [B[0] - 16, 480, 10], F], radii: [28, 21, 15] }];
       BOUGH.forEach((b, k) => limbs.push({ role: "bough", path: [F, add(mul(add(F, b), 0.5), [j("bk" + k, 16), -8, j("bq" + k, 10)]), b], radii: [14, 11, 8] }));
       balls.forEach((b, i) => {
         const s0 = BOUGH[boughOf(b.c[0])], t = add(b.c, [0, b.r * 0.45, 0]);
         limbs.push({ role: "twig", ball: i, path: [s0, add(mul(add(s0, t), 0.5), [j("tk" + i, 12), j("ty" + i, 8), 0]), t], radii: [7.5, 5.5, 3.8] });
       });
-      const S = add(F, [-257, -70, 50]), mid = add(F, [-128, -34, 30]), at = (t) => (t < 0.5 ? add(F, mul(sub(mid, F), t * 2)) : add(mid, mul(sub(S, mid), (t - 0.5) * 2)));
-      limbs.push({ role: "sign", path: [F, mid, S], radii: [12, 8, 5] });
-      const l = [at(0.52), at(0.89)]; // about one plank width apart, so the ropes hang parallel
-      return { limbs, balls, deco, sign: { a: mul(add(l[0], l[1]), 0.5), l } };
+      if (reach) limbs.push({ role: "bough", path: [F, add(F, [-150, -62, -40]), [-40, 300, -90]], radii: [12, 9, 6] });
+      return { limbs, balls, deco };
     }
-    return { ball, limb, plank, camera, project, rank, layout };
+    return { ball, limb, camera, project, rank, layout };
   }
   // Measured eases (motionmaxxing references/motion.md): landings decelerate, exits accelerate.
   const bez = (x1, y1, x2, y2) => {
@@ -130,15 +122,19 @@
   if (!Q || !gsap) { console.warn("qm-ico: needs QM and gsap"); return; }
   const { el, hash } = Q, G = geometry(hash), FR = 1 / 30;
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const SHORT = { "Information & Communication Technology": "ICT", "Agricultural Science": "Agri Science", "Combined Mathematics": "Combined Maths", "Logic & Scientific Method": "Logic & Method", "Communication & Media Studies": "Media Studies", "Greek & Roman Civilization": "Greek & Roman" };
-  const short = (s) => SHORT[s] || s.replace(/^Drama & Theatre/, "Drama").replace(/^History of SL & (.*)$/, "SL & $1 History").replace("Technology", "Tech").replace("Civilization", "Civ.");
-  const lines = (s) => { const n = s.length > 40 ? Math.ceil(s.length / 3) + 1 : s.length <= 12 ? 12 : Math.ceil(s.length / 2) + 1, o = []; s.split(" ").forEach((w) => { const l = o[o.length - 1]; if (l != null && (l + " " + w).length <= n) o[o.length - 1] = l + " " + w; else o.push(w); }); return o; };
+  // Labels keep the full name: wrap into balanced lines (1 up to 14 characters, 2 up to 28, else 3), then the font is scaled to fit the crown.
+  const lines = (s) => {
+    const n = s.length <= 14 ? 1 : s.length <= 28 ? 2 : 3, words = s.split(" "), o = [];
+    let cur = "", left = s.length;
+    words.forEach((w) => { const target = left / (n - o.length); if (cur && o.length < n - 1 && (cur + " " + w).length > target + 2) { o.push(cur); left -= cur.length + 1; cur = w; } else cur = cur ? cur + " " + w : w; });
+    o.push(cur); return o;
+  };
   const transl = (o) => "translate(" + o.ox + " " + o.oy + ") scale(" + o.s + ")";
 
   class Ico {
     constructor(svg, ctl) {
-      this.svg = svg; this.ctl = ctl; this.W = ctl.host.hasAttribute("data-wide") ? 1067 : 640; this.DX = this.W - 640;
-      this.still = ctl.opts.static; this.yaw = 0; this.pitch = 0; this.dirty = true; this.root = this.child = this.sel = null;
+      this.svg = svg; this.ctl = ctl; this.W = ctl.host.hasAttribute("data-wide") ? 1067 : 640; this.DX = ctl.host.dataset.dx != null ? +ctl.host.dataset.dx : this.W - 640;
+      this.still = ctl.opts.static; this.yaw = 0; this.pitch = 0; this.dirty = true; this.stack = []; this.panelLeft = ctl.host.classList.contains("ico-stage");
       this.cam = { x: 0, y: 0, w: this.W, h: H }; this.view_();
       (Ico.all = Ico.all || []).push(this);
       svg.setAttribute("aria-label", "Merit subject tree");
@@ -148,24 +144,23 @@
         const host = ctl.host;
         host.addEventListener("pointermove", (e) => { const r = host.getBoundingClientRect(); this.parallax(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1); });
         host.addEventListener("pointerleave", () => this.parallax(0, 0));
-        gsap.ticker.add(() => { if (this.dirty) { this.dirty = false; [this.root, this.child].forEach((sc) => sc && sc.live && this.draw(sc)); } });
+        gsap.ticker.add(() => { if (this.dirty) { this.dirty = false; this.stack.forEach((sc) => sc.live && this.draw(sc)); } });
       }
     }
     parallax(nx, ny) { gsap.to(this, { yaw: nx * 6 * Math.PI / 180, pitch: ny * 3 * Math.PI / 180, duration: 0.9, ease: "power2.out", overwrite: true, onUpdate: () => (this.dirty = true) }); }
     view_() { const c = this.cam; this.svg.setAttribute("viewBox", [c.x, c.y, c.w, c.h].map((v) => v.toFixed(1)).join(" ")); this.svg.style.setProperty("--lp-z", (c.w / this.W).toFixed(3)); }
-    camTo(box, dur) { return Object.assign({ duration: dur, ease: "power3.inOut", onUpdate: () => this.view_() }, box); }
     box(cx, cy, w) { return { x: cx - w / 2, y: cy - (w * H) / this.W / 2, w, h: (w * H) / this.W }; }
     home() { return { x: 0, y: 0, w: this.W, h: H }; }
 
-    /* ---- scene building: o = {ox, oy, s, hill, sign, zv (final zoom, for label declutter)} */
+    /* ---- scene building: o = {ox, oy, s, hill, trunk, zv (final zoom, for label sizes)} */
     build(vis, level, o) {
       const sc = { objs: [], balls: [], tw: [], live: true, o, order: "", g: el("g", { class: "ico-scene", transform: transl(o), style: "--sc:" + o.s }, this.svg) };
       if (o.hill) this.hill(sc.g, sc);
       sc.world = el("g", {}, sc.g); sc.labs = el("g", { class: "lp-labs", "aria-hidden": "true" }, sc.g);
-      const lay = G.layout(vis, level.id), reg = (m, cls) => { m.g = el("g", { class: cls }, sc.world); m.polys = m.faces.map(() => el("polygon", {}, m.g)); sc.objs.push(m); return m; };
+      const lay = G.layout(vis, level.id, o.reach), reg = (m, cls) => { m.g = el("g", { class: cls }, sc.world); m.polys = m.faces.map(() => el("polygon", {}, m.g)); sc.objs.push(m); return m; };
       sc.limbs = []; sc.twigs = [];
       lay.limbs.forEach((l, i) => {
-        if ((l.role === "trunk" && o.trunk === false) || (l.role === "sign" && !o.sign)) return; // a child tree grows from the opened crown: no trunk, no sign
+        if (l.role === "trunk" && o.trunk === false) return; // a child tree grows from the opened crown: no trunk
         const m = reg(G.limb(l.path, l.radii, level.id + i), "ico-limb");
         Object.assign(m, { role: l.role, base: l.path[0], end: l.path[l.path.length - 1] });
         if (l.role === "trunk") sc.trunk = m; else sc.limbs.push(m);
@@ -176,12 +171,13 @@
         const m = reg(G.ball(b.c, b.r, b.item.id), "ico-ball h" + b.hue + (b.item.ref && b.item.ref.tc === 0 ? " soon" : "") + (b.item.more ? " more" : ""));
         Object.assign(m, { item: b.item, c0: b.c[1], hue: b.hue }); sc.balls.push(m);
         if (!this.still) this.wire(m);
-        const lab = (m.lab = el("g", { class: "lp-lab" + (b.item.more ? " pill" : "") }, sc.labs)), ls = lines(short(b.item.label)), w = Math.max(...ls.map((l) => l.length)) * 8.6 + 16, h = ls.length * 18 + 8;
+        const lab = (m.lab = el("g", { class: "lp-lab" + (b.item.more ? " pill" : "") }, sc.labs)), ls = lines(b.item.label), w = Math.max(...ls.map((l) => l.length)) * 8.6 + 16, h = ls.length * 18 + 8;
         el("rect", { x: -w / 2, y: -h / 2, width: w, height: h, rx: 11, class: "lp-pill ico-pill" }, lab);
         ls.forEach((t, i) => el("text", { x: 0, y: -h / 2 + 18 + i * 18 - 2, "text-anchor": "middle", class: "ico-t", text: t }, lab));
-        lab.w = w; lab.h = h;
+        // text at 15 px on screen is w * zv / s scene units wide; shrink (down to 0.55) so the widest line fits 1.9 r
+        m.lk = clamp((1.9 * b.r) / ((w - 16) * (o.zv || 1) / o.s), 0.55, 1);
+        lab.w = w * m.lk; lab.h = h * m.lk;
       });
-      if (o.sign) this.sign(sc, lay.sign);
       if (o.hill) { this.tufts(sc.front); sc.g.insertBefore(sc.front, sc.labs); }
       sc.objs.forEach((m) => { if (m.kind === "ball" && !m.item) m.g.style.pointerEvents = "none"; });
       sc.zv = o.zv || 1;
@@ -215,17 +211,10 @@
         [-1, 0, 1].forEach((k) => { const h = 16 + hash("th" + i + k) * 14; el("polygon", { points: [x + k * 6 - 4, y, x + k * 6 + 4, y, x + k * 9, y - h].join(" "), class: "t" + (k + 1) }, t); });
       }
     }
-    sign(sc, s) {
-      const a = el("a", { href: "#", class: "ico-sign", "aria-label": "Start here, open sign-up" }, sc.world), ropes = [el("line", { class: "ico-rope" }, a), el("line", { class: "ico-rope" }, a)];
-      const m = G.plank(s.a, 92, 31, 8, 118); m.g = a; m.polys = m.faces.map(() => el("polygon", {}, a)); m.ropes = ropes; m.anchors = s.l; m.kind = "plank";
-      m.text = el("text", { class: "ico-sign-t", "text-anchor": "middle", "dominant-baseline": "central", text: "Start here" }, a);
-      a.addEventListener("click", (e) => e.preventDefault());
-      sc.objs.push(m); sc.sign = m;
-    }
     wire(m) {
       const g = m.g, it = m.item, ctl = this.ctl, hot = (on) => { g.classList.toggle("hot", on); if (it.color && !it.more) g.style.setProperty("--c", on ? it.color : ""); m.lab.classList.toggle("hot", on); };
       g.setAttribute("role", "button"); g.setAttribute("tabindex", "0"); g.setAttribute("aria-label", it.label + (it.meta ? ", " + it.meta : ""));
-      const go = () => ctl.open(it);
+      const go = () => (it.leaf ? this.select(m) : ctl.open(it));
       // Hover lift: up 4 units and to 1.04 (glide 6 f in, 8 f out). Skipped while a transition owns the transforms.
       const lift = (on) => { if (this.busy || reduced()) return; gsap.to(g, { y: on ? -4 : 0, scale: on ? 1.04 : 1, svgOrigin: m.sx + " " + m.sy, duration: (on ? 6 : 8) * FR, ease: EASE.glide, overwrite: "auto" }); };
       g.addEventListener("click", go); g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
@@ -244,27 +233,19 @@
         });
         if (m.kind === "ball") {
           m.sx = r.c[0]; m.sy = r.c[1]; m.sr = r.sr;
-          if (m.lab) m.lab.style.transform = "translate(" + m.sx.toFixed(1) + "px," + (m.sy + m.sr * 0.38 + (m.nudge || 0) + (m.ldy || 0)).toFixed(1) + "px) scale(calc(var(--lp-z,1) / var(--sc,1)))";
+          if (m.lab) m.lab.style.transform = "translate(" + m.sx.toFixed(1) + "px," + (m.sy + m.sr * 0.38 + (m.nudge || 0) + (m.ldy || 0)).toFixed(1) + "px) scale(calc(var(--lp-z,1) / var(--sc,1) * " + (m.lk || 1).toFixed(3) + "))";
         }
-        if (m.kind === "plank") this.rig(m, cam);
         keys.push(m);
       });
       keys.sort((a, b) => a.z - b.z);
       const ord = keys.map((m) => sc.objs.indexOf(m)).join();
       if (ord !== sc.order) { sc.order = ord; keys.forEach((m) => sc.world.appendChild(m.g)); }
     }
-    rig(m, cam) { // ropes from the branch to the plank's top corners, and the label on its front face
-      const P = (p) => cam.scr(cam.view(add(local2(m, p), m.c))), tl = P([-m.w / 2, m.drop, m.dz / 2]), tr = P([m.w / 2, m.drop, m.dz / 2]), mid = P([0, m.drop + m.h / 2, m.dz / 2 + 0.5]);
-      const sa = m.anchors.map((a) => cam.scr(cam.view(a))).sort((p, q) => p[0] - q[0]); // left anchor to the left corner: never crossed
-      sa.forEach((s, i) => { const e = i ? tr : tl; m.ropes[i].setAttribute("x1", s[0].toFixed(1)); m.ropes[i].setAttribute("y1", s[1].toFixed(1)); m.ropes[i].setAttribute("x2", e[0].toFixed(1)); m.ropes[i].setAttribute("y2", e[1].toFixed(1)); });
-      const ang = (Math.atan2(tr[1] - tl[1], tr[0] - tl[0]) * 180) / Math.PI, k = Math.hypot(tr[0] - tl[0], tr[1] - tl[1]) / m.w;
-      m.text.setAttribute("transform", "translate(" + mid[0].toFixed(1) + " " + (mid[1] + k).toFixed(1) + ") rotate(" + ang.toFixed(1) + ") scale(" + k.toFixed(3) + ")");
-    }
 
     /* ---- motion. Frame counts are at 30 fps (FR = 1 f). Rules from motionmaxxing: landings decelerate (softLand, snapSettle),
        exits accelerate (accelExit, gentleIn), siblings overlap on uneven 1-3 f gaps, opacity is only a 4-6 f helper, one spring
        per transition, and the opened crown is the carried object: its facets become the child crowns. */
-    popTimeline(sc, hill) { // about 1.8 s: hill, trunk up, boughs and twigs out, neutral crowns then node crowns pop, sign drops in
+    popTimeline(sc, hill) { // about 1.8 s: hill, trunk up, boughs and twigs out, neutral crowns then node crowns pop
       const tl = gsap.timeline({ defaults: { ease: EASE.softLand }, onUpdate: () => (this.dirty = true) });
       if (hill) tl.from(sc.g.querySelectorAll(".ico-hill,.ico-hill2,.ico-tuft"), { opacity: 0, y: 10, duration: 14 * FR, stagger: 0.04 }, 0);
       if (sc.trunk) tl.fromTo(sc.trunk.g, { scaleY: 0, svgOrigin: B[0] + " " + B[1] }, { scaleY: 1, duration: 16 * FR }, 0.25);
@@ -275,7 +256,6 @@
         tl.fromTo(m.g, { scale: 1.25, opacity: 0, svgOrigin: m.c[0] + " " + m.c[1] }, { scale: 1, duration: 11 * FR, ease: EASE.snapSettle }, 1.18 + i * 0.07).to(m.g, { opacity: 1, duration: 4 * FR, ease: "none" }, 1.18 + i * 0.07);
         tl.fromTo(m, { ldy: 6 }, { ldy: 0, duration: 10 * FR }, 1.28 + i * 0.07).from(m.lab, { opacity: 0, duration: 4 * FR, ease: "none" }, 1.28 + i * 0.07);
       });
-      if (sc.sign) tl.fromTo(sc.sign.g, { y: -46, opacity: 0 }, { y: 0, opacity: 1, duration: 14 * FR, ease: EASE.snapSettle }, 1.5);
       return tl;
     }
     idle(sc) {
@@ -284,29 +264,33 @@
         if (m.kind !== "ball") return; const h = hash(m.c[0] + ":" + m.r), a = m.item ? 2 : 1, o = { y: -a };
         sc.tw.push(gsap.to(o, { y: a, duration: (m.item ? 2.2 : 3.4) + h * 1.4, yoyo: true, repeat: -1, ease: "sine.inOut", onUpdate: () => { m.c[1] = m.c0 + o.y; this.dirty = true; } }).progress(h));
       });
-      if (sc.sign) sc.tw.push(gsap.fromTo(sc.sign, { rz: -0.09 }, { rz: 0.09, duration: 1.7, yoyo: true, repeat: -1, ease: "sine.inOut", onUpdate: () => (this.dirty = true) }));
       const balls = sc.objs.filter((m) => m.kind === "ball").sort((a, b) => a.c[0] - b.c[0]);
       const gust = () => { sc.tw.push(gsap.to(balls, { spin: 0.2, duration: 0.7, yoyo: true, repeat: 1, ease: "sine.inOut", stagger: 0.05, onUpdate: () => (this.dirty = true) })); sc.gust = gsap.delayedCall(8, gust); };
       sc.gust = gsap.delayedCall(5, gust);
     }
     kill(sc) { sc.tw.forEach((t) => t.kill()); if (sc.gust) sc.gust.kill(); sc.live = false; sc.g.remove(); }
 
-    /* ---- levels (Explorer calls render). One transition at a time: a new request makes the running one finish at 2x. */
+    /* ---- levels (Explorer calls render). A stack of scenes: the root tree, then one bloomed tree per level opened
+       (subject -> its topics, topic -> its subtopics). One transition at a time: a new request makes the running one finish at 2x. */
     async render(level, from, mode) {
       if (this.busy) { if (this.tl) this.tl.timeScale(2); await this.busy; }
       const run = (this.busy = this.render_(level, mode));
       try { await run; } finally { if (this.busy === run) this.busy = null; }
     }
     async render_(level, mode) {
-      this.ctl.host.classList.toggle("drilled", level.kind !== "root");
-      if (level.kind === "root") return this.child && mode === "out" ? this.collapse() : this.rebuild(level, mode);
-      if (level.kind === "subject") return this.child && mode === "out" ? this.pulse(null) : this.expand(level);
-      return this.pulse(level);
+      const depth = { root: 0, subject: 1, topic: 2 }[level.kind];
+      this.ctl.host.classList.toggle("drilled", depth > 0);
+      if (!this.stack.length || (depth === 0 && mode !== "out")) return this.rebuild(level, mode);
+      while (this.stack.length - 1 > depth) await this.collapse(this.stack.length - 2 > depth); // several levels up: the outer ones run at 2x
+      if (depth === this.stack.length) return this.expand(level);
+      this.select(null);
     }
     async rebuild(level, mode) {
-      if (this.root && mode === "swap" && !reduced()) await new Promise((r) => gsap.to(this.root.g, { opacity: 0, y: 8, duration: 8 * FR, ease: EASE.gentleIn, onComplete: r }));
-      [this.root, this.child].forEach((sc) => sc && this.kill(sc)); this.child = null; this.cam = this.home(); this.view_();
-      const sc = (this.root = this.build(G.rank(level.items, false, level.id), level, { ox: this.DX, oy: 0, s: 1, hill: true, sign: true }));
+      const old = this.stack[0];
+      if (old && mode === "swap" && !reduced()) await new Promise((r) => gsap.to(old.g, { opacity: 0, y: 8, duration: 8 * FR, ease: EASE.gentleIn, onComplete: r }));
+      this.stack.forEach((sc) => this.kill(sc)); this.cam = this.home(); this.view_();
+      const sc = this.build(G.rank(level.items, false, level.id), level, { ox: this.DX, oy: 0, s: 1, hill: true, reach: this.ctl.host.hasAttribute("data-reach") });
+      sc.view = this.home(); this.stack = [sc];
       this.live(sc, true);
       if (this.still || reduced()) { this.draw(sc); return; }
       const tl = (this.tl = this.popTimeline(sc, true));
@@ -314,25 +298,28 @@
       this.idle(sc);
     }
     live(sc, on) { sc.g.style.pointerEvents = on ? "" : "none"; sc.balls.forEach((m) => m.g.setAttribute("tabindex", on ? "0" : "-1")); }
-    wood(sc) { return [sc.trunk, ...sc.limbs].filter(Boolean).map((m) => m.g).concat(sc.sign ? [sc.sign.g] : [], [...sc.g.querySelectorAll(".ico-hill,.ico-hill2,.ico-tuft")]); }
-    // The child tree's view: its crown framed with room for the panel (top-left on the 16:9 stage, top-right in the hero).
+    wood(sc) { return [sc.trunk, ...sc.limbs].filter(Boolean).map((m) => m.g).concat([...sc.g.querySelectorAll(".ico-hill,.ico-hill2,.ico-tuft")]); }
+    // The bloomed tree's view: its crown framed with room for the panel (16:9 stage: panel top-left; hero: copy on the left, panel top-right).
     childView(ox, oy, s) {
-      const w = Math.max(640 * s * 1.22, (440 * s * 1.22 * this.W) / H), v = this.box(ox + 330 * s, oy + 230 * s, w);
-      if (this.W > 640) v.x -= v.w * 0.16; else v.y -= v.h * 0.14;
-      return v;
+      const cx = ox + 330 * s, cy = oy + 230 * s;
+      if (this.panelLeft) { const v = this.box(cx, cy, Math.max(640 * s * 1.22, (440 * s * 1.22 * this.W) / H)); v.x -= v.w * 0.16; return v; }
+      if (this.W > 640) { const v = this.box(cx, cy, (440 * s * 1.3 * this.W) / H); v.x = cx - v.w * 0.7; v.y -= v.h * 0.1; return v; }
+      const v = this.box(cx, cy, Math.max(640 * s * 1.22, (440 * s * 1.22 * this.W) / H)); v.y -= v.h * 0.14; return v;
     }
     async expand(level) {
-      const sc = this.root, ball = sc.balls.find((m) => m.item.id === level.id);
+      const sc = this.stack[this.stack.length - 1], ball = sc.balls.find((m) => m.item.id === level.id);
       if (!ball) return;
-      const s = 0.56, bx = sc.o.ox + ball.sx, by = sc.o.oy + ball.sy + ball.sr * 0.45, ox = bx - F[0] * s, oy = by - F[1] * s, fin = this.childView(ox, oy, s);
-      // The child tree's fork sits on the opened crown: it grows out of it.
-      const ch = (this.child = this.build(G.rank(level.items, true, level.id), level, { ox, oy, s, hill: false, sign: false, trunk: false, zv: fin.w / this.W }));
-      this.live(sc, false); this.live(ch, true); this.chosen = ball;
+      // The new tree's fork sits on the tip of the twig that held the opened crown, 0.56x the parent's scale: it grows out of it.
+      const ps = sc.o.s, s = ps * 0.56, bx = sc.o.ox + ball.sx * ps, by = sc.o.oy + (ball.sy + ball.sr * 0.45) * ps, ox = bx - F[0] * s, oy = by - F[1] * s, fin = this.childView(ox, oy, s);
+      const ch = this.build(G.rank(level.items, level.kind === "subject", level.id), level, { ox, oy, s, hill: false, trunk: false, zv: fin.w / this.W });
+      ch.view = fin; sc.chosen = ball; this.stack.push(ch);
+      this.live(sc, false); this.live(ch, true);
       const facets = ball.polys.filter((p) => p.style.display !== "none");
       if (this.still || reduced()) { this.cam = fin; this.view_(); gsap.set(this.wood(sc).concat(sc.balls.map((m) => m.g), sc.bg.map((m) => m.g), sc.balls.map((m) => m.lab)), { opacity: 0 }); return; }
-      sc.live = false; // freeze the parent's projection while its crown becomes the child tree
+      sc.live = false; // freeze the parent's projection while its crown becomes the new tree
       const f = FR, tl = (this.tl = gsap.timeline({ onUpdate: () => (this.dirty = true) })), o = (m) => m.sx + " " + m.sy, dist = (m) => Math.hypot(m.sx - ball.sx, m.sy - ball.sy);
-      // child starts hidden: limbs folded, crowns and labels off
+      const L = (x, y) => [(x - sc.o.ox) / ps, (y - sc.o.oy) / ps]; // svg point -> parent-local
+      // the new tree starts hidden: limbs folded, crowns and labels off
       ch.limbs.forEach((l) => gsap.set(l.g, { scale: 0, svgOrigin: l.base[0] + " " + l.base[1] }));
       gsap.set(ch.balls.map((m) => m.g).concat(ch.bg.map((m) => m.g), ch.balls.map((m) => m.lab)), { opacity: 0 });
       // 1. press: squash 2 f, the crown answers a frame later
@@ -349,22 +336,21 @@
         tl.to(m.g, { x: ((m.sx - ball.sx) / l) * 20, y: ((m.sy - ball.sy) / l) * 20, scale: 0.85, svgOrigin: o(m), duration: 15 * f, ease: EASE.accelExit }, at).to(m.g, { opacity: 0, duration: 6 * f, ease: "none" }, at + 9 * f);
       });
       tl.set(ball.lab, { opacity: 0 }, 8 * f); // the name moves to the breadcrumb (a state change: hard cut)
-      // 3. camera: one move, fast front and a long soft tail; the parent's wood is swept away inside it
+      // 3. camera: one move, fast front and a long soft tail; the parent's other wood is swept away inside it,
+      //    but the path that held the opened crown stays solid, so the new tree visibly grows out of the branch you touched
       tl.to(this.cam, Object.assign({ duration: 20 * f, ease: EASE.snapSettle, onUpdate: () => this.view_() }, fin), 3 * f);
       const twig = sc.twigs[sc.balls.indexOf(ball)], path = [sc.trunk, twig, sc.limbs.find((l) => l.role === "bough" && twig && l.end[0] === twig.base[0] && l.end[1] === twig.base[1])].filter(Boolean).map((m) => m.g);
       tl.to(this.wood(sc).filter((g) => !path.includes(g)), { opacity: 0.05, duration: 12 * f, ease: EASE.gentleIn }, 3 * f);
-      // 4. bloom: boughs grow from the crown's centre, each twig carries a share of the crown's facets out to a child crown
+      // 4. bloom: boughs grow from the fork; each twig carries a share of the opened crown's facets out to a new crown
       ch.limbs.filter((l) => l.role === "bough").forEach((l, k) => tl.to(l.g, { scale: 1, duration: 10 * f, ease: EASE.softLand }, (8 + k * 2) * f));
-      const stag = [0, 2, 4, 7, 8, 10, 12], kids = ch.balls, P = (x, y) => [ox + x * s - sc.o.ox, oy + y * s - sc.o.oy]; // child design point -> parent-local
+      const stag = [0, 2, 4, 7, 8, 10, 12], kids = ch.balls;
       kids.forEach((k, i) => {
-        const t0 = (12 + stag[i]) * f, land = t0 + 10 * f, tw = ch.twigs[i];
+        const t0 = (12 + stag[i]) * f, land = t0 + 10 * f, tw = ch.twigs[i], last = i === kids.length - 1;
         if (tw) tl.to(tw.g, { scale: 1, duration: 12 * f, ease: EASE.softLand }, t0);
-        const last = i === kids.length - 1;
         tl.fromTo(k.g, { scale: 1.25, svgOrigin: o(k) }, { scale: last ? 0.92 : 1, duration: (last ? 8 : 11) * f, ease: EASE.snapSettle }, land).to(k.g, { opacity: 1, duration: 4 * f, ease: "none" }, land);
         if (last) tl.to(k.g, { scale: 1, svgOrigin: o(k), duration: 6 * f, ease: "back.out(3)" }, land + 8 * f); // the one spring
         tl.fromTo(k, { ldy: 6 }, { ldy: 0, duration: 10 * f, ease: EASE.softLand }, land + 3 * f).to(k.lab, { opacity: 1, duration: 4 * f, ease: "none" }, land + 3 * f);
-        // this crown's facets travel the bough then the twig, shrinking into it
-        const mid = tw ? P(tw.base[0], tw.base[1]) : P(F[0], F[1]), tgt = [ox + k.sx * s - sc.o.ox, oy + k.sy * s - sc.o.oy];
+        const mid = L(ox + (tw ? tw.base[0] : F[0]) * s, oy + (tw ? tw.base[1] : F[1]) * s), tgt = L(ox + k.sx * s, oy + k.sy * s);
         facets.filter((_, j) => j % kids.length === i).forEach((p) => {
           const q = p.getAttribute("points").split(" ").map((t) => t.split(",").map(Number)), cx = q.reduce((a, t) => a + t[0], 0) / q.length, cy = q.reduce((a, t) => a + t[1], 0) / q.length;
           tl.to(p, { x: mid[0] - cx, y: mid[1] - cy, scale: 0.7, transformOrigin: "50% 50%", duration: 5 * f, ease: EASE.gentleIn }, t0)
@@ -373,22 +359,21 @@
         });
       });
       const bgAt = (12 + stag[Math.min(2, kids.length - 1)] + 10) * f; // neutral crowns fill in behind, last
-      ch.bg.forEach((m, i) => tl.fromTo(m.g, { scale: 0.85, svgOrigin: o(m) }, { scale: 1, duration: 12 * f, ease: EASE.softLand }, bgAt + (i % 2 ? 2 : 1) * i * f * 0.5).to(m.g, { opacity: 1, duration: 4 * f, ease: "none" }, bgAt + (i % 2 ? 2 : 1) * i * f * 0.5));
+      ch.bg.forEach((m, i) => { const at = bgAt + (i % 2 ? 2 : 1) * i * f * 0.5; tl.fromTo(m.g, { scale: 0.85, svgOrigin: o(m) }, { scale: 1, duration: 12 * f, ease: EASE.softLand }, at).to(m.g, { opacity: 1, duration: 4 * f, ease: "none" }, at); });
       await new Promise((r) => tl.eventCallback("onComplete", r));
       this.idle(ch);
     }
-    async collapse() { // a designed reverse, not a rewind (about 0.8 s)
-      const ch = this.child, sc = this.root, ball = this.chosen, f = FR, o = (m) => m.sx + " " + m.sy;
-      this.child = null;
+    async collapse(fast) { // a designed reverse, not a rewind (about 0.8 s; 2x when it is an outer level of a multi-level jump)
+      const ch = this.stack.pop(), sc = this.stack[this.stack.length - 1], ball = sc.chosen, f = FR, o = (m) => m.sx + " " + m.sy;
       const facets = ball.polys.filter((p) => p.style.display !== "none"), sibs = sc.balls.filter((m) => m !== ball), dist = (m) => Math.hypot(m.sx - ball.sx, m.sy - ball.sy);
       const reset = () => { this.kill(ch); gsap.set(facets, { clearProps: "all" }); gsap.set(sc.balls.map((m) => m.g).concat(sc.bg.map((m) => m.g)), { clearProps: "opacity" }); sc.live = true; this.live(sc, true); this.dirty = true; };
-      if (this.still || reduced()) { gsap.set(this.wood(sc).concat(sc.balls.map((m) => m.g), sc.bg.map((m) => m.g), sc.balls.map((m) => m.lab)), { opacity: 1, x: 0, y: 0, scale: 1 }); this.cam = this.home(); this.view_(); reset(); return; }
+      if (this.still || reduced()) { gsap.set(this.wood(sc).concat(sc.balls.map((m) => m.g), sc.bg.map((m) => m.g), sc.balls.map((m) => m.lab)), { opacity: 1, x: 0, y: 0, scale: 1 }); this.cam = Object.assign({}, sc.view); this.view_(); reset(); return; }
       const tl = (this.tl = gsap.timeline({ onUpdate: () => (this.dirty = true) }));
+      if (fast) tl.timeScale(2);
       tl.set(ch.balls.map((m) => m.lab), { opacity: 0 }, 0); // labels off: hard cut
-      // child crowns leave toward the fork, farthest first; their facets fly home and reassemble the crown
-      const fork = [F[0], F[1]], fd = (m) => Math.hypot(m.sx - fork[0], m.sy - fork[1]), gaps = [1, 2, 1, 2, 1, 2];
-      const kids = ch.balls.map((k, i) => ({ k, i })).sort((a, b) => fd(b.k) - fd(a.k));
-      kids.forEach(({ k, i }, n) => {
+      // the bloomed crowns leave toward the fork, farthest first; their facets fly home and reassemble the crown
+      const fd = (m) => Math.hypot(m.sx - F[0], m.sy - F[1]), gaps = [1, 2, 1, 2, 1, 2];
+      ch.balls.map((k, i) => ({ k, i })).sort((a, b) => fd(b.k) - fd(a.k)).forEach(({ k, i }, n) => {
         const at = gaps.slice(0, n).reduce((a, b) => a + b, 0) * f;
         tl.to(k.g, { scale: 0.4, opacity: 0, svgOrigin: o(k), duration: 7 * f, ease: EASE.gentleIn }, at);
         facets.filter((_, j) => j % ch.balls.length === i).forEach((p) => tl.set(p, { opacity: 1 }, at).to(p, { x: 0, y: 0, scale: 1, duration: 10 * f, ease: EASE.softLand }, at));
@@ -396,8 +381,8 @@
       ch.bg.forEach((m) => tl.to(m.g, { opacity: 0, scale: 0.85, svgOrigin: o(m), duration: 6 * f, ease: EASE.gentleIn }, 0));
       ch.limbs.forEach((l) => tl.to(l.g, { scale: 0, duration: 8 * f, ease: EASE.accelExit }, (l.role === "twig" ? 3 : 7) * f));
       tl.to(ball.g, { scale: 1, svgOrigin: o(ball), duration: 8 * f, ease: EASE.softLand }, 4 * f);
-      // camera: two pushes, an accelerating start then a soft tail home
-      const h = this.home(), c = Object.assign({}, this.cam), m30 = { x: c.x + (h.x - c.x) * 0.3, y: c.y + (h.y - c.y) * 0.3, w: c.w + (h.w - c.w) * 0.3, h: c.h + (h.h - c.h) * 0.3 };
+      // camera: two pushes, an accelerating start then a soft tail back to the parent's view
+      const h = sc.view, c = Object.assign({}, this.cam), m30 = { x: c.x + (h.x - c.x) * 0.3, y: c.y + (h.y - c.y) * 0.3, w: c.w + (h.w - c.w) * 0.3, h: c.h + (h.h - c.h) * 0.3 };
       tl.to(this.cam, Object.assign({ duration: 6 * f, ease: EASE.gentleIn, onUpdate: () => this.view_() }, m30), 2 * f).to(this.cam, Object.assign({ duration: 14 * f, ease: EASE.softLand, onUpdate: () => this.view_() }, h), 8 * f);
       tl.to(this.wood(sc), { opacity: 1, duration: 14 * f, ease: EASE.softLand }, 6 * f);
       // siblings and neutral crowns come back to their slots from 0.85, nearest first
@@ -410,22 +395,17 @@
       await new Promise((r) => tl.eventCallback("onComplete", r));
       reset();
     }
-    async pulse(level) { // topic = last level: squash, a 1.06 pulse, the rest dims; the Explorer panel opens
-      const ch = this.child, f = FR; if (!ch) return;
-      ch.balls.forEach((m) => { const on = !level || m.item.id === level.id; m.g.classList.toggle("sel", !!(level && on)); gsap.to([m.g, m.lab], { opacity: on ? 1 : 0.45, duration: 8 * f, ease: EASE.glide }); });
-      const b = level && ch.balls.find((m) => m.item.id === level.id);
-      if (!b || reduced()) return;
-      const tl = (this.tl = gsap.timeline());
-      tl.to(b.g, { scale: 0.94, svgOrigin: b.sx + " " + b.sy, duration: 2 * f, ease: "power1.out" }).to(b.g, { scale: 1.06, duration: 4 * f, ease: EASE.glide }).to(b.g, { scale: 1, duration: 6 * f, ease: EASE.glide });
-      await new Promise((r) => tl.eventCallback("onComplete", r));
+    select(m) { // a subtopic (the last level) is picked in place: squash, a 1.06 pulse, the others dim
+      const sc = this.stack[this.stack.length - 1], f = FR; if (!sc) return;
+      sc.balls.forEach((b) => { const on = !m || b === m; b.g.classList.toggle("sel", !!(m && on)); gsap.to([b.g, b.lab], { opacity: on ? 1 : 0.45, duration: 8 * f, ease: EASE.glide }); });
+      if (!m || reduced()) return;
+      gsap.timeline().to(m.g, { scale: 0.94, svgOrigin: m.sx + " " + m.sy, duration: 2 * f, ease: "power1.out" }).to(m.g, { scale: 1.06, duration: 4 * f, ease: EASE.glide }).to(m.g, { scale: 1, duration: 6 * f, ease: EASE.glide });
     }
   }
-  const local2 = (m, p) => { let q = p; if (m.rz) q = rz(q, m.rz); return q; };
-
   // Review hook: drive and scrub a mount's transitions (QMIco.debug(i).drill("Physics"), then .seek(0.25)).
   API.debug = (i) => { const x = Ico.all[i]; return {
-    drill: (name) => { const m = (x.child || x.root).balls.find((b) => b.item.label === name || b.item.id === name); if (m) x.ctl.open(m.item); return !!m; },
-    seek: (p) => { if (x.tl) { x.tl.pause(); x.tl.progress(p); x.dirty = true; } }, play: () => x.tl && x.tl.play(), labels: () => (x.child || x.root).balls.map((b) => b.item.label) }; };
+    drill: (name) => { const m = x.stack[x.stack.length - 1].balls.find((b) => b.item.label === name || b.item.id === name); if (m) x.ctl.open(m.item); return !!m; },
+    seek: (p) => { if (x.tl) { x.tl.pause(); x.tl.progress(p); x.dirty = true; } }, play: () => x.tl && x.tl.play(), labels: () => x.stack[x.stack.length - 1].balls.map((b) => b.item.label) }; };
   const boot = () => document.querySelectorAll('[data-qm="ico"]').forEach((h) => { h.classList.add("ico"); new Q.Explorer(h, Ico, { static: h.hasAttribute("data-static") }); });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })(typeof window !== "undefined" ? window : globalThis);
