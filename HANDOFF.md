@@ -8,6 +8,9 @@ and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round
 and round 15 (§30 flows) on both boards. Waiting on: the user's 19 web picks + Quilt concept, then Phase B / Step 3.
 Boards are rebuilt by `python3 wireframes/gen_web_board.py > wireframes-web.html` and
 `python3 wireframes/r15_mobile.py --splice`.
+**Boards (republished 2026-10-24 on the subsuser3 account, fresh `picks` db; the older artifacts live on another account):**
+web https://claude.ai/artifact/BSrqtke1qqxxvU1WzzpqSh · mobile https://claude.ai/artifact/Q6jsry2mnuUfD9csb1LB4X.
+Republish with the same file path from this repo (files map = every referenced asset, `wireframes/*`, `build/css/merit-tokens.css`).
 
 **Resume point (2026-10-23, round 14 planned, not started):** the approved plan is at `docs/plans/round-14-backend-driven-landing.md` (copy of `~/.claude/plans/round-14-backend-driven-landing.md`). Read it first.
 
