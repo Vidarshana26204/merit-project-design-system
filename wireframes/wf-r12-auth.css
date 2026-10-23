@@ -1,0 +1,82 @@
+/* Round 12: step-aware auth + onboarding split screen. Scoped to .as-* */
+.web .as-split { display: grid; grid-template-columns: 44fr 56fr; min-height: 640px; }
+.web .as-art { --as-tint: var(--merit-violet-300); position: relative; display: flex; flex-direction: column; gap: 24px; padding: 32px 44px 36px; overflow: hidden; isolation: isolate;
+  background: color-mix(in srgb, var(--as-tint) 16%, var(--merit-surface-sunken)); --as-pat: url("../assets/v3/patterns/dots.svg"); }
+.web .as-art::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--as-pat) 0 0 / 40px 40px; opacity: .06; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 85%); mask-image: linear-gradient(to bottom, #000, transparent 85%); }
+:root:not([data-theme="light"]) .web .as-art::before { filter: invert(1); }
+:root[data-theme="light"] .web .as-art::before { filter: none; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .web .as-art::before { filter: none; } }
+.web .as-art.si { --as-tint: var(--merit-violet-300); --as-pat: url("../assets/v3/patterns/dots.svg"); }
+.web .as-art.rg { --as-tint: var(--merit-butter-300); --as-pat: url("../assets/v3/patterns/checks.svg"); }
+.web .as-art.fg { --as-tint: var(--merit-sage-300); --as-pat: url("../assets/v3/patterns/hatch.svg"); }
+.web .as-art.ob { --as-tint: var(--merit-violet-300); --as-pat: url("../assets/v3/patterns/stripes.svg"); }
+.web .as-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.web .as-count { display: flex; align-items: center; gap: 10px; font: 700 12px var(--fb); color: var(--merit-text-secondary); white-space: nowrap; }
+.web .as-count .stepper { width: 96px; }
+.web .as-hero { display: flex; flex-direction: column; gap: 14px; margin: auto 0; max-width: 400px; }
+.web .as-h { font: 600 36px/1.1 var(--fd); letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
+.web .as-sub { font-size: 14px; line-height: 1.5; color: var(--merit-text-secondary); }
+.web .as-foot { font-size: 12px; color: var(--merit-text-tertiary); }
+.web .as-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.web .as-ghost { opacity: .5; border-style: dashed; }
+.web .as-last, .web .as-mini, .web .as-exam, .web .as-stream, .web .as-gift, .web .as-today { gap: 10px; }
+.web .as-pane { display: flex; justify-content: center; align-items: center; padding: 40px 48px; background: var(--merit-bg-app); }
+.web .as-form { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 14px; }
+.web .as-form .as-sub { margin-top: -6px; }
+.web .as-alt { text-align: center; }
+.web .as-nav { margin-top: 6px; }
+/* register */
+.web .as-from { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); font-size: 13px; }
+.web .as-vp { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.web .as-vp li { display: flex; gap: 12px; align-items: flex-start; }
+.web .as-vp b { display: block; font-size: 14px; }
+.web .as-vp small { display: block; font-size: 12px; color: var(--merit-text-secondary); line-height: 1.4; }
+.web .as-ic { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; flex: none; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); font-size: 18px; }
+.web .as-mini .mode-ic.as-mi { width: 32px; height: 32px; border-radius: 10px; font-size: 16px; }
+.web .as-mini .i:last-child { color: var(--merit-text-tertiary); }
+/* forgot */
+.web .as-spot { width: 150px; height: auto; align-self: flex-start; }
+.web .as-hints { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.web .as-hints li { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--merit-radius-lg); font-size: 13px; color: var(--merit-text-tertiary); }
+.web .as-hints li i { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; flex: none; font: 700 12px var(--fb); font-style: normal; box-shadow: inset 0 0 0 1.5px var(--merit-border-default); }
+.web .as-hints li.on { background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); color: var(--merit-text-primary); font-weight: 600; }
+.web .as-hints li.on i { background: var(--merit-action-accent); color: var(--merit-text-on-accent); box-shadow: none; }
+.web .as-hints li.d i { background: var(--merit-feedback-success-text); color: var(--merit-white); box-shadow: none; }
+/* onboarding previews */
+.web .as-exam .num { font-size: 32px; line-height: 1; }
+.web .as-carry { align-self: flex-start; background: var(--merit-surface-default); box-shadow: none; }
+.web .as-stream { flex-direction: row; align-items: center; gap: 14px; }
+.web .as-quilt { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.web .as-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; position: relative; }
+.web .as-lang { font: 700 11px var(--fb); padding: 2px 8px; border-radius: 999px; background: var(--merit-surface-default); box-shadow: var(--merit-elevation-e1); }
+.web .as-from-map { display: inline-flex; align-items: center; gap: 3px; font: 600 10.5px var(--fb); color: var(--merit-text-tertiary); }
+.web .as-slot { width: 64px; height: 64px; border-radius: 12.5%; display: grid; place-items: center; font-size: 24px; color: var(--merit-text-tertiary); border: 2px dashed var(--merit-border-default); }
+.web .as-gift .av { width: 48px; height: 48px; }
+.web .as-plus { font: 600 22px var(--fd); color: var(--merit-text-tertiary); }
+.web .as-recap { display: flex; align-items: center; gap: 8px; }
+.web .as-today { padding: 14px; }
+.web .as-plan-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--merit-radius-lg); background: var(--merit-surface-sunken); }
+.web .as-plan-row .i:last-child { color: var(--merit-text-tertiary); }
+.web .as-plan-row.as-ghost { background: transparent; box-shadow: inset 0 0 0 1.5px var(--merit-border-subtle); border: 0; justify-content: center; }
+.web .as-tier { gap: 6px; }
+.web .as-price { font-size: 26px; }
+/* collapse below 768px: panel becomes a slim band (also drawn explicitly in the phone frame) */
+@media (max-width: 767px) {
+  .web .as-split { grid-template-columns: 1fr; }
+  .web .as-art { padding: 14px 16px; gap: 8px; }
+  .web .as-hero { margin: 0; max-width: none; gap: 4px; }
+  .web .as-hero > :not(.ey):not(.as-h) { display: none; }
+  .web .as-h { font-size: 17px; }
+  .web .as-foot { display: none; }
+  .web .as-pane { padding: 20px 16px; }
+}
+.web .as-pscr { display: flex; flex-direction: column; min-height: 100%; background: var(--merit-bg-app); }
+.web .as-band { display: flex; flex-direction: column; gap: 10px; padding: 12px 16px 14px; background: color-mix(in srgb, var(--merit-violet-300) 16%, var(--merit-surface-sunken)); }
+.web .as-band .wmk { font-size: 18px; }
+.web .as-bmsg { font: 600 16px/1.25 var(--fd); letter-spacing: -0.01em; text-wrap: balance; }
+.web .as-bchips { display: flex; align-items: center; gap: 6px; }
+.web .as-pform { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 16px; overflow: hidden; }
+.web .as-pbar { padding: 12px 16px 28px; background: var(--merit-bg-app); }
+.web .scr:has(> .as-pscr) { padding: 0; gap: 0; }
+.web .as-pscr { flex: 1; }

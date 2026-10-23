@@ -166,7 +166,8 @@ flows = [
     flow("states", "System states", "One design each; no picks needed.", [("gap", "Approve")], [s_states]),
 ]
 
-HEAD = '''<title>Merit Web Wireframes</title>
+HEAD = '''<meta charset="utf-8">
+<title>Merit Web Wireframes</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
