@@ -158,3 +158,6 @@ badges and card text in dark. Every interactive element passes in default, hover
 
 **Points coin picked (2026-10-24):** concept **D, coloured as D1** (brand facets). Generated as the shipped v3 coin
 family; Flutter `MeritCoin` uses it (small/full × light/dark).
+
+**Web quiz results picked (2026-10-24):** **A Scoreboard** (`web-results`). Rank move needs the API (rank movement);
+without it the tile shows the streak only. Replaces the round 10 results frame on the web.

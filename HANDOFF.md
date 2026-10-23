@@ -11,9 +11,7 @@ Design system **v3.7.0** (branch `feat/design-system-v3`). The pre-release plan 
 - The round 15 board notes, the a11y audit, Flutter on 3.7 and the new Merit Points coin (D1).
 
 **Waiting on the owner:**
-- One web pick is left: `web-results` (A Scoreboard / B Quilt progress / C Recap and insight). Every other web screen is
-  picked or approve-or-note.
-- Then Step 3, the production build, with parallel Sonnet agents per repo; the main session orchestrates.
+- All picks are made (web results = A Scoreboard, 2026-10-24). Next is Step 3, the production build, with parallel Sonnet agents per repo; the main session orchestrates.
 
 **Nothing is pushed** (unpushed commits: DS 41, Flutter 82, backend 14, merit-content 1, frontend 2).
 Flutter CI's token-drift check fetches DS `c7ef050` (`.design-tokens-ref`), so push DS before or with Flutter.
@@ -76,7 +74,7 @@ Sources:
 | Shell + Today (`web-shell`) | A | Sidebar + rail (navigation B on the web) |
 | Subject hub (`web-hub`) | A | Tinted hero, topic quilt, docked side panel; tab double-underline fixed (note) |
 | Compete (`web-compete`) | — | Approved; podium card balanced with the right column (note) |
-| Quiz results (`web-results`) | **open** | A Scoreboard · B Quilt progress · C Recap and insight (note: old results "looks boring") |
+| Quiz results (`web-results`) | **A** | Scoreboard: grade medallion, "You proved …" headline, 4 stat tiles (accuracy, time, streak, rank move), clickable question strip, points receipt, 3 next steps (replaces the round 10 web results) |
 
 ### Owner decisions
 - **Gate 0 (2026-10-23):**
