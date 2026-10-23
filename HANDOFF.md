@@ -11,8 +11,8 @@ Design system **v3.7.0** (branch `feat/design-system-v3`). The pre-release plan 
 - The round 15 board notes, the a11y audit, Flutter on 3.7 and the new Merit Points coin (D1).
 
 **Waiting on the owner:**
-- The web picks: the board has 4 screens with alternatives (Quilt concept, hero, landing sections, `web-results`).
-  Every other screen is approve-or-note.
+- One web pick is left: `web-results` (A Scoreboard / B Quilt progress / C Recap and insight). Every other web screen is
+  picked or approve-or-note.
 - Then Step 3, the production build, with parallel Sonnet agents per repo; the main session orchestrates.
 
 **Nothing is pushed** (unpushed commits: DS 41, Flutter 82, backend 14, merit-content 1, frontend 2).
@@ -30,6 +30,82 @@ Flutter CI's token-drift check fetches DS `c7ef050` (`.design-tokens-ref`), so p
   them go into `wireframes/DECISIONS.md`.
 - Republish with the same file path from this repo, passing only changed files. The artifacts are private.
 - The older artifacts (web `6SeHPm…` at round 13, mobile `FqXHCE…` at round 10) belong to another claude.ai account.
+
+## Decisions and picks (all rounds, as of 2026-10-24)
+
+Sources:
+- the boards' `picks` DB, read 2026-10-24;
+- `wireframes/DECISIONS.md` (rounds 8–15, Gate 0);
+- `DECISIONS-v3.md` (D0–D27, D21 rev 1).
+
+### Mobile board picks (all built in Flutter unless noted)
+| Screen | Pick | Option |
+|---|---|---|
+| Bottom navigation (`nav`) | B | Four tabs (Today · Learn · Compete · Me), subject hub |
+| Home (`home`) | B | Today plan |
+| Practise tab (`quiz-mode`) | A | Sectioned list |
+| Taking a quiz (`quiz-take`) | A | Classic · paper mode |
+| Attempt review (`quiz-review`) | A | Filtered list |
+| Results (`r10-results`) | A | Calm card, full breakdown, inline review |
+| Cards tab (`cards-home`) | A | Due hero |
+| Card review session (`cards-session`) | A | Flip + four buttons, **shown as a visible stack** (note; built `432d93b`) |
+| Learn: subject quilt (`learn`) | A | Topic map + inline subtopics |
+| Subtopic (`subtopic`) | A | Bottom sheet over the quilt |
+| Learn root (`subjects-list`) | A | Rows |
+| Stats (`stats`) | B | Insights first |
+| Compete root (`r10-compete`) | A | Rank ladder + week, with B's podium preview |
+| Leaderboard (`leaderboard`) | A | Podium + sticky you |
+| Points (`points`) | A | Summary + history |
+| Achievements (`achievements`) | B | Tiered shelf |
+| Paywall (`paywall`) | A | Band + plans (was C) |
+| Mobile number (`r10-mobile`) | B | Block any first digit but 7 (`+94 7…`, D22) |
+| Me (`r10-me`) | — | Round 10 approved (settings inline on Me, D23) |
+| Points coin (`r16-coin`) | D → **D1** | Flat gold, brand-colour facets (shipped `b012184` / Flutter `89b53c7`) |
+
+**Round 15 mobile notes:**
+- `r15-maint`: one update sheet; Later shows only when skippable.
+- `r15-onb`: O/L is blocked in this release.
+- `r15-verify`: email verification is kept on the board, not in this release.
+
+### Web board picks
+| Screen | Pick | Option |
+|---|---|---|
+| Landing Quilt Map | A | Icosphere tree on a hill (round 12) |
+| Landing hero | A + M | Copy left, icosphere tree behind/right; phone web has no tree |
+| Landing sections | — | Rounds 13–14 live sections (try a question, flashcards, Mastery Engine, Merit Points, exam insights, pricing, FAQ) |
+| Shell + Today (`web-shell`) | A | Sidebar + rail (navigation B on the web) |
+| Subject hub (`web-hub`) | A | Tinted hero, topic quilt, docked side panel; tab double-underline fixed (note) |
+| Compete (`web-compete`) | — | Approved; podium card balanced with the right column (note) |
+| Quiz results (`web-results`) | **open** | A Scoreboard · B Quilt progress · C Recap and insight (note: old results "looks boring") |
+
+### Owner decisions
+- **Gate 0 (2026-10-23):**
+  - Rs 599/mo and Rs 4,990/yr, with a 14-day trial;
+  - Sri Lanka midnight;
+  - the plan "done" threshold is set in admin and applies the next day;
+  - the prediction is hidden below 30% coverage;
+  - badges retroactive, points not;
+  - reminders hidden in v1;
+  - v1 patchworks: Phy/Chem/Bio plus Agri and ICT, with the audit-UI icon pass;
+  - the web language switch is on the subject page only.
+- **2026-10-24:**
+  - Pro A/L cap 5, the same as free;
+  - CVD subject collisions left as is;
+  - repo links only for the DS artifact;
+  - coin D1.
+- **Release scope:** no email verification, no push, no O/L.
+- **Security:** no history scrub for now; the root dumps stay where they are (owner).
+- **Earlier DS rulings still in force:**
+  - D18 mastery fill;
+  - D19 colour-only timer;
+  - D20 subject tint 0.30 / 0.24;
+  - D21 one coin family (rev 1 = D1);
+  - D22 `+94 7`;
+  - D23 Me absorbs Settings;
+  - D24 14-day trial;
+  - D25 username-only share card;
+  - D26 Merit default web preset;
+  - D27 Quilt Map landing.
 
 ## What changed (2026-10-23 → 24)
 
