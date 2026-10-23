@@ -205,6 +205,46 @@ s_gate = screen("r15-gate0", "Gate 0 · prediction gate, reminders hidden (v1), 
      ("Me without reminders", ME_V1, "v1 build."),
      ("Pre-prompt (v1.1)", PRE, "Then the OS prompt. Not now: ask again after 7 days; denied: link to Settings.")])
 
+
+# ---------------------------------------------------------------- round 16: new points coin (owner: "new design")
+CC = "assets/v3/brand/coin-concepts/"
+
+
+def coin_img(k, size, dark=False):
+    cut = ("dark" if dark else "full") if size > 24 else ("dark-small" if dark else "small")
+    return f'<img src="{CC}{k}-{cut}.svg" alt="" style="width:{size}px;height:{size}px;flex:none">'
+
+
+def coin_cand(k, letter, name, kind, pro, con):
+    ramp = lambda dark: "".join(coin_img(k, sz, dark) for sz in (48, 32, 24, 16))
+    frame = ph(f'''<div class="tb"><b class="h-lg sp">Today</b><span class="hchip fl">{I("flame-fill")}12</span><span class="hchip cn" style="display:inline-flex;gap:6px;align-items:center">{coin_img(k, 18)}1,240</span></div>
+<div class="card" style="align-items:center;gap:10px;padding:20px">{coin_img(k, 112)}<b class="h-md">+100 Merit Points</b><span class="sm t2">80 for answers · 20 accuracy bonus</span></div>
+<div class="list"><div class="li">{coin_img(k, 24)}<div class="sp st" style="gap:0"><span class="ttl">Mastery · Leaf structure</span><span class="meta">Today · 8 of 10</span></div><b class="num">+100</b></div>
+<div class="li">{coin_img(k, 24)}<div class="sp st" style="gap:0"><span class="ttl">Flashcard session</span><span class="meta">Yesterday</span></div><b class="num">+15</b></div></div>
+<div class="card" style="flex-direction:row;gap:12px;align-items:center;justify-content:space-between">{ramp(False)}</div>
+<div class="card" style="flex-direction:row;gap:12px;align-items:center;justify-content:space-between;background:var(--merit-night-900)">{ramp(True)}</div>''', h=760)
+    return (f'<div class="wf-cand" data-v="{letter}"><div class="wf-cand-h"><b>{letter}</b><span>{name}</span><em>{kind}</em></div>{frame}'
+            f'<div class="wf-note"><p class="pro">{pro}</p><p class="con">{con}</p><div class="wf-comps"><code>full &gt;24</code><code>small ≤24</code><code>dark cut</code></div>'
+            f'<div class="wf-pick"><button type="button" aria-pressed="false">Pick {letter}</button></div></div></div>')
+
+
+s_coin = ('<article class="wf-screen" data-screen="r16-coin"><div class="wf-screen-h"><h3>Merit Points coin · new design (pick one)</h3>'
+          '<span class="tag energy">Energy</span><span class="tag gap">Pick one</span>'
+          "<p>Your note on r10-coin: a new points icon built from the v3 tokens. All three keep D21 (one asset family: a small cut for 24px and below, the full coin above, a dark cut with a cream outline on dark surfaces) and strike the Merit pyramid on the face, drawn as a low faceted pyramid seen from the left so it never reads as a warning triangle. "
+          "Every colour comes from <code>tokens/primitives.tokens.json</code> via <code>scripts/brand/coin_concepts.py</code> (butter face, orange facets, ink or cream outline; pattern ink follows the patchwork 42% rule). "
+          "Each frame shows the header chip (18px), a results card (112px), ledger rows (24px) and the size ramp 48 · 32 · 24 · 16 on light and dark.</p>"
+          '<span class="wf-data">After the pick: merit-coin{,-small,-dark}.svg regenerated in scripts/brand, Flutter MeritCoin asset + goldens updated</span></div>'
+          '<div class="wf-vars">' + coin_cand("a", "A", "Stitched coin", "Safe",
+              "Reads as a coin at every size: a round gold disc with a deeper rim crescent, a patchwork stitch ring and the mark struck in the centre. Closest to today\'s coin, so nothing changes in meaning for students.",
+              "The stitch ring disappears below 32px (by design); at 16px it is a gold disc with a small pyramid.")
+          + coin_cand("b", "B", "Patch coin", "Bold",
+              "The coin is cut exactly like a subject patchwork (X + corners, one dotted patch) with a white plate carrying the mark, so points visibly belong to the same world as the quilt.",
+              "Busiest of the three; at 16px the plate and wedges blur into a pale disc, so the small cut drops to two tones.")
+          + coin_cand("c", "C", "Hex medal", "Wild",
+              "A hexagon plate like the achievement medals, with a bevel and one violet sparkle: points and badges read as one reward family, and the shape stands apart from Phosphor\'s round icons.",
+              "Less obviously a coin; the sparkle is decoration only and is dropped at 24px and below.")
+          + '</div><div class="wf-feedback"><label for="fb-r16-coin">Notes on the coin</label><textarea id="fb-r16-coin" rows="2"></textarea><span class="wf-saved"></span></div></article>')
+
 SECTION = f'''{BEGIN}
 <section class="wf-flow" data-flow="r15" hidden>
   <div class="wf-intro">
@@ -219,6 +259,7 @@ SECTION = f'''{BEGIN}
 {s_misc}
 {s_onb}
 {s_gate}
+{s_coin}
 </section>
 {END}'''
 
