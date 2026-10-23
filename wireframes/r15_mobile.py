@@ -228,7 +228,7 @@ def coin_cand(k, letter, name, kind, pro, con):
             f'<div class="wf-pick"><button type="button" aria-pressed="false">Pick {letter}</button></div></div></div>')
 
 
-s_coin = ('<article class="wf-screen" data-screen="r16-coin"><div class="wf-screen-h"><h3>Merit Points coin · new design (pick one)</h3>'
+s_coin = ('<article class="wf-screen" data-screen="r16-coin"><div class="wf-screen-h"><h3>Merit Points coin · new design (pick one of four)</h3>'
           '<span class="tag energy">Energy</span><span class="tag gap">Pick one</span>'
           "<p>Your note on r10-coin: a new points icon built from the v3 tokens. All three keep D21 (one asset family: a small cut for 24px and below, the full coin above, a dark cut with a cream outline on dark surfaces) and strike the Merit pyramid on the face, drawn as a low faceted pyramid seen from the left so it never reads as a warning triangle. "
           "Every colour comes from <code>tokens/primitives.tokens.json</code> via <code>scripts/brand/coin_concepts.py</code> (butter face, orange facets, ink or cream outline; pattern ink follows the patchwork 42% rule). "
@@ -243,6 +243,9 @@ s_coin = ('<article class="wf-screen" data-screen="r16-coin"><div class="wf-scre
           + coin_cand("c", "C", "Hex medal", "Wild",
               "A hexagon plate like the achievement medals, with a bevel and one violet sparkle: points and badges read as one reward family, and the shape stands apart from Phosphor\'s round icons.",
               "Less obviously a coin; the sparkle is decoration only and is dropped at 24px and below.")
+          + coin_cand("d", "D", "Flat gold", "New",
+              "Your reference style: a flat gold disc with no ink outline and the mark knocked out in white as separate facets. Our geometry, not the reference\'s: the Merit pyramid seen from above (a diamond cut on the X, like a subject patchwork) lit from the top left, inside a ring broken on the diagonals. A deeper-gold rim keeps the edge visible on white.",
+              "White on token gold is 1.8:1, so the mark is softer than A–C on light surfaces (the coin always sits beside its number, as the reward.points exemption already allows). At 16px it is a gold disc with a two-tone diamond.")
           + '</div><div class="wf-feedback"><label for="fb-r16-coin">Notes on the coin</label><textarea id="fb-r16-coin" rows="2"></textarea><span class="wf-saved"></span></div></article>')
 
 SECTION = f'''{BEGIN}

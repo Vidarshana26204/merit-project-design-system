@@ -8,6 +8,7 @@ tokens/primitives.tokens.json (no hex typed here), so a palette change regenerat
   A  Stitched coin  : round coin, patchwork stitch ring, the Merit pyramid struck in the centre
   B  Patch coin     : round coin cut like a subject patchwork (X + corners), white plate, pyramid
   C  Hex medal      : hexagon plate (achievement medal shape), bevelled face, pyramid knock-out, sparkle
+  D  Flat gold      : flat gold disc, deeper rim, top-down pyramid as four white facets in a broken ring (owner reference)
 Cuts: full (>24px), small (<=24px: no stitches/patterns, heavier outline), dark (cream outline for dark surfaces).
 """
 import json
@@ -132,7 +133,36 @@ def coin_c(line, small):
     return "".join(out)
 
 
-CONCEPTS = {"a": ("Stitched coin", coin_a), "b": ("Patch coin", coin_b), "c": ("Hex medal", coin_c)}
+# ---------------------------------------------------------------- D · Flat gold (owner reference: flat disc + white knock-out)
+RIM = mix(DEEP, C("orange", "700"), 0.48)   # deeper gold: ~3:1 against white so the coin's edge reads on light surfaces
+
+
+def coin_d(line, small):
+    """Flat gold disc, no ink outline, a deeper-gold rim, and the mark knocked out in white as separate facets with
+    gold gaps between them (the segmented, flat style of the owner's reference, with our own geometry):
+    the Merit pyramid seen from above, a diamond cut into four facets on the X (the subject-patchwork cut), lit from
+    the top left (two facets white, two butter-100), inside a ring broken into four arcs.
+    The small cut drops the ring and widens the gaps so the facets survive at 16px."""
+    gap = 14 if small else 9
+    out = [f'<circle cx="128" cy="128" r="120" fill="{RIM}"/>',
+           f'<circle cx="128" cy="128" r="{112 if small else 113}" fill="{DEEP}"/>']
+    if not small:   # ring of four arcs, broken on the diagonals
+        r = 97
+        for k in range(4):
+            a0, a1 = math.radians(-90 + 90 * k + 14), math.radians(-90 + 90 * k + 76)
+            x0, y0, x1, y1 = 128 + r * math.cos(a0), 128 + r * math.sin(a0), 128 + r * math.cos(a1), 128 + r * math.sin(a1)
+            out.append(f'<path d="M{x0:.1f} {y0:.1f} A{r} {r} 0 0 1 {x1:.1f} {y1:.1f}" fill="none" stroke="{WHITE}" stroke-width="14"/>')
+    R = 90 if small else 74               # diamond half-diagonal
+    c = (128, 128)
+    top, right, bottom, left = (128, 128 - R), (128 + R, 128), (128, 128 + R), (128 - R, 128)
+    faces = [([top, c, left], WHITE), ([top, right, c], PALE), ([c, right, bottom], PALE), ([left, c, bottom], WHITE)]
+    if small:
+        faces = [([top, bottom, left], WHITE), ([top, right, bottom], PALE)]
+    for f, fill in faces:
+        out.append(f'<polygon points="{pts(f)}" fill="{fill}" stroke="{DEEP}" stroke-width="{gap}" stroke-linejoin="round"/>')
+    return "".join(out)
+
+CONCEPTS = {"a": ("Stitched coin", coin_a), "b": ("Patch coin", coin_b), "c": ("Hex medal", coin_c), "d": ("Flat gold", coin_d)}
 
 
 def main():
