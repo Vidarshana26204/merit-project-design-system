@@ -75,3 +75,73 @@
 .r12-tiles .t span { font: 600 11.5px/1.2 var(--fb); color: var(--merit-text-primary); overflow-wrap: anywhere; }
 .r12-tiles .t em { font: 500 10.5px var(--fb); font-style: normal; color: var(--merit-text-tertiary); }
 
+
+/* ===== Round 12b: icosphere tree on a hill (qm-ico.js) ===== */
+@property --c { syntax: "<color>"; inherits: true; initial-value: transparent; }
+.qm.ico { max-width: none; border-radius: 0; background: none; box-shadow: none; overflow: hidden; }
+.qm.ico .qm-svg { aspect-ratio: 640 / 600; }
+.qm.ico[data-wide] .qm-svg { aspect-ratio: 1067 / 600; }
+.qm.ico.ico-stage { max-width: 960px; border-radius: 20px; background: var(--merit-bg-app); box-shadow: inset 0 0 0 1px var(--merit-border-subtle); }
+.qm.ico .qm-top { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: flex-start; padding: 0; max-width: 64%; }
+.qm.ico .qm-crumb { display: none; top: 12px; bottom: auto; left: 10px; }
+.qm.ico.drilled .qm-crumb { display: flex; }
+.ico-chips .qm-top { position: static; justify-content: flex-start; padding: 0; max-width: none; }
+.ico-chips .qm-top .chip { height: 30px; }
+.qm.ico .qm-crumb button::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border: 2px solid currentColor; border-radius: 50%; vertical-align: -1px; }
+.qm.ico .qm-panel { top: 12px; right: 12px; bottom: auto; width: 236px; padding: 14px; }
+.qm.ico.ico-stage .qm-panel { right: auto; left: 14px; top: 52px; }
+.web .w-hero.ico-a { position: relative; display: flex; align-items: center; min-height: 660px; padding: 24px 40px 0; }
+.web .w-hero.ico-a .ico-copy { position: relative; z-index: 2; width: 44%; padding-bottom: 70px; }
+.web .r12-hero-ico { position: absolute; right: 0; bottom: 0; width: 54%; }
+
+/* Vivid leaf greens, grass and bark as dedicated vars (not the grey sage tokens). Dark theme: slightly deeper, less luminous. */
+.qm.ico { --qm-leaf-1: #1F7A4D; --qm-leaf-2: #2FA35C; --qm-leaf-3: #49C26B; --qm-leaf-4: #8FD86A; --qm-leaf-5: #C9E36B;
+  --qm-bark: #7A4A2A; --qm-bark-dark: #4E2E1A; --qm-plank: #B8823F; --qm-grass-a: #8FD86A; --qm-grass-b: #2FA35C; --qm-grass-c: #49C26B; }
+[data-theme="dark"] .qm.ico, .dark .qm.ico { --qm-leaf-1: #176339; --qm-leaf-2: #228247; --qm-leaf-3: #37A056; --qm-leaf-4: #6EB454; --qm-leaf-5: #A5BC55;
+  --qm-bark: #6A4025; --qm-bark-dark: #3F2415; --qm-plank: #9C6C34; --qm-grass-a: #5FA83D; --qm-grass-b: #1D7A47; --qm-grass-c: #2E9657; }
+/* 5 tones from the Lambert term (t0 shadow .. t4 lit), mixed from the ball's base colour --c. */
+.ico-f { fill: var(--f); stroke: var(--f); stroke-width: .7px; stroke-linejoin: round; }
+.ico-ball { cursor: pointer; outline: none; --c: var(--qm-leaf-2); transition: --c .35s ease; }
+.ico-ball.deco { cursor: default; }
+.ico-ball.h0 { --c: var(--qm-leaf-1); } .ico-ball.h1 { --c: var(--qm-leaf-2); } .ico-ball.h2 { --c: var(--qm-leaf-3); }
+.ico-ball.h3 { --c: var(--qm-leaf-4); } .ico-ball.h4 { --c: var(--qm-leaf-5); }
+.ico-ball.more { --c: var(--qm-leaf-3); }
+.ico-f.t0 { --f: color-mix(in srgb, var(--c) 70%, black); }
+.ico-f.t1 { --f: color-mix(in srgb, var(--c) 84%, black); }
+.ico-f.t2 { --f: var(--c); }
+.ico-f.t3 { --f: color-mix(in srgb, var(--c) 80%, white); }
+.ico-f.t4 { --f: color-mix(in srgb, var(--c) 62%, white); }
+[data-theme="dark"] .ico-f.t0, .dark .ico-f.t0 { --f: color-mix(in srgb, var(--c) 85%, black); }
+[data-theme="dark"] .ico-f.t1, .dark .ico-f.t1 { --f: var(--c); }
+[data-theme="dark"] .ico-f.t2, .dark .ico-f.t2 { --f: color-mix(in srgb, var(--c) 88%, white); }
+[data-theme="dark"] .ico-f.t3, .dark .ico-f.t3 { --f: color-mix(in srgb, var(--c) 74%, white); }
+[data-theme="dark"] .ico-f.t4, .dark .ico-f.t4 { --f: color-mix(in srgb, var(--c) 56%, white); }
+.ico-ball.soon .ico-f { filter: saturate(.5); }
+.ico-ball:focus-visible .ico-f, .ico-ball.sel .ico-f { stroke: var(--merit-focus-ring); stroke-width: 2px; }
+.ico-ball:focus-visible, .ico-ball.sel { filter: drop-shadow(0 0 4px var(--merit-focus-ring)); }
+
+/* Labels: white bold text on the ball's lower-centre face, no pill; a pill with a focus ring on hover/focus; "+N more" keeps a small pill. */
+.ico-t { font: 800 15px var(--fb); fill: #fff; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .6)); pointer-events: none; }
+.ico-pill { opacity: 0; transition: opacity .12s; }
+.lp-lab.hot .ico-pill, .lp-lab.pill .ico-pill { opacity: 1; }
+.lp-lab.hot .ico-pill { stroke: var(--merit-focus-ring); stroke-width: 2.2; }
+.lp-lab.hot .ico-t, .lp-lab.pill .ico-t { fill: var(--merit-text-primary); filter: none; }
+
+/* Bark (5 tones from two brown vars) and the sign. */
+.ico-limb .ico-f.t0 { --f: var(--qm-bark-dark); }
+.ico-limb .ico-f.t1 { --f: color-mix(in srgb, var(--qm-bark-dark) 50%, var(--qm-bark)); }
+.ico-limb .ico-f.t2 { --f: var(--qm-bark); }
+.ico-limb .ico-f.t3 { --f: color-mix(in srgb, var(--qm-bark) 86%, white); }
+.ico-limb .ico-f.t4 { --f: color-mix(in srgb, var(--qm-bark) 72%, white); }
+.ico-sign { --c: var(--qm-plank); cursor: pointer; outline: none; }
+.ico-sign:hover .ico-f { filter: brightness(1.07); }
+.ico-sign:focus-visible .ico-f { stroke: var(--merit-focus-ring); stroke-width: 2.5px; }
+.ico-sign-t { font: 800 14px var(--fb); fill: #3A2210; pointer-events: none; }
+.ico-rope { stroke: color-mix(in srgb, var(--qm-bark) 50%, #E8C58A); stroke-width: 2.4; stroke-linecap: round; }
+.ico-hill2 { fill: var(--qm-grass-c); opacity: .85; }
+.ico-tuft .t0 { fill: var(--qm-leaf-1); }
+.ico-tuft .t1 { fill: var(--qm-leaf-3); }
+.ico-tuft .t2 { fill: var(--qm-leaf-5); }
+
+/* 12b: long subject names in the panel CTA wrap instead of overflowing */
+[data-qm="ico"] .btn.full{white-space:normal;height:auto;min-height:36px;line-height:1.2;padding-block:8px;text-align:center}
