@@ -3,11 +3,28 @@
 Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
 and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
 **Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
-**Resume point (2026-10-23, round 12):** picks so far: Quilt Map A (tree), hero A, shell A, hub A. Round 12 is
-published on the web board (https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn):
-- low-poly tree, 2.5D SVG + GSAP + Delaunator, in `wireframes/qm-lowpoly.js`;
-- hub A with the app's type-scale section tabs, in `r12_hub.py`;
-- a step-aware split screen for auth and all 5 onboarding steps, in `r12_auth.py`.
+**Resume point (2026-10-23, round 13):** the landing is settled on the web board (https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn):
+- Picks: hero A, shell A, hub A, and the icosphere tree (A).
+- Rounds 12b–12d (`wireframes/qm-ico.js`):
+  - projected-3D SVG + GSAP; measured eases in `QMIco.EASE`;
+  - a scene stack: subject → topics → subtopics, each blooming out of the crown you open;
+  - no sign; the tree sits behind the copy;
+  - labels use full names and scale to fit.
+- Round 13:
+  - hero CTA is Start free + App Store / Google Play badges; the breadcrumb sits under the stream chips;
+  - live sections on real data (`r13_landing.py`, `landing-live.js`): try a real question (EN/SI), flashcard deck, exam insights;
+  - pricing shows "Rs —"; a FAQ whose facts come from the data; closing CTA band.
+- Data: `python3 wireframes/build_samples.py` snapshots questions and cards **read-only from `merit_rehearsal`** into `qm-samples.js`.
+
+Open:
+- Prices.
+- Free-tier subject cap: CLAUDE.md says 2, the board says 5.
+- Production needs a new `GET /public/samples` endpoint and KaTeX for maths.
+
+Next:
+1. The user reviews round 13.
+2. Agent L builds the landing (gsap, delaunator not needed for ico, lenis, KaTeX).
+3. Agent S builds the student portal.
 
 The phone web hero has no tree.
 
