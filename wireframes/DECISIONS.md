@@ -155,3 +155,6 @@ badges and card text in dark. Every interactive element passes in default, hover
   not published.
 - *Pro A/L subject cap:* stays **5**, the same as free. Achiever copy no longer lists a subject count.
 - *Colour-blind subject collisions (6 pairs):* left as is; tiles always carry icons and names.
+
+**Points coin picked (2026-10-24):** concept **D, coloured as D1** (brand facets). Generated as the shipped v3 coin
+family; Flutter `MeritCoin` uses it (small/full × light/dark).

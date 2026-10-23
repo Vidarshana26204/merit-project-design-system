@@ -1,3 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t"><title id="t">v3 · merit-coin icon (Bold)</title>
-<g transform="translate(2.56 12.36) scale(0.98)"><polygon points="128.00,34.00 221.53,196.00 34.47,196.00" fill="none" stroke="currentColor" stroke-width="16.5" stroke-linejoin="round"/><line x1="128" y1="54" x2="128" y2="196" stroke="currentColor" stroke-width="13.5"/></g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t"><title id="t">v3 · merit-coin icon (Bold)</title><circle cx="128" cy="128" r="108" fill="none" stroke="currentColor" stroke-width="20"/><path d="M128 54 L202 128 L128 202 L54 128 Z M128 54 L128 202 M54 128 L202 128" fill="none" stroke="currentColor" stroke-width="16" stroke-linejoin="round"/></svg>

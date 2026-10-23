@@ -13,6 +13,8 @@
 .web .wmk.sm2 { font-size: 18px; }
 .web .coin { display: inline-block; width: var(--coin, 18px); height: var(--coin, 18px); flex: none; background: url("../assets/v3/brand/merit-coin-small.svg") center / contain no-repeat; }
 .web .coin.lg { background-image: url("../assets/v3/brand/merit-coin.svg"); }
+.dark .web .coin, [data-theme="dark"] .web .coin, .web.dark .coin { background-image: url("../assets/v3/brand/merit-coin-small-dark.svg"); }
+.dark .web .coin.lg, [data-theme="dark"] .web .coin.lg, .web.dark .coin.lg { background-image: url("../assets/v3/brand/merit-coin-dark.svg"); }
 .web .hchip.cn { gap: 6px; }
 .web .ul { white-space: nowrap; }
 

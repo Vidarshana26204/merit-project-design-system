@@ -499,8 +499,9 @@ html:root .tone .pwwash { background: var(--tone-wash); opacity: .30; }
 /* Merit coin (D21): one asset family; small cut ≤24px, full above, dark cut on dark surfaces */
 .coin { display: inline-block; width: var(--coin, 18px); height: var(--coin, 18px); flex: none; vertical-align: -3px; background: url("assets/v3/brand/merit-coin-small.svg") center / contain no-repeat; }
 .coin.lg { background-image: url("assets/v3/brand/merit-coin.svg"); }
-.dark .coin, [data-theme="dark"] .coin { background-image: url("assets/v3/brand/merit-coin-dark.svg"); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .coin { background-image: url("assets/v3/brand/merit-coin-dark.svg"); } }
+.dark .coin, [data-theme="dark"] .coin { background-image: url("assets/v3/brand/merit-coin-small-dark.svg"); }
+.dark .coin.lg, [data-theme="dark"] .coin.lg { background-image: url("assets/v3/brand/merit-coin-dark.svg"); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .coin { background-image: url("assets/v3/brand/merit-coin-small-dark.svg"); } :root:not([data-theme="light"]) .coin.lg { background-image: url("assets/v3/brand/merit-coin-dark.svg"); } }
 
 /* ======================= v3.7 state model (§15) =======================
    Hover / pressed = a state layer (state.hover / state.pressed) painted over the fill, so every

@@ -1,7 +1,8 @@
 """Merit Points coin concepts (round 16, owner asked for a new design built from the v3 tokens).
 
 Usage (from the design-system repo root):
-    python3 scripts/brand/coin_concepts.py
+    python3 scripts/brand/coin_concepts.py            # concepts only
+    python3 scripts/brand/coin_concepts.py --final    # also write the shipped v3 coin family (FINAL = picked concept)
 
 Writes assets/v3/brand/coin-concepts/{a,b,c}-{full,small,dark,dark-small}.svg. Every colour is read from
 tokens/primitives.tokens.json (no hex typed here), so a palette change regenerates the coins.
@@ -196,6 +197,45 @@ CONCEPTS = {"a": ("Stitched coin", coin_a), "b": ("Patch coin", coin_b), "c": ("
             "d2": ("Flat gold, brand borders", lambda l, sm: coin_d(l, sm, "border"))}
 
 
+FINAL = "d1"   # owner pick 2026-10-24: D1, flat gold with brand-colour facets
+V3_BRAND = os.path.join(ROOT, "assets", "v3", "brand")
+
+
+def glyph_bold():
+    """Single-colour icon (tint with currentColor): ring + the X-cut diamond, as outlines."""
+    c = "currentColor"
+    d = "M128 54 L202 128 L128 202 L54 128 Z"
+    return (f'<circle cx="128" cy="128" r="108" fill="none" stroke="{c}" stroke-width="20"/>'
+            f'<path d="{d} M128 54 L128 202 M54 128 L202 128" fill="none" stroke="{c}" stroke-width="16" stroke-linejoin="round"/>')
+
+
+def glyph_fill():
+    """Single-colour icon, filled: a disc with the four facets knocked out, joined by solid gaps (the X and rim)."""
+    c, gap = "currentColor", 12
+    r, cc = 74, (128, 128)
+    top, right, bottom, left = (128, 128 - r), (128 + r, 128), (128, 128 + r), (128 - r, 128)
+    quads = [[top, cc, left], [top, right, cc], [cc, right, bottom], [left, cc, bottom]]
+    mask = "".join(f'<polygon points="{pts(q)}" fill="black" stroke="white" stroke-width="{gap}" stroke-linejoin="round"/>' for q in quads)
+    return (f'<defs><mask id="m"><rect width="256" height="256" fill="white"/>{mask}</mask></defs>'
+            f'<circle cx="128" cy="128" r="118" fill="{c}" mask="url(#m)"/>')
+
+
+def final():
+    """Write the shipped v3 coin family from the picked concept."""
+    name, fn = CONCEPTS[FINAL]
+    files = {
+        "merit-coin.svg": ("Merit Points coin", fn(INK, False)),
+        "merit-coin-small.svg": ("Merit Points coin — small sizes (≤24px)", fn(INK, True)),
+        "merit-coin-dark.svg": ("Merit Points coin — for dark backgrounds", fn(CREAM, False)),
+        "merit-coin-small-dark.svg": ("Merit Points coin — small sizes, dark backgrounds", fn(CREAM, True)),
+        "merit-coin-glyph-bold.svg": ("merit-coin icon (Bold)", glyph_bold()),
+        "merit-coin-glyph-fill.svg": ("merit-coin icon (Fill)", glyph_fill()),
+    }
+    for f, (title, body) in files.items():
+        open(os.path.join(V3_BRAND, f), "w").write(svg(f"v3 · {title}", body))
+    print("wrote", ", ".join(files))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     for k, (name, fn) in CONCEPTS.items():
@@ -206,4 +246,7 @@ def main():
 
 
 if __name__ == "__main__":
+    import sys
     main()
+    if "--final" in sys.argv:
+        final()

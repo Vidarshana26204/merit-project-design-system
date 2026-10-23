@@ -5,6 +5,14 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## Brand · 2026-10-24 (tokens unchanged at 3.7.0)
+
+- **New Merit Points coin (D21 rev 1, concept D1):** `assets/v3/brand/merit-coin{,-small,-dark,-small-dark}.svg` and
+  the glyphs, generated from tokens by `scripts/brand/coin_concepts.py --final` (concepts A–D kept in
+  `assets/v3/brand/coin-concepts/`). Adds the **small-dark** cut. `build_v3_brand.py` no longer rebuilds the coin
+  from v2. Reference site and boards use the small-dark cut on dark surfaces. Flutter `MeritCoin` updated
+  (`89b53c7`).
+
 ## 3.7.0 — 2026-10-23 (tokens and docs)
 
 Pre-release hardening from the audit in `~/.claude/plans/as-per-the-handoff-md-zippy-seal.md` (Step 1).

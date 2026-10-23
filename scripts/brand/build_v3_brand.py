@@ -66,6 +66,8 @@ def build_brand_masters() -> list[str]:
     for src in sorted((ROOT / "assets/brand").glob("*.svg")):
         if src.name.startswith("merit-lockup"):
             continue  # rebuilt with the v3 wordmark below
+        if src.name.startswith("merit-coin"):
+            continue  # v3 coin (D1, 2026-10-24) is built by scripts/brand/coin_concepts.py --final
         palette = COIN_TO_V3 if "coin" in src.name else V2_TO_V3
         write(f"brand/{src.name}", v3ify(src.read_text(), palette))
         out.append(src.name)
