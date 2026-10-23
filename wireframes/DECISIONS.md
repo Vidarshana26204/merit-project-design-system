@@ -147,3 +147,11 @@ owner whether this means a redesign or rebuilding the current coin from tokens.
 fixed store-badge captions (1.89:1), toast actions on the inverse surface in dark (1.26:1), the "Needs API" tag
 (2.85:1), error text on errorSubtle (4.03:1, now `feedback.errorText`), a status bar on the feature phone, fixed-tone
 badges and card text in dark. Every interactive element passes in default, hover and focus.
+
+**Owner answers (2026-10-24):**
+- *Points coin:* a **new coin design**. Draw 2–3 concepts in the v3 language on the board, owner picks, then generate
+  the asset family (small, full, dark cut) and the Flutter asset.
+- *Design System artifact:* repo links only (reference-site sidebar + `wireframes/BOARDS.md`); the reference site is
+  not published.
+- *Pro A/L subject cap:* stays **5**, the same as free. Achiever copy no longer lists a subject count.
+- *Colour-blind subject collisions (6 pairs):* left as is; tiles always carry icons and names.
