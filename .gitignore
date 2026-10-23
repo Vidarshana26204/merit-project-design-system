@@ -2,6 +2,10 @@
 # General Sans (ITF Free Font License) must not be redistributed from a public
 # repository. Fetch it locally: see assets/fonts/README.md.
 assets/fonts/GeneralSans-*
+# v2 legacy faces: Clash Display (ITF FFL, no redistribution) and School Times
+# (licence unknown). Kept local only for scripts/brand/build_brand.py.
+assets/fonts/ClashDisplay-*
+assets/fonts/SchoolTimes-*
 
 # Python
 __pycache__/

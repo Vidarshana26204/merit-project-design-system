@@ -75,3 +75,23 @@ Board: merged into `wireframes.html` (round 10 blocks in the Quiz, Shell, Auth, 
 
 Separate board: `wireframes-web.html` (artifact "Merit Web Wireframes"). Picks pending. Landing Quilt Map concepts are
 live prototypes: A fractal tree, B circuit network, C orbit.
+
+## Gate 0 — owner decisions before release (2026-10-23)
+
+From the pre-release audit (`~/.claude/plans/as-per-the-handoff-md-zippy-seal.md`, A.7).
+
+- **Prices (Achiever):** Rs 599 / month, Rs 4,990 / year (annual saves ≈ 31%). Stored in `tiers`, served by
+  `GET /public/plans`, edited in admin. The landing's LKR 299/249 and "$0" copy is replaced.
+- **Day boundary:** Sri Lanka midnight (Asia/Colombo, UTC+5:30) for daily caps, streaks and the daily plan. Backend
+  moves off UTC; the "resets at midnight" copy stays.
+- **Daily-plan "done":** a points threshold in `system_settings`, edited in admin. An edit takes effect from the next
+  Sri Lanka day, never mid-day.
+- **Grade prediction:** hidden below 30% topic coverage; show "Practise more to unlock your prediction" instead.
+- **Retroactive achievements:** badges are awarded retroactively; their points are not (protects the leaderboard).
+- **Push reminders:** hidden for v1 (no Firebase work; reminder toggles and pre-prompt removed from UI). v1.1.
+- **v1 patchwork subjects:** Physics, Chemistry, Biology **plus Agricultural Science and ICT**. After generating the
+  Agri/ICT icon maps, nodes with no suitable pool icon get marked in the patchwork-audit UI
+  (`tools/patchwork_review.py serve`); new icons are then generated for the marked nodes. Other subjects use the §1.4a
+  fallback.
+- **Web content-language switch (EN/SI/TA):** on the subject page only (inline switch in the subject header). Not in
+  Me › Preferences on web.

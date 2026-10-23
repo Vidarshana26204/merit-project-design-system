@@ -3,9 +3,9 @@
 | Family | Licence | In git? | Use |
 |---|---|---|---|
 | **General Sans** (Medium, Semibold, Bold + italics) | ITF Free Font License (Fontshare) | **No**, gitignored | v3 display face (D8) and wordmark (D13) |
-| Plus Jakarta Sans | SIL OFL 1.1 | Yes | Body |
-| Clash Display | ITF Free Font License (Fontshare) | Yes (v2, legacy). See the note below | v2 display face only |
-| School Times | Check its licence | Yes (v2, legacy) | v2 landing only. Retired in v3 (D13) |
+| Plus Jakarta Sans | SIL OFL 1.1 (`OFL.txt`) | Yes | Body |
+| Clash Display | ITF Free Font License (Fontshare) | **No**, gitignored (removed 2026-10-23) | v2 display face only |
+| School Times | Unknown | **No**, gitignored (removed 2026-10-23) | v2 landing only. Retired in v3 (D13) |
 
 ## Getting General Sans locally
 
@@ -25,5 +25,6 @@ The apps bundle their own copies. Flutter puts them in `assets/google_fonts/` (a
 embedded in the app, which the licence allows). The web frontend self-hosts them from its
 deployment.
 
-> **Open issue:** the v2 Clash Display (FFL) files are committed to this public repo and are in
-> its history. Before v3 ships, decide whether to make the repo private or to remove them.
+> **History:** the v2 Clash Display and School Times files were removed from the tree on
+> 2026-10-23 but remain in history (since `227b9a1`). Scrubbing history needs a force-push of
+> this public repo; that is the owner's call.
