@@ -145,3 +145,12 @@
 
 /* 12b: long subject names in the panel CTA wrap instead of overflowing */
 [data-qm="ico"] .btn.full{white-space:normal;height:auto;min-height:36px;line-height:1.2;padding-block:8px;text-align:center}
+
+/* 12c: neutral background crowns (not nodes): desaturated sage-olive, 3 compressed tones, so the vivid node crowns read as the things to touch */
+.qm.ico { --qm-bg-leaf-1: #7F9A79; --qm-bg-leaf-2: #94AA87; --qm-bg-leaf-3: #AAB99A; }
+[data-theme="dark"] .qm.ico, .dark .qm.ico { --qm-bg-leaf-1: #3D5240; --qm-bg-leaf-2: #4A6049; --qm-bg-leaf-3: #586B52; }
+.ico-ball.bg.b0 { --c: var(--qm-bg-leaf-1); } .ico-ball.bg.b1 { --c: var(--qm-bg-leaf-2); } .ico-ball.bg.b2 { --c: var(--qm-bg-leaf-3); }
+.ico-ball.bg .ico-f.t0, .ico-ball.bg .ico-f.t1 { --f: color-mix(in srgb, var(--c) 88%, black); }
+.ico-ball.bg .ico-f.t2 { --f: var(--c); }
+.ico-ball.bg .ico-f.t3, .ico-ball.bg .ico-f.t4 { --f: color-mix(in srgb, var(--c) 88%, white); }
+[data-theme="dark"] .ico-ball.bg .ico-f.t3, [data-theme="dark"] .ico-ball.bg .ico-f.t4, .dark .ico-ball.bg .ico-f.t3, .dark .ico-ball.bg .ico-f.t4 { --f: color-mix(in srgb, var(--c) 90%, white); }

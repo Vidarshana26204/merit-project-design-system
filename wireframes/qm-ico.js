@@ -75,30 +75,52 @@
       if (a.length > 6) vis.push({ id: id + ":more", more: true, label: "+" + (a.length - 6) + " more", meta: "", tile: "languages" });
       return vis;
     }
-    // Crown slots [x, y, z, r], filled in this order so a short list still makes one connected mass (design space 640 x 600).
-    const SLOT = [[395, 160, 10, 94], [275, 146, -10, 96], [372, 252, 45, 96], [160, 190, 15, 92], [505, 218, 25, 90], [245, 245, 20, 92]];
-    const MORE = [515, 112, -5, 60], DECO = [[255, 175, -80, 72], [440, 205, -85, 78], [330, 205, -90, 82], [560, 170, -70, 58], [205, 262, -70, 60]];
-    // Deterministic tree: a leaning trunk forking into 3-4 branches into a dense overlapping crown (6 balls + "+N more" + 3-5 decorative),
+    // Node crowns [x, y, z, r]: small, in a wide fan, each at the end of its own twig (design space 640 x 600). Filled centre-out.
+    const SLOT = [[330, 92, 40, 60], [178, 142, 30, 58], [486, 136, 34, 60], [92, 238, 22, 56], [546, 236, 22, 56], [262, 236, 46, 58]];
+    const MORE = [420, 236, 40, 40];
+    // Neutral background crowns: bigger, further back, never interactive. They make the canopy one mass behind the nodes.
+    const BG = [[330, 172, -120, 108], [228, 150, -100, 92], [440, 150, -105, 96], [138, 214, -85, 78], [532, 206, -90, 80], [330, 92, -110, 74],
+      [200, 82, -95, 66], [470, 80, -95, 68], [90, 286, -70, 56], [580, 284, -70, 54], [382, 262, -80, 72], [258, 272, -75, 62]];
+    // Three boughs leave the fork; a node's twig starts on the bough nearest it, so the structure reads at a glance.
+    const BOUGH = [[226, 300, 12], [346, 236, 18], [470, 286, 12]];
+    const boughOf = (x) => (x < 250 ? 0 : x > 420 ? 2 : 1);
+    // Deterministic tree: a leaning trunk, three boughs fanning wide, one twig per node crown, neutral crowns behind,
     // and a long lower-left branch that carries the sign into open sky.
     function layout(vis, id) {
       const j = (k, a) => (hash(id + k) - 0.5) * a, balls = [];
       vis.forEach((it, i) => {
         const sl = it.more ? MORE : SLOT[i];
-        balls.push({ item: it, c: [sl[0] + j("bx" + i, 8), sl[1] + j("by" + i, 8), sl[2]], r: sl[3] + (it.more ? 0 : hash(id + "r" + i) * 6), hue: Math.floor(hash(id + "h" + i) * 5) });
+        balls.push({ item: it, c: [sl[0] + j("bx" + i, 8), sl[1] + j("by" + i, 8), sl[2]], r: sl[3] + (it.more ? 0 : hash(id + "r" + i) * 4), hue: Math.floor(hash(id + "h" + i) * 5) });
       });
-      const nd = vis.length >= 5 ? 5 : vis.length >= 3 ? 4 : 3, deco = DECO.slice(0, nd).map((d, k) => ({ item: null, c: [d[0] + j("dx" + k, 12), d[1] + j("dy" + k, 12), d[2]], r: d[3] + hash(id + "dr" + k) * 8, hue: Math.floor(hash(id + "dh" + k) * 5) }));
-      const limbs = [{ path: [B, [B[0] - 16, 480, 10], F], radii: [28, 21, 15] }];
-      const near = balls.filter((b) => !b.item.more).sort((a, b) => a.c[0] - b.c[0]), pick = near.length <= 4 ? near : [0, 1, 2, 3].map((k) => near[Math.round((k * (near.length - 1)) / 3)]);
-      const tips = pick.map((b) => add(b.c, [0, b.r * 0.35, 0]));
-      tips.forEach((t, k) => limbs.push({ path: [F, add(mul(add(F, t), 0.5), [j("k" + k, 14), 0, j("q" + k, 14)]), t], radii: [13, 9, 6] }));
+      const nd = vis.length >= 5 ? 12 : vis.length >= 3 ? 10 : 8;
+      const deco = BG.slice(0, nd).map((d, k) => ({ item: null, c: [d[0] + j("dx" + k, 12), d[1] + j("dy" + k, 12), d[2]], r: d[3] + hash(id + "dr" + k) * 8, hue: k % 3 }));
+      const limbs = [{ role: "trunk", path: [B, [B[0] - 16, 480, 10], F], radii: [28, 21, 15] }];
+      BOUGH.forEach((b, k) => limbs.push({ role: "bough", path: [F, add(mul(add(F, b), 0.5), [j("bk" + k, 16), -8, j("bq" + k, 10)]), b], radii: [14, 11, 8] }));
+      balls.forEach((b, i) => {
+        const s0 = BOUGH[boughOf(b.c[0])], t = add(b.c, [0, b.r * 0.45, 0]);
+        limbs.push({ role: "twig", ball: i, path: [s0, add(mul(add(s0, t), 0.5), [j("tk" + i, 12), j("ty" + i, 8), 0]), t], radii: [7.5, 5.5, 3.8] });
+      });
       const S = add(F, [-257, -70, 50]), mid = add(F, [-128, -34, 30]), at = (t) => (t < 0.5 ? add(F, mul(sub(mid, F), t * 2)) : add(mid, mul(sub(S, mid), (t - 0.5) * 2)));
-      limbs.push({ path: [F, mid, S], radii: [12, 8, 5] });
+      limbs.push({ role: "sign", path: [F, mid, S], radii: [12, 8, 5] });
       const l = [at(0.52), at(0.89)]; // about one plank width apart, so the ropes hang parallel
-      return { limbs, balls, deco, sign: { a: mul(add(l[0], l[1]), 0.5), l }, tips };
+      return { limbs, balls, deco, sign: { a: mul(add(l[0], l[1]), 0.5), l } };
     }
     return { ball, limb, plank, camera, project, rank, layout };
   }
-  const API = { geometry, LIGHT };
+  // Measured eases (motionmaxxing references/motion.md): landings decelerate, exits accelerate.
+  const bez = (x1, y1, x2, y2) => {
+    const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+    const X = (t) => ((ax * t + bx) * t + cx) * t, Y = (t) => ((ay * t + by) * t + cy) * t, dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
+    return (p) => {
+      if (p <= 0) return 0; if (p >= 1) return 1;
+      let lo = 0, hi = 1, t = p;
+      for (let i = 0; i < 8; i++) { const e = X(t) - p, d = dX(t); if (Math.abs(e) < 1e-6) return Y(t); if (Math.abs(d) < 1e-6) break; t -= e / d; }
+      for (let i = 0; i < 40; i++) { t = (lo + hi) / 2; if (X(t) < p) lo = t; else hi = t; }
+      return Y(t);
+    };
+  };
+  const EASE = { softLand: bez(0.22, 0.9, 0.3, 1), snapSettle: bez(0.12, 0.95, 0.2, 1), glide: bez(0.33, 0.75, 0.4, 1), gentleIn: bez(0.55, 0, 0.85, 0.45), accelExit: bez(0.6, 0, 0.9, 0.35) };
+  const API = { geometry, LIGHT, EASE };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   if (typeof window === "undefined") return;
   root.QMIco = API;
@@ -106,7 +128,7 @@
   /* ------------------------------------------------------------ renderer */
   const Q = root.QM, gsap = root.gsap;
   if (!Q || !gsap) { console.warn("qm-ico: needs QM and gsap"); return; }
-  const { el, hash } = Q, G = geometry(hash);
+  const { el, hash } = Q, G = geometry(hash), FR = 1 / 30;
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const SHORT = { "Information & Communication Technology": "ICT", "Agricultural Science": "Agri Science", "Combined Mathematics": "Combined Maths", "Logic & Scientific Method": "Logic & Method", "Communication & Media Studies": "Media Studies", "Greek & Roman Civilization": "Greek & Roman" };
   const short = (s) => SHORT[s] || s.replace(/^Drama & Theatre/, "Drama").replace(/^History of SL & (.*)$/, "SL & $1 History").replace("Technology", "Tech").replace("Civilization", "Civ.");
@@ -118,6 +140,7 @@
       this.svg = svg; this.ctl = ctl; this.W = ctl.host.hasAttribute("data-wide") ? 1067 : 640; this.DX = this.W - 640;
       this.still = ctl.opts.static; this.yaw = 0; this.pitch = 0; this.dirty = true; this.root = this.child = this.sel = null;
       this.cam = { x: 0, y: 0, w: this.W, h: H }; this.view_();
+      (Ico.all = Ico.all || []).push(this);
       svg.setAttribute("aria-label", "Merit subject tree");
       const slot = ctl.top && ctl.host.dataset.chipsIn && document.querySelector(ctl.host.dataset.chipsIn);
       if (slot) { slot.appendChild(ctl.top); ctl.top.classList.add("moved"); } // stream chips live in the hero copy column, still wired to the tree
@@ -140,8 +163,15 @@
       if (o.hill) this.hill(sc.g, sc);
       sc.world = el("g", {}, sc.g); sc.labs = el("g", { class: "lp-labs", "aria-hidden": "true" }, sc.g);
       const lay = G.layout(vis, level.id), reg = (m, cls) => { m.g = el("g", { class: cls }, sc.world); m.polys = m.faces.map(() => el("polygon", {}, m.g)); sc.objs.push(m); return m; };
-      lay.limbs.forEach((l, i) => { const m = reg(G.limb(l.path, l.radii, level.id + i), "ico-limb"); if (!i) sc.trunk = m; else (sc.limbs = sc.limbs || []).push(m); });
-      lay.deco.forEach((d) => { const m = reg(G.ball(d.c, d.r, level.id + d.hue + d.c[0]), "ico-ball deco h" + d.hue); m.g.setAttribute("aria-hidden", "true"); m.c0 = d.c[1]; });
+      sc.limbs = []; sc.twigs = [];
+      lay.limbs.forEach((l, i) => {
+        if ((l.role === "trunk" && o.trunk === false) || (l.role === "sign" && !o.sign)) return; // a child tree grows from the opened crown: no trunk, no sign
+        const m = reg(G.limb(l.path, l.radii, level.id + i), "ico-limb");
+        Object.assign(m, { role: l.role, base: l.path[0], end: l.path[l.path.length - 1] });
+        if (l.role === "trunk") sc.trunk = m; else sc.limbs.push(m);
+        if (l.role === "twig") sc.twigs[l.ball] = m;
+      });
+      sc.bg = lay.deco.map((d) => { const m = reg(G.ball(d.c, d.r, level.id + d.hue + d.c[0]), "ico-ball deco bg b" + d.hue); m.g.setAttribute("aria-hidden", "true"); m.c0 = d.c[1]; return m; });
       lay.balls.forEach((b) => {
         const m = reg(G.ball(b.c, b.r, b.item.id), "ico-ball h" + b.hue + (b.item.ref && b.item.ref.tc === 0 ? " soon" : "") + (b.item.more ? " more" : ""));
         Object.assign(m, { item: b.item, c0: b.c[1], hue: b.hue }); sc.balls.push(m);
@@ -196,8 +226,10 @@
       const g = m.g, it = m.item, ctl = this.ctl, hot = (on) => { g.classList.toggle("hot", on); if (it.color && !it.more) g.style.setProperty("--c", on ? it.color : ""); m.lab.classList.toggle("hot", on); };
       g.setAttribute("role", "button"); g.setAttribute("tabindex", "0"); g.setAttribute("aria-label", it.label + (it.meta ? ", " + it.meta : ""));
       const go = () => ctl.open(it);
+      // Hover lift: up 4 units and to 1.04 (glide 6 f in, 8 f out). Skipped while a transition owns the transforms.
+      const lift = (on) => { if (this.busy || reduced()) return; gsap.to(g, { y: on ? -4 : 0, scale: on ? 1.04 : 1, svgOrigin: m.sx + " " + m.sy, duration: (on ? 6 : 8) * FR, ease: EASE.glide, overwrite: "auto" }); };
       g.addEventListener("click", go); g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
-      ["pointerenter", "focus"].forEach((ev) => g.addEventListener(ev, () => hot(true))); ["pointerleave", "blur"].forEach((ev) => g.addEventListener(ev, () => hot(false)));
+      ["pointerenter", "focus"].forEach((ev) => g.addEventListener(ev, () => { hot(true); lift(true); })); ["pointerleave", "blur"].forEach((ev) => g.addEventListener(ev, () => { hot(false); lift(false); }));
     }
 
     /* ---- projection -> DOM (only when dirty) */
@@ -212,7 +244,7 @@
         });
         if (m.kind === "ball") {
           m.sx = r.c[0]; m.sy = r.c[1]; m.sr = r.sr;
-          if (m.lab) m.lab.style.transform = "translate(" + m.sx.toFixed(1) + "px," + (m.sy + m.sr * 0.38 + (m.nudge || 0)).toFixed(1) + "px) scale(calc(var(--lp-z,1) / var(--sc,1)))";
+          if (m.lab) m.lab.style.transform = "translate(" + m.sx.toFixed(1) + "px," + (m.sy + m.sr * 0.38 + (m.nudge || 0) + (m.ldy || 0)).toFixed(1) + "px) scale(calc(var(--lp-z,1) / var(--sc,1)))";
         }
         if (m.kind === "plank") this.rig(m, cam);
         keys.push(m);
@@ -229,92 +261,171 @@
       m.text.setAttribute("transform", "translate(" + mid[0].toFixed(1) + " " + (mid[1] + k).toFixed(1) + ") rotate(" + ang.toFixed(1) + ") scale(" + k.toFixed(3) + ")");
     }
 
-    /* ---- motion */
-    popTimeline(sc, hill) { // about 1.8 s: hill, trunk up, branches out, balls pop trunk-outward, sign drops in
-      const tl = gsap.timeline({ defaults: { ease: "power2.out" }, onUpdate: () => (this.dirty = true) });
-      if (hill) tl.from(sc.g.querySelectorAll(".ico-hill,.ico-hill2,.ico-tuft"), { opacity: 0, duration: 0.45, stagger: 0.05 }, 0);
-      tl.fromTo(sc.trunk.g, { scaleY: 0, svgOrigin: B[0] + " " + B[1] }, { scaleY: 1, duration: 0.55 }, 0.25);
-      (sc.limbs || []).forEach((l, i) => tl.fromTo(l.g, { scale: 0, svgOrigin: F[0] + " " + F[1] }, { scale: 1, duration: 0.4 }, 0.65 + i * 0.07));
-      const bs = sc.objs.filter((m) => m.kind === "ball").sort((a, b) => Math.hypot(a.c[0] - F[0], a.c[1] - F[1]) - Math.hypot(b.c[0] - F[0], b.c[1] - F[1]));
-      bs.forEach((m, i) => { tl.fromTo(m.g, { scale: 0, svgOrigin: m.c[0] + " " + m.c[1] }, { scale: 1, duration: 0.45, ease: "back.out(1.8)" }, 0.95 + i * 0.06); if (m.lab) tl.from(m.lab, { opacity: 0, duration: 0.3 }, 1.3 + i * 0.05); });
-      if (sc.sign) tl.fromTo(sc.sign.g, { y: -46, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.6)" }, 1.35);
+    /* ---- motion. Frame counts are at 30 fps (FR = 1 f). Rules from motionmaxxing: landings decelerate (softLand, snapSettle),
+       exits accelerate (accelExit, gentleIn), siblings overlap on uneven 1-3 f gaps, opacity is only a 4-6 f helper, one spring
+       per transition, and the opened crown is the carried object: its facets become the child crowns. */
+    popTimeline(sc, hill) { // about 1.8 s: hill, trunk up, boughs and twigs out, neutral crowns then node crowns pop, sign drops in
+      const tl = gsap.timeline({ defaults: { ease: EASE.softLand }, onUpdate: () => (this.dirty = true) });
+      if (hill) tl.from(sc.g.querySelectorAll(".ico-hill,.ico-hill2,.ico-tuft"), { opacity: 0, y: 10, duration: 14 * FR, stagger: 0.04 }, 0);
+      if (sc.trunk) tl.fromTo(sc.trunk.g, { scaleY: 0, svgOrigin: B[0] + " " + B[1] }, { scaleY: 1, duration: 16 * FR }, 0.25);
+      sc.limbs.forEach((l, i) => tl.fromTo(l.g, { scale: 0, svgOrigin: l.base[0] + " " + l.base[1] }, { scale: 1, duration: 12 * FR }, l.role === "twig" ? 0.82 + i * 0.04 : 0.62 + i * 0.07));
+      const d = (m) => Math.hypot(m.c[0] - F[0], m.c[1] - F[1]);
+      sc.bg.slice().sort((a, b) => d(a) - d(b)).forEach((m, i) => tl.fromTo(m.g, { scale: 0.6, opacity: 0, svgOrigin: m.c[0] + " " + m.c[1] }, { scale: 1, opacity: 1, duration: 12 * FR }, 0.86 + i * 0.035));
+      sc.balls.slice().sort((a, b) => d(a) - d(b)).forEach((m, i) => {
+        tl.fromTo(m.g, { scale: 1.25, opacity: 0, svgOrigin: m.c[0] + " " + m.c[1] }, { scale: 1, duration: 11 * FR, ease: EASE.snapSettle }, 1.18 + i * 0.07).to(m.g, { opacity: 1, duration: 4 * FR, ease: "none" }, 1.18 + i * 0.07);
+        tl.fromTo(m, { ldy: 6 }, { ldy: 0, duration: 10 * FR }, 1.28 + i * 0.07).from(m.lab, { opacity: 0, duration: 4 * FR, ease: "none" }, 1.28 + i * 0.07);
+      });
+      if (sc.sign) tl.fromTo(sc.sign.g, { y: -46, opacity: 0 }, { y: 0, opacity: 1, duration: 14 * FR, ease: EASE.snapSettle }, 1.5);
       return tl;
     }
     idle(sc) {
       if (this.still || reduced()) return;
-      sc.objs.forEach((m) => { if (m.kind !== "ball") return; const h = hash(m.c[0] + ":" + m.r); const o = { y: -2 }; sc.tw.push(gsap.to(o, { y: 2, duration: 2.2 + h * 1.4, yoyo: true, repeat: -1, ease: "sine.inOut", onUpdate: () => { m.c[1] = m.c0 + o.y; this.dirty = true; } }).progress(h)); });
+      sc.objs.forEach((m) => { // node crowns bob +-2; neutral crowns half as far and slower
+        if (m.kind !== "ball") return; const h = hash(m.c[0] + ":" + m.r), a = m.item ? 2 : 1, o = { y: -a };
+        sc.tw.push(gsap.to(o, { y: a, duration: (m.item ? 2.2 : 3.4) + h * 1.4, yoyo: true, repeat: -1, ease: "sine.inOut", onUpdate: () => { m.c[1] = m.c0 + o.y; this.dirty = true; } }).progress(h));
+      });
       if (sc.sign) sc.tw.push(gsap.fromTo(sc.sign, { rz: -0.09 }, { rz: 0.09, duration: 1.7, yoyo: true, repeat: -1, ease: "sine.inOut", onUpdate: () => (this.dirty = true) }));
       const balls = sc.objs.filter((m) => m.kind === "ball").sort((a, b) => a.c[0] - b.c[0]);
-      const gust = () => { sc.tw.push(gsap.to(balls, { spin: 0.2, duration: 0.7, yoyo: true, repeat: 1, ease: "sine.inOut", stagger: 0.07, onUpdate: () => (this.dirty = true) })); sc.gust = gsap.delayedCall(8, gust); };
+      const gust = () => { sc.tw.push(gsap.to(balls, { spin: 0.2, duration: 0.7, yoyo: true, repeat: 1, ease: "sine.inOut", stagger: 0.05, onUpdate: () => (this.dirty = true) })); sc.gust = gsap.delayedCall(8, gust); };
       sc.gust = gsap.delayedCall(5, gust);
     }
     kill(sc) { sc.tw.forEach((t) => t.kill()); if (sc.gust) sc.gust.kill(); sc.live = false; sc.g.remove(); }
 
-    /* ---- levels (Explorer calls render) */
+    /* ---- levels (Explorer calls render). One transition at a time: a new request makes the running one finish at 2x. */
     async render(level, from, mode) {
+      if (this.busy) { if (this.tl) this.tl.timeScale(2); await this.busy; }
+      const run = (this.busy = this.render_(level, mode));
+      try { await run; } finally { if (this.busy === run) this.busy = null; }
+    }
+    async render_(level, mode) {
       this.ctl.host.classList.toggle("drilled", level.kind !== "root");
       if (level.kind === "root") return this.child && mode === "out" ? this.collapse() : this.rebuild(level, mode);
       if (level.kind === "subject") return this.child && mode === "out" ? this.pulse(null) : this.expand(level);
       return this.pulse(level);
     }
     async rebuild(level, mode) {
-      if (this.root && mode === "swap" && !reduced()) await new Promise((r) => gsap.to(this.root.g, { opacity: 0, duration: 0.25, onComplete: r }));
+      if (this.root && mode === "swap" && !reduced()) await new Promise((r) => gsap.to(this.root.g, { opacity: 0, y: 8, duration: 8 * FR, ease: EASE.gentleIn, onComplete: r }));
       [this.root, this.child].forEach((sc) => sc && this.kill(sc)); this.child = null; this.cam = this.home(); this.view_();
       const sc = (this.root = this.build(G.rank(level.items, false, level.id), level, { ox: this.DX, oy: 0, s: 1, hill: true, sign: true }));
       this.live(sc, true);
       if (this.still || reduced()) { this.draw(sc); return; }
-      const tl = this.popTimeline(sc, true);
+      const tl = (this.tl = this.popTimeline(sc, true));
       await new Promise((r) => tl.eventCallback("onComplete", r));
       this.idle(sc);
     }
     live(sc, on) { sc.g.style.pointerEvents = on ? "" : "none"; sc.balls.forEach((m) => m.g.setAttribute("tabindex", on ? "0" : "-1")); }
+    wood(sc) { return [sc.trunk, ...sc.limbs].filter(Boolean).map((m) => m.g).concat(sc.sign ? [sc.sign.g] : [], [...sc.g.querySelectorAll(".ico-hill,.ico-hill2,.ico-tuft")]); }
+    // The child tree's view: its crown framed with room for the panel (top-left on the 16:9 stage, top-right in the hero).
+    childView(ox, oy, s) {
+      const w = Math.max(640 * s * 1.22, (440 * s * 1.22 * this.W) / H), v = this.box(ox + 330 * s, oy + 230 * s, w);
+      if (this.W > 640) v.x -= v.w * 0.16; else v.y -= v.h * 0.14;
+      return v;
+    }
     async expand(level) {
       const sc = this.root, ball = sc.balls.find((m) => m.item.id === level.id);
       if (!ball) return;
-      const s = 0.42, bx = sc.o.ox + ball.sx * sc.o.s, by = sc.o.oy + ball.sy * sc.o.s, w = this.W;
-      const fw = Math.max(560 * s * 1.14, (500 * s * 1.14 * w) / H), fin = this.box(bx - 80 * s, by - 280 * s, fw); // final view of the new tree
-      if (this.W > 640) fin.x -= fin.w * 0.2; else { fin.x += fin.w * 0.14; fin.y -= fin.h * 0.14; } // room for the panel: top-left (16:9) / top-right (hero)
-      const ch = (this.child = this.build(G.rank(level.items, true, level.id), level, { ox: bx - B[0] * s, oy: by - B[1] * s, s, hill: false, sign: false, zv: fin.w / w }));
-      this.live(sc, false); this.live(ch, true); ch.g.style.opacity = 0; this.chosen = ball;
-      if (this.still || reduced()) { this.cam = fin; this.view_(); ch.g.style.opacity = 1; sc.g.style.opacity = 0; this.shatter(ball, true); return; }
-      sc.live = false; // freeze the parent while its ball breaks up
-      const tl = gsap.timeline({ onUpdate: () => (this.dirty = true) });
-      tl.to(this.cam, this.camTo(this.box(bx, by, Math.max(170, ball.sr * sc.o.s * 5.2)), 0.65), 0);
-      tl.add(() => this.shatter(ball), 0.4);
-      tl.set(ch.g, { opacity: 1 }, 0.75).add(this.popTimeline(ch, false), 0.75);
-      tl.to(this.cam, this.camTo(fin, 0.7), 1.3).to(sc.g, { opacity: 0.05, duration: 0.5 }, 1.3);
+      const s = 0.56, bx = sc.o.ox + ball.sx, by = sc.o.oy + ball.sy + ball.sr * 0.45, ox = bx - F[0] * s, oy = by - F[1] * s, fin = this.childView(ox, oy, s);
+      // The child tree's fork sits on the opened crown: it grows out of it.
+      const ch = (this.child = this.build(G.rank(level.items, true, level.id), level, { ox, oy, s, hill: false, sign: false, trunk: false, zv: fin.w / this.W }));
+      this.live(sc, false); this.live(ch, true); this.chosen = ball;
+      const facets = ball.polys.filter((p) => p.style.display !== "none");
+      if (this.still || reduced()) { this.cam = fin; this.view_(); gsap.set(this.wood(sc).concat(sc.balls.map((m) => m.g), sc.bg.map((m) => m.g), sc.balls.map((m) => m.lab)), { opacity: 0 }); return; }
+      sc.live = false; // freeze the parent's projection while its crown becomes the child tree
+      const f = FR, tl = (this.tl = gsap.timeline({ onUpdate: () => (this.dirty = true) })), o = (m) => m.sx + " " + m.sy, dist = (m) => Math.hypot(m.sx - ball.sx, m.sy - ball.sy);
+      // child starts hidden: limbs folded, crowns and labels off
+      ch.limbs.forEach((l) => gsap.set(l.g, { scale: 0, svgOrigin: l.base[0] + " " + l.base[1] }));
+      gsap.set(ch.balls.map((m) => m.g).concat(ch.bg.map((m) => m.g), ch.balls.map((m) => m.lab)), { opacity: 0 });
+      // 1. press: squash 2 f, the crown answers a frame later
+      tl.to(ball.g, { scale: 0.94, svgOrigin: o(ball), duration: 2 * f, ease: "power1.out" }, 0).to(ball.g, { scale: 1.02, svgOrigin: o(ball), duration: 5 * f, ease: EASE.softLand }, 3 * f);
+      // 2. siblings leave nearest first on uneven gaps, accelerating outward; neutral crowns recede slower and half as far
+      const gaps = [2, 1, 3, 2, 2, 1, 2];
+      sc.balls.filter((m) => m !== ball).sort((a, b) => dist(a) - dist(b)).forEach((m, i) => {
+        const at = (2 + gaps.slice(0, i).reduce((a, b) => a + b, 0)) * f, l = dist(m) || 1;
+        tl.to(m.g, { x: ((m.sx - ball.sx) / l) * 40, y: ((m.sy - ball.sy) / l) * 40, scale: 0.7, svgOrigin: o(m), duration: 12 * f, ease: EASE.accelExit }, at)
+          .to(m.g, { opacity: 0, duration: 5 * f, ease: "none" }, at + 7 * f).to(m.lab, { opacity: 0, duration: 4 * f, ease: "none" }, at);
+      });
+      sc.bg.forEach((m, i) => {
+        const at = (3 + (i % 4)) * f, l = dist(m) || 1;
+        tl.to(m.g, { x: ((m.sx - ball.sx) / l) * 20, y: ((m.sy - ball.sy) / l) * 20, scale: 0.85, svgOrigin: o(m), duration: 15 * f, ease: EASE.accelExit }, at).to(m.g, { opacity: 0, duration: 6 * f, ease: "none" }, at + 9 * f);
+      });
+      tl.set(ball.lab, { opacity: 0 }, 8 * f); // the name moves to the breadcrumb (a state change: hard cut)
+      // 3. camera: one move, fast front and a long soft tail; the parent's wood is swept away inside it
+      tl.to(this.cam, Object.assign({ duration: 20 * f, ease: EASE.snapSettle, onUpdate: () => this.view_() }, fin), 3 * f);
+      const twig = sc.twigs[sc.balls.indexOf(ball)], path = [sc.trunk, twig, sc.limbs.find((l) => l.role === "bough" && twig && l.end[0] === twig.base[0] && l.end[1] === twig.base[1])].filter(Boolean).map((m) => m.g);
+      tl.to(this.wood(sc).filter((g) => !path.includes(g)), { opacity: 0.05, duration: 12 * f, ease: EASE.gentleIn }, 3 * f);
+      // 4. bloom: boughs grow from the crown's centre, each twig carries a share of the crown's facets out to a child crown
+      ch.limbs.filter((l) => l.role === "bough").forEach((l, k) => tl.to(l.g, { scale: 1, duration: 10 * f, ease: EASE.softLand }, (8 + k * 2) * f));
+      const stag = [0, 2, 4, 7, 8, 10, 12], kids = ch.balls, P = (x, y) => [ox + x * s - sc.o.ox, oy + y * s - sc.o.oy]; // child design point -> parent-local
+      kids.forEach((k, i) => {
+        const t0 = (12 + stag[i]) * f, land = t0 + 10 * f, tw = ch.twigs[i];
+        if (tw) tl.to(tw.g, { scale: 1, duration: 12 * f, ease: EASE.softLand }, t0);
+        const last = i === kids.length - 1;
+        tl.fromTo(k.g, { scale: 1.25, svgOrigin: o(k) }, { scale: last ? 0.92 : 1, duration: (last ? 8 : 11) * f, ease: EASE.snapSettle }, land).to(k.g, { opacity: 1, duration: 4 * f, ease: "none" }, land);
+        if (last) tl.to(k.g, { scale: 1, svgOrigin: o(k), duration: 6 * f, ease: "back.out(3)" }, land + 8 * f); // the one spring
+        tl.fromTo(k, { ldy: 6 }, { ldy: 0, duration: 10 * f, ease: EASE.softLand }, land + 3 * f).to(k.lab, { opacity: 1, duration: 4 * f, ease: "none" }, land + 3 * f);
+        // this crown's facets travel the bough then the twig, shrinking into it
+        const mid = tw ? P(tw.base[0], tw.base[1]) : P(F[0], F[1]), tgt = [ox + k.sx * s - sc.o.ox, oy + k.sy * s - sc.o.oy];
+        facets.filter((_, j) => j % kids.length === i).forEach((p) => {
+          const q = p.getAttribute("points").split(" ").map((t) => t.split(",").map(Number)), cx = q.reduce((a, t) => a + t[0], 0) / q.length, cy = q.reduce((a, t) => a + t[1], 0) / q.length;
+          tl.to(p, { x: mid[0] - cx, y: mid[1] - cy, scale: 0.7, transformOrigin: "50% 50%", duration: 5 * f, ease: EASE.gentleIn }, t0)
+            .to(p, { x: tgt[0] - cx, y: tgt[1] - cy, scale: 0.4, duration: 5 * f, ease: EASE.softLand }, t0 + 5 * f)
+            .to(p, { opacity: 0, duration: 3 * f, ease: "none" }, land);
+        });
+      });
+      const bgAt = (12 + stag[Math.min(2, kids.length - 1)] + 10) * f; // neutral crowns fill in behind, last
+      ch.bg.forEach((m, i) => tl.fromTo(m.g, { scale: 0.85, svgOrigin: o(m) }, { scale: 1, duration: 12 * f, ease: EASE.softLand }, bgAt + (i % 2 ? 2 : 1) * i * f * 0.5).to(m.g, { opacity: 1, duration: 4 * f, ease: "none" }, bgAt + (i % 2 ? 2 : 1) * i * f * 0.5));
       await new Promise((r) => tl.eventCallback("onComplete", r));
       this.idle(ch);
     }
-    shatter(ball, snap) { // facets scatter outward and fade; reassembled in collapse()
-      ball.polys.forEach((p, i) => {
-        if (p.style.display === "none") return;
-        const q = p.getAttribute("points").split(" ").map((t) => t.split(",").map(Number)), cx = q.reduce((a, t) => a + t[0], 0) / q.length - ball.sx, cy = q.reduce((a, t) => a + t[1], 0) / q.length - ball.sy, l = Math.hypot(cx, cy) || 1;
-        const v = { x: (cx / l) * 70, y: (cy / l) * 70 - 14, rotation: (hash("sh" + i) - 0.5) * 160, opacity: 0, duration: 0.65, ease: "power2.out" };
-        snap ? gsap.set(p, v) : gsap.to(p, v);
+    async collapse() { // a designed reverse, not a rewind (about 0.8 s)
+      const ch = this.child, sc = this.root, ball = this.chosen, f = FR, o = (m) => m.sx + " " + m.sy;
+      this.child = null;
+      const facets = ball.polys.filter((p) => p.style.display !== "none"), sibs = sc.balls.filter((m) => m !== ball), dist = (m) => Math.hypot(m.sx - ball.sx, m.sy - ball.sy);
+      const reset = () => { this.kill(ch); gsap.set(facets, { clearProps: "all" }); gsap.set(sc.balls.map((m) => m.g).concat(sc.bg.map((m) => m.g)), { clearProps: "opacity" }); sc.live = true; this.live(sc, true); this.dirty = true; };
+      if (this.still || reduced()) { gsap.set(this.wood(sc).concat(sc.balls.map((m) => m.g), sc.bg.map((m) => m.g), sc.balls.map((m) => m.lab)), { opacity: 1, x: 0, y: 0, scale: 1 }); this.cam = this.home(); this.view_(); reset(); return; }
+      const tl = (this.tl = gsap.timeline({ onUpdate: () => (this.dirty = true) }));
+      tl.set(ch.balls.map((m) => m.lab), { opacity: 0 }, 0); // labels off: hard cut
+      // child crowns leave toward the fork, farthest first; their facets fly home and reassemble the crown
+      const fork = [F[0], F[1]], fd = (m) => Math.hypot(m.sx - fork[0], m.sy - fork[1]), gaps = [1, 2, 1, 2, 1, 2];
+      const kids = ch.balls.map((k, i) => ({ k, i })).sort((a, b) => fd(b.k) - fd(a.k));
+      kids.forEach(({ k, i }, n) => {
+        const at = gaps.slice(0, n).reduce((a, b) => a + b, 0) * f;
+        tl.to(k.g, { scale: 0.4, opacity: 0, svgOrigin: o(k), duration: 7 * f, ease: EASE.gentleIn }, at);
+        facets.filter((_, j) => j % ch.balls.length === i).forEach((p) => tl.set(p, { opacity: 1 }, at).to(p, { x: 0, y: 0, scale: 1, duration: 10 * f, ease: EASE.softLand }, at));
       });
-    }
-    async collapse() {
-      const ch = this.child, sc = this.root, ball = this.chosen, s = sc.o.s;
-      this.child = null; this.sel = null;
-      const bx = sc.o.ox + ball.sx * s, by = sc.o.oy + ball.sy * s;
-      if (this.still || reduced()) { this.kill(ch); sc.g.style.opacity = 1; ball.polys.forEach((p) => gsap.set(p, { clearProps: "all" })); this.cam = this.home(); this.view_(); this.live(sc, true); sc.live = true; this.dirty = true; return; }
-      const tl = gsap.timeline({ onUpdate: () => (this.dirty = true) });
-      tl.to(ch.g, { opacity: 0, duration: 0.35 }, 0).to(this.cam, this.camTo(this.box(bx, by, Math.max(170, ball.sr * s * 5.2)), 0.5), 0).to(sc.g, { opacity: 1, duration: 0.4 }, 0.1);
-      tl.to(ball.polys, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.5, ease: "power2.inOut", stagger: 0.012, clearProps: "all" }, 0.35);
-      tl.to(this.cam, this.camTo(this.home(), 0.65), 0.9);
+      ch.bg.forEach((m) => tl.to(m.g, { opacity: 0, scale: 0.85, svgOrigin: o(m), duration: 6 * f, ease: EASE.gentleIn }, 0));
+      ch.limbs.forEach((l) => tl.to(l.g, { scale: 0, duration: 8 * f, ease: EASE.accelExit }, (l.role === "twig" ? 3 : 7) * f));
+      tl.to(ball.g, { scale: 1, svgOrigin: o(ball), duration: 8 * f, ease: EASE.softLand }, 4 * f);
+      // camera: two pushes, an accelerating start then a soft tail home
+      const h = this.home(), c = Object.assign({}, this.cam), m30 = { x: c.x + (h.x - c.x) * 0.3, y: c.y + (h.y - c.y) * 0.3, w: c.w + (h.w - c.w) * 0.3, h: c.h + (h.h - c.h) * 0.3 };
+      tl.to(this.cam, Object.assign({ duration: 6 * f, ease: EASE.gentleIn, onUpdate: () => this.view_() }, m30), 2 * f).to(this.cam, Object.assign({ duration: 14 * f, ease: EASE.softLand, onUpdate: () => this.view_() }, h), 8 * f);
+      tl.to(this.wood(sc), { opacity: 1, duration: 14 * f, ease: EASE.softLand }, 6 * f);
+      // siblings and neutral crowns come back to their slots from 0.85, nearest first
+      sibs.sort((a, b) => dist(a) - dist(b)).forEach((m, i) => {
+        const at = (10 + i * 2 + (i % 2)) * f;
+        tl.set(m.g, { scale: 0.85, x: 0, y: 0, svgOrigin: o(m) }, at).to(m.g, { scale: 1, svgOrigin: o(m), duration: 12 * f, ease: EASE.softLand }, at).to(m.g, { opacity: 1, duration: 4 * f, ease: "none" }, at).to(m.lab, { opacity: 1, duration: 4 * f, ease: "none" }, at + 3 * f);
+      });
+      sc.bg.forEach((m, i) => tl.set(m.g, { scale: 0.85, x: 0, y: 0, svgOrigin: o(m) }, (8 + (i % 3)) * f).to(m.g, { scale: 1, opacity: 1, svgOrigin: o(m), duration: 12 * f, ease: EASE.softLand }, (8 + (i % 3)) * f));
+      tl.to(ball.lab, { opacity: 1, duration: 4 * f, ease: "none" }, 14 * f);
       await new Promise((r) => tl.eventCallback("onComplete", r));
-      this.kill(ch); sc.live = true; this.live(sc, true); this.dirty = true;
+      reset();
     }
-    async pulse(level) { // topic = last level: the ball pulses and the Explorer panel opens
-      const ch = this.child; if (!ch) return;
-      ch.balls.forEach((m) => { const on = level && m.item.id === level.id; m.g.classList.toggle("sel", !!on); m.g.style.opacity = !level || on ? 1 : 0.45; m.lab.style.opacity = !level || on ? 1 : 0.45; });
+    async pulse(level) { // topic = last level: squash, a 1.06 pulse, the rest dims; the Explorer panel opens
+      const ch = this.child, f = FR; if (!ch) return;
+      ch.balls.forEach((m) => { const on = !level || m.item.id === level.id; m.g.classList.toggle("sel", !!(level && on)); gsap.to([m.g, m.lab], { opacity: on ? 1 : 0.45, duration: 8 * f, ease: EASE.glide }); });
       const b = level && ch.balls.find((m) => m.item.id === level.id);
-      if (b && !reduced()) gsap.fromTo(b.g, { scale: 1, svgOrigin: b.sx + " " + b.sy }, { scale: 1.14, duration: 0.2, yoyo: true, repeat: 1, ease: "sine.inOut", clearProps: "transform" });
+      if (!b || reduced()) return;
+      const tl = (this.tl = gsap.timeline());
+      tl.to(b.g, { scale: 0.94, svgOrigin: b.sx + " " + b.sy, duration: 2 * f, ease: "power1.out" }).to(b.g, { scale: 1.06, duration: 4 * f, ease: EASE.glide }).to(b.g, { scale: 1, duration: 6 * f, ease: EASE.glide });
+      await new Promise((r) => tl.eventCallback("onComplete", r));
     }
   }
   const local2 = (m, p) => { let q = p; if (m.rz) q = rz(q, m.rz); return q; };
 
+  // Review hook: drive and scrub a mount's transitions (QMIco.debug(i).drill("Physics"), then .seek(0.25)).
+  API.debug = (i) => { const x = Ico.all[i]; return {
+    drill: (name) => { const m = (x.child || x.root).balls.find((b) => b.item.label === name || b.item.id === name); if (m) x.ctl.open(m.item); return !!m; },
+    seek: (p) => { if (x.tl) { x.tl.pause(); x.tl.progress(p); x.dirty = true; } }, play: () => x.tl && x.tl.play(), labels: () => (x.child || x.root).balls.map((b) => b.item.label) }; };
   const boot = () => document.querySelectorAll('[data-qm="ico"]').forEach((h) => { h.classList.add("ico"); new Q.Explorer(h, Ico, { static: h.hasAttribute("data-static") }); });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })(typeof window !== "undefined" ? window : globalThis);
