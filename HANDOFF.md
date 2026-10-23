@@ -140,7 +140,7 @@ patchwork numbers need `migrate force 46` before migrating up.
 
 - **Daily plan "done":** built as "every item done", which pays 30 points. Confirm it.
 - **Prices:** Rs 4,990/yr and Rs 599/mo, or the "$4.99/mo" on the current Profile screen.
-- **Share card privacy:** can username, school and district appear on shared images?
+- ~~**Share card privacy**~~: settled by D25 (username and score only).
 - **Day boundary:** streaks and the daily plan use the UTC day, so it rolls over at 05:30 Sri Lanka time. Decide whether to
   switch both to Sri Lanka midnight.
 - **Grade prediction with little data:** it shows a low-confidence grade (often F) for new students. Consider hiding the

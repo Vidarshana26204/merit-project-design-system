@@ -34,11 +34,11 @@
     },
     "timer": {
       "$description": "Calm until it matters (C2). v3.5: colour-only — text + icon change colour, no pill (safe/warn/critical/fg/criticalFg are deprecated)",
-      "safe": { "$value": "{color.surface.sunken}" },
-      "warn": { "$value": "{color.butter.300}" },
-      "critical": { "$value": "{color.red.600}" },
-      "fg": { "$value": "{color.ink.900}", "$description": "Deprecated (pill timer, v3.0–3.4); remove in v4" },
-      "criticalFg": { "$value": "{color.white}", "$description": "Deprecated (pill timer, v3.0–3.4); remove in v4" },
+      "safe": { "$value": "{color.surface.sunken}", "$description": "DEPRECATED (pill timer, v3.0–3.4). Removed in v4.0, no later than 2026-12-31; no app references it" },
+      "warn": { "$value": "{color.butter.300}", "$description": "DEPRECATED (pill timer, v3.0–3.4). Removed in v4.0, no later than 2026-12-31; no app references it" },
+      "critical": { "$value": "{color.red.600}", "$description": "DEPRECATED (pill timer, v3.0–3.4). Removed in v4.0, no later than 2026-12-31; no app references it" },
+      "fg": { "$value": "{color.ink.900}", "$description": "DEPRECATED (pill timer, v3.0–3.4). Removed in v4.0, no later than 2026-12-31; no app references it" },
+      "criticalFg": { "$value": "{color.white}", "$description": "DEPRECATED (pill timer, v3.0–3.4). Removed in v4.0, no later than 2026-12-31; no app references it" },
       "text": { "$value": "{color.text.primary}", "$description": "v3.5 colour-only timer: digits + icon, >5 min" },
       "warnText": { "$value": "{color.feedback.warningText}", "$description": "v3.5 colour-only timer: ≤5 min" },
       "criticalText": { "$value": "{color.feedback.error}", "$description": "v3.5 colour-only timer: ≤1 min" }
@@ -61,27 +61,27 @@
       "fg": { "$value": "{color.ink.900}" },
       "sage": {
         "bg": { "$value": "{color.sage.300}" },
-        "wash": { "$value": "#6B8578", "$description": "Wash ink; layer opacity .30" }
+        "wash": { "$value": "{color.wash.sage}", "$description": "Wash ink; layer opacity .30" }
       },
       "sky": {
         "bg": { "$value": "{color.sky.300}" },
-        "wash": { "$value": "#7A87A0", "$description": "Wash ink; layer opacity .30" }
+        "wash": { "$value": "{color.wash.sky}", "$description": "Wash ink; layer opacity .30" }
       },
       "coral": {
         "bg": { "$value": "{color.coral.300}" },
-        "wash": { "$value": "#9F5F52", "$description": "Wash ink; layer opacity .30" }
+        "wash": { "$value": "{color.wash.coral}", "$description": "Wash ink; layer opacity .30" }
       },
       "butter": {
         "bg": { "$value": "{color.butter.300}" },
-        "wash": { "$value": "#A08751", "$description": "Wash ink; layer opacity .30" }
+        "wash": { "$value": "{color.wash.butter}", "$description": "Wash ink; layer opacity .30" }
       },
       "violet": {
         "bg": { "$value": "{color.violet.100}" },
-        "wash": { "$value": "#938BA0", "$description": "Wash ink; layer opacity .30" }
+        "wash": { "$value": "{color.wash.violet}", "$description": "Wash ink; layer opacity .30" }
       },
       "blush": {
         "bg": { "$value": "{color.blush.300}" },
-        "wash": { "$value": "#9B7484", "$description": "Wash ink; layer opacity .30" }
+        "wash": { "$value": "{color.wash.blush}", "$description": "Wash ink; layer opacity .30" }
       }
     },
     "banner": {
@@ -94,7 +94,7 @@
       "arc": { "$value": "{color.violet.300}", "$description": "Hairline circle outlines" }
     },
     "reward": {
-      "points": { "$value": "{color.butter.500}", "$description": "Coin glyph fill. Exempt from 1.4.11: the MeritCoin asset carries its own ink outline" },
+      "points": { "$value": "{color.butter.500}", "$description": "DEPRECATED since D21 (points use the MeritCoin asset). Removed in v4.0, no later than 2026-12-31" },
       "pointsFill": { "$value": "{color.butter.300}" },
       "streak": { "$value": "{color.orange.500}", "$description": "Flame glyph" },
       "streakDone": { "$value": "{color.orange.500}" },

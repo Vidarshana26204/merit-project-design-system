@@ -5,6 +5,45 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## 3.7.0 — 2026-10-23 (tokens and docs)
+
+Pre-release hardening from the audit in `~/.claude/plans/as-per-the-handoff-md-zippy-seal.md` (Step 1).
+Tokens and docs now share one version.
+
+### Gate
+- Contrast pairs take a tier (`text` 4.5, `large` 3, `ui` 3) instead of a number; translucent tokens are
+  composited over their ground (optional `{"over": token}`). `$exempt` documents every fill that never
+  carries meaning alone. 152 → 222 checks.
+- New pairs: focus on every surface, error/info/warning text on subtle fills, tertiary on selected, quiz idle
+  edge, chart colours in both themes, state layers.
+- `check:subjects` also checks the dark rim and colour-blind separation of stream-mates (deutan/protan,
+  report-only unless `--strict`) and runs in CI on a synthetic fixture. Patchwork engine tests run in CI.
+
+### Changed (values)
+- `ink.500` `#68667F` → `#625F79` (tertiary on selected 4.19 → 4.64).
+- `quizOption.idle.border` → new `border.control` (1.27 → 3.3:1 light, 1.35 → 3.3 dark).
+- `chart.1–5` follow the theme via `dataviz.cat*`; light 3/4 → `sage.600` / `butter.700`, dark uses the
+  300/400 steps (all ≥ 3:1).
+- Dark skeleton base `night.700` (sunken was invisible on cards).
+
+### Added
+- `focus.ringOnFeature`, `focus.ringOnInverse` (focus on violet bands was 1.26; on inverse 2.02 / 1.71).
+- `feedback.errorText`, `warningSubtle`, `info` / `infoSubtle` / `infoText`, `text.onInfo`.
+- `state.hover` / `state.pressed` layers; `action.disabled`, `text.disabled`, `border.disabled`; `scrim`;
+  `skeleton.base` / `highlight`; `focusRing.width` / `offset`; `easing.enter` / `emphasized`;
+  `duration.reduced`; `density.default|compact.*` (D7); `dataviz.seq1–5`, `dataviz.div1–5`.
+- Primitives: `ink.300`, `sage.600`, `butter.700/900`, `sky.100/700/900`, `red.700`, `night.500`,
+  `scrim.light/dark`, `wash.*` (flashcard wash inks, no longer raw hex in the component layer).
+- SI/TA script overrides (`tokens/scripts.json`): CSS `:lang(si|ta)` blocks; Dart `MeritTypeScaleSi`,
+  `MeritTypeScaleTa`, `MeritTypeScaleSet.of(lang)`. Dart `MeritFocusRing`, `MeritDensity`.
+- Reference site: §15 full state matrix, §30 flow specs, Noto Sans Sinhala/Tamil woff2 subsets.
+
+### Deprecated
+- `timer.safe/warn/critical/fg/criticalFg` and `reward.points`: removed in v4.0, no later than 2026-12-31.
+
+### Licences
+- Clash Display and School Times are no longer tracked (still in history); Plus Jakarta ships `OFL.txt`.
+
 ## Docs 3.6 — 2026-10-22 (tokens unchanged at 3.5.0)
 
 Rulings from the Flutter build and the round 10 device test, plus the web track (D21–D27). No token changes,
@@ -58,7 +97,7 @@ Subject colour drives patchworks (D16 rev 5). No token changes.
 - `subjects/<S>/subject.json` → `color_hex` (merit-content, = backend `subjects.color_hex`) is the
   generator's input; `manifest.json` records `subject_color` per node.
 - Subject colour set: one brand-safe, distinct colour per subject (merit-content
-  `subjects/_subject-colors.json`, backend migration `000047_subject_colors`). Physics `#4C88D3`,
+  `subjects/_subject-colors.json`, backend migration `000048_subject_colors`). Physics `#4C88D3`,
   Chemistry `#03999A`, Biology `#4E9A52`, Agricultural Science `#A6801F`, ICT `#A8B35E`.
 
 ### Changed

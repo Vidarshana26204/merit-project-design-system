@@ -1,5 +1,5 @@
 {
-  "version": "3.5.0",
+  "version": "3.7.0",
   "source": "tokens/*.tokens.json",
   "themes": {
     "light": {
@@ -63,6 +63,12 @@
       "color.mist.400": "#9C94AC",
       "color.scrim.light": "#1E1B2E80",
       "color.scrim.dark": "#0B0810B3",
+      "color.wash.sage": "#6B8578",
+      "color.wash.sky": "#7A87A0",
+      "color.wash.coral": "#9F5F52",
+      "color.wash.butter": "#A08751",
+      "color.wash.violet": "#938BA0",
+      "color.wash.blush": "#9B7484",
       "space.0": "0px",
       "space.1": "4px",
       "space.2": "8px",
@@ -663,6 +669,12 @@
       "color.mist.400": "#9C94AC",
       "color.scrim.light": "#1E1B2E80",
       "color.scrim.dark": "#0B0810B3",
+      "color.wash.sage": "#6B8578",
+      "color.wash.sky": "#7A87A0",
+      "color.wash.coral": "#9F5F52",
+      "color.wash.butter": "#A08751",
+      "color.wash.violet": "#938BA0",
+      "color.wash.blush": "#9B7484",
       "space.0": "0px",
       "space.1": "4px",
       "space.2": "8px",

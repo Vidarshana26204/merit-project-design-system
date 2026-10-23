@@ -89,6 +89,15 @@
     "scrim": {
       "light": { "$value": "#1E1B2E80", "$description": "Scrim under dialogs and sheets (light): ink 50%" },
       "dark": { "$value": "#0B0810B3", "$description": "Scrim (dark): near-black 70%" }
+    },
+    "wash": {
+      "$description": "Flashcard wash inks: each tone mixed 42% toward ink.900 (component flashcard.*.wash)",
+      "sage": { "$value": "#6B8578" },
+      "sky": { "$value": "#7A87A0" },
+      "coral": { "$value": "#9F5F52" },
+      "butter": { "$value": "#A08751" },
+      "violet": { "$value": "#938BA0" },
+      "blush": { "$value": "#9B7484" }
     }
   },
   "space": {

@@ -120,6 +120,6 @@
     "color.text.disabled / color.action.disabled / color.border.disabled": "Inactive components are exempt from 1.4.3 and 1.4.11; disabled is also conveyed by semantics and removed hover/press.",
     "color.dataviz.seq1-4 / div2-4": "Ramp fills are read with a legend, labels and value text; only ramp endpoints are gated.",
     "color.decor.*": "Decorative.",
-    "color.timer.safe / warn / critical / fg / criticalFg": "Deprecated pill timer (v3.0–3.4); removed in v4.0."
+    "color.timer.safe / warn / critical / fg / criticalFg": "Deprecated pill timer (v3.0–3.4); removed in v4.0, no later than 2026-12-31."
   }
 }

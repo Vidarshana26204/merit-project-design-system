@@ -1,0 +1,11 @@
+{
+  "_note": "Synthetic CI fixture for check-subject-tints.mjs. Real subject colours live in the private merit-content repo.",
+  "subjects": {
+    "SAMPLE_BLUE": { "hex": "#4A7FC9", "streams": ["sample_a"] },
+    "SAMPLE_GREEN": { "hex": "#3E8F5A", "streams": ["sample_a"] },
+    "SAMPLE_VIOLET": { "hex": "#B05FB8", "streams": ["sample_a", "sample_b"] },
+    "SAMPLE_TEAL": { "hex": "#1F8A8A", "streams": ["sample_b"] },
+    "SAMPLE_ROSE": { "hex": "#C9577A", "streams": ["sample_b"] },
+    "SAMPLE_OLIVE": { "hex": "#7D8A2A", "streams": ["sample_c"] }
+  }
+}

@@ -17,3 +17,17 @@ jobs:
       # Contrast gate (WCAG AA, light + dark) + fails if build/ or SKILL.md
       # token block is stale relative to tokens/*.tokens.json.
       - run: npm run check
+      # Subject header tints, dark rim and colour-blind separation. Real subject
+      # colours are private (merit-content), so CI runs the synthetic fixture.
+      - run: npm run check:subjects -- scripts/fixtures/subject-colors.sample.json --strict
+
+  patchwork:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pytest
+      - run: python -m pytest -q patchwork
+        working-directory: scripts
