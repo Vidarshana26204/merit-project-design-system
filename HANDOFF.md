@@ -3,10 +3,18 @@
 Design system **v3.5.0** (branch `feat/design-system-v3`). Patchworks, mobile wireframes, the exam-intelligence detour
 and the **Flutter v3 reskin are all done** (batches 1–3 plus device-test round 10, merged locally).
 **Next: `merit-project-frontend`: landing, admin and student portals on v3** (see "Next: web frontend" below).
-**Resume point (2026-10-23):** waiting on the user's picks on the web board
-(https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn): Quilt Map concept (A tree / B network / C orbit), hero
-composition, landing sections, student shell, subject hub; approve the rest. Read them with ArtifactData
-`list picks` on that URL, then dispatch Agent L (landing + Quilt Map) and Agent S (student portal).
+**Resume point (2026-10-23, round 12):** picks so far: Quilt Map A (tree), hero A, shell A, hub A. Round 12 is
+published on the web board (https://claude.ai/artifact/6SeHPm6JhVrNV2ctgzhajn):
+- low-poly tree, 2.5D SVG + GSAP + Delaunator, in `wireframes/qm-lowpoly.js`;
+- hub A with the app's type-scale section tabs, in `r12_hub.py`;
+- a step-aware split screen for auth and all 5 onboarding steps, in `r12_auth.py`.
+
+The phone web hero has no tree.
+
+Next:
+1. The user reviews round 12.
+2. Dispatch Agent L, the landing build. It uses `gsap`, `@gsap/react`, `delaunator` and `lenis` (decided round 12, replacing `motion`). The spec is in the concept screen description.
+3. Dispatch Agent S, the student portal.
 
 ## Where things stand
 
