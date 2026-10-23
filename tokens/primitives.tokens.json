@@ -9,7 +9,8 @@
       "200": { "$value": "#E9E4D4", "$description": "Light hairline / divider" }
     },
     "ink": {
-      "500": { "$value": "#68667F", "$description": "Tertiary text, input borders" },
+      "300": { "$value": "#8A879C", "$description": "Control edge (quiz option idle) · disabled text (light)" },
+      "500": { "$value": "#625F79", "$description": "Tertiary text, input borders. v3.7: darkened from #68667F for 4.5:1 on surface.selected" },
       "700": { "$value": "#4A4760", "$description": "Secondary text" },
       "900": { "$value": "#1E1B2E", "$description": "Primary text, outlines, labels on orange (D9)" }
     },
@@ -44,26 +45,36 @@
       "100": { "$value": "#E2F2E6", "$description": "Correct-answer fill (light)" },
       "300": { "$value": "#A2D2AE", "$description": "Success fill" },
       "500": { "$value": "#6FAF82" },
+      "600": { "$value": "#4F8F62", "$description": "Chart (light) — 3:1 on surfaces" },
       "700": { "$value": "#2F6B43", "$description": "Success text on light" },
       "900": { "$value": "#1D3B28", "$description": "Correct-answer fill (dark)" }
     },
     "butter": {
       "100": { "$value": "#FFF3CC" },
       "300": { "$value": "#FFD66B", "$description": "Reward fill, warning, Achiever seal" },
-      "500": { "$value": "#F5B700", "$description": "Coin glyph" }
+      "500": { "$value": "#F5B700", "$description": "Coin glyph" },
+      "700": { "$value": "#A67C00", "$description": "Chart (light) — 3:1 on surfaces" },
+      "900": { "$value": "#3A2E0A", "$description": "Warning subtle fill (dark)" }
     },
-    "blush": { "300": { "$value": "#F6B5C3", "$description": "Category only" } },
+    "blush": {
+      "300": { "$value": "#F6B5C3", "$description": "Category only" }
+    },
     "sky": {
-      "300": { "$value": "#BCD6F2", "$description": "Category only" },
-      "500": { "$value": "#5B8FCB", "$description": "Chart only" }
+      "100": { "$value": "#E3EEF9", "$description": "Info subtle fill (light)" },
+      "300": { "$value": "#BCD6F2", "$description": "Category · info fill · dark chart" },
+      "500": { "$value": "#5B8FCB", "$description": "Chart only" },
+      "700": { "$value": "#2F5F94", "$description": "Info text (light)" },
+      "900": { "$value": "#16273A", "$description": "Info subtle fill (dark)" }
     },
     "red": {
       "100": { "$value": "#FBDAD6", "$description": "Wrong-answer fill (light)" },
       "300": { "$value": "#FF9A8F", "$description": "Dark-mode error" },
       "600": { "$value": "#C7362F", "$description": "Error (light)" },
+      "700": { "$value": "#A8302A", "$description": "Error text (light) — 4.5:1 on errorSubtle" },
       "900": { "$value": "#5A1A1A", "$description": "Wrong-answer fill (dark)" }
     },
     "night": {
+      "500": { "$value": "#736A87", "$description": "Control edge · disabled text (dark)" },
       "600": { "$value": "#3A3048", "$description": "Dark hairline" },
       "700": { "$value": "#2E2539" },
       "800": { "$value": "#221B2C", "$description": "Dark surface" },
@@ -74,6 +85,10 @@
       "50": { "$value": "#F7F3EA", "$description": "Dark-mode primary text" },
       "300": { "$value": "#B9B2C6", "$description": "Dark secondary text" },
       "400": { "$value": "#9C94AC", "$description": "Dark tertiary text, input borders" }
+    },
+    "scrim": {
+      "light": { "$value": "#1E1B2E80", "$description": "Scrim under dialogs and sheets (light): ink 50%" },
+      "dark": { "$value": "#0B0810B3", "$description": "Scrim (dark): near-black 70%" }
     }
   },
   "space": {
@@ -107,18 +122,27 @@
     "base": { "$value": "1.5px", "$description": "Inputs, filter chips, patchwork outlines" },
     "strong": { "$value": "2px", "$description": "Selected / focused component edge" }
   },
+  "focusRing": {
+    "$type": "dimension",
+    "$description": "Focus indicator geometry (2.4.11/2.4.13). Colour: color.focus.*",
+    "width": { "$value": "3px" },
+    "offset": { "$value": "2px" }
+  },
   "duration": {
     "$type": "duration",
     "instant": { "$value": "80ms" },
     "fast": { "$value": "120ms", "$description": "Press" },
     "base": { "$value": "180ms", "$description": "Toggle, tab" },
     "slow": { "$value": "280ms", "$description": "Sheet, card-flip half" },
-    "celebrate": { "$value": "600ms", "$description": "Grade, level-up" }
+    "celebrate": { "$value": "600ms", "$description": "Grade, level-up" },
+    "reduced": { "$value": "0ms", "$description": "Reduced motion: replaces every non-essential duration (prefers-reduced-motion / disableAnimations)" }
   },
   "easing": {
     "$type": "cubicBezier",
-    "standard": { "$value": [0.2, 0.7, 0.2, 1] },
-    "exit": { "$value": [0.4, 0, 1, 1] }
+    "standard": { "$value": [0.2, 0.7, 0.2, 1], "$description": "Default for state changes" },
+    "exit": { "$value": [0.4, 0, 1, 1], "$description": "Elements leaving" },
+    "enter": { "$value": [0, 0, 0.2, 1], "$description": "Elements entering (sheets, toasts)" },
+    "emphasized": { "$value": [0.3, 0, 0, 1], "$description": "Hero and celebrate moments" }
   },
   "opacity": {
     "$type": "number",
@@ -131,7 +155,9 @@
   },
   "zIndex": {
     "$type": "number",
-    "$extensions": { "merit.platforms": ["css"] },
+    "$extensions": {
+      "merit.platforms": ["css"]
+    },
     "base": { "$value": 0 },
     "sticky": { "$value": 10 },
     "dropdown": { "$value": 20 },
@@ -141,7 +167,9 @@
   },
   "breakpoint": {
     "$type": "dimension",
-    "$extensions": { "merit.platforms": ["css"] },
+    "$extensions": {
+      "merit.platforms": ["css"]
+    },
     "sm": { "$value": "640px" },
     "md": { "$value": "768px" },
     "lg": { "$value": "1024px" },
@@ -151,19 +179,30 @@
     "$type": "dimension",
     "minTarget": { "$value": "48px", "$description": "48dp Android / ≥44pt iOS" }
   },
+  "density": {
+    "$type": "dimension",
+    "$description": "D7: compact density for admin and contributor screens only. Student UI always uses default.",
+    "default": {
+      "controlHeight": { "$value": "48px" },
+      "rowHeight": { "$value": "56px" },
+      "cellPadX": { "$value": "16px" },
+      "cellPadY": { "$value": "12px" }
+    },
+    "compact": {
+      "controlHeight": { "$value": "36px" },
+      "rowHeight": { "$value": "40px" },
+      "cellPadX": { "$value": "10px" },
+      "cellPadY": { "$value": "6px" }
+    }
+  },
   "fontFamily": {
     "$type": "fontFamily",
     "$description": "Latin faces have no Sinhala/Tamil glyphs — every stack falls back to Noto Sans Sinhala / Tamil before system fonts.",
-    "$extensions": { "merit.flutterFallback": ["NotoSansSinhala", "NotoSansTamil"] },
-    "display": {
-      "$value": ["General Sans", "Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
-      "$description": "Headings, numbers, wordmark (D8). Product + landing — School Times retired (D13)",
-      "$extensions": { "merit.flutter": "GeneralSans" }
+    "$extensions": {
+      "merit.flutterFallback": ["NotoSansSinhala", "NotoSansTamil"]
     },
-    "body": {
-      "$value": ["Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"],
-      "$extensions": { "merit.flutter": "PlusJakartaSans" }
-    }
+    "display": { "$value": ["General Sans", "Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"], "$description": "Headings, numbers, wordmark (D8). Product + landing — School Times retired (D13)", "$extensions": {"merit.flutter": "GeneralSans"} },
+    "body": { "$value": ["Plus Jakarta Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "system-ui", "sans-serif"], "$extensions": {"merit.flutter": "PlusJakartaSans"} }
   },
   "fontWeight": {
     "$type": "fontWeight",

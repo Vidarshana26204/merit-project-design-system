@@ -26,19 +26,24 @@
       "onInverse": { "$value": "{color.canvas.50}" },
       "onSuccess": { "$value": "{color.ink.900}" },
       "onWarning": { "$value": "{color.ink.900}" },
-      "onError": { "$value": "{color.white}" }
+      "onInfo": { "$value": "{color.ink.900}" },
+      "onError": { "$value": "{color.white}" },
+      "disabled": { "$value": "{color.ink.300}", "$description": "Disabled labels — exempt from 1.4.3, never the only state cue" }
     },
     "border": {
       "default": { "$value": "{color.ink.500}", "$description": "Input / control edge (≥3:1)" },
       "strong": { "$value": "{color.ink.900}", "$description": "Ink outline — chips, patchwork, illustration" },
-      "subtle": { "$value": "{color.canvas.200}", "$description": "Dividers, idle option edge" }
+      "subtle": { "$value": "{color.canvas.200}", "$description": "Dividers only — never a control edge (use border.control)" },
+      "control": { "$value": "{color.ink.300}", "$description": "Edge of a control that has no other boundary (quiz option idle) — 3:1" },
+      "disabled": { "$value": "{color.canvas.200}" }
     },
     "action": {
       "primary": { "$value": "{color.orange.500}" },
       "primaryPressed": { "$value": "{color.orange.600}" },
       "primaryStrong": { "$value": "{color.orange.700}", "$description": "White-label variant for dense contexts (D9)" },
       "accent": { "$value": "{color.violet.700}" },
-      "accentPressed": { "$value": "{color.violet.800}" }
+      "accentPressed": { "$value": "{color.violet.800}" },
+      "disabled": { "$value": "{color.canvas.200}", "$description": "Disabled fill for every button variant" }
     },
     "feedback": {
       "success": { "$value": "{color.sage.300}" },
@@ -47,36 +52,69 @@
       "warning": { "$value": "{color.butter.300}" },
       "warningText": { "$value": "{color.orange.700}", "$description": "Warning text and icons on bg.app / surfaces (timer ≤5 min). Butter fails as text on light" },
       "error": { "$value": "{color.red.600}" },
-      "errorSubtle": { "$value": "{color.red.100}" }
+      "errorSubtle": { "$value": "{color.red.100}" },
+      "errorText": { "$value": "{color.red.700}", "$description": "Error text and icons, incl. on errorSubtle" },
+      "warningSubtle": { "$value": "{color.butter.100}" },
+      "info": { "$value": "{color.sky.300}", "$description": "Info fill (ink label)" },
+      "infoSubtle": { "$value": "{color.sky.100}" },
+      "infoText": { "$value": "{color.sky.700}" }
     },
     "subject": {
       "headerBase": { "$value": "{color.canvas.50}", "$description": "Ground the subject colour mixes into for hub headers: mix(color_hex, headerBase, opacity.subjectTintLight). Text on it: text.primary / text.secondary only" }
     },
     "focus": {
-      "ring": { "$value": "{color.violet.500}", "$description": "3px outline, 2px offset — orange is too light (C3)" }
+      "ring": { "$value": "{color.violet.500}", "$description": "3px outline, 2px offset — orange is too light (C3)" },
+      "ringOnFeature": { "$value": "{color.white}", "$description": "On surface.feature / banners" },
+      "ringOnInverse": { "$value": "{color.white}", "$description": "On surface.inverse (dark button, tooltip)" }
     },
     "decor": {
       "sparkle": { "$value": "{color.violet.600}" },
       "sparkleWarm": { "$value": "{color.orange.500}" },
       "underline": { "$value": "{color.orange.500}", "$description": "Brush underline under the emphasis word" },
       "connector": { "$value": "{color.ink.500}", "$description": "Dotted learning-path connector" }
+    },
+    "state": {
+      "hover": { "$value": "#1E1B2E0F", "$description": "Hover state layer: paint over any surface or action (ink 6%)" },
+      "pressed": { "$value": "#1E1B2E1F", "$description": "Pressed state layer for surfaces and ghost/inverse buttons (ink 12%)" }
+    },
+    "scrim": { "$value": "{color.scrim.light}" },
+    "skeleton": {
+      "base": { "$value": "{color.surface.sunken}" },
+      "highlight": { "$value": "{color.canvas.50}", "$description": "Shimmer highlight; static under reduced motion" }
+    },
+    "dataviz": {
+      "cat1": { "$value": "{color.violet.500}" },
+      "cat2": { "$value": "{color.orange.500}" },
+      "cat3": { "$value": "{color.sage.600}" },
+      "cat4": { "$value": "{color.butter.700}" },
+      "cat5": { "$value": "{color.sky.500}" },
+      "seq1": { "$value": "{color.violet.50}", "$description": "Sequential ramp, low → high" },
+      "seq2": { "$value": "{color.violet.100}" },
+      "seq3": { "$value": "{color.violet.300}" },
+      "seq4": { "$value": "{color.violet.500}" },
+      "seq5": { "$value": "{color.violet.700}" },
+      "div1": { "$value": "{color.red.600}", "$description": "Diverging ramp: weak (1) → neutral (3) → strong (5)" },
+      "div2": { "$value": "{color.red.300}" },
+      "div3": { "$value": "{color.canvas.200}" },
+      "div4": { "$value": "{color.sage.500}" },
+      "div5": { "$value": "{color.sage.700}" }
     }
   },
   "elevation": {
     "$type": "shadow",
     "$description": "Soft, warm-violet-tinted depth (D11). Max 2 layers. Never combine with a border on cards.",
     "e0": { "$value": [] },
-    "e1": { "$value": [
-      { "color": "#1E1B2E0F", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" },
-      { "color": "#54306C14", "offsetX": "0px", "offsetY": "4px", "blur": "12px", "spread": "0px" }
-    ], "$description": "Cards, chips, search pill" },
-    "e2": { "$value": [
-      { "color": "#1E1B2E0F", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px" },
-      { "color": "#54306C1F", "offsetX": "0px", "offsetY": "10px", "blur": "24px", "spread": "0px" }
-    ], "$description": "Raised: tab bar, toasts, popovers, hovered cards" },
-    "e3": { "$value": [
-      { "color": "#1E1B2E14", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px" },
-      { "color": "#54306C2E", "offsetX": "0px", "offsetY": "18px", "blur": "40px", "spread": "0px" }
-    ], "$description": "Dialogs, bottom sheets" }
+    "e1": {
+      "$value": [{"color": "#1E1B2E0F", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px"}, {"color": "#54306C14", "offsetX": "0px", "offsetY": "4px", "blur": "12px", "spread": "0px"}],
+      "$description": "Cards, chips, search pill"
+    },
+    "e2": {
+      "$value": [{"color": "#1E1B2E0F", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px"}, {"color": "#54306C1F", "offsetX": "0px", "offsetY": "10px", "blur": "24px", "spread": "0px"}],
+      "$description": "Raised: tab bar, toasts, popovers, hovered cards"
+    },
+    "e3": {
+      "$value": [{"color": "#1E1B2E14", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px"}, {"color": "#54306C2E", "offsetX": "0px", "offsetY": "18px", "blur": "40px", "spread": "0px"}],
+      "$description": "Dialogs, bottom sheets"
+    }
   }
 }

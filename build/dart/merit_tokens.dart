@@ -11,7 +11,8 @@ abstract final class MeritPalette {
   static const Color canvas50 = Color(0xFFFBFAF4); // bg.app — warm off-white (D10)
   static const Color canvas100 = Color(0xFFF4F1E6); // Sunken wells, tracks
   static const Color canvas200 = Color(0xFFE9E4D4); // Light hairline / divider
-  static const Color ink500 = Color(0xFF68667F); // Tertiary text, input borders
+  static const Color ink300 = Color(0xFF8A879C); // Control edge (quiz option idle) · disabled text (light)
+  static const Color ink500 = Color(0xFF625F79); // Tertiary text, input borders. v3.7: darkened from #68667F for 4.5:1 on surface.selected
   static const Color ink700 = Color(0xFF4A4760); // Secondary text
   static const Color ink900 = Color(0xFF1E1B2E); // Primary text, outlines, labels on orange (D9)
   static const Color orange100 = Color(0xFFFFE7D8);
@@ -36,18 +37,26 @@ abstract final class MeritPalette {
   static const Color sage100 = Color(0xFFE2F2E6); // Correct-answer fill (light)
   static const Color sage300 = Color(0xFFA2D2AE); // Success fill
   static const Color sage500 = Color(0xFF6FAF82);
+  static const Color sage600 = Color(0xFF4F8F62); // Chart (light) — 3:1 on surfaces
   static const Color sage700 = Color(0xFF2F6B43); // Success text on light
   static const Color sage900 = Color(0xFF1D3B28); // Correct-answer fill (dark)
   static const Color butter100 = Color(0xFFFFF3CC);
   static const Color butter300 = Color(0xFFFFD66B); // Reward fill, warning, Achiever seal
   static const Color butter500 = Color(0xFFF5B700); // Coin glyph
+  static const Color butter700 = Color(0xFFA67C00); // Chart (light) — 3:1 on surfaces
+  static const Color butter900 = Color(0xFF3A2E0A); // Warning subtle fill (dark)
   static const Color blush300 = Color(0xFFF6B5C3); // Category only
-  static const Color sky300 = Color(0xFFBCD6F2); // Category only
+  static const Color sky100 = Color(0xFFE3EEF9); // Info subtle fill (light)
+  static const Color sky300 = Color(0xFFBCD6F2); // Category · info fill · dark chart
   static const Color sky500 = Color(0xFF5B8FCB); // Chart only
+  static const Color sky700 = Color(0xFF2F5F94); // Info text (light)
+  static const Color sky900 = Color(0xFF16273A); // Info subtle fill (dark)
   static const Color red100 = Color(0xFFFBDAD6); // Wrong-answer fill (light)
   static const Color red300 = Color(0xFFFF9A8F); // Dark-mode error
   static const Color red600 = Color(0xFFC7362F); // Error (light)
+  static const Color red700 = Color(0xFFA8302A); // Error text (light) — 4.5:1 on errorSubtle
   static const Color red900 = Color(0xFF5A1A1A); // Wrong-answer fill (dark)
+  static const Color night500 = Color(0xFF736A87); // Control edge · disabled text (dark)
   static const Color night600 = Color(0xFF3A3048); // Dark hairline
   static const Color night700 = Color(0xFF2E2539);
   static const Color night800 = Color(0xFF221B2C); // Dark surface
@@ -56,6 +65,8 @@ abstract final class MeritPalette {
   static const Color mist50 = Color(0xFFF7F3EA); // Dark-mode primary text
   static const Color mist300 = Color(0xFFB9B2C6); // Dark secondary text
   static const Color mist400 = Color(0xFF9C94AC); // Dark tertiary text, input borders
+  static const Color scrimLight = Color(0x801E1B2E); // Scrim under dialogs and sheets (light): ink 50%
+  static const Color scrimDark = Color(0xB30B0810); // Scrim (dark): near-black 70%
 }
 
 /// 4-pt spacing scale (logical px).
@@ -91,6 +102,24 @@ abstract final class MeritBorderWidth {
   static const double strong = 2.0;
 }
 
+/// Focus indicator geometry. Colour: MeritSemanticColors.focusRing*.
+abstract final class MeritFocusRing {
+  static const double width = 3.0;
+  static const double offset = 2.0;
+}
+
+/// D7 density: compact is for admin / contributor screens only.
+abstract final class MeritDensity {
+  static const double defaultControlHeight = 48.0;
+  static const double defaultRowHeight = 56.0;
+  static const double defaultCellPadX = 16.0;
+  static const double defaultCellPadY = 12.0;
+  static const double compactControlHeight = 36.0;
+  static const double compactRowHeight = 40.0;
+  static const double compactCellPadX = 10.0;
+  static const double compactCellPadY = 6.0;
+}
+
 /// Durations + curves. Gate non-essential motion on MediaQuery.disableAnimationsOf(context).
 abstract final class MeritMotion {
   static const Duration instant = Duration(milliseconds: 80);
@@ -98,8 +127,11 @@ abstract final class MeritMotion {
   static const Duration base = Duration(milliseconds: 180); // Toggle, tab
   static const Duration slow = Duration(milliseconds: 280); // Sheet, card-flip half
   static const Duration celebrate = Duration(milliseconds: 600); // Grade, level-up
+  static const Duration reduced = Duration(milliseconds: 0); // Reduced motion: replaces every non-essential duration (prefers-reduced-motion / disableAnimations)
   static const Cubic standard = Cubic(0.2, 0.7, 0.2, 1.0);
   static const Cubic exit = Cubic(0.4, 0.0, 1.0, 1.0);
+  static const Cubic enter = Cubic(0.0, 0.0, 0.2, 1.0);
+  static const Cubic emphasized = Cubic(0.3, 0.0, 0.0, 1.0);
 }
 
 /// Opacity levels.
@@ -179,15 +211,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     required this.textOnInverse,
     required this.textOnSuccess,
     required this.textOnWarning,
+    required this.textOnInfo,
     required this.textOnError,
+    required this.textDisabled,
     required this.borderDefault,
     required this.borderStrong,
     required this.borderSubtle,
+    required this.borderControl,
+    required this.borderDisabled,
     required this.actionPrimary,
     required this.actionPrimaryPressed,
     required this.actionPrimaryStrong,
     required this.actionAccent,
     required this.actionAccentPressed,
+    required this.actionDisabled,
     required this.feedbackSuccess,
     required this.feedbackSuccessSubtle,
     required this.feedbackSuccessText,
@@ -195,12 +232,39 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     required this.feedbackWarningText,
     required this.feedbackError,
     required this.feedbackErrorSubtle,
+    required this.feedbackErrorText,
+    required this.feedbackWarningSubtle,
+    required this.feedbackInfo,
+    required this.feedbackInfoSubtle,
+    required this.feedbackInfoText,
     required this.subjectHeaderBase,
     required this.focusRing,
+    required this.focusRingOnFeature,
+    required this.focusRingOnInverse,
     required this.decorSparkle,
     required this.decorSparkleWarm,
     required this.decorUnderline,
     required this.decorConnector,
+    required this.stateHover,
+    required this.statePressed,
+    required this.scrim,
+    required this.skeletonBase,
+    required this.skeletonHighlight,
+    required this.datavizCat1,
+    required this.datavizCat2,
+    required this.datavizCat3,
+    required this.datavizCat4,
+    required this.datavizCat5,
+    required this.datavizSeq1,
+    required this.datavizSeq2,
+    required this.datavizSeq3,
+    required this.datavizSeq4,
+    required this.datavizSeq5,
+    required this.datavizDiv1,
+    required this.datavizDiv2,
+    required this.datavizDiv3,
+    required this.datavizDiv4,
+    required this.datavizDiv5,
     required this.elevationE0,
     required this.elevationE1,
     required this.elevationE2,
@@ -308,15 +372,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
   final Color textOnInverse;
   final Color textOnSuccess;
   final Color textOnWarning;
+  final Color textOnInfo;
   final Color textOnError;
+  final Color textDisabled; // Disabled labels — exempt from 1.4.3, never the only state cue
   final Color borderDefault; // Input / control edge (≥3:1)
   final Color borderStrong; // Ink outline — chips, patchwork, illustration
-  final Color borderSubtle; // Dividers, idle option edge
+  final Color borderSubtle; // Dividers only — never a control edge (use border.control)
+  final Color borderControl; // Edge of a control that has no other boundary (quiz option idle) — 3:1
+  final Color borderDisabled;
   final Color actionPrimary;
   final Color actionPrimaryPressed;
   final Color actionPrimaryStrong; // White-label variant for dense contexts (D9)
   final Color actionAccent;
   final Color actionAccentPressed;
+  final Color actionDisabled; // Disabled fill for every button variant
   final Color feedbackSuccess;
   final Color feedbackSuccessSubtle;
   final Color feedbackSuccessText;
@@ -324,18 +393,45 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
   final Color feedbackWarningText; // Warning text and icons on bg.app / surfaces (timer ≤5 min). Butter fails as text on light
   final Color feedbackError;
   final Color feedbackErrorSubtle;
+  final Color feedbackErrorText; // Error text and icons, incl. on errorSubtle
+  final Color feedbackWarningSubtle;
+  final Color feedbackInfo; // Info fill (ink label)
+  final Color feedbackInfoSubtle;
+  final Color feedbackInfoText;
   final Color subjectHeaderBase; // Ground the subject colour mixes into for hub headers: mix(color_hex, headerBase, opacity.subjectTintLight). Text on it: text.primary / text.secondary only
   final Color focusRing; // 3px outline, 2px offset — orange is too light (C3)
+  final Color focusRingOnFeature; // On surface.feature / banners
+  final Color focusRingOnInverse; // On surface.inverse (dark button, tooltip)
   final Color decorSparkle;
   final Color decorSparkleWarm;
   final Color decorUnderline; // Brush underline under the emphasis word
   final Color decorConnector; // Dotted learning-path connector
+  final Color stateHover; // Hover state layer: paint over any surface or action (ink 6%)
+  final Color statePressed; // Pressed state layer for surfaces and ghost/inverse buttons (ink 12%)
+  final Color scrim;
+  final Color skeletonBase;
+  final Color skeletonHighlight; // Shimmer highlight; static under reduced motion
+  final Color datavizCat1;
+  final Color datavizCat2;
+  final Color datavizCat3;
+  final Color datavizCat4;
+  final Color datavizCat5;
+  final Color datavizSeq1; // Sequential ramp, low → high
+  final Color datavizSeq2;
+  final Color datavizSeq3;
+  final Color datavizSeq4;
+  final Color datavizSeq5;
+  final Color datavizDiv1; // Diverging ramp: weak (1) → neutral (3) → strong (5)
+  final Color datavizDiv2;
+  final Color datavizDiv3;
+  final Color datavizDiv4;
+  final Color datavizDiv5;
   final List<BoxShadow> elevationE0;
   final List<BoxShadow> elevationE1; // Cards, chips, search pill
   final List<BoxShadow> elevationE2; // Raised: tab bar, toasts, popovers, hovered cards
   final List<BoxShadow> elevationE3; // Dialogs, bottom sheets
   final Color quizOptionIdleBg;
-  final Color quizOptionIdleBorder;
+  final Color quizOptionIdleBorder; // 3:1 edge — the idle option has no other boundary (1.4.11)
   final Color quizOptionIdleFg;
   final Color quizOptionSelectedBg;
   final Color quizOptionSelectedBorder;
@@ -382,7 +478,7 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
   final Color bannerDisc;
   final Color bannerDiscInk; // Disc pattern, tone on tone
   final Color bannerArc; // Hairline circle outlines
-  final Color rewardPoints; // Coin glyph
+  final Color rewardPoints; // Coin glyph fill. Exempt from 1.4.11: the MeritCoin asset carries its own ink outline
   final Color rewardPointsFill;
   final Color rewardStreak; // Flame glyph
   final Color rewardStreakDone;
@@ -437,15 +533,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     textOnInverse: MeritPalette.canvas50,
     textOnSuccess: MeritPalette.ink900,
     textOnWarning: MeritPalette.ink900,
+    textOnInfo: MeritPalette.ink900,
     textOnError: MeritPalette.white,
+    textDisabled: MeritPalette.ink300,
     borderDefault: MeritPalette.ink500,
     borderStrong: MeritPalette.ink900,
     borderSubtle: MeritPalette.canvas200,
+    borderControl: MeritPalette.ink300,
+    borderDisabled: MeritPalette.canvas200,
     actionPrimary: MeritPalette.orange500,
     actionPrimaryPressed: MeritPalette.orange600,
     actionPrimaryStrong: MeritPalette.orange700,
     actionAccent: MeritPalette.violet700,
     actionAccentPressed: MeritPalette.violet800,
+    actionDisabled: MeritPalette.canvas200,
     feedbackSuccess: MeritPalette.sage300,
     feedbackSuccessSubtle: MeritPalette.sage100,
     feedbackSuccessText: MeritPalette.sage700,
@@ -453,18 +554,45 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     feedbackWarningText: MeritPalette.orange700,
     feedbackError: MeritPalette.red600,
     feedbackErrorSubtle: MeritPalette.red100,
+    feedbackErrorText: MeritPalette.red700,
+    feedbackWarningSubtle: MeritPalette.butter100,
+    feedbackInfo: MeritPalette.sky300,
+    feedbackInfoSubtle: MeritPalette.sky100,
+    feedbackInfoText: MeritPalette.sky700,
     subjectHeaderBase: MeritPalette.canvas50,
     focusRing: MeritPalette.violet500,
+    focusRingOnFeature: MeritPalette.white,
+    focusRingOnInverse: MeritPalette.white,
     decorSparkle: MeritPalette.violet600,
     decorSparkleWarm: MeritPalette.orange500,
     decorUnderline: MeritPalette.orange500,
     decorConnector: MeritPalette.ink500,
+    stateHover: Color(0x0F1E1B2E),
+    statePressed: Color(0x1F1E1B2E),
+    scrim: MeritPalette.scrimLight,
+    skeletonBase: MeritPalette.canvas100,
+    skeletonHighlight: MeritPalette.canvas50,
+    datavizCat1: MeritPalette.violet500,
+    datavizCat2: MeritPalette.orange500,
+    datavizCat3: MeritPalette.sage600,
+    datavizCat4: MeritPalette.butter700,
+    datavizCat5: MeritPalette.sky500,
+    datavizSeq1: MeritPalette.violet50,
+    datavizSeq2: MeritPalette.violet100,
+    datavizSeq3: MeritPalette.violet300,
+    datavizSeq4: MeritPalette.violet500,
+    datavizSeq5: MeritPalette.violet700,
+    datavizDiv1: MeritPalette.red600,
+    datavizDiv2: MeritPalette.red300,
+    datavizDiv3: MeritPalette.canvas200,
+    datavizDiv4: MeritPalette.sage500,
+    datavizDiv5: MeritPalette.sage700,
     elevationE0: [],
     elevationE1: [BoxShadow(color: Color(0x0F1E1B2E), offset: Offset(0.0, 1.0), blurRadius: 2.0, spreadRadius: 0.0), BoxShadow(color: Color(0x1454306C), offset: Offset(0.0, 4.0), blurRadius: 12.0, spreadRadius: 0.0)],
     elevationE2: [BoxShadow(color: Color(0x0F1E1B2E), offset: Offset(0.0, 2.0), blurRadius: 4.0, spreadRadius: 0.0), BoxShadow(color: Color(0x1F54306C), offset: Offset(0.0, 10.0), blurRadius: 24.0, spreadRadius: 0.0)],
     elevationE3: [BoxShadow(color: Color(0x141E1B2E), offset: Offset(0.0, 4.0), blurRadius: 8.0, spreadRadius: 0.0), BoxShadow(color: Color(0x2E54306C), offset: Offset(0.0, 18.0), blurRadius: 40.0, spreadRadius: 0.0)],
     quizOptionIdleBg: MeritPalette.white,
-    quizOptionIdleBorder: MeritPalette.canvas200,
+    quizOptionIdleBorder: MeritPalette.ink300,
     quizOptionIdleFg: MeritPalette.ink900,
     quizOptionSelectedBg: MeritPalette.violet100,
     quizOptionSelectedBorder: MeritPalette.violet500,
@@ -542,8 +670,8 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     patchworkIconShade: MeritPalette.canvas200,
     chart1: MeritPalette.violet500,
     chart2: MeritPalette.orange500,
-    chart3: MeritPalette.sage500,
-    chart4: MeritPalette.butter500,
+    chart3: MeritPalette.sage600,
+    chart4: MeritPalette.butter700,
     chart5: MeritPalette.sky500,
   );
 
@@ -567,15 +695,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     textOnInverse: MeritPalette.ink900,
     textOnSuccess: MeritPalette.ink900,
     textOnWarning: MeritPalette.ink900,
+    textOnInfo: MeritPalette.ink900,
     textOnError: MeritPalette.ink900,
+    textDisabled: MeritPalette.night500,
     borderDefault: MeritPalette.mist400,
     borderStrong: MeritPalette.mist50,
     borderSubtle: MeritPalette.night600,
+    borderControl: MeritPalette.night500,
+    borderDisabled: MeritPalette.night600,
     actionPrimary: MeritPalette.orange400,
     actionPrimaryPressed: MeritPalette.orange300,
     actionPrimaryStrong: MeritPalette.orange400,
     actionAccent: MeritPalette.violet300,
     actionAccentPressed: MeritPalette.violet100,
+    actionDisabled: MeritPalette.night700,
     feedbackSuccess: MeritPalette.sage300,
     feedbackSuccessSubtle: MeritPalette.sage900,
     feedbackSuccessText: MeritPalette.sage300,
@@ -583,18 +716,45 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     feedbackWarningText: MeritPalette.butter300,
     feedbackError: MeritPalette.red300,
     feedbackErrorSubtle: MeritPalette.red900,
+    feedbackErrorText: MeritPalette.red300,
+    feedbackWarningSubtle: MeritPalette.butter900,
+    feedbackInfo: MeritPalette.sky300,
+    feedbackInfoSubtle: MeritPalette.sky900,
+    feedbackInfoText: MeritPalette.sky300,
     subjectHeaderBase: MeritPalette.night850,
     focusRing: MeritPalette.violet300,
+    focusRingOnFeature: MeritPalette.violet300,
+    focusRingOnInverse: MeritPalette.violet500,
     decorSparkle: MeritPalette.violet300,
     decorSparkleWarm: MeritPalette.orange400,
     decorUnderline: MeritPalette.orange400,
     decorConnector: MeritPalette.mist400,
+    stateHover: Color(0x14F7F3EA),
+    statePressed: Color(0x24F7F3EA),
+    scrim: MeritPalette.scrimDark,
+    skeletonBase: MeritPalette.night850,
+    skeletonHighlight: MeritPalette.night700,
+    datavizCat1: MeritPalette.violet300,
+    datavizCat2: MeritPalette.orange400,
+    datavizCat3: MeritPalette.sage300,
+    datavizCat4: MeritPalette.butter300,
+    datavizCat5: MeritPalette.sky300,
+    datavizSeq1: MeritPalette.violet900,
+    datavizSeq2: MeritPalette.violet800,
+    datavizSeq3: MeritPalette.violet400,
+    datavizSeq4: MeritPalette.violet300,
+    datavizSeq5: MeritPalette.violet100,
+    datavizDiv1: MeritPalette.red300,
+    datavizDiv2: MeritPalette.red900,
+    datavizDiv3: MeritPalette.night600,
+    datavizDiv4: MeritPalette.sage900,
+    datavizDiv5: MeritPalette.sage300,
     elevationE0: [],
     elevationE1: [BoxShadow(color: Color(0x66000000), offset: Offset(0.0, 1.0), blurRadius: 2.0, spreadRadius: 0.0), BoxShadow(color: Color(0x4D000000), offset: Offset(0.0, 4.0), blurRadius: 12.0, spreadRadius: 0.0)],
     elevationE2: [BoxShadow(color: Color(0x66000000), offset: Offset(0.0, 2.0), blurRadius: 4.0, spreadRadius: 0.0), BoxShadow(color: Color(0x66000000), offset: Offset(0.0, 10.0), blurRadius: 24.0, spreadRadius: 0.0)],
     elevationE3: [BoxShadow(color: Color(0x80000000), offset: Offset(0.0, 4.0), blurRadius: 8.0, spreadRadius: 0.0), BoxShadow(color: Color(0x80000000), offset: Offset(0.0, 18.0), blurRadius: 40.0, spreadRadius: 0.0)],
     quizOptionIdleBg: MeritPalette.night800,
-    quizOptionIdleBorder: MeritPalette.night600,
+    quizOptionIdleBorder: MeritPalette.night500,
     quizOptionIdleFg: MeritPalette.mist50,
     quizOptionSelectedBg: MeritPalette.violet800,
     quizOptionSelectedBorder: MeritPalette.violet300,
@@ -670,11 +830,11 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     patchworkPlate: MeritPalette.white,
     patchworkIconLine: MeritPalette.ink900,
     patchworkIconShade: MeritPalette.canvas200,
-    chart1: MeritPalette.violet500,
-    chart2: MeritPalette.orange500,
-    chart3: MeritPalette.sage500,
-    chart4: MeritPalette.butter500,
-    chart5: MeritPalette.sky500,
+    chart1: MeritPalette.violet300,
+    chart2: MeritPalette.orange400,
+    chart3: MeritPalette.sage300,
+    chart4: MeritPalette.butter300,
+    chart5: MeritPalette.sky300,
   );
 
   @override
@@ -698,15 +858,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     Color? textOnInverse,
     Color? textOnSuccess,
     Color? textOnWarning,
+    Color? textOnInfo,
     Color? textOnError,
+    Color? textDisabled,
     Color? borderDefault,
     Color? borderStrong,
     Color? borderSubtle,
+    Color? borderControl,
+    Color? borderDisabled,
     Color? actionPrimary,
     Color? actionPrimaryPressed,
     Color? actionPrimaryStrong,
     Color? actionAccent,
     Color? actionAccentPressed,
+    Color? actionDisabled,
     Color? feedbackSuccess,
     Color? feedbackSuccessSubtle,
     Color? feedbackSuccessText,
@@ -714,12 +879,39 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
     Color? feedbackWarningText,
     Color? feedbackError,
     Color? feedbackErrorSubtle,
+    Color? feedbackErrorText,
+    Color? feedbackWarningSubtle,
+    Color? feedbackInfo,
+    Color? feedbackInfoSubtle,
+    Color? feedbackInfoText,
     Color? subjectHeaderBase,
     Color? focusRing,
+    Color? focusRingOnFeature,
+    Color? focusRingOnInverse,
     Color? decorSparkle,
     Color? decorSparkleWarm,
     Color? decorUnderline,
     Color? decorConnector,
+    Color? stateHover,
+    Color? statePressed,
+    Color? scrim,
+    Color? skeletonBase,
+    Color? skeletonHighlight,
+    Color? datavizCat1,
+    Color? datavizCat2,
+    Color? datavizCat3,
+    Color? datavizCat4,
+    Color? datavizCat5,
+    Color? datavizSeq1,
+    Color? datavizSeq2,
+    Color? datavizSeq3,
+    Color? datavizSeq4,
+    Color? datavizSeq5,
+    Color? datavizDiv1,
+    Color? datavizDiv2,
+    Color? datavizDiv3,
+    Color? datavizDiv4,
+    Color? datavizDiv5,
     List<BoxShadow>? elevationE0,
     List<BoxShadow>? elevationE1,
     List<BoxShadow>? elevationE2,
@@ -827,15 +1019,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
       textOnInverse: textOnInverse ?? this.textOnInverse,
       textOnSuccess: textOnSuccess ?? this.textOnSuccess,
       textOnWarning: textOnWarning ?? this.textOnWarning,
+      textOnInfo: textOnInfo ?? this.textOnInfo,
       textOnError: textOnError ?? this.textOnError,
+      textDisabled: textDisabled ?? this.textDisabled,
       borderDefault: borderDefault ?? this.borderDefault,
       borderStrong: borderStrong ?? this.borderStrong,
       borderSubtle: borderSubtle ?? this.borderSubtle,
+      borderControl: borderControl ?? this.borderControl,
+      borderDisabled: borderDisabled ?? this.borderDisabled,
       actionPrimary: actionPrimary ?? this.actionPrimary,
       actionPrimaryPressed: actionPrimaryPressed ?? this.actionPrimaryPressed,
       actionPrimaryStrong: actionPrimaryStrong ?? this.actionPrimaryStrong,
       actionAccent: actionAccent ?? this.actionAccent,
       actionAccentPressed: actionAccentPressed ?? this.actionAccentPressed,
+      actionDisabled: actionDisabled ?? this.actionDisabled,
       feedbackSuccess: feedbackSuccess ?? this.feedbackSuccess,
       feedbackSuccessSubtle: feedbackSuccessSubtle ?? this.feedbackSuccessSubtle,
       feedbackSuccessText: feedbackSuccessText ?? this.feedbackSuccessText,
@@ -843,12 +1040,39 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
       feedbackWarningText: feedbackWarningText ?? this.feedbackWarningText,
       feedbackError: feedbackError ?? this.feedbackError,
       feedbackErrorSubtle: feedbackErrorSubtle ?? this.feedbackErrorSubtle,
+      feedbackErrorText: feedbackErrorText ?? this.feedbackErrorText,
+      feedbackWarningSubtle: feedbackWarningSubtle ?? this.feedbackWarningSubtle,
+      feedbackInfo: feedbackInfo ?? this.feedbackInfo,
+      feedbackInfoSubtle: feedbackInfoSubtle ?? this.feedbackInfoSubtle,
+      feedbackInfoText: feedbackInfoText ?? this.feedbackInfoText,
       subjectHeaderBase: subjectHeaderBase ?? this.subjectHeaderBase,
       focusRing: focusRing ?? this.focusRing,
+      focusRingOnFeature: focusRingOnFeature ?? this.focusRingOnFeature,
+      focusRingOnInverse: focusRingOnInverse ?? this.focusRingOnInverse,
       decorSparkle: decorSparkle ?? this.decorSparkle,
       decorSparkleWarm: decorSparkleWarm ?? this.decorSparkleWarm,
       decorUnderline: decorUnderline ?? this.decorUnderline,
       decorConnector: decorConnector ?? this.decorConnector,
+      stateHover: stateHover ?? this.stateHover,
+      statePressed: statePressed ?? this.statePressed,
+      scrim: scrim ?? this.scrim,
+      skeletonBase: skeletonBase ?? this.skeletonBase,
+      skeletonHighlight: skeletonHighlight ?? this.skeletonHighlight,
+      datavizCat1: datavizCat1 ?? this.datavizCat1,
+      datavizCat2: datavizCat2 ?? this.datavizCat2,
+      datavizCat3: datavizCat3 ?? this.datavizCat3,
+      datavizCat4: datavizCat4 ?? this.datavizCat4,
+      datavizCat5: datavizCat5 ?? this.datavizCat5,
+      datavizSeq1: datavizSeq1 ?? this.datavizSeq1,
+      datavizSeq2: datavizSeq2 ?? this.datavizSeq2,
+      datavizSeq3: datavizSeq3 ?? this.datavizSeq3,
+      datavizSeq4: datavizSeq4 ?? this.datavizSeq4,
+      datavizSeq5: datavizSeq5 ?? this.datavizSeq5,
+      datavizDiv1: datavizDiv1 ?? this.datavizDiv1,
+      datavizDiv2: datavizDiv2 ?? this.datavizDiv2,
+      datavizDiv3: datavizDiv3 ?? this.datavizDiv3,
+      datavizDiv4: datavizDiv4 ?? this.datavizDiv4,
+      datavizDiv5: datavizDiv5 ?? this.datavizDiv5,
       elevationE0: elevationE0 ?? this.elevationE0,
       elevationE1: elevationE1 ?? this.elevationE1,
       elevationE2: elevationE2 ?? this.elevationE2,
@@ -961,15 +1185,20 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
       textOnInverse: Color.lerp(textOnInverse, other.textOnInverse, t)!,
       textOnSuccess: Color.lerp(textOnSuccess, other.textOnSuccess, t)!,
       textOnWarning: Color.lerp(textOnWarning, other.textOnWarning, t)!,
+      textOnInfo: Color.lerp(textOnInfo, other.textOnInfo, t)!,
       textOnError: Color.lerp(textOnError, other.textOnError, t)!,
+      textDisabled: Color.lerp(textDisabled, other.textDisabled, t)!,
       borderDefault: Color.lerp(borderDefault, other.borderDefault, t)!,
       borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
       borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
+      borderControl: Color.lerp(borderControl, other.borderControl, t)!,
+      borderDisabled: Color.lerp(borderDisabled, other.borderDisabled, t)!,
       actionPrimary: Color.lerp(actionPrimary, other.actionPrimary, t)!,
       actionPrimaryPressed: Color.lerp(actionPrimaryPressed, other.actionPrimaryPressed, t)!,
       actionPrimaryStrong: Color.lerp(actionPrimaryStrong, other.actionPrimaryStrong, t)!,
       actionAccent: Color.lerp(actionAccent, other.actionAccent, t)!,
       actionAccentPressed: Color.lerp(actionAccentPressed, other.actionAccentPressed, t)!,
+      actionDisabled: Color.lerp(actionDisabled, other.actionDisabled, t)!,
       feedbackSuccess: Color.lerp(feedbackSuccess, other.feedbackSuccess, t)!,
       feedbackSuccessSubtle: Color.lerp(feedbackSuccessSubtle, other.feedbackSuccessSubtle, t)!,
       feedbackSuccessText: Color.lerp(feedbackSuccessText, other.feedbackSuccessText, t)!,
@@ -977,12 +1206,39 @@ class MeritSemanticColors extends ThemeExtension<MeritSemanticColors> {
       feedbackWarningText: Color.lerp(feedbackWarningText, other.feedbackWarningText, t)!,
       feedbackError: Color.lerp(feedbackError, other.feedbackError, t)!,
       feedbackErrorSubtle: Color.lerp(feedbackErrorSubtle, other.feedbackErrorSubtle, t)!,
+      feedbackErrorText: Color.lerp(feedbackErrorText, other.feedbackErrorText, t)!,
+      feedbackWarningSubtle: Color.lerp(feedbackWarningSubtle, other.feedbackWarningSubtle, t)!,
+      feedbackInfo: Color.lerp(feedbackInfo, other.feedbackInfo, t)!,
+      feedbackInfoSubtle: Color.lerp(feedbackInfoSubtle, other.feedbackInfoSubtle, t)!,
+      feedbackInfoText: Color.lerp(feedbackInfoText, other.feedbackInfoText, t)!,
       subjectHeaderBase: Color.lerp(subjectHeaderBase, other.subjectHeaderBase, t)!,
       focusRing: Color.lerp(focusRing, other.focusRing, t)!,
+      focusRingOnFeature: Color.lerp(focusRingOnFeature, other.focusRingOnFeature, t)!,
+      focusRingOnInverse: Color.lerp(focusRingOnInverse, other.focusRingOnInverse, t)!,
       decorSparkle: Color.lerp(decorSparkle, other.decorSparkle, t)!,
       decorSparkleWarm: Color.lerp(decorSparkleWarm, other.decorSparkleWarm, t)!,
       decorUnderline: Color.lerp(decorUnderline, other.decorUnderline, t)!,
       decorConnector: Color.lerp(decorConnector, other.decorConnector, t)!,
+      stateHover: Color.lerp(stateHover, other.stateHover, t)!,
+      statePressed: Color.lerp(statePressed, other.statePressed, t)!,
+      scrim: Color.lerp(scrim, other.scrim, t)!,
+      skeletonBase: Color.lerp(skeletonBase, other.skeletonBase, t)!,
+      skeletonHighlight: Color.lerp(skeletonHighlight, other.skeletonHighlight, t)!,
+      datavizCat1: Color.lerp(datavizCat1, other.datavizCat1, t)!,
+      datavizCat2: Color.lerp(datavizCat2, other.datavizCat2, t)!,
+      datavizCat3: Color.lerp(datavizCat3, other.datavizCat3, t)!,
+      datavizCat4: Color.lerp(datavizCat4, other.datavizCat4, t)!,
+      datavizCat5: Color.lerp(datavizCat5, other.datavizCat5, t)!,
+      datavizSeq1: Color.lerp(datavizSeq1, other.datavizSeq1, t)!,
+      datavizSeq2: Color.lerp(datavizSeq2, other.datavizSeq2, t)!,
+      datavizSeq3: Color.lerp(datavizSeq3, other.datavizSeq3, t)!,
+      datavizSeq4: Color.lerp(datavizSeq4, other.datavizSeq4, t)!,
+      datavizSeq5: Color.lerp(datavizSeq5, other.datavizSeq5, t)!,
+      datavizDiv1: Color.lerp(datavizDiv1, other.datavizDiv1, t)!,
+      datavizDiv2: Color.lerp(datavizDiv2, other.datavizDiv2, t)!,
+      datavizDiv3: Color.lerp(datavizDiv3, other.datavizDiv3, t)!,
+      datavizDiv4: Color.lerp(datavizDiv4, other.datavizDiv4, t)!,
+      datavizDiv5: Color.lerp(datavizDiv5, other.datavizDiv5, t)!,
       elevationE0: BoxShadow.lerpList(elevationE0, other.elevationE0, t)!,
       elevationE1: BoxShadow.lerpList(elevationE1, other.elevationE1, t)!,
       elevationE2: BoxShadow.lerpList(elevationE2, other.elevationE2, t)!,

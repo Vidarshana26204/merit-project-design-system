@@ -103,9 +103,22 @@ export function loadContrastPairs(tokensDir) {
 }
 
 // ---- WCAG contrast -------------------------------------------------------
-function luminance(hex) {
+const rgba = (hex) => {
   const n = hex.replace('#', '');
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16) / 255)
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16));
+  return [r, g, b, n.length === 8 ? parseInt(n.slice(6, 8), 16) / 255 : 1];
+};
+const toHex = (rgb) => `#${rgb.map((c) => Math.round(c).toString(16).padStart(2, '0')).join('').toUpperCase()}`;
+
+/** Composite `top` (#RRGGBB or #RRGGBBAA) over an opaque `base`. */
+export function composite(top, base) {
+  const [r, g, b, a] = rgba(top);
+  const [R, G, B] = rgba(base);
+  return toHex([r * a + R * (1 - a), g * a + G * (1 - a), b * a + B * (1 - a)]);
+}
+
+function luminance(hex) {
+  const [r, g, b] = rgba(hex).slice(0, 3).map((c) => c / 255)
     .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
@@ -114,15 +127,34 @@ export function contrast(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-/** Check every pair in every theme → [{theme, fg, bg, min, ratio, ok}] */
+/**
+ * WCAG 2.2 AA tiers. A pair's third element is a tier name or a raw number.
+ *   text  4.5 — body text (1.4.3)
+ *   large 3   — text ≥ 24px, or ≥ 18.66px bold (1.4.3 large)
+ *   ui    3   — control edges, focus indicators, meaningful graphics (1.4.11)
+ */
+export const TIERS = { text: 4.5, large: 3, ui: 3 };
+
+/**
+ * Check every pair in every theme → [{theme, fg, bg, min, tier, ratio, ok}].
+ * Pair: [fg, bg, tier|min, opts?]. opts.over = the opaque token a translucent bg
+ * sits on (default color.bg.app). A translucent fg is composited over the bg.
+ */
 export function checkContrast(themes, pairs) {
   const results = [];
   for (const th of THEMES) {
-    for (const [fg, bg, min] of pairs) {
+    for (const [fg, bg, tier, opts = {}] of pairs) {
+      const min = typeof tier === 'number' ? tier : TIERS[tier];
+      if (min === undefined) throw new Error(`contrast.json: unknown tier "${tier}" (${fg} on ${bg})`);
       const f = themes[th].get(fg), b = themes[th].get(bg);
       if (!f || !b) throw new Error(`contrast.json references unknown token: ${!f ? fg : bg}`);
-      const ratio = contrast(f.value, b.value);
-      results.push({ theme: th, fg, bg, min, ratio, ok: ratio >= min, fgHex: f.value, bgHex: b.value });
+      const overId = opts.over ?? 'color.bg.app';
+      const over = themes[th].get(overId);
+      if (!over) throw new Error(`contrast.json references unknown token: ${overId}`);
+      const bgHex = composite(b.value, over.value);
+      const fgHex = composite(f.value, bgHex);
+      const ratio = contrast(fgHex, bgHex);
+      results.push({ theme: th, fg, bg, min, tier: typeof tier === 'number' ? null : tier, ratio, ok: ratio >= min, fgHex, bgHex });
     }
   }
   return results;

@@ -174,6 +174,10 @@ export function formatDart(themes, version) {
       group('radius').map((t) => `static const double ${dartName(t)} = ${num(px(t.value))};${doc(t)}`)),
     ...cls('Border widths. v3: cards have no border; outlines are for inputs, chips and illustration.', 'MeritBorderWidth',
       group('borderWidth').map((t) => `static const double ${dartName(t)} = ${num(px(t.value))};`)),
+    ...cls('Focus indicator geometry. Colour: MeritSemanticColors.focusRing*.', 'MeritFocusRing',
+      group('focusRing').map((t) => `static const double ${dartName(t)} = ${num(px(t.value))};`)),
+    ...cls('D7 density: compact is for admin / contributor screens only.', 'MeritDensity',
+      group('density').map((t) => `static const double ${dartName(t)} = ${num(px(t.value))};`)),
     ...cls('Durations + curves. Gate non-essential motion on MediaQuery.disableAnimationsOf(context).', 'MeritMotion', [
       ...group('duration').map((t) => `static const Duration ${dartName(t)} = Duration(milliseconds: ${ms(t.value)});${doc(t)}`),
       ...group('easing').map((t) => `static const Cubic ${dartName(t)} = Cubic(${t.value.map(num).join(', ')});`),

@@ -235,7 +235,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .quota { display: flex; flex-direction: column; gap: 6px; }
 .quota .rw { justify-content: space-between; font-size: 12.5px; }
 
-/* banner: mobile = 2xl rounded rect (<760px rule) */
+/* banner: mobile = 2xl rounded rect (<768px rule, breakpoint.md) */
 .band { --band-field: url("../assets/v3/banners/cta-field.svg"); --band-disc: url("../assets/v3/banners/cta-disc.svg");
   position: relative; overflow: hidden; isolation: isolate; border-radius: var(--merit-radius-2xl); padding: 20px; background: var(--band-field) left center / auto 100% no-repeat, var(--merit-banner-bg); color: var(--merit-banner-fg);
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }

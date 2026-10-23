@@ -5,7 +5,7 @@
     "quizOption": {
       "idle": {
         "bg": { "$value": "{color.surface.default}" },
-        "border": { "$value": "{color.border.subtle}" },
+        "border": { "$value": "{color.border.control}", "$description": "3:1 edge — the idle option has no other boundary (1.4.11)" },
         "fg": { "$value": "{color.text.primary}" }
       },
       "selected": {
@@ -59,12 +59,30 @@
     "flashcard": {
       "$description": "Flashcard and note tones (SKILL.md §5). A card may take any tone; its subtopic wash (the pattern that subtopic added) is inked tone-on-tone: the tone mixed 42% toward ink, the same rule as patchwork pattern ink. The plain tone uses surface.default and the subtopic's own washInk from the manifest. Theme-fixed like the category tints: ink text in both themes.",
       "fg": { "$value": "{color.ink.900}" },
-      "sage": { "bg": { "$value": "{color.sage.300}" }, "wash": { "$value": "#6B8578", "$description": "Wash ink; layer opacity .30" } },
-      "sky": { "bg": { "$value": "{color.sky.300}" }, "wash": { "$value": "#7A87A0", "$description": "Wash ink; layer opacity .30" } },
-      "coral": { "bg": { "$value": "{color.coral.300}" }, "wash": { "$value": "#9F5F52", "$description": "Wash ink; layer opacity .30" } },
-      "butter": { "bg": { "$value": "{color.butter.300}" }, "wash": { "$value": "#A08751", "$description": "Wash ink; layer opacity .30" } },
-      "violet": { "bg": { "$value": "{color.violet.100}" }, "wash": { "$value": "#938BA0", "$description": "Wash ink; layer opacity .30" } },
-      "blush": { "bg": { "$value": "{color.blush.300}" }, "wash": { "$value": "#9B7484", "$description": "Wash ink; layer opacity .30" } }
+      "sage": {
+        "bg": { "$value": "{color.sage.300}" },
+        "wash": { "$value": "#6B8578", "$description": "Wash ink; layer opacity .30" }
+      },
+      "sky": {
+        "bg": { "$value": "{color.sky.300}" },
+        "wash": { "$value": "#7A87A0", "$description": "Wash ink; layer opacity .30" }
+      },
+      "coral": {
+        "bg": { "$value": "{color.coral.300}" },
+        "wash": { "$value": "#9F5F52", "$description": "Wash ink; layer opacity .30" }
+      },
+      "butter": {
+        "bg": { "$value": "{color.butter.300}" },
+        "wash": { "$value": "#A08751", "$description": "Wash ink; layer opacity .30" }
+      },
+      "violet": {
+        "bg": { "$value": "{color.violet.100}" },
+        "wash": { "$value": "#938BA0", "$description": "Wash ink; layer opacity .30" }
+      },
+      "blush": {
+        "bg": { "$value": "{color.blush.300}" },
+        "wash": { "$value": "#9B7484", "$description": "Wash ink; layer opacity .30" }
+      }
     },
     "banner": {
       "$description": "Feature banners (SKILL.md §8): violet stadium, orange disc, hairline arcs. Each context pairs two of the 16 patterns (band · disc) that dissolve toward the copy: cta halftone·chevron, achiever diamonds·arcs, promo plus·waves, streak dashes·scales. Patterns only, never pack icons. Theme-fixed.",
@@ -76,7 +94,7 @@
       "arc": { "$value": "{color.violet.300}", "$description": "Hairline circle outlines" }
     },
     "reward": {
-      "points": { "$value": "{color.butter.500}", "$description": "Coin glyph" },
+      "points": { "$value": "{color.butter.500}", "$description": "Coin glyph fill. Exempt from 1.4.11: the MeritCoin asset carries its own ink outline" },
       "pointsFill": { "$value": "{color.butter.300}" },
       "streak": { "$value": "{color.orange.500}", "$description": "Flame glyph" },
       "streakDone": { "$value": "{color.orange.500}" },
@@ -84,12 +102,30 @@
     },
     "grade": {
       "$description": "fg = text on the grade fill. Letter always shown.",
-      "a": { "bg": { "$value": "{color.sage.300}" }, "fg": { "$value": "{color.ink.900}" } },
-      "b": { "bg": { "$value": "{color.sage.100}" }, "fg": { "$value": "{color.ink.900}" } },
-      "c": { "bg": { "$value": "{color.butter.300}" }, "fg": { "$value": "{color.ink.900}" } },
-      "d": { "bg": { "$value": "{color.orange.300}" }, "fg": { "$value": "{color.ink.900}" } },
-      "e": { "bg": { "$value": "{color.coral.300}" }, "fg": { "$value": "{color.ink.900}" } },
-      "f": { "bg": { "$value": "{color.red.600}" }, "fg": { "$value": "{color.white}" } }
+      "a": {
+        "bg": { "$value": "{color.sage.300}" },
+        "fg": { "$value": "{color.ink.900}" }
+      },
+      "b": {
+        "bg": { "$value": "{color.sage.100}" },
+        "fg": { "$value": "{color.ink.900}" }
+      },
+      "c": {
+        "bg": { "$value": "{color.butter.300}" },
+        "fg": { "$value": "{color.ink.900}" }
+      },
+      "d": {
+        "bg": { "$value": "{color.orange.300}" },
+        "fg": { "$value": "{color.ink.900}" }
+      },
+      "e": {
+        "bg": { "$value": "{color.coral.300}" },
+        "fg": { "$value": "{color.ink.900}" }
+      },
+      "f": {
+        "bg": { "$value": "{color.red.600}" },
+        "fg": { "$value": "{color.white}" }
+      }
     },
     "category": {
       "$description": "Category tints for chips and the in-app patchwork FALLBACK (tint + Phosphor duotone) when a node has no generated patchwork. Real patchworks are generated per node (SKILL.md §12). Ink text + ink outline.",
@@ -110,11 +146,12 @@
       "iconShade": { "$value": "{color.canvas.200}", "$description": "Icon shade layers" }
     },
     "chart": {
-      "1": { "$value": "{color.violet.500}" },
-      "2": { "$value": "{color.orange.500}" },
-      "3": { "$value": "{color.sage.500}" },
-      "4": { "$value": "{color.butter.500}" },
-      "5": { "$value": "{color.sky.500}" }
+      "$description": "Categorical series. Theme-following (dark variants in dataviz.*). Ramps: color.dataviz.seq* / div*",
+      "1": { "$value": "{color.dataviz.cat1}" },
+      "2": { "$value": "{color.dataviz.cat2}" },
+      "3": { "$value": "{color.dataviz.cat3}" },
+      "4": { "$value": "{color.dataviz.cat4}" },
+      "5": { "$value": "{color.dataviz.cat5}" }
     }
   },
   "size": {

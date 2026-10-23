@@ -26,19 +26,24 @@
       "onInverse": { "$value": "{color.ink.900}" },
       "onSuccess": { "$value": "{color.ink.900}" },
       "onWarning": { "$value": "{color.ink.900}" },
-      "onError": { "$value": "{color.ink.900}" }
+      "onInfo": { "$value": "{color.ink.900}" },
+      "onError": { "$value": "{color.ink.900}" },
+      "disabled": { "$value": "{color.night.500}" }
     },
     "border": {
       "default": { "$value": "{color.mist.400}" },
       "strong": { "$value": "{color.mist.50}" },
-      "subtle": { "$value": "{color.night.600}" }
+      "subtle": { "$value": "{color.night.600}" },
+      "control": { "$value": "{color.night.500}" },
+      "disabled": { "$value": "{color.night.600}" }
     },
     "action": {
       "primary": { "$value": "{color.orange.400}" },
       "primaryPressed": { "$value": "{color.orange.300}" },
       "primaryStrong": { "$value": "{color.orange.400}" },
       "accent": { "$value": "{color.violet.300}" },
-      "accentPressed": { "$value": "{color.violet.100}" }
+      "accentPressed": { "$value": "{color.violet.100}" },
+      "disabled": { "$value": "{color.night.700}" }
     },
     "feedback": {
       "success": { "$value": "{color.sage.300}" },
@@ -47,36 +52,66 @@
       "warning": { "$value": "{color.butter.300}" },
       "warningText": { "$value": "{color.butter.300}", "$description": "Warning text and icons on bg.app / surfaces (timer ≤5 min). Butter fails as text on light" },
       "error": { "$value": "{color.red.300}" },
-      "errorSubtle": { "$value": "{color.red.900}" }
+      "errorSubtle": { "$value": "{color.red.900}" },
+      "errorText": { "$value": "{color.red.300}" },
+      "warningSubtle": { "$value": "{color.butter.900}" },
+      "info": { "$value": "{color.sky.300}" },
+      "infoSubtle": { "$value": "{color.sky.900}" },
+      "infoText": { "$value": "{color.sky.300}" }
     },
     "subject": {
       "headerBase": { "$value": "{color.night.850}", "$description": "Ground the subject colour mixes into for hub headers: mix(color_hex, headerBase, opacity.subjectTintDark). Text on it: text.primary / text.secondary only" }
     },
     "focus": {
-      "ring": { "$value": "{color.violet.300}" }
+      "ring": { "$value": "{color.violet.300}" },
+      "ringOnFeature": { "$value": "{color.violet.300}" },
+      "ringOnInverse": { "$value": "{color.violet.500}" }
     },
     "decor": {
       "sparkle": { "$value": "{color.violet.300}" },
       "sparkleWarm": { "$value": "{color.orange.400}" },
       "underline": { "$value": "{color.orange.400}" },
       "connector": { "$value": "{color.mist.400}" }
+    },
+    "state": {
+      "hover": { "$value": "#F7F3EA14" },
+      "pressed": { "$value": "#F7F3EA24" }
+    },
+    "scrim": { "$value": "{color.scrim.dark}" },
+    "skeleton": {
+      "base": { "$value": "{color.surface.sunken}" },
+      "highlight": { "$value": "{color.night.700}" }
+    },
+    "dataviz": {
+      "cat1": { "$value": "{color.violet.300}" },
+      "cat2": { "$value": "{color.orange.400}" },
+      "cat3": { "$value": "{color.sage.300}" },
+      "cat4": { "$value": "{color.butter.300}" },
+      "cat5": { "$value": "{color.sky.300}" },
+      "seq1": { "$value": "{color.violet.900}" },
+      "seq2": { "$value": "{color.violet.800}" },
+      "seq3": { "$value": "{color.violet.400}" },
+      "seq4": { "$value": "{color.violet.300}" },
+      "seq5": { "$value": "{color.violet.100}" },
+      "div1": { "$value": "{color.red.300}" },
+      "div2": { "$value": "{color.red.900}" },
+      "div3": { "$value": "{color.night.600}" },
+      "div4": { "$value": "{color.sage.900}" },
+      "div5": { "$value": "{color.sage.300}" }
     }
   },
   "elevation": {
     "$type": "shadow",
     "$description": "On dark, depth reads mostly from surface steps; shadows are black and stronger.",
     "e0": { "$value": [] },
-    "e1": { "$value": [
-      { "color": "#00000066", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" },
-      { "color": "#0000004D", "offsetX": "0px", "offsetY": "4px", "blur": "12px", "spread": "0px" }
-    ] },
-    "e2": { "$value": [
-      { "color": "#00000066", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px" },
-      { "color": "#00000066", "offsetX": "0px", "offsetY": "10px", "blur": "24px", "spread": "0px" }
-    ] },
-    "e3": { "$value": [
-      { "color": "#00000080", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px" },
-      { "color": "#00000080", "offsetX": "0px", "offsetY": "18px", "blur": "40px", "spread": "0px" }
-    ] }
+    "e1": {
+      "$value": [{"color": "#00000066", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px"}, {"color": "#0000004D", "offsetX": "0px", "offsetY": "4px", "blur": "12px", "spread": "0px"}]
+    },
+    "e2": {
+      "$value": [{"color": "#00000066", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px"}, {"color": "#00000066", "offsetX": "0px", "offsetY": "10px", "blur": "24px", "spread": "0px"}]
+    },
+    "e3": {
+      "$value": [{"color": "#00000080", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px"}, {"color": "#00000080", "offsetX": "0px", "offsetY": "18px", "blur": "40px", "spread": "0px"}]
+    }
   }
 }

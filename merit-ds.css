@@ -297,7 +297,7 @@ section.sec { padding-top: 88px; scroll-margin-top: 8px; }
 .band .btn { background: var(--merit-white); color: var(--merit-ink-900); }
 .band .search { flex: 0 1 360px; min-width: min(260px, 100%); background: var(--merit-white); }
 .band .search input { color: var(--merit-ink-900); }
-@media (max-width: 760px) { .band { border-radius: var(--merit-radius-2xl); padding: 28px 24px; } .band::after { width: 180px; right: -60px; top: -70px; } }
+@media (max-width: 767px) { .band { border-radius: var(--merit-radius-2xl); padding: 28px 24px; } .band::after { width: 180px; right: -60px; top: -70px; } }
 
 /* ---------- quiz ---------- */
 .qcard { background: var(--merit-surface-default); border-radius: var(--merit-radius-xl); padding: 20px; box-shadow: var(--merit-elevation-e1); }
@@ -412,7 +412,7 @@ table.spec td { padding: 10px; border-bottom: var(--merit-border-width-hairline)
 .land .prog .it img { width: 44px; }
 .modeic { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; font-size: 26px; color: var(--merit-ink-900); }
 .land .cta { margin: 0 28px 28px; }
-@media (max-width: 760px) { .land .hero2, .land .prog { grid-template-columns: 1fr; } .land nav a { display: none; } }
+@media (max-width: 767px) { .land .hero2, .land .prog { grid-template-columns: 1fr; } .land nav a { display: none; } }
 
 /* ---------- logo ---------- */
 .logoTile { border-radius: var(--merit-radius-xl); display: grid; place-items: center; padding: 26px; min-height: 180px; }

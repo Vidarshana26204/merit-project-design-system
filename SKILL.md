@@ -418,7 +418,7 @@ Outputs: `build/css/merit-tokens.css` (web), `build/dart/merit_tokens.dart` (Flu
 | `surface.feature` | `#54306C` | `#3C244E` | `--merit-surface-feature` | `context.meritColors.surfaceFeature` |
 | `text.primary` | `#1E1B2E` | `#F7F3EA` | `--merit-text-primary` | `context.meritColors.textPrimary` |
 | `text.secondary` | `#4A4760` | `#B9B2C6` | `--merit-text-secondary` | `context.meritColors.textSecondary` |
-| `text.tertiary` | `#68667F` | `#9C94AC` | `--merit-text-tertiary` | `context.meritColors.textTertiary` |
+| `text.tertiary` | `#625F79` | `#9C94AC` | `--merit-text-tertiary` | `context.meritColors.textTertiary` |
 | `text.link` | `#663696` | `#C9B3EA` | `--merit-text-link` | `context.meritColors.textLink` |
 | `text.eyebrow` | `#B23F06` | `#FF8A4C` | `--merit-text-eyebrow` | `context.meritColors.textEyebrow` |
 | `text.onPrimary` | `#1E1B2E` | `#1E1B2E` | `--merit-text-on-primary` | `context.meritColors.textOnPrimary` |
@@ -428,15 +428,20 @@ Outputs: `build/css/merit-tokens.css` (web), `build/dart/merit_tokens.dart` (Flu
 | `text.onInverse` | `#FBFAF4` | `#1E1B2E` | `--merit-text-on-inverse` | `context.meritColors.textOnInverse` |
 | `text.onSuccess` | `#1E1B2E` | `#1E1B2E` | `--merit-text-on-success` | `context.meritColors.textOnSuccess` |
 | `text.onWarning` | `#1E1B2E` | `#1E1B2E` | `--merit-text-on-warning` | `context.meritColors.textOnWarning` |
+| `text.onInfo` | `#1E1B2E` | `#1E1B2E` | `--merit-text-on-info` | `context.meritColors.textOnInfo` |
 | `text.onError` | `#FFFFFF` | `#1E1B2E` | `--merit-text-on-error` | `context.meritColors.textOnError` |
-| `border.default` | `#68667F` | `#9C94AC` | `--merit-border-default` | `context.meritColors.borderDefault` |
+| `text.disabled` | `#8A879C` | `#736A87` | `--merit-text-disabled` | `context.meritColors.textDisabled` |
+| `border.default` | `#625F79` | `#9C94AC` | `--merit-border-default` | `context.meritColors.borderDefault` |
 | `border.strong` | `#1E1B2E` | `#F7F3EA` | `--merit-border-strong` | `context.meritColors.borderStrong` |
 | `border.subtle` | `#E9E4D4` | `#3A3048` | `--merit-border-subtle` | `context.meritColors.borderSubtle` |
+| `border.control` | `#8A879C` | `#736A87` | `--merit-border-control` | `context.meritColors.borderControl` |
+| `border.disabled` | `#E9E4D4` | `#3A3048` | `--merit-border-disabled` | `context.meritColors.borderDisabled` |
 | `action.primary` | `#F65E16` | `#FF8A4C` | `--merit-action-primary` | `context.meritColors.actionPrimary` |
 | `action.primaryPressed` | `#EA540E` | `#FF9A63` | `--merit-action-primary-pressed` | `context.meritColors.actionPrimaryPressed` |
 | `action.primaryStrong` | `#B23F06` | `#FF8A4C` | `--merit-action-primary-strong` | `context.meritColors.actionPrimaryStrong` |
 | `action.accent` | `#54306C` | `#C9B3EA` | `--merit-action-accent` | `context.meritColors.actionAccent` |
 | `action.accentPressed` | `#3C244E` | `#E7DCF2` | `--merit-action-accent-pressed` | `context.meritColors.actionAccentPressed` |
+| `action.disabled` | `#E9E4D4` | `#2E2539` | `--merit-action-disabled` | `context.meritColors.actionDisabled` |
 | `feedback.success` | `#A2D2AE` | `#A2D2AE` | `--merit-feedback-success` | `context.meritColors.feedbackSuccess` |
 | `feedback.successSubtle` | `#E2F2E6` | `#1D3B28` | `--merit-feedback-success-subtle` | `context.meritColors.feedbackSuccessSubtle` |
 | `feedback.successText` | `#2F6B43` | `#A2D2AE` | `--merit-feedback-success-text` | `context.meritColors.feedbackSuccessText` |
@@ -444,29 +449,56 @@ Outputs: `build/css/merit-tokens.css` (web), `build/dart/merit_tokens.dart` (Flu
 | `feedback.warningText` | `#B23F06` | `#FFD66B` | `--merit-feedback-warning-text` | `context.meritColors.feedbackWarningText` |
 | `feedback.error` | `#C7362F` | `#FF9A8F` | `--merit-feedback-error` | `context.meritColors.feedbackError` |
 | `feedback.errorSubtle` | `#FBDAD6` | `#5A1A1A` | `--merit-feedback-error-subtle` | `context.meritColors.feedbackErrorSubtle` |
+| `feedback.errorText` | `#A8302A` | `#FF9A8F` | `--merit-feedback-error-text` | `context.meritColors.feedbackErrorText` |
+| `feedback.warningSubtle` | `#FFF3CC` | `#3A2E0A` | `--merit-feedback-warning-subtle` | `context.meritColors.feedbackWarningSubtle` |
+| `feedback.info` | `#BCD6F2` | `#BCD6F2` | `--merit-feedback-info` | `context.meritColors.feedbackInfo` |
+| `feedback.infoSubtle` | `#E3EEF9` | `#16273A` | `--merit-feedback-info-subtle` | `context.meritColors.feedbackInfoSubtle` |
+| `feedback.infoText` | `#2F5F94` | `#BCD6F2` | `--merit-feedback-info-text` | `context.meritColors.feedbackInfoText` |
 | `subject.headerBase` | `#FBFAF4` | `#1C1625` | `--merit-subject-header-base` | `context.meritColors.subjectHeaderBase` |
 | `focus.ring` | `#663696` | `#C9B3EA` | `--merit-focus-ring` | `context.meritColors.focusRing` |
+| `focus.ringOnFeature` | `#FFFFFF` | `#C9B3EA` | `--merit-focus-ring-on-feature` | `context.meritColors.focusRingOnFeature` |
+| `focus.ringOnInverse` | `#FFFFFF` | `#663696` | `--merit-focus-ring-on-inverse` | `context.meritColors.focusRingOnInverse` |
 | `decor.sparkle` | `#7E24DE` | `#C9B3EA` | `--merit-decor-sparkle` | `context.meritColors.decorSparkle` |
 | `decor.sparkleWarm` | `#F65E16` | `#FF8A4C` | `--merit-decor-sparkle-warm` | `context.meritColors.decorSparkleWarm` |
 | `decor.underline` | `#F65E16` | `#FF8A4C` | `--merit-decor-underline` | `context.meritColors.decorUnderline` |
-| `decor.connector` | `#68667F` | `#9C94AC` | `--merit-decor-connector` | `context.meritColors.decorConnector` |
+| `decor.connector` | `#625F79` | `#9C94AC` | `--merit-decor-connector` | `context.meritColors.decorConnector` |
+| `state.hover` | `#1E1B2E0F` | `#F7F3EA14` | `--merit-state-hover` | `context.meritColors.stateHover` |
+| `state.pressed` | `#1E1B2E1F` | `#F7F3EA24` | `--merit-state-pressed` | `context.meritColors.statePressed` |
+| `scrim` | `#1E1B2E80` | `#0B0810B3` | `--merit-scrim` | `context.meritColors.scrim` |
+| `skeleton.base` | `#F4F1E6` | `#1C1625` | `--merit-skeleton-base` | `context.meritColors.skeletonBase` |
+| `skeleton.highlight` | `#FBFAF4` | `#2E2539` | `--merit-skeleton-highlight` | `context.meritColors.skeletonHighlight` |
+| `dataviz.cat1` | `#663696` | `#C9B3EA` | `--merit-dataviz-cat1` | `context.meritColors.datavizCat1` |
+| `dataviz.cat2` | `#F65E16` | `#FF8A4C` | `--merit-dataviz-cat2` | `context.meritColors.datavizCat2` |
+| `dataviz.cat3` | `#4F8F62` | `#A2D2AE` | `--merit-dataviz-cat3` | `context.meritColors.datavizCat3` |
+| `dataviz.cat4` | `#A67C00` | `#FFD66B` | `--merit-dataviz-cat4` | `context.meritColors.datavizCat4` |
+| `dataviz.cat5` | `#5B8FCB` | `#BCD6F2` | `--merit-dataviz-cat5` | `context.meritColors.datavizCat5` |
+| `dataviz.seq1` | `#F4EFF9` | `#24162F` | `--merit-dataviz-seq1` | `context.meritColors.datavizSeq1` |
+| `dataviz.seq2` | `#E7DCF2` | `#3C244E` | `--merit-dataviz-seq2` | `context.meritColors.datavizSeq2` |
+| `dataviz.seq3` | `#C9B3EA` | `#905AA8` | `--merit-dataviz-seq3` | `context.meritColors.datavizSeq3` |
+| `dataviz.seq4` | `#663696` | `#C9B3EA` | `--merit-dataviz-seq4` | `context.meritColors.datavizSeq4` |
+| `dataviz.seq5` | `#54306C` | `#E7DCF2` | `--merit-dataviz-seq5` | `context.meritColors.datavizSeq5` |
+| `dataviz.div1` | `#C7362F` | `#FF9A8F` | `--merit-dataviz-div1` | `context.meritColors.datavizDiv1` |
+| `dataviz.div2` | `#FF9A8F` | `#5A1A1A` | `--merit-dataviz-div2` | `context.meritColors.datavizDiv2` |
+| `dataviz.div3` | `#E9E4D4` | `#3A3048` | `--merit-dataviz-div3` | `context.meritColors.datavizDiv3` |
+| `dataviz.div4` | `#6FAF82` | `#1D3B28` | `--merit-dataviz-div4` | `context.meritColors.datavizDiv4` |
+| `dataviz.div5` | `#2F6B43` | `#A2D2AE` | `--merit-dataviz-div5` | `context.meritColors.datavizDiv5` |
 
 Component tokens (quiz option states, timer, tier, grade A–F, subject category 1–6, chart 1–5),
 spacing (`--merit-space-*` / `MeritSpace`), radii, border widths, soft elevation
 (`--merit-elevation-e0…e3` / `context.meritColors.elevationE0…E3`), motion and the type scale
 (`--merit-type-*` / `MeritTypeScale`) are in the generated files.
 
-### Contrast gate — 152 checks (76 pairs × light/dark), all ≥ AA
+### Contrast gate — 222 checks (111 pairs × light/dark), all ≥ AA
 
 Lowest five:
 
 | Theme | Foreground | Background | Ratio | Min |
 |---|---|---|---|---|
 | light | `action.primary` | `bg.app` | 3.07 | 3 |
+| light | `chart.2` | `bg.app` | 3.07 | 3 |
+| light | `border.control` | `surface.sunken` | 3.08 | 3 |
 | light | `action.primary` | `surface.default` | 3.22 | 3 |
-| light | `quizOption.wrong.border` | `quizOption.wrong.bg` | 4.03 | 3 |
-| light | `text.onPrimary` | `action.primaryPressed` | 4.61 | 4.5 |
-| light | `text.tertiary` | `bg.brand` | 4.73 | 4.5 |
+| light | `chart.2` | `surface.default` | 3.22 | 3 |
 <!-- MERIT-TOKENS:END -->
 
 ---
