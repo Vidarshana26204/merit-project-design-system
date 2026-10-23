@@ -1,0 +1,112 @@
+/* Round 13 landing: hero CTA + store badges, breadcrumb under the chips, live sections (landing-live.js), FAQ. Tokens only. */
+
+/* ---- store badges (board stand-ins; production uses the official Apple / Google artwork) */
+.r13-badges { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.r13-badge { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px 0 12px; border-radius: 12px; background: var(--merit-ink-900); color: var(--merit-white);
+  text-decoration: none; font: 700 15px/1.05 var(--fb); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--merit-white) 18%, transparent); }
+.r13-badge .i { font-size: 24px; width: 24px; height: 24px; flex: none; }
+.r13-badge span { display: flex; flex-direction: column; }
+.r13-badge small { font: 600 10px/1.1 var(--fb); opacity: .82; }
+.r13-badge:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: 2px; }
+.r13-badges.sm .r13-badge { height: 38px; font-size: 13px; } .r13-badges.sm .r13-badge .i { font-size: 19px; width: 19px; height: 19px; }
+.r13-badges.stack { flex-direction: column; align-items: stretch; } .r13-badges.stack .r13-badge { justify-content: center; }
+.r13-herocta { gap: 12px; flex-wrap: wrap; }
+.r13-herocta .r13-badge { height: 56px; }
+
+/* ---- hero breadcrumb: a reserved row under the stream chips, visible once you drill in (no layout jump) */
+.ico-crumb { min-height: 32px; visibility: hidden; }
+.ico-crumb.drilled { visibility: visible; }
+.ico-crumb .qm-crumb { position: static; display: flex; padding: 0; }
+.ico-crumb .qm-crumb button::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border: 2px solid currentColor; border-radius: 50%; vertical-align: -1px; }
+
+/* ---- section layout */
+.r13-sec { scroll-margin-top: 24px; }
+.web .w-scroll.r13 .w-sec { padding: 56px 48px; }
+.web .w-scroll.r13 .w-sec + .w-sec { padding-top: 24px; }
+.r13-2col { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px; align-items: center; }
+.r13-2col.rev { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+.r13-lead { gap: 14px; }
+.r13-lead .t2 { margin: 0; max-width: 46ch; }
+.r13-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.r13-chips .chip { cursor: pointer; border: 0; height: 32px; font-size: 12.5px; }
+
+/* ---- try a question */
+.r13-qcard { gap: 14px; padding: 22px; min-height: 420px; outline: none; }
+.r13-qcard:focus-visible { box-shadow: 0 0 0 2px var(--merit-focus-ring); }
+.lq-head { display: flex; align-items: center; gap: 10px; }
+.lq-head .ey { flex: 1; }
+.lq-lang { padding: 3px; }
+.lq-lang button { border: 0; background: none; padding: 5px 12px; min-height: 28px; border-radius: 999px; font: 700 12px var(--fb); color: var(--merit-text-secondary); cursor: pointer; }
+.lq-lang button.on { background: var(--merit-surface-default); color: var(--merit-text-primary); box-shadow: var(--merit-elevation-e1); }
+.lq-lang button:disabled { opacity: .4; cursor: not-allowed; }
+.lq-q { margin: 0; font: 600 18px/1.45 var(--fd); }
+.lq-q[lang="si"], .opt[lang="si"] { line-height: 1.6; }
+.r13 .opt { width: 100%; border: 0; font: inherit; text-align: left; color: inherit; cursor: pointer; min-height: 50px; transition: opacity .2s; }
+.r13 .opt[aria-disabled] { cursor: default; }
+.r13 .opt.dim { opacity: .5; }
+.r13 .opt > .i:last-child { margin-left: auto; font-size: 20px; }
+.r13 .opt.ok > .i:last-child { color: var(--merit-feedback-success); } .r13 .opt.bad > .i:last-child { color: var(--merit-feedback-error); }
+.lq-x { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: var(--merit-radius-md); background: var(--merit-surface-sunken); overflow: hidden; }
+.lq-x p { margin: 0; }
+.lq-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.lq-pts { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; }
+.lq-pts .num { font-size: 18px; }
+.lq-pts .coin { --coin: 26px; }
+.lq-foot .sp { flex: 1; }
+/* maths subset */
+.tx { white-space: nowrap; font-style: normal; }
+.tx-fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: .82em; line-height: 1.1; margin: 0 .1em; }
+.tx-fr > span:first-child { border-bottom: 1.2px solid currentColor; padding: 0 .15em; }
+.tx-rt { border-top: 1.2px solid currentColor; padding: 0 .1em; }
+.tx sup, .tx sub { font-size: .72em; }
+
+/* ---- flashcards */
+.r13-deck { display: flex; flex-direction: column; gap: 18px; }
+.r13-stage { position: relative; height: 300px; margin-right: 34px; perspective: 1200px; outline: none; }
+.r13-stage:focus-visible { box-shadow: 0 0 0 2px var(--merit-focus-ring); border-radius: 24px; }
+.lf-card { position: absolute; inset: 0; cursor: pointer; }
+.lf-in { position: relative; height: 100%; transform-style: preserve-3d; }
+.lf-face { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 10px; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: var(--merit-elevation-e1); }
+.lf-face .q { font-size: 20px; }
+.lf-back { transform: rotateY(180deg); color: var(--merit-ink-900); }
+.lf-hint { margin-top: auto; color: var(--merit-ink-700); opacity: .8; }
+.r13-rate { opacity: .35; pointer-events: none; transition: opacity .2s; margin-right: 34px; }
+.r13-rate.on { opacity: 1; pointer-events: auto; }
+.r13-rate button { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 56px; border: 0; border-radius: 16px; font: 700 13px var(--fb); color: var(--merit-ink-900); cursor: pointer; }
+.r13-rate button small { font: 600 11px var(--fb); opacity: .75; }
+.r13-rate .ag { background: var(--merit-coral-300); } .r13-rate .hd2 { background: var(--merit-sand-300); } .r13-rate .gd { background: var(--merit-sage-300); } .r13-rate .ez { background: var(--merit-violet-100); }
+
+/* ---- exam insights */
+.r13-chart { gap: 10px; padding: 22px; }
+.li-chart { display: flex; flex-direction: column; gap: 4px; }
+.li-row { display: grid; grid-template-columns: minmax(0, 11fr) minmax(0, 10fr) 52px; align-items: center; gap: 12px; min-height: 36px; padding: 4px 8px; border: 0; border-radius: 10px; background: none; font: 600 13px var(--fb); color: var(--merit-text-primary); text-align: left; cursor: default; }
+.li-row:hover, .li-row:focus-visible { background: var(--merit-surface-sunken); outline: none; }
+.li-t { overflow: hidden; text-overflow: clip; }
+.li-bar { height: 12px; border-radius: 999px; background: var(--merit-surface-sunken); overflow: hidden; }
+.li-bar i { display: block; height: 100%; width: var(--v); border-radius: 999px; background: var(--subj, var(--merit-action-primary)); }
+.li-row.rest .li-bar i { background: var(--merit-text-tertiary); }
+.li-row .num { text-align: right; font-variant-numeric: tabular-nums; }
+.li-note { margin: 6px 8px 0; min-height: 40px; }
+.r13-licta { align-self: flex-start; }
+
+/* ---- FAQ */
+.r13-faq .faq-i + .faq-i { border-top: 1px solid var(--merit-border-subtle); }
+.r13-faq .faq-i > button.li { width: 100%; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.r13-faq .faq-i > button.li .i { transition: transform .25s; }
+.r13-faq .faq-i.on > button.li .i { transform: rotate(180deg); }
+.r13-faq .faq-i > button.li:focus-visible { outline: 2px solid var(--merit-focus-ring); outline-offset: -2px; }
+.faq-a { overflow: hidden; padding: 0 16px 14px; }
+.faq-a p { margin: 0; max-width: 64ch; }
+
+/* ---- closing band */
+.r13-band { align-items: center; }
+.r13-bandcta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+.r13-badges.on-feature .r13-badge { background: var(--merit-ink-900); }
+
+/* ---- phone frame */
+.r13-ph { display: flex; flex-direction: column; gap: 12px; }
+.r13-ph .r13-qcard { min-height: 0; padding: 16px; }
+.r13-ph .lq-q { font-size: 16px; }
+.r13-ph .lq-foot .lnk { display: none; }
+.r13 a.btn, .r13-licta { text-decoration: none; }
+.r13-chips .chip:not(.on) { background: none; color: var(--merit-text-primary); }

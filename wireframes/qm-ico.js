@@ -140,6 +140,8 @@
       svg.setAttribute("aria-label", "Merit subject tree");
       const slot = ctl.top && ctl.host.dataset.chipsIn && document.querySelector(ctl.host.dataset.chipsIn);
       if (slot) { slot.appendChild(ctl.top); ctl.top.classList.add("moved"); } // stream chips live in the hero copy column, still wired to the tree
+      this.crumbSlot = ctl.crumb && ctl.host.dataset.crumbIn && document.querySelector(ctl.host.dataset.crumbIn);
+      if (this.crumbSlot) this.crumbSlot.appendChild(ctl.crumb); // so does the breadcrumb, under the chips
       if (!this.still && !reduced()) {
         const host = ctl.host;
         host.addEventListener("pointermove", (e) => { const r = host.getBoundingClientRect(); this.parallax(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1); });
@@ -280,6 +282,7 @@
     async render_(level, mode) {
       const depth = { root: 0, subject: 1, topic: 2 }[level.kind];
       this.ctl.host.classList.toggle("drilled", depth > 0);
+      if (this.crumbSlot) this.crumbSlot.classList.toggle("drilled", depth > 0);
       if (!this.stack.length || (depth === 0 && mode !== "out")) return this.rebuild(level, mode);
       while (this.stack.length - 1 > depth) await this.collapse(this.stack.length - 2 > depth); // several levels up: the outer ones run at 2x
       if (depth === this.stack.length) return this.expand(level);

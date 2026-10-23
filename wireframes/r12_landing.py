@@ -1,6 +1,7 @@
 """Round 12 landing frames: the low-poly Quilt Map concept (live) and the hero (desktop tree, phone without it).
 Must not import gen_web_board (circular)."""
 from gen_web import *  # noqa: F401,F403
+from r13_landing import badges  # noqa: E402  store badges (round 13)
 
 CAP = ('<p class="qm-cap">Live prototype: click a subject (or Enter), then a topic. Esc or the breadcrumb goes back. '
        'Stream chips switch the tree. Grows on load, then sways; the coin runs until your first interaction.</p>')
@@ -59,10 +60,10 @@ concept = screen("web-quilt-concept", "Quilt Map · icosphere tree vs low-poly t
 # ---- hero: A desktop (tree right) and phone (no tree)
 hero_ico = dk("meritproject.lk", lnav() + f'''
 <div class="w-hero ico-a"><div class="ico-copy st" style="gap:18px">{HERO_COPY}
-<div class="rw"><button class="btn l" type="button">Start free</button><button class="btn gh l" type="button">{I("play-circle")}How it works</button></div>
+<div class="rw r13-herocta"><button class="btn l" type="button">Start free</button>{badges()}</div>
 <div class="rw xs t3" style="gap:14px"><span>62 subjects</span><span>·</span><span>Official past papers since 2012</span><span>·</span><span>Free forever</span></div>
-<div class="ico-chips" id="r12-hero-chips"></div></div>
-<div class="qm ico r12-hero-ico" data-qm="ico" data-wide data-dx="430" data-reach data-stream="al-science" data-chips-in="#r12-hero-chips"></div></div>''')
+<div class="ico-chips" id="r12-hero-chips"></div><div class="ico-crumb" id="r12-hero-crumb"></div></div>
+<div class="qm ico r12-hero-ico" data-qm="ico" data-wide data-dx="430" data-reach data-stream="al-science" data-chips-in="#r12-hero-chips" data-crumb-in="#r12-hero-crumb"></div></div>''')
 
 TILES = [("Physics", "physics", "11 topics"), ("Chemistry", "chemistry", "14 topics"), ("Biology", "biology", "10 topics"),
          ("Agri. Science", "plants", "17 topics"), ("ICT", "ict", "14 topics"), ("Comb. Maths", "maths", "Soon")]
@@ -72,12 +73,12 @@ hero_phone = phone(
     '<span class="ey">O/L &amp; A/L · Sinhala · Tamil · English</span>'
     '<div class="h-lg">Every subject you sit, <span class="ul">stitched</span> together.</div>'
     '<span class="sm t2">Past papers, flashcards and notes for the Sri Lankan syllabus.</span>'
-    '<button class="btn l full" type="button">Start free</button>'
+    '<button class="btn l full" type="button">Start free</button>' + badges("stack") +
     '<div class="chips"><span class="chip on">A/L Science</span><span class="chip">Commerce</span><span class="chip">Arts</span><span class="chip">Technology</span><span class="chip">O/L</span></div>'
     f'<div class="r12-tiles">{tiles}</div><span class="xs t3" style="text-align:center">Tap a subject to start with it</span></div>', 780)
 
 s_hero = screen("web-hero", "Landing hero · copy left, tree right", [("energy", "Energy"), ("gap", "Picked")],
-    "Hero A is picked: copy left and vertically centred; the tree is a full-width layer BEHIND the copy (16:9 stage, tree offset 430). Every node crown stays right of the copy; only the neutral crowns and a long leafy bough reach in behind the text, under a soft radial wash of the page colour (78%) so the copy stays legible. The copy column passes pointer events through except on its own controls. No card: the sky is the hero background. The tree is fully interactive (stream chips are one row in the copy column, wired to the tree; the breadcrumb appears once you drill in; the panel anchors top-right). On mobile web the tree is not shown: copy, CTA, stream chips, then a 3-up grid of subject tiles, no sideways scroll.",
+    "Hero A is picked: copy left and vertically centred; the tree is a full-width layer BEHIND the copy (16:9 stage, tree offset 430). Every node crown stays right of the copy; only the neutral crowns and a long leafy bough reach in behind the text, under a soft radial wash of the page colour (78%) so the copy stays legible. The copy column passes pointer events through except on its own controls. No card: the sky is the hero background. The tree is fully interactive (stream chips are one row in the copy column, wired to the tree; the breadcrumb sits under the chips in the copy column, in a reserved 32 px row that only becomes visible once you drill in, so nothing jumps; the panel anchors top-right). CTAs (round 13): Start free, then the App Store and Google Play badges in the same row; the old How it works button goes (the nav links it). Phone: Start free full width, then both badges stacked. On mobile web the tree is not shown: copy, CTA, stream chips, then a 3-up grid of subject tiles, no sideways scroll.",
     "GET /public/explore?lang= · streams → subjects (counts, patchwork)",
     [cand("A", "Copy left, icosphere tree right", "Picked", hero_ico,
           "Reads like a classic hero with a living illustration. The tree spans the whole hero behind the copy, fills about 85% of its height and fits a 1280 laptop without scrolling.",

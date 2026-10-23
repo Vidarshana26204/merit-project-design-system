@@ -147,6 +147,7 @@ s_states = kit_screen("web-states", "States · empty, error, offline, loading, s
 from r12_landing import concept, s_hero  # noqa: E402,F811  low-poly tree + hero A + phone hero
 from r12_hub import s_hub, s_subj  # noqa: E402,F811  hub A with mobile section tabs
 from r12_auth import s_auth  # noqa: E402,F811  step-aware split screen
+from r13_landing import s_secs  # noqa: E402,F811  live sections on real data + FAQ (round 13)
 
 # ------------------------------------------------------------------ page
 NAVS = [("landing", "00", "Landing"), ("shell", "01", "Shell &amp; nav"), ("today", "02", "Today"), ("quiz", "03", "Quiz"), ("study", "04", "Study &amp; notes"),
@@ -177,6 +178,7 @@ HEAD = '''<meta charset="utf-8">
 <link rel="stylesheet" href="wireframes/wf-r12-landing.css">
 <link rel="stylesheet" href="wireframes/wf-r12-hub.css">
 <link rel="stylesheet" href="wireframes/wf-r12-auth.css">
+<link rel="stylesheet" href="wireframes/wf-r13-landing.css">
 
 <header class="wf-top">
   <div class="wf-top-row">
@@ -212,6 +214,8 @@ TAIL = '''</main>
 <script src="https://cdn.jsdelivr.net/npm/delaunator@5.0.1/delaunator.min.js"></script>
 <script src="wireframes/qm-lowpoly.js"></script>
 <script src="wireframes/qm-ico.js"></script>
+<script src="wireframes/qm-samples.js"></script>
+<script src="wireframes/landing-live.js"></script>
 '''
 
 if __name__ == "__main__":
