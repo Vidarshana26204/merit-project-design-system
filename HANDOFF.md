@@ -92,7 +92,6 @@ Sources:
   - repo links only for the DS artifact;
   - coin D1.
 - **Release scope:** no email verification, no push, no O/L.
-- **Security:** no history scrub for now; the root dumps stay where they are (owner).
 - **Earlier DS rulings still in force:**
   - D18 mastery fill;
   - D19 colour-only timer;
@@ -129,12 +128,9 @@ Sources:
 - O/L is blocked (no subject coverage).
 - One update sheet, with "Later" shown only when the update can be skipped.
 
-**Security / licences:**
-- Untracked: Flutter `.env` and the old keystore (`da264b4`); backend `env/dev.env` and `env/test.env` (`c3211e5`; the
-  `.example` files list the keys).
-- Untracked here: Clash Display and School Times; Plus Jakarta now ships `OFL.txt` (`e47e66b`).
-- **Not done (owner):** history scrub, rotating the dev `API_SECRET` and the old keystore if they were ever live, and
-  moving the root DB dumps.
+**Licences:** Clash Display and School Times are untracked here; Plus Jakarta ships `OFL.txt` (`e47e66b`). Local env
+files in the app repos are untracked, with `.example` files listing the keys. Open security items are tracked in the
+private plan, not here.
 
 **DS 3.7.0** (`516f786..83d6ef0`):
 - **Contrast gate:**
@@ -436,7 +432,7 @@ moved here from the retired `merit-project-admin`. Branch per MIGRATION §2: `fe
 **Open decisions for this track:**
 - Resolved: `components/ui` may be edited (tweakcn picker kept, Merit default); web gets a wireframe round;
   contributor portal is out of this pass; web premium sells but purchase happens in the app; landing stays EN/SI/TA.
-- Prices (Rs 4,990/yr and Rs 599/mo?) for the landing and the student premium page.
+- Prices: settled by Gate 0 (Rs 599/mo, Rs 4,990/yr).
 
 ## How to work here
 

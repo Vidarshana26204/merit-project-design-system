@@ -55,8 +55,6 @@
     ["color.quizOption.wrong.fg", "color.quizOption.wrong.bg", "text"],
     ["color.quizOption.wrong.border", "color.quizOption.wrong.bg", "ui"],
     ["color.quizOption.selected.fg", "color.quizOption.selected.bg", "text"],
-    ["color.timer.fg", "color.timer.warn", "text"],
-    ["color.timer.criticalFg", "color.timer.critical", "text"],
     ["color.tier.achiever.fg", "color.tier.achiever.bg", "text"],
     ["color.grade.a.fg", "color.grade.a.bg", "text"],
     ["color.grade.b.fg", "color.grade.b.bg", "text"],
@@ -115,7 +113,7 @@
   ],
   "$exempt": {
     "color.feedback.success / color.feedback.warning / color.feedback.info (fills)": "Always carry an ink label and icon; the fill is never the only cue. Label pairs are gated (onSuccess, onWarning, onInfo).",
-    "color.reward.points / color.reward.pointsFill": "MeritCoin asset has its own ink outline (D21).",
+    "color.reward.points / color.reward.pointsFill": "reward.points is deprecated (D21, D1 coin): points are drawn with the MeritCoin asset, never this colour. pointsFill is a fill that always carries text.onWarning labels.",
     "color.border.subtle": "Dividers only; never the sole boundary of a control (that is border.control).",
     "color.text.disabled / color.action.disabled / color.border.disabled": "Inactive components are exempt from 1.4.3 and 1.4.11; disabled is also conveyed by semantics and removed hover/press.",
     "color.dataviz.seq1-4 / div2-4": "Ramp fills are read with a legend, labels and value text; only ramp endpoints are gated.",

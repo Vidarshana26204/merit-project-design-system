@@ -1,5 +1,5 @@
 {
-  "version": "3.7.0",
+  "version": "3.7.1",
   "source": "tokens/*.tokens.json",
   "themes": {
     "light": {
@@ -1160,9 +1160,9 @@
       "color.dataviz.seq4": "#C9B3EA",
       "color.dataviz.seq5": "#E7DCF2",
       "color.dataviz.div1": "#FF9A8F",
-      "color.dataviz.div2": "#5A1A1A",
+      "color.dataviz.div2": "#C7362F",
       "color.dataviz.div3": "#3A3048",
-      "color.dataviz.div4": "#1D3B28",
+      "color.dataviz.div4": "#4F8F62",
       "color.dataviz.div5": "#A2D2AE",
       "elevation.e0": [],
       "elevation.e1": [

@@ -239,7 +239,7 @@
     var g = $('#iconGrid'); if (!g) return;
     g.innerHTML = ICONS.map(function (i) {
       var cls = i[1] ? 'ph-' + i[1] : 'ph';
-      var color = i[0] === 'flame' ? ';color:var(--merit-reward-streak)' : i[0] === 'coins' ? ';color:var(--merit-reward-points)' : i[1] === 'duotone' ? ';color:var(--merit-text-link)' : '';
+      var color = i[0] === 'flame' ? ';color:var(--merit-reward-streak)' : i[1] === 'duotone' ? ';color:var(--merit-text-link)' : '';
       return '<div><i class="' + cls + ' ph-' + i[0] + '" style="' + color.slice(1) + '"></i>' + i[0] + '<br><span style="opacity:.7">' + (i[1] || 'regular') + '</span></div>';
     }).join('');
   }

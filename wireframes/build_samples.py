@@ -67,6 +67,19 @@ select coalesce(json_agg(r), '[]') from (
 RULES = "select row_to_json(s) from system_settings s where id = 1"
 TIERS = "select coalesce(json_agg(t order by t.id), '[]') from tiers t"
 
+# qm-samples.js is public (this repo is public). Only the keys GET /public/plans will serve leave the DB; a new
+# system_settings column stays private until it is added here on purpose.
+PUBLIC_RULES = (
+    "free_mastery_daily_limit", "free_paper_daily_limit",
+    "free_enrollment_limit_al", "free_enrollment_limit_ol", "pro_enrollment_limit_al", "pro_enrollment_limit_ol",
+    "points_per_correct_answer", "accuracy_bonus_threshold", "accuracy_bonus_points", "pro_multiplier",
+    "mastery_completion_threshold", "progression_unlock_reward",
+    "force_unlock_base_cost", "force_unlock_cost_increment", "force_unlock_burn_pct",
+    "mastery_weight_quiz", "mastery_weight_notes", "mastery_weight_flashcard",
+    "flashcard_session_points", "flashcard_daily_points_cap", "flashcard_request_retention", "note_completion_points",
+)
+PUBLIC_TIER = ("id", "code", "duration_days", "is_trial")
+
 # Gate 0 (2026-10-23): owner-set launch prices. Moves to tiers.display_price_lkr in Phase B.
 PRICES_LKR = {"PRO_MONTHLY": 599, "PRO_ANNUAL": 4990}
 # go-fsrs v4 via service.newFsrsEngine(0.9, fuzz off), probe run 2026-10-23. Seconds.
@@ -151,9 +164,9 @@ def main():
         "questions": qs,
         "flashcards": cards,
     }
-    rules = json.loads(sql(db, RULES))
-    rules.pop("updated_at", None)
-    tiers = json.loads(sql(db, TIERS))
+    row = json.loads(sql(db, RULES))
+    rules = {k: row[k] for k in PUBLIC_RULES}
+    tiers = [{k: t[k] for k in PUBLIC_TIER} for t in json.loads(sql(db, TIERS))]
     for t in tiers:
         t["price_lkr"] = PRICES_LKR.get(t["code"])
     out["rules"] = rules

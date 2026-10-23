@@ -41,9 +41,11 @@ def pts(p):
     return " ".join(f"{x:.2f},{y:.2f}" for x, y in p)
 
 
-def svg(title, body):
+def svg(title, body, uid="merit-coin"):
+    """`uid` prefixes every id, so several coins inlined on one page keep unique ids and the right accessible name."""
+    body = body.replace('id="m"', f'id="{uid}-m"').replace("url(#m)", f"url(#{uid}-m)")
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" '
-            f'aria-labelledby="t"><title id="t">{title}</title>{body}</svg>\n')
+            f'aria-labelledby="{uid}-t"><title id="{uid}-t">{title}</title>{body}</svg>\n')
 
 
 TONES = [C("orange", "300"), C("orange", "400"), C("orange", "500"), C("orange", "700")]
@@ -135,7 +137,7 @@ def coin_c(line, small):
 
 
 # ---------------------------------------------------------------- D · Flat gold (owner reference: flat disc + white knock-out)
-RIM = mix(DEEP, C("orange", "700"), 0.48)
+RIM = mix(DEEP, C("orange", "700"), 0.55)   # 3.2:1 on bg.app (canvas.50), so the coin edge passes 1.4.11
 # The Merit mark's facet colours (assets/v3/brand/merit-mark.svg): orange top, violet right, sage left.
 BRAND = [C("orange", "500"), C("violet", "500"), C("violet", "700"), C("sage", "500")]
 BRAND_DARK = [C("orange", "400"), C("violet", "300"), C("violet", "500"), C("sage", "300")]   # dark cut: the 300/400 steps
@@ -225,14 +227,14 @@ def final():
     name, fn = CONCEPTS[FINAL]
     files = {
         "merit-coin.svg": ("Merit Points coin", fn(INK, False)),
-        "merit-coin-small.svg": ("Merit Points coin — small sizes (≤24px)", fn(INK, True)),
-        "merit-coin-dark.svg": ("Merit Points coin — for dark backgrounds", fn(CREAM, False)),
-        "merit-coin-small-dark.svg": ("Merit Points coin — small sizes, dark backgrounds", fn(CREAM, True)),
-        "merit-coin-glyph-bold.svg": ("merit-coin icon (Bold)", glyph_bold()),
-        "merit-coin-glyph-fill.svg": ("merit-coin icon (Fill)", glyph_fill()),
+        "merit-coin-small.svg": ("Merit Points coin", fn(INK, True)),
+        "merit-coin-dark.svg": ("Merit Points coin", fn(CREAM, False)),
+        "merit-coin-small-dark.svg": ("Merit Points coin", fn(CREAM, True)),
+        "merit-coin-glyph-bold.svg": ("Merit Points", glyph_bold()),
+        "merit-coin-glyph-fill.svg": ("Merit Points", glyph_fill()),
     }
     for f, (title, body) in files.items():
-        open(os.path.join(V3_BRAND, f), "w").write(svg(f"v3 · {title}", body))
+        open(os.path.join(V3_BRAND, f), "w").write(svg(title, body, uid=f[:-4]))
     print("wrote", ", ".join(files))
 
 
@@ -241,7 +243,7 @@ def main():
     for k, (name, fn) in CONCEPTS.items():
         for cut, line, small in (("full", INK, False), ("small", INK, True), ("dark", CREAM, False), ("dark-small", CREAM, True)):
             path = os.path.join(OUT, f"{k}-{cut}.svg")
-            open(path, "w").write(svg(f"Merit Points coin concept {k.upper()} · {name} · {cut}", fn(line, small)))
+            open(path, "w").write(svg(f"Merit Points coin concept {k.upper()} · {name} · {cut}", fn(line, small), uid=f"coin-{k}-{cut}"))
     print("wrote", sorted(os.listdir(OUT)))
 
 

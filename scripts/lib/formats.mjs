@@ -232,7 +232,7 @@ export function formatDart(themes, version, scripts) {
       ...group('fontFamily').map((t) => `static const String ${dartName(t)} = '${t.extensions['merit.flutter']}';${doc(t)}`),
       `static const List<String> fallback = [${(group('fontFamily')[0]?.extensions['merit.flutterFallback'] ?? []).map((f) => `'${f}'`).join(', ')}];`,
     ]),
-    ...cls('Unified type scale (Latin). For SI/TA content use MeritTypeScaleSi / MeritTypeScaleTa (or MeritTypeScales.of).', 'MeritTypeScale', typeStyles),
+    ...cls('Unified type scale (Latin). For SI/TA content use MeritTypeScaleSi / MeritTypeScaleTa (or MeritTypeScaleSet.of).', 'MeritTypeScale', typeStyles),
     ...cls('Sinhala overrides (tokens/scripts.json): tracking 0, height ≥ 1.6 body / 1.3 display, no uppercase.', 'MeritTypeScaleSi', scriptClass('si')),
     ...cls('Tamil overrides (tokens/scripts.json): as Sinhala, and display sizes one step down.', 'MeritTypeScaleTa', scriptClass('ta')),
     '/// The type scale for a content language: `MeritTypeScaleSet.of(lang).bodyLg`.',

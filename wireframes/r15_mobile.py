@@ -180,7 +180,7 @@ def onb(step, total, title, body, skip):
 
 
 ONB_AL = onb(4, 5, "Which school?", f'<div class="inp focus">{I("magnifying-glass")}Visakha<span class="sp"></span></div><div class="list">{li("graduation-cap", "Visakha Vidyalaya", "Colombo 05", "")}{li("graduation-cap", "Visakha Balika Vidyalaya", "Kandy", "")}</div><span class="xs t3">Used for school and district leaderboards. You can add it later.</span>', True)
-ONB_OL = onb(3, 4, "Your O/L subjects", f'<span class="sm t2">Up to 5 on Wanderer · the 6 core subjects are picked for you</span><div class="list">{li("check-circle-fill", "Mathematics", "Core", "")}{li("check-circle-fill", "Science", "Core", "")}{li("circle-dashed", "ICT", "Basket 3", "")}</div>', False)
+ONB_OL = onb(3, 4, "Your O/L subjects", f'<span class="sm t2">Up to 6 on Wanderer · the core subjects are picked for you</span><div class="list">{li("check-circle-fill", "Mathematics", "Core", "")}{li("check-circle-fill", "Science", "Core", "")}{li("circle-dashed", "ICT", "Basket 3", "")}</div>', False)
 s_onb = screen("r15-onb", "Onboarding · back and skip, A/L 5 steps and O/L 4", GAP,
     "<b>O/L is blocked in this release</b> (no O/L subject coverage yet): the level step shows O/L disabled with \"O/L isn't available yet. Pick A/L to continue.\", as the app does today. The O/L frame is for when coverage lands. Back on every step after the first; Skip only on optional steps (school, avatar). Step count is A/L 5 (level and year, stream, subjects, school, avatar) and O/L 4 (level and year, subjects, school, avatar). This replaces DECISIONS' \"3 steps\".",
     "POST /students/me · /enrollments · GET /schools?q= (needs API: school lookup) · O/L onboarding (needs API)",

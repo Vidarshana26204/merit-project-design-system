@@ -15,8 +15,8 @@ is done and the top screens have been reviewed.
 **Branch:** `feat/design-system-v3` from `dev`. **Layouts:** follow `wireframes/DECISIONS.md` (the picked
 variants on `wireframes.html`); this section says how, the board says what.
 
-**Status (2026-10-21):** §1.1, §1.2 and the guard are done on the Flutter branch (`920b5bb`, DS 3.5.0 pinned).
-Next is §1.3.
+**Status (2026-10-24):** every v3 screen is built on the Flutter branch, which vendors DS 3.7.0 (`633bbdf`) and the
+D1 coin (`89b53c7`). Remaining Flutter work is the Step 3 list in the pre-release plan (see `HANDOFF.md`).
 
 ### 1.1 Tokens and fonts
 1. Copy `build/dart/merit_tokens.dart` to `lib/theme/merit_tokens.dart` exactly as generated.

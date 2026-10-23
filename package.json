@@ -1,6 +1,6 @@
 {
   "name": "merit-design-system",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "private": true,
   "description": "Merit Project design tokens + reference site. Zero runtime dependencies.",
   "type": "module",

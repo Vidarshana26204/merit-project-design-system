@@ -5,6 +5,20 @@ and **changing a value** is patch. The version lives in `package.json` and is st
 into every generated file. The reference site (`Merit Design System.html`) carries its
 own doc version (shown in its sidebar) for changes to the site itself, not the tokens.
 
+## 3.7.1 · 2026-10-24 (pre-build fixes)
+
+- **Patch:** dark `dataviz.div2` / `div4` are now `red.600` / `sage.600`, so the diverging ramp steps evenly in
+  lightness towards the neutral centre (they were darker than `div3`).
+- **Gate:** the deprecated timer-pill pairs leave the gate (218 checks). The `reward.points` exemption now says why:
+  points are drawn with the D1 coin asset. Nothing in this repo uses `--merit-reward-points` or the `--merit-timer-*`
+  pill tokens any more; they are still emitted until v4.0 (no later than 2026-12-31).
+- **SI/TA:** `.eyebrow` reads `--merit-type-eyebrow-transform`, so Sinhala and Tamil eyebrows are no longer uppercased.
+- **Coin:** ids are prefixed per file (several coins can be inlined on one page), titles are plain "Merit Points
+  coin", and the rim is 3.2:1 on `bg.app` (was 2.97:1).
+- **Boards:** `build_samples.py` writes only an allow-list of `system_settings` keys to the public `qm-samples.js`.
+  O/L onboarding copy says up to 6 subjects (the stored rule).
+- **CI:** the patchwork job installs `fonttools`.
+
 ## Brand · 2026-10-24 (tokens unchanged at 3.7.0)
 
 - **New Merit Points coin (D21 rev 1, concept D1):** `assets/v3/brand/merit-coin{,-small,-dark,-small-dark}.svg` and
