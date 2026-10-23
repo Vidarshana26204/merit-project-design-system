@@ -501,3 +501,90 @@ html:root .tone .pwwash { background: var(--tone-wash); opacity: .30; }
 .coin.lg { background-image: url("assets/v3/brand/merit-coin.svg"); }
 .dark .coin, [data-theme="dark"] .coin { background-image: url("assets/v3/brand/merit-coin-dark.svg"); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .coin { background-image: url("assets/v3/brand/merit-coin-dark.svg"); } }
+
+/* ======================= v3.7 state model (§15) =======================
+   Hover / pressed = a state layer (state.hover / state.pressed) painted over the fill, so every
+   variant gets both states from two tokens. Disabled = disabled colours, not opacity. */
+.btn, .chip, .opt, .seg button, .pager button { position: relative; isolation: isolate; }
+.btn:not(.link)::before, .chip::before, .opt::before, .pager button::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: transparent; pointer-events: none; z-index: -1; transition: background var(--merit-duration-fast) var(--merit-easing-standard); }
+.btn:not(.link):hover::before, .chip:hover::before, .opt:not([aria-disabled="true"]):hover::before, .pager button:hover::before, .btn.is-hover::before, .opt.is-hover::before, .chip.is-hover::before { background: var(--merit-state-hover); }
+.btn:not(.link):active::before, .chip:active::before, .opt:not([aria-disabled="true"]):active::before, .btn.is-pressed::before { background: var(--merit-state-pressed); }
+.btn.primary:hover { background: var(--merit-action-primary); }
+.btn.accent:hover { background: var(--merit-action-accent); }
+.btn.ghost:hover { background: transparent; }
+.btn.primary:active, .btn.primary.is-pressed { background: var(--merit-action-primary-pressed); }
+.btn.accent:active, .btn.accent.is-pressed { background: var(--merit-action-accent-pressed); }
+.btn[disabled], .btn.disabled { opacity: 1; background: var(--merit-action-disabled); color: var(--merit-text-disabled); box-shadow: none; }
+.btn.ghost[disabled] { background: transparent; box-shadow: inset 0 0 0 var(--merit-border-width-base) var(--merit-border-disabled); }
+.btn.link[disabled] { background: none; }
+/* focus on dark grounds: ringOnFeature / ringOnInverse */
+.card.feature :focus-visible, .band :focus-visible, .on-feature:focus-visible { outline-color: var(--merit-focus-ring-on-feature); }
+.btn.inverse:focus-visible, .toast :focus-visible, .tooltip :focus-visible { outline-color: var(--merit-focus-ring-on-inverse); }
+:focus-visible { outline-width: var(--merit-focus-ring-width); outline-offset: var(--merit-focus-ring-offset); }
+.is-focus { outline: var(--merit-focus-ring-width) solid var(--merit-focus-ring); outline-offset: var(--merit-focus-ring-offset); }
+.btn.inverse.is-focus { outline-color: var(--merit-focus-ring-on-inverse); }
+
+/* inputs */
+.input.is-focus, .input:focus { outline: none; border-color: var(--merit-focus-ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--merit-focus-ring) 25%, transparent); }
+.field.err .input { border-color: var(--merit-feedback-error); }
+.field.err .help { color: var(--merit-feedback-error-text); }
+.input:disabled, .field.dis .input { background: var(--merit-action-disabled); border-color: var(--merit-border-disabled); color: var(--merit-text-disabled); cursor: not-allowed; }
+.field.dis label { color: var(--merit-text-disabled); }
+.input[readonly], .field.ro .input { background: var(--merit-surface-sunken); border-color: transparent; color: var(--merit-text-primary); }
+textarea.input { min-height: 96px; padding-block: 12px; resize: vertical; line-height: 1.5; }
+.select { position: relative; } .select .input { appearance: none; padding-right: 40px; }
+.select i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--merit-text-secondary); }
+.otp .input.is-focus { border-color: var(--merit-focus-ring); }
+.otp.err .input { border-color: var(--merit-feedback-error); }
+
+/* quiz option */
+.opt.is-focus { outline: var(--merit-focus-ring-width) solid var(--merit-focus-ring); outline-offset: var(--merit-focus-ring-offset); }
+.opt.locked { cursor: default; color: var(--merit-text-secondary); }
+.opt.locked .l { color: var(--merit-text-secondary); }
+
+/* chips & toggles */
+.chip[disabled], .chip.disabled { box-shadow: none; border-color: var(--merit-border-disabled); color: var(--merit-text-disabled); background: transparent; pointer-events: none; }
+.toggle[disabled], .check[disabled] { background: var(--merit-action-disabled); border-color: var(--merit-border-disabled); cursor: not-allowed; }
+.toggle[disabled]::after { box-shadow: none; background: var(--merit-surface-sunken); }
+.toggle:hover:not([disabled])::before { content: ""; position: absolute; inset: -6px; border-radius: inherit; background: var(--merit-state-hover); }
+
+/* toasts: inverse surface, icon carries the meaning; info/success/error */
+.toast .info { color: var(--merit-feedback-info); }
+.toast .act { color: inherit; }
+.alert { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--merit-radius-lg); font-size: 14px; }
+.alert i { font-size: 20px; flex: none; }
+.alert.info { background: var(--merit-feedback-info-subtle); color: var(--merit-text-primary); } .alert.info i { color: var(--merit-feedback-info-text); }
+.alert.warn { background: var(--merit-feedback-warning-subtle); color: var(--merit-text-primary); } .alert.warn i { color: var(--merit-feedback-warning-text); }
+.alert.err { background: var(--merit-feedback-error-subtle); color: var(--merit-text-primary); } .alert.err i, .alert.err b { color: var(--merit-feedback-error-text); }
+.alert.ok { background: var(--merit-feedback-success-subtle); color: var(--merit-text-primary); } .alert.ok i { color: var(--merit-feedback-success-text); }
+
+/* progress: indeterminate (static 30% bar under reduced motion) */
+.progress.indet > i { width: 30%; }
+@media (prefers-reduced-motion: no-preference) { .progress.indet > i { animation: indet 1.3s var(--merit-easing-standard) infinite; } @keyframes indet { from { transform: translateX(-100%); } to { transform: translateX(340%); } } }
+
+/* skeleton uses skeleton tokens */
+.skel { background: var(--merit-skeleton-base); }
+.scrim { background: var(--merit-scrim); }
+
+/* avatar, tooltip, pagination, admin table */
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; background: var(--merit-category-5); color: var(--merit-category-fg); font: 700 15px var(--font-display); box-shadow: inset 0 0 0 var(--merit-border-width-base) var(--merit-category-outline); overflow: hidden; }
+.avatar.sm { width: 28px; height: 28px; font-size: 12px; } .avatar.lg { width: 64px; height: 64px; font-size: 22px; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar.empty { background: var(--merit-surface-sunken); color: var(--merit-text-secondary); box-shadow: none; }
+.tooltip { display: inline-block; position: relative; background: var(--merit-surface-inverse); color: var(--merit-text-on-inverse); font: 600 12.5px/1.35 var(--font-body); padding: 6px 10px; border-radius: var(--merit-radius-sm); box-shadow: var(--merit-elevation-e2); max-width: 240px; }
+.tooltip::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: inherit; transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
+.pager { display: inline-flex; gap: 4px; align-items: center; }
+.pager button { min-width: 36px; height: 36px; border: 0; border-radius: var(--merit-radius-sm); background: transparent; color: var(--merit-text-primary); font: 600 13px var(--font-body); cursor: pointer; }
+.pager button[aria-current="page"] { background: var(--merit-surface-selected); color: var(--merit-text-primary); box-shadow: inset 0 0 0 var(--merit-border-width-strong) var(--merit-focus-ring); }
+.pager button[disabled] { color: var(--merit-text-disabled); cursor: not-allowed; }
+.pager .gap { color: var(--merit-text-tertiary); padding: 0 4px; }
+table.spec.data { min-width: 560px; }
+table.spec.data th { font: 700 11px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--merit-text-secondary); }
+table.spec.data th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
+table.spec.data tr[aria-selected="true"] td { background: var(--merit-surface-selected); }
+table.spec.data td, table.spec.data th { padding: var(--merit-density-compact-cell-pad-y) var(--merit-density-compact-cell-pad-x); height: var(--merit-density-compact-row-height); }
+.stateGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; align-items: end; }
+.stateGrid figure { margin: 0; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.stateGrid figcaption { font: 700 11px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--merit-text-tertiary); }
+.lbEmpty { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: var(--merit-radius-lg); background: var(--merit-surface-sunken); }
+.flowTbl td:first-child { white-space: nowrap; font-weight: 700; }

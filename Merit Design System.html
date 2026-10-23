@@ -61,8 +61,9 @@
       <a href="#screens"><span class="ix">28</span> Screen specimens</a>
       <a href="wireframes.html"><span class="ix">↗</span> Mobile wireframes</a>
       <a href="#landing"><span class="ix">29</span> Landing specimen</a>
-      <a href="#tokens"><span class="ix">30</span> Tokens</a>
-      <a href="#changelog"><span class="ix">31</span> Changelog</a>
+      <a href="#flows"><span class="ix">30</span> Flow specs</a>
+      <a href="#tokens"><span class="ix">31</span> Tokens</a>
+      <a href="#changelog"><span class="ix">32</span> Changelog</a>
     </nav>
 
     <div class="sideFoot">
@@ -363,9 +364,81 @@ FilledButton(
 
 <!-- ======================= 15 STATES ======================= -->
 <section class="sec" id="states">
-  <div class="secHead"><span class="eyebrow">15 · States &amp; focus</span><h2>Visible focus, everywhere.</h2>
-    <p class="lede">Focus is a 3&nbsp;px violet outline with a 2&nbsp;px offset (≥3:1 on every surface). Tab through the row below. Hover darkens fills or lifts cards. Disabled is .4 opacity with no elevation.</p></div>
-  <div class="panel row"><button class="btn primary">Tab to me</button><button class="chip" aria-pressed="false">Chip</button><a href="#states">Link</a><input class="input" style="max-width:200px" placeholder="Input" aria-label="Demo input" /><button class="btn ghost" disabled>Disabled</button></div>
+  <div class="secHead"><span class="eyebrow">15 · States &amp; focus</span><h2>Every state, <span class="u">specified</span>.</h2>
+    <p class="lede">Focus is a <code>focusRing.width</code> 3&nbsp;px outline at a 2&nbsp;px offset in <code>focus.ring</code>, switching to <code>focus.ringOnFeature</code> on violet bands and <code>focus.ringOnInverse</code> on inverse surfaces, so it clears 3:1 on every surface (gated). Hover and pressed are one <b>state layer</b> (<code>state.hover</code> 6%, <code>state.pressed</code> 12%) painted over any fill. Disabled uses <code>action.disabled</code> / <code>text.disabled</code> / <code>border.disabled</code> with no elevation and no hover. It never relies on opacity, and it is never the only cue: set <code>disabled</code> / <code>aria-disabled</code>.</p></div>
+
+  <div class="panel"><span class="label">Buttons · default → hover → pressed → focus → disabled → loading</span>
+    <div class="stateGrid">
+      <figure><figcaption>Primary</figcaption><button class="btn primary sm">Default</button><button class="btn primary sm is-hover">Hover</button><button class="btn primary sm is-pressed">Pressed</button><button class="btn primary sm is-focus">Focus</button><button class="btn primary sm" disabled>Disabled</button><button class="btn primary sm loading" aria-busy="true">Saving</button></figure>
+      <figure><figcaption>Strong</figcaption><button class="btn strong sm">Default</button><button class="btn strong sm is-hover">Hover</button><button class="btn strong sm is-pressed">Pressed</button><button class="btn strong sm is-focus">Focus</button><button class="btn strong sm" disabled>Disabled</button></figure>
+      <figure><figcaption>Accent</figcaption><button class="btn accent sm">Default</button><button class="btn accent sm is-hover">Hover</button><button class="btn accent sm is-pressed">Pressed</button><button class="btn accent sm is-focus">Focus</button><button class="btn accent sm" disabled>Disabled</button></figure>
+      <figure><figcaption>Ghost</figcaption><button class="btn ghost sm">Default</button><button class="btn ghost sm is-hover">Hover</button><button class="btn ghost sm is-pressed">Pressed</button><button class="btn ghost sm is-focus">Focus</button><button class="btn ghost sm" disabled>Disabled</button></figure>
+      <figure><figcaption>Inverse</figcaption><button class="btn inverse sm">Default</button><button class="btn inverse sm is-hover">Hover</button><button class="btn inverse sm is-pressed">Pressed</button><button class="btn inverse sm is-focus">Focus</button><button class="btn inverse sm" disabled>Disabled</button></figure>
+    </div>
+    <p class="muted" style="margin-top:12px">In dark mode <code>action.primaryStrong</code> equals <code>action.primary</code> (both carry an ink label), so Strong renders like Primary there by design. Use Strong only for dense light-mode contexts that need a white label.</p>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel stack"><span class="label">Inputs</span>
+      <div class="field"><label for="s1">Default</label><input id="s1" class="input" placeholder="Placeholder · text.tertiary" /></div>
+      <div class="field"><label for="s2">Focus</label><input id="s2" class="input is-focus" value="Kasun" /></div>
+      <div class="field err"><label for="s3">Error</label><input id="s3" class="input" value="kasun@" aria-invalid="true" aria-describedby="s3h" /><span class="help" id="s3h"><i class="ph-fill ph-warning-circle"></i> Enter a full email address.</span></div>
+      <div class="field dis"><label for="s4">Disabled</label><input id="s4" class="input" value="Grade 11" disabled /></div>
+      <div class="field ro"><label for="s5">Read-only</label><input id="s5" class="input" value="+94 77 123 4567" readonly /><span class="help">Change your number in Account.</span></div>
+    </div>
+    <div class="panel stack"><span class="label">Select, textarea, OTP</span>
+      <div class="field"><label for="s6">District</label><div class="select"><select id="s6" class="input"><option>Colombo</option><option>Kandy</option><option>Jaffna</option></select><i class="ph ph-caret-down"></i></div></div>
+      <div class="field"><label for="s7">Tell us what's wrong</label><textarea id="s7" class="input" placeholder="At least 10 characters"></textarea><span class="help">0 / 500</span></div>
+      <div class="field"><label>Code · focus on digit 3</label><div class="otp"><input class="input" value="4" aria-label="Digit 1" /><input class="input" value="2" aria-label="Digit 2" /><input class="input is-focus" aria-label="Digit 3" /><input class="input" aria-label="Digit 4" /><input class="input" aria-label="Digit 5" /><input class="input" aria-label="Digit 6" /></div></div>
+      <div class="field err"><label>Code · wrong</label><div class="otp err"><input class="input" value="4" aria-label="Digit 1" /><input class="input" value="2" aria-label="Digit 2" /><input class="input" value="9" aria-label="Digit 3" /><input class="input" value="1" aria-label="Digit 4" /><input class="input" value="0" aria-label="Digit 5" /><input class="input" value="7" aria-label="Digit 6" /></div><span class="help"><i class="ph-fill ph-warning-circle"></i> That code didn't match. 2 tries left.</span></div>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel"><span class="label">Quiz option · idle edge is <code>border.control</code> (3:1)</span>
+      <button class="opt"><span class="l">A</span>Idle</button>
+      <button class="opt is-hover"><span class="l">B</span>Hover (pointer only)</button>
+      <button class="opt is-focus"><span class="l">C</span>Keyboard focus</button>
+      <button class="opt sel" aria-pressed="true"><span class="l">D</span>Selected<i class="ph-fill ph-circle ic" style="color:var(--merit-focus-ring)"></i></button>
+      <div class="opt locked" aria-disabled="true"><span class="l">E</span>Locked after submit (not picked)</div>
+      <p class="muted" style="margin-top:10px">Locked options lose hover and press, keep their text at <code>text.secondary</code> and stay readable. Correct, wrong and revealed are in §17.</p>
+    </div>
+    <div class="panel stack"><span class="label">Chips &amp; toggles</span>
+      <div class="chips"><button class="chip" aria-pressed="false">Default</button><button class="chip is-hover" aria-pressed="false">Hover</button><button class="chip is-focus" aria-pressed="false">Focus</button><button class="chip" aria-pressed="true">Selected</button><button class="chip" aria-pressed="false" disabled>Disabled</button></div>
+      <div class="row"><button class="toggle" aria-pressed="false" aria-label="Off"></button><button class="toggle on" aria-pressed="true" aria-label="On"></button><button class="toggle" aria-pressed="false" aria-label="Disabled off" disabled></button><button class="check" aria-label="Unchecked"></button><button class="check on" aria-label="Checked">✓</button><button class="check" aria-label="Disabled" disabled></button></div>
+      <span class="label">Toasts &amp; alerts</span>
+      <div class="toast" role="status"><i class="ph-fill ph-check-circle lead ok"></i>Saved to your flashcards<button class="act">Undo</button></div>
+      <div class="toast" role="alert"><i class="ph-fill ph-x-circle lead bad"></i>Couldn't save. Check your connection.<button class="act">Retry</button></div>
+      <div class="toast" role="status"><i class="ph-fill ph-info lead info"></i>New past papers were added to Biology.</div>
+      <div class="alert info"><i class="ph-fill ph-info"></i><div>Your plan resets at midnight (Sri Lanka time).</div></div>
+      <div class="alert warn"><i class="ph-fill ph-warning"></i><div>2 paper attempts left today.</div></div>
+      <div class="alert err"><i class="ph-fill ph-warning-circle"></i><div><b>Payment failed.</b> Your Achiever access ends on 30 Nov.</div></div>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-top:16px">
+    <div class="panel stack"><span class="label">Progress · indeterminate</span><div class="progress calm indet" role="progressbar" aria-label="Loading questions"><i></i></div><span class="muted">Use when the total is unknown. Static 30% bar under reduced motion.</span></div>
+    <div class="panel stack"><span class="label">Avatar</span><div class="row"><span class="avatar sm" aria-hidden="true">K</span><span class="avatar" role="img" aria-label="Kasun Perera">KP</span><span class="avatar lg" role="img" aria-label="Nila">N</span><span class="avatar empty" role="img" aria-label="No avatar"><i class="ph ph-user"></i></span></div><span class="muted">Initials on a category tint with an ink rim; chosen avatar art replaces them (<code>avatar_id</code>).</span></div>
+    <div class="panel stack"><span class="label">Tooltip · pagination</span><span class="tooltip" role="tooltip">Points double on Achiever ×1.5</span><nav class="pager" aria-label="Pages"><button disabled aria-label="Previous page"><i class="ph ph-caret-left"></i></button><button aria-current="page">1</button><button>2</button><button>3</button><span class="gap">…</span><button>12</button><button aria-label="Next page"><i class="ph ph-caret-right"></i></button></nav><span class="muted">Tooltips show on hover and focus, hide on Esc, and never hold the only copy of anything.</span></div>
+  </div>
+
+  <div class="panel compact tblWrap" style="margin-top:16px"><span class="label">Admin data table · compact density (D7)</span>
+    <table class="spec data">
+      <thead><tr><th><input type="checkbox" aria-label="Select all" /></th><th><button aria-sort="ascending">Student <i class="ph-bold ph-caret-up"></i></button></th><th>School</th><th><button>Points <i class="ph ph-caret-up-down"></i></button></th><th>Tier</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox" aria-label="Select Amaya" /></td><td><span class="row" style="gap:8px"><span class="avatar sm" aria-hidden="true">A</span>Amaya S.</span></td><td>Visakha Vidyalaya</td><td class="mono">12,480</td><td><span class="badge violet">Achiever</span></td><td><button class="btn icon" aria-label="More for Amaya"><i class="ph ph-dots-three"></i></button></td></tr>
+        <tr aria-selected="true"><td><input type="checkbox" checked aria-label="Select Dinuk" /></td><td><span class="row" style="gap:8px"><span class="avatar sm" aria-hidden="true">D</span>Dinuk R.</span></td><td>Royal College</td><td class="mono">9,310</td><td><span class="badge">Wanderer</span></td><td><button class="btn icon" aria-label="More for Dinuk"><i class="ph ph-dots-three"></i></button></td></tr>
+      </tbody>
+    </table>
+    <div class="row" style="justify-content:space-between;margin-top:10px"><span class="muted">1 selected · 2 of 1,204</span><nav class="pager" aria-label="Table pages"><button disabled aria-label="Previous page"><i class="ph ph-caret-left"></i></button><button aria-current="page">1</button><button>2</button><button aria-label="Next page"><i class="ph ph-caret-right"></i></button></nav></div>
+  </div>
+
+  <div class="grid g4" style="margin-top:16px">
+    <div class="panel stack"><span class="label">Leaderboard · empty</span><div class="lbEmpty"><span class="avatar empty"><i class="ph ph-ranking"></i></span><div><b>No ranks yet this week</b><div class="muted">Answer 10 questions to join.</div></div></div><button class="btn primary sm">Start practice</button></div>
+    <div class="panel stack"><span class="label">Leaderboard · loading</span><div class="row"><div class="skel" style="width:28px;height:28px;border-radius:50%"></div><div class="skel" style="height:12px;flex:1"></div></div><div class="row"><div class="skel" style="width:28px;height:28px;border-radius:50%"></div><div class="skel" style="height:12px;flex:1"></div></div><div class="row"><div class="skel" style="width:28px;height:28px;border-radius:50%"></div><div class="skel" style="height:12px;flex:1"></div></div></div>
+    <div class="panel stack"><span class="label">Chart · empty / loading</span><div class="skel" style="height:90px"></div><span class="muted">No data: keep the axes, show "Answer a few questions to see your accuracy" centred. Never draw zero bars.</span></div>
+    <div class="panel stack"><span class="label">Quilt · loading</span><div class="row" style="flex-wrap:wrap;gap:6px"><div class="skel" style="width:44px;height:44px;border-radius:var(--merit-radius-lg)"></div><div class="skel" style="width:44px;height:44px;border-radius:var(--merit-radius-lg)"></div><div class="skel" style="width:44px;height:44px;border-radius:var(--merit-radius-lg)"></div><div class="skel" style="width:44px;height:44px;border-radius:var(--merit-radius-lg)"></div></div><span class="muted">Tiles keep their final size. Missing art falls back to the category tint + Phosphor duotone (§21), never a blank.</span></div>
+  </div>
 </section>
 
 <!-- ======================= 16 GAME ======================= -->
@@ -541,7 +614,7 @@ FilledButton(
 <!-- ======================= 24 CHART ======================= -->
 <section class="sec" id="chart">
   <div class="secHead"><span class="eyebrow">24 · Data viz</span><h2>Legend and tooltip, always.</h2>
-    <p class="lede">The categorical palette is <code>chart.1–5</code>: violet, orange, sage, butter, sky. The streak heatmap is a four-step orange ramp on sunken. Never rely on colour alone, so always include a legend and data labels.</p></div>
+    <p class="lede">The categorical palette is <code>chart.1–5</code> (violet, orange, sage, butter, sky), with dark variants via <code>dataviz.cat*</code>; every series clears 3:1 on its surface in both themes. Ramps: <code>dataviz.seq1–5</code> (sequential, violet) and <code>dataviz.div1–5</code> (diverging, red → neutral → sage). The streak heatmap is a four-step orange ramp on sunken. Never rely on colour alone, so always include a legend and data labels.</p></div>
   <div class="grid g2">
     <div class="panel"><span class="label">Accuracy by subject</span><div class="bars" id="bars"></div><div class="legend" id="legend"></div></div>
     <div class="panel"><span class="label">Study heatmap · last 15 weeks</span><div class="heat" id="heat"></div><div class="legend"><span>Less</span><span class="dot" style="background:var(--merit-surface-sunken)"></span><span class="dot" style="background:color-mix(in srgb,var(--merit-action-primary) 25%,var(--merit-surface-sunken))"></span><span class="dot" style="background:color-mix(in srgb,var(--merit-action-primary) 55%,var(--merit-surface-sunken))"></span><span class="dot" style="background:var(--merit-action-primary)"></span><span>More</span></div></div>
@@ -706,18 +779,53 @@ FilledButton(
   </div>
 </section>
 
-<!-- ======================= 30 TOKENS ======================= -->
+<!-- ======================= 30 FLOW SPECS ======================= -->
+<section class="sec" id="flows">
+  <div class="secHead"><span class="eyebrow">30 · Flow specs</span><h2>The flows the boards <span class="u">still</span> need.</h2>
+    <p class="lede">These flows are missing from the mobile or web wireframe board, or exist in code without a design (pre-release audit, 2026-10-23). Each is built only from §07–§20 components and their §15 states. Gate 0 decisions are folded in: prices, Sri Lanka midnight, reminders hidden for v1, the subject-page language switch, and the 30% prediction gate.</p></div>
+  <div class="panel tblWrap">
+    <table class="spec flowTbl">
+      <thead><tr><th>Flow</th><th>Where</th><th>Entry</th><th>Contents</th><th>States</th><th>Needs</th></tr></thead>
+      <tbody>
+        <tr><td>Email verification</td><td>Both</td><td>After email sign-up; banner on Today until verified</td><td>Envelope spot, masked address, 6-digit OTP (§15 OTP states), Resend with 60 s countdown, Change email link</td><td>Sent · wrong code (tries left) · expired · resend cooldown · verified → toast + continue</td><td>—</td></tr>
+        <tr><td>Maintenance</td><td>Both</td><td>API 503 with maintenance flag, any screen</td><td>Full-screen line-art spot, one line, ETA if known, Retry; no tab bar</td><td>Retry loading · still down</td><td>Backend: maintenance flag + ETA field</td></tr>
+        <tr><td>Update required / available</td><td>Mobile</td><td>Version check on launch (<code>update_dialog.dart</code>)</td><td>Required: blocking sheet, single Update action to the store. Optional: dismissible sheet, Later + Update</td><td>Required (no dismiss) · optional (once per version)</td><td>—</td></tr>
+        <tr><td>Notification pre-prompt</td><td>Mobile</td><td><b>Hidden for v1</b> (Gate 0). Spec kept for v1.1: after the first finished session</td><td>Bell spot, value line, Allow / Not now, then OS prompt</td><td>Allowed · not now (ask again after 7 days) · denied → Settings link</td><td>Firebase (v1.1)</td></tr>
+        <tr><td>Subscription manage</td><td>Both</td><td>Me › Account › Subscription</td><td>Plan, price (Rs 599 / mo or Rs 4,990 / yr), renews/ends date, store it was bought in, Manage in store, Restore purchases, cancel copy</td><td>Active · trial (14 days) · cancelled (access until date) · billing issue (§15 error alert) · expired</td><td>Web shows status read-only for app purchases</td></tr>
+        <tr><td>Restore purchases</td><td>Mobile</td><td>Subscription screen + paywall footer</td><td>Spinner on the button, then toast</td><td>Restored · nothing to restore · failed (retry)</td><td>RevenueCat</td></tr>
+        <tr><td>Legal pages</td><td>Both</td><td>Me › About; sign-up footer</td><td>In-app reader: Terms, Privacy, Refunds; title, updated date, body at body.lg, back</td><td>Loading · offline (cached copy + note)</td><td>—</td></tr>
+        <tr><td>Change password</td><td>Both</td><td>Me › Account (email/password accounts only)</td><td>Current, new, confirm; strength hint; Save</td><td>Wrong current · weak · mismatch · saved (toast)</td><td>Backend: authenticated change-password</td></tr>
+        <tr><td>Forgot password</td><td>Both (web missing)</td><td>Sign-in › Forgot password</td><td>Email or +94 number → OTP → new password</td><td>Unknown account (neutral copy) · OTP states · success → signed in</td><td>Backend: reset returns tokens</td></tr>
+        <tr><td>Sign-out confirmation</td><td>Both</td><td>Me › Account › Sign out</td><td>Dialog: “Sign out of Merit?” Cancel / Sign out (ghost + strong)</td><td>—</td><td>—</td></tr>
+        <tr><td>Session expired</td><td>Both</td><td>401 after refresh fails</td><td>Sheet over the current screen: “Please sign in again”, Sign in; return to the same route after</td><td>—</td><td>—</td></tr>
+        <tr><td>Help / contact</td><td>Both</td><td>Me › Help</td><td>FAQ list (shared with the landing FAQ from <code>/public/plans</code>), Report a problem (§15 textarea), WhatsApp / email links</td><td>Sent · offline</td><td>—</td></tr>
+        <tr><td>Onboarding back + skip</td><td>Mobile</td><td>Each onboarding step</td><td>Back on every step after the first; Skip only on optional steps (school, avatar). Step count: A/L 5, O/L 4 (DECISIONS says 3, update it)</td><td>—</td><td>Backend: O/L onboarding, school lookup</td></tr>
+        <tr><td>Account deletion</td><td>Both (web missing)</td><td>Me › Account › Delete account</td><td>Two steps: consequences list → type DELETE → final dialog; subscription warning if active</td><td>Deleting · done (signed out) · failed</td><td>—</td></tr>
+        <tr><td>Compete group</td><td>Web</td><td>Primary nav: Compete</td><td>Leaderboard (School / District / Island), achievements shelf, Tasks &amp; Quests; empty and loading states as §15</td><td>Not ranked yet · loading</td><td>Rank gap beyond top 50, rank movement</td></tr>
+        <tr><td>Today plan + streak</td><td>Web</td><td>Primary nav: Today</td><td>Daily plan card (done = admin points threshold, applies next day), streak week dots, your subjects</td><td>Done · in progress · rest day</td><td>Per-day streak API, weekly points total</td></tr>
+        <tr><td>Avatar picker</td><td>Web</td><td>Me › Profile</td><td>Grid of avatars, current ringed (§15 selected), Save</td><td>Saving · saved</td><td><code>avatar_id</code> in user payload</td></tr>
+        <tr><td>Content language switch</td><td>Web</td><td><b>Subject page header only</b> (Gate 0)</td><td>Segmented EN / සිංහල / தமிழ் in the subject header; sets <code>lang</code> on the content container</td><td>Language not available for this subject (disabled segment + tooltip)</td><td>—</td></tr>
+        <tr><td>Limit sheet / paywall</td><td>Web</td><td>Free cap hit (mastery 50/day, papers 2/day, 5 subjects)</td><td>Sheet: what ran out, resets at midnight (Sri Lanka), Achiever benefits, Rs 599 / mo · Rs 4,990 / yr (save 31%)</td><td>Cap reached · trial available</td><td><code>/public/plans</code></td></tr>
+        <tr><td>Results + review</td><td>Web</td><td>After a quiz or paper</td><td>Points card (D21), Review mistakes inline, Done</td><td>—</td><td>Subtopic name in session payload</td></tr>
+        <tr><td>Grade prediction</td><td>Both</td><td>Subject report</td><td>Predicted grade chip (grade.* tokens)</td><td><b>Hidden below 30% topic coverage</b> (Gate 0): “Practise more to unlock your prediction” + coverage bar</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ======================= 31 TOKENS ======================= -->
 <section class="sec" id="tokens">
-  <div class="secHead"><span class="eyebrow">30 · Tokens</span><h2>Read live, never copied.</h2>
+  <div class="secHead"><span class="eyebrow">31 · Tokens</span><h2>Read live, never copied.</h2>
     <p class="lede">These values are read at runtime from <code>build/css/merit-tokens.css</code>, which is generated from <code>tokens/*.tokens.json</code> by <code>npm run build</code>. The Flutter and web apps vendor the generated files, and CI fails on drift.</p></div>
   <div class="panel tblWrap" id="tokenRefTable"></div>
 </section>
 
-<!-- ======================= 31 CHANGELOG ======================= -->
+<!-- ======================= 32 CHANGELOG ======================= -->
 <section class="sec" id="changelog">
-  <div class="secHead"><span class="eyebrow">31 · Changelog</span><h2>v3.6</h2></div>
+  <div class="secHead"><span class="eyebrow">32 · Changelog</span><h2>v3.7</h2></div>
   <div class="panel">
     <ul>
+      <li><b>v3.7.0 · Pre-release hardening.</b> The contrast gate has tiers (text / large / ui), composites translucent tokens, and covers focus on every surface, subtle-fill text, the quiz idle edge and charts in both themes. Fixes: <code>ink.500</code> darkened, <code>border.control</code> for the quiz idle edge, <code>feedback.errorText</code>, <code>focus.ringOnFeature</code> / <code>ringOnInverse</code>, theme-following chart colours. New tokens: info family, <code>warningSubtle</code>, <code>state.hover</code> / <code>pressed</code> layers, disabled colours, scrim, skeleton, focus-ring geometry, <code>easing.enter</code> / <code>emphasized</code>, <code>duration.reduced</code>, D7 density, data-viz ramps, and SI/TA script overrides (<code>tokens/scripts.json</code>, §23). §15 is now the full state matrix; §30 lists the flows the boards still need.</li>
       <li><b>v3.6 · Build and device-test rulings (D21–D27), docs only; tokens stay 3.5.0.</b> One Merit coin asset family for every points mark (§11, §16). The mobile number field is <code>+94</code> then 7. Me absorbs Settings. The Achiever trial is 14 days. The share card shows username and score. The web keeps the theme picker with Merit as the default preset (§9a), and the landing hero becomes the Quilt Map (§29). Round 10 is merged into the <a href="wireframes.html">wireframe board</a>, which now has a Web round.</li>
       <li><b>v3.5.0 · Wireframe rulings (D18–D20).</b> The timer is colour-only: <code>timer.text</code>, <code>timer.warnText</code>, <code>timer.criticalText</code> (pill tokens deprecated). Subject hub headers mix <code>color_hex</code> into <code>subject.headerBase</code> at 0.30 light / 0.24 dark, checked for every subject. Patchwork tiles may show a mastery fill where they report progress (SKILL §12). Mobile layouts are decided on the <a href="wireframes.html">wireframe board</a>.</li>
       <li><b>v3.4.0 · Subject colour drives patchworks (D16 rev 5).</b> A subject's <code>color_hex</code> becomes its palette (pastel tints, the colour itself as the solid patch, icon accents), shared by every topic and subtopic below it. Plate sides now equal the patch count: square subject, pentagon topic, hexagon subtopic (§21).</li>

@@ -481,8 +481,8 @@ Outputs: `build/css/merit-tokens.css` (web), `build/dart/merit_tokens.dart` (Flu
 | `state.hover` | `#1E1B2E0F` | `#F7F3EA14` | `--merit-state-hover` | `context.meritColors.stateHover` |
 | `state.pressed` | `#1E1B2E1F` | `#F7F3EA24` | `--merit-state-pressed` | `context.meritColors.statePressed` |
 | `scrim` | `#1E1B2E80` | `#0B0810B3` | `--merit-scrim` | `context.meritColors.scrim` |
-| `skeleton.base` | `#F4F1E6` | `#1C1625` | `--merit-skeleton-base` | `context.meritColors.skeletonBase` |
-| `skeleton.highlight` | `#FBFAF4` | `#2E2539` | `--merit-skeleton-highlight` | `context.meritColors.skeletonHighlight` |
+| `skeleton.base` | `#F4F1E6` | `#2E2539` | `--merit-skeleton-base` | `context.meritColors.skeletonBase` |
+| `skeleton.highlight` | `#FBFAF4` | `#3A3048` | `--merit-skeleton-highlight` | `context.meritColors.skeletonHighlight` |
 | `dataviz.cat1` | `#663696` | `#C9B3EA` | `--merit-dataviz-cat1` | `context.meritColors.datavizCat1` |
 | `dataviz.cat2` | `#F65E16` | `#FF8A4C` | `--merit-dataviz-cat2` | `context.meritColors.datavizCat2` |
 | `dataviz.cat3` | `#4F8F62` | `#A2D2AE` | `--merit-dataviz-cat3` | `context.meritColors.datavizCat3` |

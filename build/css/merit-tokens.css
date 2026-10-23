@@ -371,8 +371,8 @@
   --merit-state-hover: #F7F3EA14;
   --merit-state-pressed: #F7F3EA24;
   --merit-scrim: var(--merit-scrim-dark);
-  --merit-skeleton-base: var(--merit-surface-sunken);
-  --merit-skeleton-highlight: var(--merit-night-700);
+  --merit-skeleton-base: var(--merit-night-700);
+  --merit-skeleton-highlight: var(--merit-night-600);
   --merit-dataviz-cat1: var(--merit-violet-300);
   --merit-dataviz-cat2: var(--merit-orange-400);
   --merit-dataviz-cat3: var(--merit-sage-300);

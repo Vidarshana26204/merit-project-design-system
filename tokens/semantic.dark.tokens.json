@@ -79,8 +79,8 @@
     },
     "scrim": { "$value": "{color.scrim.dark}" },
     "skeleton": {
-      "base": { "$value": "{color.surface.sunken}" },
-      "highlight": { "$value": "{color.night.700}" }
+      "base": { "$value": "{color.night.700}", "$description": "Sunken is too close to surface.default in dark; skeletons sit on cards" },
+      "highlight": { "$value": "{color.night.600}" }
     },
     "dataviz": {
       "cat1": { "$value": "{color.violet.300}" },
