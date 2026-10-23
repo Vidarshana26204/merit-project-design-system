@@ -248,6 +248,25 @@ s_coin = ('<article class="wf-screen" data-screen="r16-coin"><div class="wf-scre
               "White on token gold is 1.8:1, so the mark is softer than A–C on light surfaces (the coin always sits beside its number, as the reward.points exemption already allows). At 16px it is a gold disc with a two-tone diamond.")
           + '</div><div class="wf-feedback"><label for="fb-r16-coin">Notes on the coin</label><textarea id="fb-r16-coin" rows="2"></textarea><span class="wf-saved"></span></div></article>')
 
+
+s_coin_col = ('<article class="wf-screen" data-screen="r16-coin-colour"><div class="wf-screen-h"><h3>Coin D · colour (pick one)</h3>'
+              '<span class="tag energy">Energy</span><span class="tag gap">Pick one</span>'
+              "<p>You picked D and asked for the four parts of the square (or their borders) in brand colours. Colours are the Merit mark\'s own facet tokens: "
+              "orange.500 top-left, violet.500 top-right, violet.700 bottom-right, sage.500 bottom-left; the dark cut lifts each to its 300/400 step. "
+              "The white version stays for comparison.</p>"
+              '<span class="wf-data">scripts/brand/coin_concepts.py · d, d1 (style=fill), d2 (style=border)</span></div>'
+              '<div class="wf-vars">'
+              + coin_cand("d1", "D1", "Brand facets", "New",
+                  "The diamond is the Merit mark in miniature: each facet in its brand colour, split by white gaps, on the flat gold disc. Strongest at small sizes, where four colours still read as four parts.",
+                  "Most colourful option next to other UI; orange on gold is the weakest pair, so the white gap carries that edge.")
+              + coin_cand("d2", "D2", "Brand borders", "New",
+                  "Keeps the calm white facets and frames each with a short brand-coloured bar outside its edge, so the coin stays mostly gold and white like your reference.",
+                  "The bars thin out below 24px and blend into the rim; at 16px it reads like the white D.")
+              + coin_cand("d", "D", "White (as picked)", "Safe",
+                  "The picked version: white and butter facets only.",
+                  "No brand colour.")
+              + '</div><div class="wf-feedback"><label for="fb-r16-coin-colour">Notes on the coin colour</label><textarea id="fb-r16-coin-colour" rows="2"></textarea><span class="wf-saved"></span></div></article>')
+
 SECTION = f'''{BEGIN}
 <section class="wf-flow" data-flow="r15" hidden>
   <div class="wf-intro">
@@ -262,6 +281,7 @@ SECTION = f'''{BEGIN}
 {s_misc}
 {s_onb}
 {s_gate}
+{s_coin_col}
 {s_coin}
 </section>
 {END}'''

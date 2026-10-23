@@ -134,15 +134,25 @@ def coin_c(line, small):
 
 
 # ---------------------------------------------------------------- D · Flat gold (owner reference: flat disc + white knock-out)
-RIM = mix(DEEP, C("orange", "700"), 0.48)   # deeper gold: ~3:1 against white so the coin's edge reads on light surfaces
+RIM = mix(DEEP, C("orange", "700"), 0.48)
+# The Merit mark's facet colours (assets/v3/brand/merit-mark.svg): orange top, violet right, sage left.
+BRAND = [C("orange", "500"), C("violet", "500"), C("violet", "700"), C("sage", "500")]
+BRAND_DARK = [C("orange", "400"), C("violet", "300"), C("violet", "500"), C("sage", "300")]   # dark cut: the 300/400 steps
 
 
-def coin_d(line, small):
+def _shrink(poly, cx, cy, k):
+    return [(cx + (x - cx) * k, cy + (y - cy) * k) for x, y in poly]   # deeper gold: ~3:1 against white so the coin's edge reads on light surfaces
+
+
+def coin_d(line, small, style="white"):
     """Flat gold disc, no ink outline, a deeper-gold rim, and the mark knocked out in white as separate facets with
     gold gaps between them (the segmented, flat style of the owner's reference, with our own geometry):
     the Merit pyramid seen from above, a diamond cut into four facets on the X (the subject-patchwork cut), lit from
     the top left (two facets white, two butter-100), inside a ring broken into four arcs.
-    The small cut drops the ring and widens the gaps so the facets survive at 16px."""
+    The small cut drops the ring and widens the gaps so the facets survive at 16px.
+    style "fill"   (D1): facets in the Merit mark's brand colours (top-left orange, top-right violet, bottom-right deep
+                         violet, bottom-left sage), white gaps, as the mark itself is coloured.
+    style "border" (D2): white facets, each outlined in its brand colour (gold gaps kept between outlines)."""
     gap = 14 if small else 9
     out = [f'<circle cx="128" cy="128" r="120" fill="{RIM}"/>',
            f'<circle cx="128" cy="128" r="{112 if small else 113}" fill="{DEEP}"/>']
@@ -155,14 +165,35 @@ def coin_d(line, small):
     R = 90 if small else 74               # diamond half-diagonal
     c = (128, 128)
     top, right, bottom, left = (128, 128 - R), (128 + R, 128), (128, 128 + R), (128 - R, 128)
-    faces = [([top, c, left], WHITE), ([top, right, c], PALE), ([c, right, bottom], PALE), ([left, c, bottom], WHITE)]
-    if small:
-        faces = [([top, bottom, left], WHITE), ([top, right, bottom], PALE)]
-    for f, fill in faces:
-        out.append(f'<polygon points="{pts(f)}" fill="{fill}" stroke="{DEEP}" stroke-width="{gap}" stroke-linejoin="round"/>')
+    quads = [[top, c, left], [top, right, c], [c, right, bottom], [left, c, bottom]]
+    if style == "white":
+        faces = list(zip(quads, [WHITE, PALE, PALE, WHITE]))
+        if small:
+            faces = [([top, bottom, left], WHITE), ([top, right, bottom], PALE)]
+        for f, fill in faces:
+            out.append(f'<polygon points="{pts(f)}" fill="{fill}" stroke="{DEEP}" stroke-width="{gap}" stroke-linejoin="round"/>')
+        return "".join(out)
+    brand = BRAND_DARK if line == CREAM else BRAND
+    if style == "fill":
+        for f, col in zip(quads, brand):
+            out.append(f'<polygon points="{pts(f)}" fill="{col}" stroke="{WHITE}" stroke-width="{gap}" stroke-linejoin="round"/>')
+    else:   # border: white facets with gold gaps, and each facet's outer edge drawn as a brand-coloured bar
+        for f in quads:
+            out.append(f'<polygon points="{pts(f)}" fill="{WHITE}" stroke="{DEEP}" stroke-width="{gap}" stroke-linejoin="round"/>')
+        bw, off = (18, 12) if small else (13, 13)
+        edges = [(top, left), (top, right), (right, bottom), (left, bottom)]
+        for (p0, p1), col in zip(edges, brand):
+            mx, my = (p0[0] + p1[0]) / 2 - 128, (p0[1] + p1[1]) / 2 - 128
+            n = math.hypot(mx, my)
+            ox, oy = mx / n * off, my / n * off                     # push the bar outward, off the facet
+            t0 = lambda p, q, t: (p[0] + (q[0] - p[0]) * t + ox, p[1] + (q[1] - p[1]) * t + oy)
+            (x0, y0), (x1, y1) = t0(p0, p1, 0.08), t0(p0, p1, 0.92)
+            out.append(f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" stroke="{col}" stroke-width="{bw}" stroke-linecap="round"/>')
     return "".join(out)
 
-CONCEPTS = {"a": ("Stitched coin", coin_a), "b": ("Patch coin", coin_b), "c": ("Hex medal", coin_c), "d": ("Flat gold", coin_d)}
+CONCEPTS = {"a": ("Stitched coin", coin_a), "b": ("Patch coin", coin_b), "c": ("Hex medal", coin_c), "d": ("Flat gold", coin_d),
+            "d1": ("Flat gold, brand facets", lambda l, sm: coin_d(l, sm, "fill")),
+            "d2": ("Flat gold, brand borders", lambda l, sm: coin_d(l, sm, "border"))}
 
 
 def main():
